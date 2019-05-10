@@ -38,6 +38,7 @@ public class Eeit106team01Application {
 		props.setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
 		props.setProperty("hibernate.format_sql", environment.getProperty("hibernate.format_sql"));
 		props.setProperty("hibernate.use_sql_comments", environment.getProperty("hibernate.use_sql_comments"));
+		
 		builder.addProperties(props);
 		return builder.buildSessionFactory();
 	}
