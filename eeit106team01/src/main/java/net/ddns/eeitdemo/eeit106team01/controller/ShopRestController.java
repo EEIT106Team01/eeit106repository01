@@ -40,19 +40,19 @@ public class ShopRestController {
 	}
 
 	@PostMapping(path = { "/items" }, consumes = { "application/x-www-form-urlencoded", "application/json" })
-	public List<ShopBean> createItem(@RequestBody MultiValueMap<String, String> body) {
+	public List<ShopBean> createItem(@RequestBody ShopBean bean) {
 		Session session = sessionFactory.openSession();
-		ShopBean bean = new ShopBean();
-		bean.setId(Integer.parseInt(body.get("id").get(0)));
-		bean.setName(body.get("name").get(0));
-		bean.setPrice(body.get("price").get(0));
-		bean.setImgLink(body.get("imgLink").get(0));
-		bean.setImgSetLink(body.get("imgSetLink").get(0));
-		bean.setPlatformName(body.get("platformName").get(0));
-		bean.setPlatformLink(body.get("platformLink").get(0));
-		bean.setTotalCount(body.get("totalCount").get(0));
-		bean.setTotalPage(body.get("totalPage").get(0));
-		session.save(bean);
+		ShopBean newBean = new ShopBean();
+		newBean.setId(bean.getId());
+		newBean.setName(bean.getName());
+		newBean.setPrice(String.valueOf(bean.getPrice()));
+		newBean.setImgLink(bean.getImgLink());
+		newBean.setImgSetLink(bean.getImgSetLink());
+		newBean.setPlatformName(bean.getPlatformName());
+		newBean.setPlatformLink(bean.getPlatformLink());
+		newBean.setTotalCount(String.valueOf(bean.getTotalCount()));
+		newBean.setTotalPage(String.valueOf(bean.getTotalPage()));
+		session.save(newBean);
 		session.beginTransaction().commit();
 		return findAllItem();
 	}
