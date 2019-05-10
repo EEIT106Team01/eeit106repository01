@@ -16,6 +16,7 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import net.ddns.eeitdemo.eeit106team01.model.CustomerBean;
 import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.model.ShopBean;
 
 @SpringBootApplication
 public class Eeit106team01Application {
@@ -32,12 +33,14 @@ public class Eeit106team01Application {
 		LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(dataSource);
 		builder.addAnnotatedClass(CustomerBean.class);
 		builder.addAnnotatedClass(ProductBean.class);
+		builder.addAnnotatedClass(ShopBean.class);
 		
 		Properties props = new Properties();
 		props.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
 		props.setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));
 		props.setProperty("hibernate.format_sql", environment.getProperty("hibernate.format_sql"));
 		props.setProperty("hibernate.use_sql_comments", environment.getProperty("hibernate.use_sql_comments"));
+		props.setProperty("hibernate.hbm2ddl.auto", environment.getProperty("hibernate.hbm2ddl.auto"));
 		
 		builder.addProperties(props);
 		return builder.buildSessionFactory();
