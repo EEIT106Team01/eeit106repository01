@@ -14,5 +14,4 @@ public interface StorageService {
 	public Resource loadAsResource(String filePath);
 
 	public boolean delete(String filePath);
-
 }

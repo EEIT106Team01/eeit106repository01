@@ -89,5 +89,4 @@ public class StorageServiceImpl implements StorageService {
 	public boolean delete(String filePath) {
 		return new File(STORAGE_PATH + filePath).delete();
 	}
-
 }
