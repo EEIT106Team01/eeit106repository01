@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="PRODUCT")
+//@Entity
+//@Table(name="PRODUCT")
 public class ProductBean {
 	@Id
 	private int id;

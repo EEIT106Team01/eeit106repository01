@@ -4,8 +4,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
-@Table(name="CUSTOMER")
+//@Entity
+//@Table(name="CUSTOMER")
 public class CustomerBean {
 	@Id
 	private String custid;

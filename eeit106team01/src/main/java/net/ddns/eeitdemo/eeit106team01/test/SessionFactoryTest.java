@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 
 import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
 
-@Component
+//@Component
 public class SessionFactoryTest implements CommandLineRunner {
 	
 	@Autowired
