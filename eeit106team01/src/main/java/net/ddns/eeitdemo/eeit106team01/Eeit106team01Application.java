@@ -39,7 +39,7 @@ public class Eeit106team01Application {
 		return "forward:index.html";
 	}
 	
-	@Bean
+//	@Bean
 	public TomcatServletWebServerFactory tomcatServletWebServerFactory() {
 	    TomcatServletWebServerFactory tomcatServletWebServerFactory = new TomcatServletWebServerFactory() {
 	        @Override
