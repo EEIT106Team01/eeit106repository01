@@ -18,6 +18,7 @@ public class SessionFactoryTest implements CommandLineRunner {
 	@Autowired
 	private SessionFactory sessionFactory;
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public void run(String... args) throws Exception {
 		Session session = sessionFactory.openSession();
