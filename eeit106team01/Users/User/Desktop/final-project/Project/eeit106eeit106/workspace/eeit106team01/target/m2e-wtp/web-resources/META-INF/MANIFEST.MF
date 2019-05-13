@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Built-By: User
+Build-Jdk: 11.0.1-ojdkbuild
+Implementation-Title: eeit106team01
+Implementation-Version: 0.0.1-SNAPSHOT
+Implementation-Vendor-Id: net.ddns.eeitdemo
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/eeit106team01
+Created-By: Maven Integration for Eclipse
+
