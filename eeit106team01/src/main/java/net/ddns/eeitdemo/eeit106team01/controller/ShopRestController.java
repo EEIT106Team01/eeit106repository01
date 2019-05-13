@@ -92,11 +92,11 @@ public class ShopRestController {
 			
 			String pageCountHref = pageCounts.get(0).absUrl("href");
 			
-			final String cardFooterOneStar = "&#9733; &#9734; &#9734; &#9734; &#9734;";
-			final String cardFooterTwoStar = "&#9733; &#9733; &#9734; &#9734; &#9734;";
-			final String cardFooterThreeStar = "&#9733; &#9733; &#9733; &#9734; &#9734;";
-			final String cardFooterFourStar = "&#9733; &#9733; &#9733; &#9733; &#9734;";
-			final String cardFooterFive = "&#9733; &#9733; &#9733; &#9733; &#9733;";
+//			final String cardFooterOneStar = "&#9733; &#9734; &#9734; &#9734; &#9734;";
+//			final String cardFooterTwoStar = "&#9733; &#9733; &#9734; &#9734; &#9734;";
+//			final String cardFooterThreeStar = "&#9733; &#9733; &#9733; &#9734; &#9734;";
+//			final String cardFooterFourStar = "&#9733; &#9733; &#9733; &#9733; &#9734;";
+//			final String cardFooterFive = "&#9733; &#9733; &#9733; &#9733; &#9733;";
 
 			if (names != null && prices != null && imgLinks != null && imgSetLinks != null && platforms != null
 					&& platformLinks != null && productCounts != null && pageCounts != null) {
@@ -136,7 +136,7 @@ public class ShopRestController {
 		// Same duration in seconds (convert from millis)
 		durationInSeconds = (float) TimeUnit.NANOSECONDS.toMillis(durationInNano) / 1000;
 		System.out.printf("\n本次搜尋使用   %s 秒...", durationInSeconds);
-		String spendTimeString = String.format("\n本次搜尋使用   %s 秒...", durationInSeconds);
+//		String spendTimeString = String.format("\n本次搜尋使用   %s 秒...", durationInSeconds);
 		
 		return result;
 	}
