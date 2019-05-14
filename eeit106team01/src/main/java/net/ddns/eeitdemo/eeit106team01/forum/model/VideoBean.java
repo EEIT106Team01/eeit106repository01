@@ -30,7 +30,6 @@ public class VideoBean {
 	private Long videoLength;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String updateMessage;
-	
 	@OneToOne(mappedBy = "videoBean", cascade = CascadeType.ALL)
 	private ArticleTopicCurrentBean articleTopicCurrentBean;
 	@OneToOne(mappedBy = "videoBean", cascade = CascadeType.ALL)
