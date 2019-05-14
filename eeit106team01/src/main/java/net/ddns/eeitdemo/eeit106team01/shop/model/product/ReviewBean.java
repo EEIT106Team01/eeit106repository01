@@ -12,7 +12,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
+import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
 /**
  * @author 冒竣瑋 - This is an Entity for Review.

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
-import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
+import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 import net.ddns.eeitdemo.eeit106team01.shop.model.DeliverTypeBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
