@@ -40,12 +40,12 @@ public class VideoController {
 	@Autowired
 	private Environment env;
 
-	@GetMapping(path = { "/video" }, produces = { "application/json" })
+	@GetMapping(path = { "/videos" }, produces = { "application/json" })
 	public ResponseEntity<?> getVideoList() {
 		return ResponseEntity.ok(videoService.findAll());
 	}
 
-	@GetMapping(path = { "/video/{id}" }, produces = { "application/json" })
+	@GetMapping(path = { "/videos/{id}" }, produces = { "application/json" })
 	public ResponseEntity<?> getVideo(@PathVariable String id) {
 		if (id != null && id.length() != 0) {
 			try {
@@ -61,14 +61,14 @@ public class VideoController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PostMapping(path = { "/video" })
+	@PostMapping(path = { "/videos" }, produces = { "application/json" })
 	public ResponseEntity<?> uploadVideo(@RequestParam("videoFile") MultipartFile videoFile, Model model) {
 		if (videoFile == null || videoFile.getSize() == 0 || !videoFile.getContentType().startsWith("video/")) {
 			return ResponseEntity.noContent().header("errorMsg", "upload file not exist").build();
 		} else {
 			try {
 				long uploadTime = System.currentTimeMillis();
-				File outFile = storageService.createFile("video/" + uploadTime + videoFile.getOriginalFilename());
+				File outFile = storageService.createFile("videos/" + uploadTime + videoFile.getOriginalFilename());
 				try (InputStream is = videoFile.getInputStream(); OutputStream os = new FileOutputStream(outFile);) {
 					byte[] bytes = new byte[8 * 1024];
 					int len;
@@ -102,8 +102,8 @@ public class VideoController {
 							.build();
 				}
 
-				File outFileJpg = storageService.createFile("jpg/" + outFile.getName() + ".jpg");
-				File outFileGif = storageService.createFile("gif/" + outFile.getName() + ".gif");
+				File outFileJpg = storageService.createFile("jpgs/" + outFile.getName() + ".jpg");
+				File outFileGif = storageService.createFile("gifs/" + outFile.getName() + ".gif");
 				ffu.generateThumbnail(outFile, outFileJpg, -1);
 				ffu.generateDefaultGifCut(outFile, outFileGif);
 
@@ -113,7 +113,7 @@ public class VideoController {
 				videoService.update(videoBean);
 
 				String encodeName = new URLEncoder().encode(videoBean.getVideoURI(), Charset.forName("UTF-8"));
-				return ResponseEntity.created(URI.create("storage/video/" + encodeName)).build();
+				return ResponseEntity.created(URI.create("storage/videos/" + encodeName)).body(videoBean);
 			} catch (IOException e) {
 				System.out.println(e.getMessage());
 				return ResponseEntity.noContent().header("errorMsg", e.getMessage()).build();
@@ -121,7 +121,7 @@ public class VideoController {
 		}
 	}
 
-	@PutMapping(path = { "/video/{id}" }, consumes = { "application/json" }, produces = { "application/json" })
+	@PutMapping(path = { "/videos/{id}" }, consumes = { "application/json" }, produces = { "application/json" })
 	public ResponseEntity<?> updateVideo(@PathVariable String id, @RequestBody VideoBean videoBean,
 			BindingResult bindingResult) {
 		if (id != null && id.length() != 0) {
@@ -164,7 +164,7 @@ public class VideoController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@DeleteMapping(path = { "/video/{id}" }, produces = { "application/json" })
+	@DeleteMapping(path = { "/videos/{id}" }, produces = { "application/json" })
 	public ResponseEntity<?> deleteVideo(@PathVariable String id) {
 		if (id != null && id.length() != 0) {
 			try {
@@ -172,9 +172,9 @@ public class VideoController {
 				VideoBean videoBean = videoService.findByPrimaryKey(intId);
 				if (videoBean != null) {
 					if(videoService.delete(intId)) {
-						storageService.delete("jpg/" + videoBean.getThumbnailURI());
-						storageService.delete("gif/" + videoBean.getGifURI());
-						storageService.delete("video/" + videoBean.getVideoURI());
+						storageService.delete("jpgs/" + videoBean.getThumbnailURI());
+						storageService.delete("gifs/" + videoBean.getGifURI());
+						storageService.delete("videos/" + videoBean.getVideoURI());
 						return ResponseEntity.ok(videoBean);
 					}
 				}
