@@ -1,15 +1,18 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
+import javax.persistence.OneToMany;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
@@ -45,46 +48,38 @@ public class OrderDetailBean implements Serializable {
 	@JoinColumn(name = "FK_Order_Id")
 	private OrderBean orderBean;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_AntiTheftBean_SerialNumber")
-	private AntiTheftBean antiTheftBean;
+	
+	//product
+	@OneToMany(mappedBy = "antiTheftBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<AntiTheftBean> antiTheftBean = new ArrayList<AntiTheftBean>();
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_CarCareBean_SerialNumber")
-	private CarCareBean carCareBean;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_CarGpsBean_SerialNumber")
-	private CarGpsBean carGpsBean;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_CarRecorderBean_SerialNumber")
-	private CarRecorderBean carRecorderBean;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_CarSeatBean_SerialNumber")
-	private CarSeatBean carSeatBean;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_EmergencyToolBean_SerialNumber")
-	private EmergencyToolBean emergencyToolBean;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_HelmetRecorderBean_SerialNumber")
-	private HelmetRecorderBean helmetRecorderBean;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_MotorcycleGpsBean_SerialNumber")
-	private MotorcycleGpsBean motorcycleGpsBean;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_MotorcycleRecorderBean_SerialNumber")
-	private MotorcycleRecorderBean motorcycleRecorderBean;
-
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_TireGaugeBean_SerialNumber")
-	private TireGaugeBean tireGaugeBean;
-
+	@OneToMany(mappedBy = "carCareBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<CarCareBean> carCareBean = new ArrayList<CarCareBean>();
+	
+	@OneToMany(mappedBy = "carGpsBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<CarGpsBean> carGpsBean = new ArrayList<CarGpsBean>();
+	
+	@OneToMany(mappedBy = "carRecorderBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<CarRecorderBean> carRecorderBean = new ArrayList<CarRecorderBean>();
+	
+	@OneToMany(mappedBy = "carSeatBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<CarSeatBean> carSeatBean = new ArrayList<CarSeatBean>();
+	
+	@OneToMany(mappedBy = "emergencyToolBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<EmergencyToolBean> emergencyToolBean = new ArrayList<EmergencyToolBean>();
+	
+	@OneToMany(mappedBy = "helmetRecorderBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<HelmetRecorderBean> helmetRecorderBean = new ArrayList<HelmetRecorderBean>();
+	
+	@OneToMany(mappedBy = "motorcycleGpsBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<MotorcycleGpsBean> motorcycleGpsBean = new ArrayList<MotorcycleGpsBean>();
+	
+	@OneToMany(mappedBy = "motorcycleRecorderBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<MotorcycleRecorderBean> motorcycleRecorderBean = new ArrayList<MotorcycleRecorderBean>();
+	
+	@OneToMany(mappedBy = "tireGaugeBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	private List<TireGaugeBean> tireGaugeBean = new ArrayList<TireGaugeBean>();
+	
 	public Long getId() {
 		return id;
 	}

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -28,11 +29,11 @@ public class OrderBean implements Serializable {
 	private String transationType;
 	private String deliverStatus;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_member_Id")
 	private MemberBeanTest memberBeanTest;
 
-	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
 
 	public Long getId() {
