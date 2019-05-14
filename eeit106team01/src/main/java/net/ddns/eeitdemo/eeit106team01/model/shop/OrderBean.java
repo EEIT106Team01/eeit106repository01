@@ -1,36 +1,68 @@
 package net.ddns.eeitdemo.eeit106team01.model.shop;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
 
 @Entity
 @Table(name="Order")
-public class OrderBean {
-	
-	private int Id;
-	private int MemberId;
-	private String PayStatus;
-	private java.util.Date Time;
-	private int TotalPrice;
-	private String TransationType;
-	private String DeliverStatus;
-	
+public class OrderBean implements Serializable{
+
+	private static final long serialVersionUID = -2108352266354853778L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
+	private Integer Id;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_member_Id") 
+	private MemberBeanTest memberBeanTest;
+	private String PayStatus;
+	private java.util.Date Time;
+	private Integer TotalPrice;
+	private String TransationType;
+	private String DeliverStatus;
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
+	private List<OrderBean> OrderList = new ArrayList<>();
+	
+	public OrderBean() {
+		super();
+	}
+	
+	public OrderBean(Integer id, MemberBeanTest memberbeantest, String payStatus, Date time, Integer totalPrice,
+			String transationType, String deliverStatus) {
+		super();
+		Id = id;
+		memberBeanTest = memberbeantest;
+		PayStatus = payStatus;
+		Time = time;
+		TotalPrice = totalPrice;
+		TransationType = transationType;
+		DeliverStatus = deliverStatus;
+	}
+	
+	public Integer getId() {
 		return Id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		Id = id;
 	}
-	public int getMemberId() {
-		return MemberId;
+	public MemberBeanTest getMemberId() {
+		return memberBeanTest;
 	}
-	public void setMemberId(int memberId) {
-		MemberId = memberId;
+	public void setMemberId(MemberBeanTest memberbeantest) {
+		this.memberBeanTest = memberbeantest;
 	}
 	public String getPayStatus() {
 		return PayStatus;
@@ -44,10 +76,10 @@ public class OrderBean {
 	public void setTime(java.util.Date time) {
 		Time = time;
 	}
-	public int getTotalPrice() {
+	public Integer getTotalPrice() {
 		return TotalPrice;
 	}
-	public void setTotalPrice(int totalPrice) {
+	public void setTotalPrice(Integer totalPrice) {
 		TotalPrice = totalPrice;
 	}
 	public String getTransationType() {
@@ -62,6 +94,10 @@ public class OrderBean {
 	public void setDeliverStatus(String deliverStatus) {
 		DeliverStatus = deliverStatus;
 	}
-
-
+	public List<OrderBean> getOrderList() {
+		return OrderList;
+	}
+	public void setOrderList(List<OrderBean> orderList) {
+		OrderList = orderList;
+	}
 }

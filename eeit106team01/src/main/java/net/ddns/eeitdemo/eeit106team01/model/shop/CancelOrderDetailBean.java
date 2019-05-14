@@ -1,46 +1,78 @@
 package net.ddns.eeitdemo.eeit106team01.model.shop;
 
+import java.io.Serializable;
+
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="CancelOrderDetail")
-public class CancelOrderDetailBean {
+public class CancelOrderDetailBean implements Serializable{
 	
-	private int CancelOrderId;
-	private String ItemSerialNumber;
-	private int ProductId;
-	private int Price;
-	private int DeliverTypeId;
+	private static final long serialVersionUID = 3873757388653464094L;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_cancelOrder_Id") 
+	private CancelOrderBean cancelOrder;
+	private String Item_SerialNumber;
+	private Integer Product_Id;
+	private Integer Price;
+	private Integer DeliverType_Id;
+
+	public CancelOrderDetailBean() {
+		super();
+	}
 	
-	public int getCancelOrderId() {
-		return CancelOrderId;
+	public CancelOrderDetailBean(CancelOrderBean cancelOrder, String item_SerialNumber, Integer product_Id,
+			Integer price, Integer deliverType_Id) {
+		super();
+		this.cancelOrder = cancelOrder;
+		Item_SerialNumber = item_SerialNumber;
+		Product_Id = product_Id;
+		Price = price;
+		DeliverType_Id = deliverType_Id;
 	}
-	public void setCancelOrderId(int cancelOrderId) {
-		CancelOrderId = cancelOrderId;
+
+	public CancelOrderBean getCancelOrder() {
+		return cancelOrder;
 	}
-	public String getItemSerialNumber() {
-		return ItemSerialNumber;
+
+	public void setCancelOrder(CancelOrderBean cancelOrder) {
+		this.cancelOrder = cancelOrder;
 	}
-	public void setItemSerialNumber(String itemSerialNumber) {
-		ItemSerialNumber = itemSerialNumber;
+
+	public String getItem_SerialNumber() {
+		return Item_SerialNumber;
 	}
-	public int getProductId() {
-		return ProductId;
+
+	public void setItem_SerialNumber(String item_SerialNumber) {
+		Item_SerialNumber = item_SerialNumber;
 	}
-	public void setProductId(int productId) {
-		ProductId = productId;
+
+	public Integer getProduct_Id() {
+		return Product_Id;
 	}
-	public int getPrice() {
+
+	public void setProduct_Id(Integer product_Id) {
+		Product_Id = product_Id;
+	}
+
+	public Integer getPrice() {
 		return Price;
 	}
-	public void setPrice(int price) {
+
+	public void setPrice(Integer price) {
 		Price = price;
 	}
-	public int getDeliverTypeId() {
-		return DeliverTypeId;
+
+	public Integer getDeliverType_Id() {
+		return DeliverType_Id;
 	}
-	public void setDeliverTypeId(int deliverTypeId) {
-		DeliverTypeId = deliverTypeId;
+
+	public void setDeliverType_Id(Integer deliverType_Id) {
+		DeliverType_Id = deliverType_Id;
 	}
+	
 }
