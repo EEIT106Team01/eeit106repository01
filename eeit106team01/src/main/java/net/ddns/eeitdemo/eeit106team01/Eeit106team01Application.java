@@ -20,8 +20,8 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import net.ddns.eeitdemo.eeit106team01.model.ArticleContentCurrentBean;
-import net.ddns.eeitdemo.eeit106team01.model.ArticleTopicCurrentBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.model.CustomerBean;
 import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.model.ShopBean;
