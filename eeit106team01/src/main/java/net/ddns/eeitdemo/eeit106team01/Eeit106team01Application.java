@@ -34,7 +34,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ReviewBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class,
@@ -97,7 +97,7 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(RefundDetailBean.class);
 		builder.addAnnotatedClass(DeliverTypeBean.class);
 		// Product - car
-		builder.addAnnotatedClass(CarCareBean.class);
+//		builder.addAnnotatedClass(CarCareBean.class);
 //		builder.addAnnotatedClass(CarGpsBean.class);
 //		builder.addAnnotatedClass(CarRecorderBean.class);
 //		builder.addAnnotatedClass(CarSeatBean.class);
@@ -106,7 +106,7 @@ public class Eeit106team01Application {
 //		builder.addAnnotatedClass(MotorcycleGpsBean.class);
 //		builder.addAnnotatedClass(MotorcycleRecorderBean.class);
 //		// others
-//		builder.addAnnotatedClass(AntiTheftBean.class);
+		builder.addAnnotatedClass(AntiTheftBean.class);
 //		builder.addAnnotatedClass(EmergencyToolBean.class);
 //		builder.addAnnotatedClass(TireGaugeBean.class);
 

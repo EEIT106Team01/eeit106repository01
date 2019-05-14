@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
 
 /**
  * @author 冒竣瑋 - This is an Entity for Product.
@@ -39,7 +39,11 @@ public class ProductBean implements Serializable {
 	@OneToMany(mappedBy = "productbean")
 	List<ReviewBean> reviews = new ArrayList<ReviewBean>();
 
-	// Automotive - Car
+	// Automotive
+	@OneToMany(mappedBy = "productbean")
+	List<AntiTheftBean> antiTheftBeans = new ArrayList<AntiTheftBean>();
+
+//	 Automotive - Car
 //	@OneToMany(mappedBy = "productbean")
 //	List<CarCareBean> carcares = new ArrayList<CarCareBean>();
 //	@OneToMany(mappedBy = "productBean")
@@ -57,9 +61,6 @@ public class ProductBean implements Serializable {
 //	@OneToMany(mappedBy = "productBean")
 //	List<MotorcycleGpsBean> motorcyclegpss = new ArrayList<MotorcycleGpsBean>();
 //
-//	// Automotive
-//	@OneToMany(mappedBy = "productbean")
-//	List<AntiTheftBean> antithefts = new ArrayList<AntiTheftBean>();
 //	@OneToMany(mappedBy = "productbean")
 //	List<EmergencyToolBean> emergencytools = new ArrayList<EmergencyToolBean>();
 //	@OneToMany(mappedBy = "productbean")
