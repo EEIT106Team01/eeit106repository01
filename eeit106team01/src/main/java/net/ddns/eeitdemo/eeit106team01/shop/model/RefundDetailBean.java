@@ -20,11 +20,11 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBe
 public class RefundDetailBean implements Serializable {
 
 	private static final long serialVersionUID = -2001180171846295649L;
-	
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Product_Id")
 	private ProductBean product;
@@ -32,11 +32,11 @@ public class RefundDetailBean implements Serializable {
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_antiTheftBean_SerialNumber")
 	private AntiTheftBean antiTheftBean;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Refund_Id")
 	private RefundBean refund;
-	
+
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "FK_carCare_SerialNumber")
 //	@OneToOne(mappedBy = "refunddetailbean")
@@ -50,18 +50,6 @@ public class RefundDetailBean implements Serializable {
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "FK_carSeat_SerialNumber")
 //	private CarSeatBean carSeatBean;
-	
-	public RefundDetailBean(Long id, ProductBean product, AntiTheftBean antiTheftBean, RefundBean refund) {
-		super();
-		this.id = id;
-		this.product = product;
-		this.antiTheftBean = antiTheftBean;
-		this.refund = refund;
-	}
-	
-	public RefundDetailBean() {
-		super();
-	}
 
 	public Long getId() {
 		return id;

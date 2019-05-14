@@ -14,10 +14,6 @@ import javax.persistence.Table;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarGpsBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarRecorderBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarSeatBean;
 
 @Entity
 @Table(name = "OrderDetail")
@@ -34,25 +30,25 @@ public class OrderDetailBean implements Serializable {
 	private ProductBean product;
 
 	private Integer Price;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_DeliverType_Id")
 	private DeliverTypeBean deliverType;
-	
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Order_Id")
 	private OrderBean order;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_antiTheftBean_SerialNumber")
+	@JoinColumn(name = "FK_AntiTheftBean_SerialNumber")
 	private AntiTheftBean antiTheftBean;
-	
+
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "FK_carCare_SerialNumber")
-	
+
 //	@OneToOne(mappedBy = "orderdetailbean")
 //	private CarCareBean carCareBean;
-	
+
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "FK_carGps_SerialNumber")
 //	private CarGpsBean carGpsBean;
@@ -62,24 +58,6 @@ public class OrderDetailBean implements Serializable {
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "FK_carSeat_SerialNumber")
 //	private CarSeatBean carSeatBean;
-	
-	public OrderDetailBean() {
-		super();
-	}
-
-	public OrderDetailBean(ProductBean product, Integer price, DeliverTypeBean deliverType, OrderBean order,
-			CarCareBean carCareBean, CarGpsBean carGpsBean, CarRecorderBean carRecorderBean, CarSeatBean carSeatBean,
-			RefundBean refund) {
-		super();
-		this.product = product;
-		Price = price;
-		this.deliverType = deliverType;
-		this.order = order;
-//		this.carCareBean = carCareBean;
-//		this.carGpsBean = carGpsBean;
-//		this.carRecorderBean = carRecorderBean;
-//		this.carSeatBean = carSeatBean;
-	}
 
 	public ProductBean getProduct() {
 		return product;
@@ -144,6 +122,5 @@ public class OrderDetailBean implements Serializable {
 //	public void setCarSeatBean(CarSeatBean carSeatBean) {
 //		this.carSeatBean = carSeatBean;
 //	}
-
 
 }

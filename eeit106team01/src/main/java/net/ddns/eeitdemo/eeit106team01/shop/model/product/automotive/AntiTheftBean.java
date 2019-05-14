@@ -1,8 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,11 +27,11 @@ public class AntiTheftBean implements Serializable {
 	private ProductBean productbean;
 
 	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
-	private List<RefundDetailBean> refundDetailBeanList = new ArrayList<RefundDetailBean>();
-	
+	private RefundDetailBean refundDetailBeanList;
+
 	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
-	private List<OrderDetailBean> orderDetailBeanList = new ArrayList<OrderDetailBean>();
-	
+	private OrderDetailBean orderDetailBeanList;
+
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
 	private Long serialnumber;
