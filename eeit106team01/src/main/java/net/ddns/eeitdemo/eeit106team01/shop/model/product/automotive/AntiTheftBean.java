@@ -1,14 +1,16 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
@@ -49,13 +51,15 @@ public class AntiTheftBean implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "FK_ProductBean_Id")
-	private ProductBean productBean;
+	private List<ProductBean> productBean = new ArrayList<ProductBean>();
 
-	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
-	private RefundDetailBean refundDetailBean;
-
-	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_OrderDetailBean_SerialNumber")
 	private OrderDetailBean orderDetailBean;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_RefundDetailBean_SerialNumber")
+	private RefundDetailBean refundDetailBean;
 
 	public Long getSerialnumber() {
 		return serialnumber;
