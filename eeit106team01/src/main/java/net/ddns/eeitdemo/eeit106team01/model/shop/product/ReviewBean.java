@@ -9,6 +9,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
 import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
 
 /**
@@ -20,8 +21,8 @@ public class ReviewBean implements Serializable {
 	private static final long serialVersionUID = 2337078640768450244L;
 
 	@ManyToOne
-	@JoinColumn(name = "MemberBean_Id_FK")
-	private Long memberbean;
+	@JoinColumn(name = "MemberBeanTest_Id_FK")
+	private MemberBeanTest memberbeantest;
 	
 	@Temporal(TemporalType.DATE)
 	private java.util.Date date;
@@ -35,16 +36,16 @@ public class ReviewBean implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ReviewBean [memberbean=" + memberbean + ", date=" + date + ", rating=" + rating + ", comment=" + comment
+		return "ReviewBean [memberbeantest=" + memberbeantest + ", date=" + date + ", rating=" + rating + ", comment=" + comment
 				+ ", image=" + image + ", product_id=" + productbean + "]";
 	}
 
-	public Long getMember_id() {
-		return memberbean;
+	public MemberBeanTest getMember_id() {
+		return memberbeantest;
 	}
 
-	public void setMember_id(Long memberbean) {
-		this.memberbean = memberbean;
+	public void setMember_id(MemberBeanTest memberbeantest) {
+		this.memberbeantest = memberbeantest;
 	}
 
 	public java.util.Date getDate() {
