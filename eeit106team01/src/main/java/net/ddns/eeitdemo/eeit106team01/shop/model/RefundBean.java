@@ -14,7 +14,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
+import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
 @Entity
 @Table(name="Refund")

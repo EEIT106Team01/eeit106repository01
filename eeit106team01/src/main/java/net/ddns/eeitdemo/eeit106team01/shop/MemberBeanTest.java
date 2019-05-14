@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model;
+package net.ddns.eeitdemo.eeit106team01.shop;
 
 import java.io.Serializable;
 import java.util.ArrayList;
