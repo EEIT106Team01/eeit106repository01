@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 
 import com.google.gson.JsonObject;
 
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.model.shop.product.ProductBean;
 
 /**
  * @author 冒竣瑋 - This is an Entity for TireGauge.
@@ -22,7 +22,7 @@ public class TireGaugeBean implements Serializable{
 	
 	@ManyToOne
 	@JoinColumn(name = "ProductBean_Id_FK")
-	private ProductBean productBean;
+	private ProductBean productbean;
 
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
@@ -51,17 +51,17 @@ public class TireGaugeBean implements Serializable{
 
 	@Override
 	public String toString() {
-		return "CarSeatBean [productBean=" + productBean + ", serialnumber=" + serialnumber + ", brand=" + brand
+		return "CarSeatBean [productbean=" + productbean + ", serialnumber=" + serialnumber + ", brand=" + brand
 				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
 				+ ", information=" + information + ", imagelink=" + imagelink + "]";
 	}
 
 	public ProductBean getProduct_id() {
-		return productBean;
+		return productbean;
 	}
 
-	public void setProduct_id(ProductBean productBean) {
-		this.productBean = productBean;
+	public void setProduct_id(ProductBean productbean) {
+		this.productbean = productbean;
 	}
 
 	public Long getSerialnumber() {

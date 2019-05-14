@@ -10,7 +10,7 @@ import javax.persistence.ManyToOne;
 
 import com.google.gson.JsonObject;
 
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.model.shop.product.ProductBean;
 
 /**
  * @author 冒竣瑋 - This is an Entity for MotorcycleGps.

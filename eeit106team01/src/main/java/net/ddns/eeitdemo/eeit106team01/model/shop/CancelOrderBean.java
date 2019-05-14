@@ -1,25 +1,21 @@
 package net.ddns.eeitdemo.eeit106team01.model.shop;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="CancelOrder")
-public class CancelOrderBean implements Serializable{
+@Table(name = "CancelOrder")
+public class CancelOrderBean implements Serializable {
 
 	private static final long serialVersionUID = 6911694576480865027L;
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer Id;
 	private Integer MemberId;
 	private String PayStatus;
@@ -27,12 +23,10 @@ public class CancelOrderBean implements Serializable{
 	private Integer TotalPrice;
 	private String TransationType;
 
-	private List<CancelOrderBean> cancelOrderList = new ArrayList<>();
-	
 	public CancelOrderBean() {
 		super();
 	}
-	
+
 	public CancelOrderBean(Integer id, Integer memberId, String payStatus, Date time, Integer totalPrice,
 			String transationType) {
 		super();
@@ -92,11 +86,4 @@ public class CancelOrderBean implements Serializable{
 		TransationType = transationType;
 	}
 
-	public List<CancelOrderBean> getCancelOrderList() {
-		return cancelOrderList;
-	}
-
-	public void setCancelOrderList(List<CancelOrderBean> cancelOrderList) {
-		this.cancelOrderList = cancelOrderList;
-	}
 }

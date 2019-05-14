@@ -2,19 +2,14 @@ package net.ddns.eeitdemo.eeit106team01.model.shop;
 
 import java.io.Serializable;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="CancelOrderDetail")
-public class CancelOrderDetailBean implements Serializable{
-	
+@Table(name = "CancelOrderDetail")
+public class CancelOrderDetailBean implements Serializable {
+
 	private static final long serialVersionUID = 3873757388653464094L;
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="FK_cancelOrder_Id") 
 	private CancelOrderBean cancelOrder;
 	private String Item_SerialNumber;
 	private Integer Product_Id;
@@ -24,7 +19,7 @@ public class CancelOrderDetailBean implements Serializable{
 	public CancelOrderDetailBean() {
 		super();
 	}
-	
+
 	public CancelOrderDetailBean(CancelOrderBean cancelOrder, String item_SerialNumber, Integer product_Id,
 			Integer price, Integer deliverType_Id) {
 		super();
@@ -74,5 +69,5 @@ public class CancelOrderDetailBean implements Serializable{
 	public void setDeliverType_Id(Integer deliverType_Id) {
 		DeliverType_Id = deliverType_Id;
 	}
-	
+
 }

@@ -33,8 +33,9 @@ public class OrderBean implements Serializable{
 	private Integer TotalPrice;
 	private String TransationType;
 	private String DeliverStatus;
+	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-	private List<OrderBean> OrderList = new ArrayList<>();
+	private List<OrderDetailBean> OrderDetails = new ArrayList<OrderDetailBean>();
 	
 	public OrderBean() {
 		super();
@@ -94,10 +95,10 @@ public class OrderBean implements Serializable{
 	public void setDeliverStatus(String deliverStatus) {
 		DeliverStatus = deliverStatus;
 	}
-	public List<OrderBean> getOrderList() {
-		return OrderList;
+	public List<OrderDetailBean> getOrderList() {
+		return OrderDetails;
 	}
-	public void setOrderList(List<OrderBean> orderList) {
-		OrderList = orderList;
+	public void setOrderList(List<OrderDetailBean> OrderDetails) {
+		this.OrderDetails = OrderDetails;
 	}
 }

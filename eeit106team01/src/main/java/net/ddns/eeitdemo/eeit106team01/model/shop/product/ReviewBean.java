@@ -4,13 +4,15 @@ import java.io.Serializable;
 import java.sql.Blob;
 
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
 
 /**
  * @author 冒竣瑋 - This is an Entity for Review.
@@ -20,6 +22,10 @@ public class ReviewBean implements Serializable {
 
 	private static final long serialVersionUID = 2337078640768450244L;
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
 	@ManyToOne
 	@JoinColumn(name = "MemberBeanTest_Id_FK")
 	private MemberBeanTest memberbeantest;

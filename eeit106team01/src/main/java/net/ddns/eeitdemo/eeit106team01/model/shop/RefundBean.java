@@ -29,8 +29,9 @@ public class RefundBean implements Serializable{
 	private MemberBeanTest memberBeanTest;
 	private String Comment;
 	private String ProcessStatus;
+	
 	@OneToMany(mappedBy = "refund", cascade = CascadeType.ALL)
-	private List<RefundBean> RefundList = new ArrayList<>();
+	private List<RefundDetailBean> RefundList = new ArrayList<RefundDetailBean>();
 	
 	public RefundBean() {
 		super();
@@ -68,10 +69,10 @@ public class RefundBean implements Serializable{
 	public void setProcessStatus(String processStatus) {
 		ProcessStatus = processStatus;
 	}
-	public List<RefundBean> getRefundList() {
+	public List<RefundDetailBean> getRefundList() {
 		return RefundList;
 	}
-	public void setRefundList(List<RefundBean> refundList) {
+	public void setRefundList(List<RefundDetailBean> refundList) {
 		RefundList = refundList;
 	}
 }

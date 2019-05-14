@@ -14,16 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarSeatBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.motorcycle.HelmetRecorderBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.motorcycle.MotorcycleGpsBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.motorcycle.MotorcycleRecorderBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.AntiTheftBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.EmergencyToolBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.TireGaugeBean;
 import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarCareBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarGpsBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarRecorderBean;
 
 /**
  * @author 冒竣瑋 - This is an Entity for Product.
@@ -49,30 +40,30 @@ public class ProductBean implements Serializable {
 	List<ReviewBean> reviews = new ArrayList<ReviewBean>();
 
 	// Automotive - Car
-	@OneToMany(mappedBy = "productbean")
-	List<CarCareBean> carcares = new ArrayList<CarCareBean>();
-	@OneToMany(mappedBy = "productbean")
-	List<CarGpsBean> cargpss = new ArrayList<CarGpsBean>();
-	@OneToMany(mappedBy = "productbean")
-	List<CarRecorderBean> carrecorders = new ArrayList<CarRecorderBean>();
-	@OneToMany(mappedBy = "productbean")
-	List<CarSeatBean> carseats = new ArrayList<CarSeatBean>();
-
-	// Automotive - Motorcycle
-	@OneToMany(mappedBy = "productbean")
-	List<HelmetRecorderBean> helmetrecorders = new ArrayList<HelmetRecorderBean>();
-	@OneToMany(mappedBy = "productbean")
-	List<MotorcycleRecorderBean> motorcyclerecorders = new ArrayList<MotorcycleRecorderBean>();
-	@OneToMany(mappedBy = "productbean")
-	List<MotorcycleGpsBean> motorcyclegpss = new ArrayList<MotorcycleGpsBean>();
-
-	// Automotive
-	@OneToMany(mappedBy = "productbean")
-	List<AntiTheftBean> antithefts = new ArrayList<AntiTheftBean>();
-	@OneToMany(mappedBy = "productbean")
-	List<EmergencyToolBean> emergencytools = new ArrayList<EmergencyToolBean>();
-	@OneToMany(mappedBy = "productbean")
-	List<TireGaugeBean> tiregauges = new ArrayList<TireGaugeBean>();
+//	@OneToMany(mappedBy = "productbean")
+//	List<CarCareBean> carcares = new ArrayList<CarCareBean>();
+//	@OneToMany(mappedBy = "productBean")
+//	List<CarGpsBean> cargpss = new ArrayList<CarGpsBean>();
+//	@OneToMany(mappedBy = "productBean")
+//	List<CarRecorderBean> carrecorders = new ArrayList<CarRecorderBean>();
+//	@OneToMany(mappedBy = "productBean")
+//	List<CarSeatBean> carseats = new ArrayList<CarSeatBean>();
+//
+//	// Automotive - Motorcycle
+//	@OneToMany(mappedBy = "productBean")
+//	List<HelmetRecorderBean> helmetrecorders = new ArrayList<HelmetRecorderBean>();
+//	@OneToMany(mappedBy = "productBean")
+//	List<MotorcycleRecorderBean> motorcyclerecorders = new ArrayList<MotorcycleRecorderBean>();
+//	@OneToMany(mappedBy = "productBean")
+//	List<MotorcycleGpsBean> motorcyclegpss = new ArrayList<MotorcycleGpsBean>();
+//
+//	// Automotive
+//	@OneToMany(mappedBy = "productbean")
+//	List<AntiTheftBean> antithefts = new ArrayList<AntiTheftBean>();
+//	@OneToMany(mappedBy = "productbean")
+//	List<EmergencyToolBean> emergencytools = new ArrayList<EmergencyToolBean>();
+//	@OneToMany(mappedBy = "productbean")
+//	List<TireGaugeBean> tiregauges = new ArrayList<TireGaugeBean>();
 
 	public ProductBean() {
 		super();

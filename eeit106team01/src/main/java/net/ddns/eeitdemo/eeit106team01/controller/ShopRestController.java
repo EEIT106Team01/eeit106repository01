@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.model.ProductBean1;
 import net.ddns.eeitdemo.eeit106team01.model.ShopBean;
 
 @RestController
@@ -29,10 +29,10 @@ public class ShopRestController {
 
 	@GetMapping(value = { "/products" })
 	@SuppressWarnings("unchecked")
-	public List<ProductBean> findAll() {
+	public List<ProductBean1> findAll() {
 		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("from ProductBean", ProductBean.class);
-		List<ProductBean> result = query.getResultList();
+		Query query = session.createQuery("from ProductBean", ProductBean1.class);
+		List<ProductBean1> result = query.getResultList();
 		return result;
 	}
 

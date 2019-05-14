@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import net.ddns.eeitdemo.eeit106team01.model.shop.OrderBean;
+import net.ddns.eeitdemo.eeit106team01.model.shop.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.model.shop.product.ReviewBean;
 
 @Entity
@@ -18,13 +20,14 @@ public class MemberBeanTest implements Serializable {
 	@Id
 	private Long id;
 	private String name;
-	
+
 	@OneToMany(mappedBy = "memberbeantest")
 	List<ReviewBean> reviews = new ArrayList<ReviewBean>();
 	@OneToMany(mappedBy = "memberBeanTest")
-	List<ReviewBean> OrderBean = new ArrayList<ReviewBean>();
+	List<OrderBean> OrderBean = new ArrayList<OrderBean>();
 	@OneToMany(mappedBy = "memberBeanTest")
-	List<ReviewBean> RefundBean = new ArrayList<ReviewBean>();
+	List<RefundBean> RefundBean = new ArrayList<RefundBean>();
+
 	public Long getId() {
 		return id;
 	}

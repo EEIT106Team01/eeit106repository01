@@ -23,13 +23,13 @@ public class DeliverTypeBean implements Serializable{
 	private String Name;
 	private Integer Price;
 	@OneToMany(mappedBy = "deliverType", cascade = CascadeType.ALL)
-	private List<DeliverTypeBean> deliverTypeList = new ArrayList<>();
+	private List<OrderDetailBean> deliverTypeList = new ArrayList<OrderDetailBean>();
 	
 	public DeliverTypeBean() {
 		super();
 	}
 
-	public DeliverTypeBean(Integer id, String name, Integer price, List<DeliverTypeBean> deliverTypeList) {
+	public DeliverTypeBean(Integer id, String name, Integer price, List<OrderDetailBean> deliverTypeList) {
 		super();
 		Id = id;
 		Name = name;
@@ -61,11 +61,11 @@ public class DeliverTypeBean implements Serializable{
 		Price = price;
 	}
 
-	public List<DeliverTypeBean> getDeliverTypeList() {
+	public List<OrderDetailBean> getDeliverTypeList() {
 		return deliverTypeList;
 	}
 
-	public void setDeliverTypeList(List<DeliverTypeBean> deliverTypeList) {
+	public void setDeliverTypeList(List<OrderDetailBean> deliverTypeList) {
 		this.deliverTypeList = deliverTypeList;
 	}
 }

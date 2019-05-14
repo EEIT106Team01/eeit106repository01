@@ -5,22 +5,19 @@ import java.io.Serializable;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.google.gson.JsonObject;
 
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.model.shop.OrderDetailBean;
+import net.ddns.eeitdemo.eeit106team01.model.shop.RefundDetailBean;
 
 /**
  * @author 冒竣瑋 - This is an Entity for CarCare.
  */
-public class CarCareBean implements Serializable{
+public class CarCareBean implements Serializable {
 
 	private static final long serialVersionUID = -4031176785222281587L;
-	
-	@ManyToOne
-	@JoinColumn(name = "ProductBean_Id_FK")
-	private ProductBean productBean;
 
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
@@ -47,20 +44,24 @@ public class CarCareBean implements Serializable{
 	@Column(nullable = false)
 	private String imagelink;
 
-	@Override
-	public String toString() {
-		return "CarSeatBean [productBean=" + productBean + ", serialnumber=" + serialnumber + ", brand=" + brand
-				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
-				+ ", information=" + information + ", imagelink=" + imagelink + "]";
-	}
+//	@OneToOne
+//	@JoinColumn(name = "CarCareBean_Id_PK")
+//	private OrderDetailBean orderdetailbean;
+//
+//	@OneToOne
+//	@JoinColumn(name = "carCareBean")
+//	private RefundDetailBean refunddetailbean;
 
-	public ProductBean getProduct_id() {
-		return productBean;
-	}
+//	@ManyToOne
+//	@JoinColumn(name = "ProductBean_Id_FK")
+//	private ProductBean productbean;
 
-	public void setProduct_id(ProductBean productBean) {
-		this.productBean = productBean;
-	}
+//	@Override
+//	public String toString() {
+//		return "CarSeatBean [productbean=" + productbean + ", serialnumber=" + serialnumber + ", brand=" + brand
+//				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
+//				+ ", information=" + information + ", imagelink=" + imagelink + "]";
+//	}
 
 	public Long getSerialnumber() {
 		return serialnumber;
@@ -125,5 +126,5 @@ public class CarCareBean implements Serializable{
 	public void setImage(String imagelink) {
 		this.imagelink = imagelink;
 	}
-	
+
 }

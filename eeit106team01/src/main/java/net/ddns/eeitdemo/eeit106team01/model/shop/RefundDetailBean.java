@@ -4,8 +4,12 @@ import java.io.Serializable;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import net.ddns.eeitdemo.eeit106team01.model.shop.product.ProductBean;
@@ -19,23 +23,29 @@ import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarSeat
 public class RefundDetailBean implements Serializable {
 
 	private static final long serialVersionUID = -2001180171846295649L;
-
+	
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Product_Id")
 	private ProductBean product;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_carCare_SerialNumber")
-	private CarCareBean carCareBean;
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_carGps_SerialNumber")
-	private CarGpsBean carGpsBean;
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_carRecorder_SerialNumber")
-	private CarRecorderBean carRecorderBean;
-	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_carSeat_SerialNumber")
-	private CarSeatBean carSeatBean;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "FK_carCare_SerialNumber")
+//	@OneToOne(mappedBy = "refunddetailbean")
+//	private CarCareBean carCareBean;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "FK_carGps_SerialNumber")
+//	private CarGpsBean carGpsBean;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "FK_carRecorder_SerialNumber")
+//	private CarRecorderBean carRecorderBean;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	@JoinColumn(name = "FK_carSeat_SerialNumber")
+//	private CarSeatBean carSeatBean;
+	
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Refund_Id")
 	private RefundBean refund;
@@ -49,10 +59,10 @@ public class RefundDetailBean implements Serializable {
 		super();
 		this.refund = refund;
 		this.product = product;
-		this.carCareBean = carCareBean;
-		this.carGpsBean = carGpsBean;
-		this.carRecorderBean = carRecorderBean;
-		this.carSeatBean = carSeatBean;
+//		this.carCareBean = carCareBean;
+//		this.carGpsBean = carGpsBean;
+//		this.carRecorderBean = carRecorderBean;
+//		this.carSeatBean = carSeatBean;
 	}
 
 	public RefundBean getRefund() {
@@ -71,39 +81,36 @@ public class RefundDetailBean implements Serializable {
 		this.product = product;
 	}
 
-	public CarCareBean getCarCareBean() {
-		return carCareBean;
-	}
+//	public CarCareBean getCarCareBean() {
+//		return carCareBean;
+//	}
+//
+//	public void setCarCareBean(CarCareBean carCareBean) {
+//		this.carCareBean = carCareBean;
+//	}
 
-	public void setCarCareBean(CarCareBean carCareBean) {
-		this.carCareBean = carCareBean;
-	}
+//	public CarGpsBean getCarGpsBean() {
+//		return carGpsBean;
+//	}
+//
+//	public void setCarGpsBean(CarGpsBean carGpsBean) {
+//		this.carGpsBean = carGpsBean;
+//	}
+//
+//	public CarRecorderBean getCarRecorderBean() {
+//		return carRecorderBean;
+//	}
+//
+//	public void setCarRecorderBean(CarRecorderBean carRecorderBean) {
+//		this.carRecorderBean = carRecorderBean;
+//	}
+//
+//	public CarSeatBean getCarSeatBean() {
+//		return carSeatBean;
+//	}
+//
+//	public void setCarSeatBean(CarSeatBean carSeatBean) {
+//		this.carSeatBean = carSeatBean;
+//	}
 
-	public CarGpsBean getCarGpsBean() {
-		return carGpsBean;
-	}
-
-	public void setCarGpsBean(CarGpsBean carGpsBean) {
-		this.carGpsBean = carGpsBean;
-	}
-
-	public CarRecorderBean getCarRecorderBean() {
-		return carRecorderBean;
-	}
-
-	public void setCarRecorderBean(CarRecorderBean carRecorderBean) {
-		this.carRecorderBean = carRecorderBean;
-	}
-
-	public CarSeatBean getCarSeatBean() {
-		return carSeatBean;
-	}
-
-	public void setCarSeatBean(CarSeatBean carSeatBean) {
-		this.carSeatBean = carSeatBean;
-	}
-
-	
-
-	
 }
