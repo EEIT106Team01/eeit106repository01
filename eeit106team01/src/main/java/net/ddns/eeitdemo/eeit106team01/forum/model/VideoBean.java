@@ -25,7 +25,7 @@ public class VideoBean {
 	private String thumbnailURI;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String gifURI;
-	private Long videoLength;
+	private Double videoLength;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String updateMessage;
 
@@ -34,7 +34,7 @@ public class VideoBean {
 	}
 
 	public VideoBean(Date uploadTime, String videoStatus, String videoURI, String thumbnailURI,
-			String gifURI, Long videoLength, String updateMessage) {
+			String gifURI, Double videoLength, String updateMessage) {
 		super();
 		this.uploadTime = uploadTime;
 		this.videoStatus = videoStatus;
@@ -93,11 +93,11 @@ public class VideoBean {
 		this.gifURI = gifURI;
 	}
 
-	public Long getVideoLength() {
+	public Double getVideoLength() {
 		return videoLength;
 	}
 
-	public void setVideoLength(Long videoLength) {
+	public void setVideoLength(Double videoLength) {
 		this.videoLength = videoLength;
 	}
 

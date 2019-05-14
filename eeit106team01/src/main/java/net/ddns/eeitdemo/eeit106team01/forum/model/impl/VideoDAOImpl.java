@@ -16,7 +16,7 @@ public class VideoDAOImpl implements VideoDAO {
 
 	@Override
 	public VideoBean findByPrimaryKey(int id) {
-		return sessionFactory.getCurrentSession().find(VideoBean.class, id);
+		return sessionFactory.getCurrentSession().get(VideoBean.class, id);
 	}
 
 	@Override
@@ -26,14 +26,20 @@ public class VideoDAOImpl implements VideoDAO {
 
 	@Override
 	public VideoBean insert(VideoBean videoBean) {
-		Integer id = (Integer) sessionFactory.getCurrentSession().save(videoBean);
-		return this.findByPrimaryKey(id);
+		if (videoBean != null) {
+			Integer id = (Integer) sessionFactory.getCurrentSession().save(videoBean);
+			return this.findByPrimaryKey(id);
+		}
+		return null;
 	}
 
 	@Override
 	public VideoBean update(VideoBean videoBean) {
-		sessionFactory.getCurrentSession().update(videoBean);
-		return this.findByPrimaryKey(videoBean.getId());
+		if (videoBean != null) {
+			sessionFactory.getCurrentSession().update(videoBean);
+			return this.findByPrimaryKey(videoBean.getId());
+		}
+		return null;
 	}
 
 	@Override

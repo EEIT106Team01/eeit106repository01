@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,11 +26,11 @@ public class RefundBean implements Serializable {
 	private String comment;
 	private String processStatus;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	@JoinColumn(name = "FK_member_Id")
 	private MemberBeanTest memberBeanTest;
 
-	@OneToMany(mappedBy = "refundBean", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "refundBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
 	private List<RefundDetailBean> refundDetailBeans = new ArrayList<RefundDetailBean>();
 
 	public Long getId() {

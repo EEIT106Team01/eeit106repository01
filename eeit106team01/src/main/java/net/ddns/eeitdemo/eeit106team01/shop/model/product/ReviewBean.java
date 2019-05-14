@@ -3,8 +3,10 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.product;
 import java.io.Serializable;
 import java.sql.Blob;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -39,12 +41,12 @@ public class ReviewBean implements Serializable {
 
 	private Blob image;
 
-	@ManyToOne
-	@JoinColumn(name = "MemberBeanTest_Id_FK")
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "FK_MemberBeanTest_Id")
 	private MemberBeanTest memberBeanTest;
 
-	@ManyToOne
-	@JoinColumn(name = "ProductBean_Id_FK")
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "FK_ProductBean_Id")
 	private ProductBean productBean;
 
 	public Long getId() {
