@@ -1,8 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -49,9 +47,9 @@ public class AntiTheftBean implements Serializable {
 	@Column(nullable = false)
 	private String imagelink;
 
-	@ManyToOne
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_ProductBean_Id")
-	private List<ProductBean> productBean = new ArrayList<ProductBean>();
+	private ProductBean productBean;
 
 	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_OrderDetailBean_SerialNumber")
