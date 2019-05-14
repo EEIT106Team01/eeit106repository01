@@ -49,6 +49,7 @@ public class ArticleTopicCurrentBean {
 	List<ArticleContentCurrentBean> articleContentCurrentBeanList = new ArrayList<>();
 	
 //	memberPK
+	
 //	vedioPK
 	@OneToOne
 	@PrimaryKeyJoinColumn
