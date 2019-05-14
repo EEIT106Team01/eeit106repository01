@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
@@ -22,55 +21,39 @@ public class RefundBean implements Serializable {
 	private static final long serialVersionUID = -5659890739956492348L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private Long id;
+	private String comment;
+	private String processStatus;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_member_Id")
 	private MemberBeanTest memberBeanTest;
-
-	private String Comment;
-	private String ProcessStatus;
-
+	
 	@OneToMany(mappedBy = "refund", cascade = CascadeType.ALL)
 	private List<RefundDetailBean> RefundList = new ArrayList<RefundDetailBean>();
 
 	public Long getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		Id = id;
-	}
-
-	public MemberBeanTest getMemberId() {
-		return memberBeanTest;
-	}
-
-	public void setMemberId(MemberBeanTest memberBeanTest) {
-		this.memberBeanTest = memberBeanTest;
+		this.id = id;
 	}
 
 	public String getComment() {
-		return Comment;
+		return comment;
 	}
 
 	public void setComment(String comment) {
-		Comment = comment;
+		this.comment = comment;
 	}
 
 	public String getProcessStatus() {
-		return ProcessStatus;
+		return processStatus;
 	}
 
 	public void setProcessStatus(String processStatus) {
-		ProcessStatus = processStatus;
+		this.processStatus = processStatus;
 	}
 
-	public List<RefundDetailBean> getRefundList() {
-		return RefundList;
-	}
-
-	public void setRefundList(List<RefundDetailBean> refundList) {
-		RefundList = refundList;
-	}
 }

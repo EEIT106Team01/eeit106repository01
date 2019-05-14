@@ -14,6 +14,15 @@ import javax.persistence.Table;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarGpsBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarRecorderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarSeatBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.EmergencyToolBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.HelmetRecorderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.MotorcycleGpsBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.MotorcycleRecorderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.TireGaugeBean;
 
 @Entity
 public class RefundDetailBean implements Serializable {
@@ -28,27 +37,49 @@ public class RefundDetailBean implements Serializable {
 	@JoinColumn(name = "FK_Product_Id")
 	private ProductBean product;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "FK_antiTheftBean_SerialNumber")
-	private AntiTheftBean antiTheftBean;
-
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Refund_Id")
 	private RefundBean refund;
 
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "FK_carCare_SerialNumber")
-//	@OneToOne(mappedBy = "refunddetailbean")
-//	private CarCareBean carCareBean;
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "FK_carGps_SerialNumber")
-//	private CarGpsBean carGpsBean;
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "FK_carRecorder_SerialNumber")
-//	private CarRecorderBean carRecorderBean;
-//	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "FK_carSeat_SerialNumber")
-//	private CarSeatBean carSeatBean;
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_AntiTheftBean_SerialNumber")
+	private AntiTheftBean antiTheftBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_CarCareBean_SerialNumber")
+	private CarCareBean carCareBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_CarGpsBean_SerialNumber")
+	private CarGpsBean carGpsBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_CarRecorderBean_SerialNumber")
+	private CarRecorderBean carRecorderBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_CarSeatBean_SerialNumber")
+	private CarSeatBean carSeatBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_EmergencyToolBean_SerialNumber")
+	private EmergencyToolBean emergencyToolBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_HelmetRecorderBean_SerialNumber")
+	private HelmetRecorderBean helmetRecorderBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_MotorcycleGpsBean_SerialNumber")
+	private MotorcycleGpsBean motorcycleGpsBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_MotorcycleRecorderBean_SerialNumber")
+	private MotorcycleRecorderBean motorcycleRecorderBean;
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_TireGaugeBean_SerialNumber")
+	private TireGaugeBean tireGaugeBean;
 
 	public Long getId() {
 		return id;
@@ -57,33 +88,5 @@ public class RefundDetailBean implements Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public ProductBean getProduct() {
-		return product;
-	}
-
-	public void setProduct(ProductBean product) {
-		this.product = product;
-	}
-
-	public AntiTheftBean getAntiTheftBean() {
-		return antiTheftBean;
-	}
-
-	public void setAntiTheftBean(AntiTheftBean antiTheftBean) {
-		this.antiTheftBean = antiTheftBean;
-	}
-
-	public RefundBean getRefund() {
-		return refund;
-	}
-
-	public void setRefund(RefundBean refund) {
-		this.refund = refund;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
+	
 }

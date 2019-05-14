@@ -12,7 +12,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
@@ -22,82 +21,57 @@ public class OrderBean implements Serializable {
 	private static final long serialVersionUID = -2108352266354853778L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long Id;
+	private Long id;
+	private String payStatus;
+	private java.util.Date time;
+	private Integer totalPrice;
+	private String transationType;
+	private String deliverStatus;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_member_Id")
 	private MemberBeanTest memberBeanTest;
-
-	private String PayStatus;
-	private java.util.Date Time;
-	private Integer TotalPrice;
-	private String TransationType;
-	private String DeliverStatus;
-
+	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderDetailBean> orderDetailList = new ArrayList<OrderDetailBean>();
 
 	public Long getId() {
-		return Id;
+		return id;
 	}
 
 	public void setId(Long id) {
-		Id = id;
-	}
-
-	public MemberBeanTest getMemberId() {
-		return memberBeanTest;
-	}
-
-	public void setMemberId(MemberBeanTest memberbeantest) {
-		this.memberBeanTest = memberbeantest;
+		this.id = id;
 	}
 
 	public String getPayStatus() {
-		return PayStatus;
+		return payStatus;
 	}
 
 	public void setPayStatus(String payStatus) {
-		PayStatus = payStatus;
+		this.payStatus = payStatus;
 	}
 
 	public java.util.Date getTime() {
-		return Time;
+		return time;
 	}
 
 	public void setTime(java.util.Date time) {
-		Time = time;
-	}
-
-	public Integer getTotalPrice() {
-		return TotalPrice;
-	}
-
-	public void setTotalPrice(Integer totalPrice) {
-		TotalPrice = totalPrice;
+		this.time = time;
 	}
 
 	public String getTransationType() {
-		return TransationType;
+		return transationType;
 	}
 
 	public void setTransationType(String transationType) {
-		TransationType = transationType;
+		this.transationType = transationType;
 	}
 
 	public String getDeliverStatus() {
-		return DeliverStatus;
+		return deliverStatus;
 	}
 
 	public void setDeliverStatus(String deliverStatus) {
-		DeliverStatus = deliverStatus;
-	}
-
-	public List<OrderDetailBean> getOrderList() {
-		return orderDetailList;
-	}
-
-	public void setOrderList(List<OrderDetailBean> OrderDetails) {
-		this.orderDetailList = OrderDetails;
+		this.deliverStatus = deliverStatus;
 	}
 }

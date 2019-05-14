@@ -3,70 +3,47 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 import java.io.Serializable;
 
 import javax.persistence.Entity;
-import javax.persistence.Table;
 
 @Entity
 public class CancelOrderDetailBean implements Serializable {
 
 	private static final long serialVersionUID = 3873757388653464094L;
+	
 	private CancelOrderBean cancelOrder;
-	private String Item_SerialNumber;
-	private Long Product_Id;
-	private Integer Price;
-	private Long DeliverType_Id;
-
-	public CancelOrderDetailBean() {
-		super();
-	}
-
-	public CancelOrderDetailBean(CancelOrderBean cancelOrder, String item_SerialNumber, Long product_Id,
-			Integer price, Long deliverType_Id) {
-		super();
-		this.cancelOrder = cancelOrder;
-		Item_SerialNumber = item_SerialNumber;
-		Product_Id = product_Id;
-		Price = price;
-		DeliverType_Id = deliverType_Id;
-	}
-
+	private String itemSerialNumber;
+	private Long productId;
+	private Integer price;
+	private Long deliverTypeId;
+	
 	public CancelOrderBean getCancelOrder() {
 		return cancelOrder;
 	}
-
 	public void setCancelOrder(CancelOrderBean cancelOrder) {
 		this.cancelOrder = cancelOrder;
 	}
-
-	public String getItem_SerialNumber() {
-		return Item_SerialNumber;
+	public String getItemSerialNumber() {
+		return itemSerialNumber;
 	}
-
-	public void setItem_SerialNumber(String item_SerialNumber) {
-		Item_SerialNumber = item_SerialNumber;
+	public void setItemSerialNumber(String itemSerialNumber) {
+		this.itemSerialNumber = itemSerialNumber;
 	}
-
-	public Long getProduct_Id() {
-		return Product_Id;
+	public Long getProductId() {
+		return productId;
 	}
-
-	public void setProduct_Id(Long product_Id) {
-		Product_Id = product_Id;
+	public void setProductId(Long productId) {
+		this.productId = productId;
 	}
-
 	public Integer getPrice() {
-		return Price;
+		return price;
 	}
-
 	public void setPrice(Integer price) {
-		Price = price;
+		this.price = price;
 	}
-
-	public Long getDeliverType_Id() {
-		return DeliverType_Id;
+	public Long getDeliverTypeId() {
+		return deliverTypeId;
 	}
-
-	public void setDeliverType_Id(Long deliverType_Id) {
-		DeliverType_Id = deliverType_Id;
+	public void setDeliverTypeId(Long deliverTypeId) {
+		this.deliverTypeId = deliverTypeId;
 	}
 
 }

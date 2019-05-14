@@ -19,50 +19,35 @@ public class DeliverTypeBean implements Serializable{
 	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Long Id;
-	
-	private String Name;
-	private Integer Price;
+	private Long id;
+	private String name;
+	private Integer price;
 	
 	@OneToMany(mappedBy = "deliverType", cascade = CascadeType.ALL)
 	private List<OrderDetailBean> deliverTypeList = new ArrayList<OrderDetailBean>();
-	
-	
-	
-	public DeliverTypeBean() {
-		super();
-	}
-	public DeliverTypeBean(Long id, String name, Integer price) {
-		super();
-		Id = id;
-		Name = name;
-		Price = price;
-	}
+
 	public Long getId() {
-		return Id;
+		return id;
 	}
+
 	public void setId(Long id) {
-		Id = id;
+		this.id = id;
 	}
+
 	public String getName() {
-		return Name;
+		return name;
 	}
+
 	public void setName(String name) {
-		Name = name;
+		this.name = name;
 	}
+
 	public Integer getPrice() {
-		return Price;
+		return price;
 	}
+
 	public void setPrice(Integer price) {
-		Price = price;
+		this.price = price;
 	}
-	public List<OrderDetailBean> getDeliverTypeList() {
-		return deliverTypeList;
-	}
-	public void setDeliverTypeList(List<OrderDetailBean> deliverTypeList) {
-		this.deliverTypeList = deliverTypeList;
-	}
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
+
 }
