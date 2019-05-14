@@ -11,6 +11,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 //	yaowei: 0513
@@ -48,6 +50,9 @@ public class ArticleTopicCurrentBean {
 	
 //	memberPK
 //	vedioPK
+	@OneToOne
+	@PrimaryKeyJoinColumn
+	private VideoBean videoBean;
 
 	public ArticleTopicCurrentBean() {
 		super();
@@ -56,7 +61,7 @@ public class ArticleTopicCurrentBean {
 	public ArticleTopicCurrentBean(String topicHeader, String topicType, String topicRegion, Integer topicLikeNum,
 		Integer contentReplyNum, Date topicCreateTime, Date topicUpdateTime, String topicStatus, Date accidentTime,
 		String accidentLocation, Double accidentLocationLongitude, Double accidentLocationLatitude, String topicContent,
-		Date topicContentUpdateTime, String updateMessage) {
+		Date topicContentUpdateTime, String updateMessage, VideoBean videoBean) {
 		super();
 		this.topicHeader = topicHeader;
 		this.topicType = topicType;
@@ -73,6 +78,7 @@ public class ArticleTopicCurrentBean {
 		this.topicContent = topicContent;
 		this.topicContentUpdateTime = topicContentUpdateTime;
 		this.updateMessage = updateMessage;
+		this.videoBean = videoBean;
 	}
 	
 	
@@ -211,6 +217,14 @@ public class ArticleTopicCurrentBean {
 
 	public void setArticleContentCurrentBeanList(List<ArticleContentCurrentBean> articleContentCurrentBeanList) {
 		this.articleContentCurrentBeanList = articleContentCurrentBeanList;
+	}
+
+	public VideoBean getVideoBean() {
+		return videoBean;
+	}
+
+	public void setVideoBean(VideoBean videoBean) {
+		this.videoBean = videoBean;
 	}
 
 }

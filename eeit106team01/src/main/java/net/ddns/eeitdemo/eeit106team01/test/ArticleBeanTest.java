@@ -36,7 +36,8 @@ public class ArticleBeanTest implements CommandLineRunner {
 				34.56, // accidentLocationLatitude
 				"我是主題1號", // topicContent
 				new java.util.Date(60000), // topicContentUpdateTime
-				"使用者修改" // updateMessage
+				"使用者修改", // updateMessage
+				null
 		);
 
 		ArticleContentCurrentBean content1 = new ArticleContentCurrentBean(
@@ -46,7 +47,8 @@ public class ArticleBeanTest implements CommandLineRunner {
 				new java.util.Date(100000), // contentUpdateTime
 				"replyType", // contentStatus 這欄位可以刪了吧
 				"我是內文1號", // contentContent
-				"使用者修改" // updateMessage
+				"使用者修改", // updateMessage
+				null
 		);
 
 		ArticleContentCurrentBean content2 = new ArticleContentCurrentBean(
@@ -56,7 +58,8 @@ public class ArticleBeanTest implements CommandLineRunner {
 				new java.util.Date(100000), // contentUpdateTime
 				"replyType", // contentStatus 這欄位可以刪了吧
 				"我是內文2號", // contentContent
-				"使用者修改" // updateMessage
+				"使用者修改", // updateMessage
+				null
 		);
 
 		ArticleContentCurrentBean content3 = new ArticleContentCurrentBean(
@@ -66,7 +69,8 @@ public class ArticleBeanTest implements CommandLineRunner {
 				new java.util.Date(100000), // contentUpdateTime
 				"replyType", // contentStatus 這欄位可以刪了吧
 				"我是內文3號", // contentContent
-				"使用者修改" // updateMessage
+				"使用者修改", // updateMessage
+				null
 		);
 
 		// 把topic1塞給3個content

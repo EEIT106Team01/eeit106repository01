@@ -1,0 +1,137 @@
+package net.ddns.eeitdemo.eeit106team01.forum.model;
+
+import java.util.Date;
+
+import javax.persistence.CascadeType;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
+import javax.persistence.Table;
+
+@Entity
+@Table(name = "video")
+public class VideoBean {
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+//	private Integer memberPK;
+	private java.util.Date uploadTime;
+	@Column(columnDefinition = "nvarchar(255)")
+	private String videoStatus;
+	@Column(columnDefinition = "nvarchar(255)")
+	private String videoURI;
+	@Column(columnDefinition = "nvarchar(255)")
+	private String thumbnailURI;
+	@Column(columnDefinition = "nvarchar(255)")
+	private String gifURI;
+	private Long videoLength;
+	@Column(columnDefinition = "nvarchar(255)")
+	private String updateMessage;
+	@OneToOne(mappedBy = "articleTopicCurrent", cascade = CascadeType.ALL)
+	private ArticleTopicCurrentBean articleTopicCurrentBean;
+	@OneToOne(mappedBy = "articleContentCurrent", cascade = CascadeType.ALL)
+	private ArticleContentCurrentBean articleContentCurrentBean;
+
+	public VideoBean() {
+		super();
+	}
+
+	public VideoBean(Integer id, Date uploadTime, String videoStatus, String videoURI, String thumbnailURI,
+			String gifURI, Long videoLength, String updateMessage, ArticleTopicCurrentBean articleTopicCurrentBean,
+			ArticleContentCurrentBean articleContentCurrentBean) {
+		super();
+		this.id = id;
+		this.uploadTime = uploadTime;
+		this.videoStatus = videoStatus;
+		this.videoURI = videoURI;
+		this.thumbnailURI = thumbnailURI;
+		this.gifURI = gifURI;
+		this.videoLength = videoLength;
+		this.updateMessage = updateMessage;
+		this.articleTopicCurrentBean = articleTopicCurrentBean;
+		this.articleContentCurrentBean = articleContentCurrentBean;
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public java.util.Date getUploadTime() {
+		return uploadTime;
+	}
+
+	public void setUploadTime(java.util.Date uploadTime) {
+		this.uploadTime = uploadTime;
+	}
+
+	public String getVideoStatus() {
+		return videoStatus;
+	}
+
+	public void setVideoStatus(String videoStatus) {
+		this.videoStatus = videoStatus;
+	}
+
+	public String getVideoURI() {
+		return videoURI;
+	}
+
+	public void setVideoURI(String videoURI) {
+		this.videoURI = videoURI;
+	}
+
+	public String getThumbnailURI() {
+		return thumbnailURI;
+	}
+
+	public void setThumbnailURI(String thumbnailURI) {
+		this.thumbnailURI = thumbnailURI;
+	}
+
+	public String getGifURI() {
+		return gifURI;
+	}
+
+	public void setGifURI(String gifURI) {
+		this.gifURI = gifURI;
+	}
+
+	public Long getVideoLength() {
+		return videoLength;
+	}
+
+	public void setVideoLength(Long videoLength) {
+		this.videoLength = videoLength;
+	}
+
+	public String getUpdateMessage() {
+		return updateMessage;
+	}
+
+	public void setUpdateMessage(String updateMessage) {
+		this.updateMessage = updateMessage;
+	}
+
+	public ArticleTopicCurrentBean getArticleTopicCurrentBean() {
+		return articleTopicCurrentBean;
+	}
+
+	public void setArticleTopicCurrentBean(ArticleTopicCurrentBean articleTopicCurrentBean) {
+		this.articleTopicCurrentBean = articleTopicCurrentBean;
+	}
+
+	public ArticleContentCurrentBean getArticleContentCurrentBean() {
+		return articleContentCurrentBean;
+	}
+
+	public void setArticleContentCurrentBean(ArticleContentCurrentBean articleContentCurrentBean) {
+		this.articleContentCurrentBean = articleContentCurrentBean;
+	}
+}
