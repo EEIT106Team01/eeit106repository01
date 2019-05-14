@@ -13,6 +13,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
 
 //yaowei: 0513
@@ -47,13 +49,17 @@ public class ArticleContentCurrentBean {
 
 //	memberPK
 //	vedioPK
-	
+	@OneToOne
+	@PrimaryKeyJoinColumn
+	private VideoBean videoBean;
+
 	public ArticleContentCurrentBean() {
 		super();
 	}
-	
+
 	public ArticleContentCurrentBean(Integer contentLikeNum, Integer contentReplyNum, Date contentCreateTime,
-			Date contentUpdateTime, String contentStatus, String contentContent, String updateMessage) {
+			Date contentUpdateTime, String contentStatus, String contentContent, String updateMessage,
+			VideoBean videoBean) {
 		super();
 		this.contentLikeNum = contentLikeNum;
 		this.contentReplyNum = contentReplyNum;
@@ -62,9 +68,8 @@ public class ArticleContentCurrentBean {
 		this.contentStatus = contentStatus;
 		this.contentContent = contentContent;
 		this.updateMessage = updateMessage;
+		this.videoBean = videoBean;
 	}
-	
-	
 
 	public Integer getId() {
 		return id;
@@ -152,6 +157,14 @@ public class ArticleContentCurrentBean {
 
 	public void setSubReplyList(List<ArticleContentCurrentBean> subReplyList) {
 		this.subReplyList = subReplyList;
+	}
+
+	public VideoBean getVideoBean() {
+		return videoBean;
+	}
+
+	public void setVideoBean(VideoBean videoBean) {
+		this.videoBean = videoBean;
 	}
 
 }
