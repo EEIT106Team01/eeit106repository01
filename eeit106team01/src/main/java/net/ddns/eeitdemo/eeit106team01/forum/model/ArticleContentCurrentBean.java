@@ -12,12 +12,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-//yaowei: 0513
 
 @Entity
 @Table(name = "ArticleContentCurrent")
@@ -44,13 +40,11 @@ public class ArticleContentCurrentBean {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "reply_id")
 	private ArticleContentCurrentBean reply;
-	@OneToMany(mappedBy = "reply", cascade = CascadeType.ALL)
-	private List<ArticleContentCurrentBean> subReplyList = new ArrayList<>();
 
 //	memberPK
-	
+
 //	vedioPK
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "video_id")
 	private VideoBean videoBean;
 
@@ -59,8 +53,7 @@ public class ArticleContentCurrentBean {
 	}
 
 	public ArticleContentCurrentBean(Integer contentLikeNum, Integer contentReplyNum, Date contentCreateTime,
-			Date contentUpdateTime, String contentStatus, String contentContent, String updateMessage,
-			VideoBean videoBean) {
+			Date contentUpdateTime, String contentStatus, String contentContent, String updateMessage) {
 		super();
 		this.contentLikeNum = contentLikeNum;
 		this.contentReplyNum = contentReplyNum;
@@ -69,7 +62,6 @@ public class ArticleContentCurrentBean {
 		this.contentStatus = contentStatus;
 		this.contentContent = contentContent;
 		this.updateMessage = updateMessage;
-		this.videoBean = videoBean;
 	}
 
 	public Integer getId() {
@@ -150,14 +142,6 @@ public class ArticleContentCurrentBean {
 
 	public void setReply(ArticleContentCurrentBean reply) {
 		this.reply = reply;
-	}
-
-	public List<ArticleContentCurrentBean> getSubReplyList() {
-		return subReplyList;
-	}
-
-	public void setSubReplyList(List<ArticleContentCurrentBean> subReplyList) {
-		this.subReplyList = subReplyList;
 	}
 
 	public VideoBean getVideoBean() {
