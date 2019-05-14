@@ -48,10 +48,17 @@
 		<!-- 		</div> -->
 	</div>
 	<script>
-		$.get("video", "", getVideo, "json");
-		function getVideo(data){
-			var names = data.name;
-			for (let i = 0; i < names.length; i++){
+		$.get("videos", "", getVideo, "json");
+		function getVideo(datas){
+			for (let i = 0; i < datas.length; i++){
+				let thumbnailURI = "preparing.jpg";
+				let gifURI = "preparing.jpg";
+				if (datas[i].thumbnailURI!=null && datas[i].thumbnailURI.length != 0){
+					thumbnailURI = datas[i].thumbnailURI;
+				}
+				if (datas[i].gifURI!=null && datas[i].gifURI.length != 0){
+					gifURI = datas[i].gifURI;
+				}
 				let card = document.createElement("div");
 				card.className = "card";
 				card.style.width = "48%";
@@ -64,12 +71,12 @@
 				let video = document.createElement("video");
 				video.id = "player" + i;
 				video.className = "card-img-top";
-				video.poster = "storage/jpg/" + names[i] + ".jpg";
+				video.poster = "storage/jpgs/" + thumbnailURI;
 				video.controls = true;
-				video.src = "storage/video/" + names[i];
+				video.src = "storage/videos/" + datas[i].videoURI;
 				let cardBody = document.createElement("div");
 				cardBody.className = "card-body";
-				cardBody.textContent = names[i].substr(0, 13);
+				cardBody.textContent = datas[i].videoURI.substr(0, 13);
 				videoDiv.appendChild(video);
 				card.appendChild(videoDiv);
 				card.appendChild(cardBody);
@@ -77,9 +84,9 @@
 				const player = new Plyr('#player' + i);
 				$(document.getElementById('player' + i).nextElementSibling).hover(function(){
 					console.log($(this));
-					$(this).css("background-image", "url('storage/gif/" + names[i] + ".gif')");
+					$(this).css("background-image", "url('storage/gifs/" + gifURI + "')");
 					}, function(){
-					$(this).css("background-image", "url('storage/jpg/" + names[i] + ".jpg')");
+					$(this).css("background-image", "url('storage/jpgs/" + thumbnailURI + "')");
 				});
 			}
 		}
