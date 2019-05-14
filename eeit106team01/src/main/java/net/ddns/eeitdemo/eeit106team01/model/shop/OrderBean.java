@@ -24,7 +24,7 @@ public class OrderBean implements Serializable{
 	private static final long serialVersionUID = -2108352266354853778L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer Id;
+	private Long Id;
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="FK_member_Id") 
 	private MemberBeanTest memberBeanTest;
@@ -41,7 +41,7 @@ public class OrderBean implements Serializable{
 		super();
 	}
 	
-	public OrderBean(Integer id, MemberBeanTest memberbeantest, String payStatus, Date time, Integer totalPrice,
+	public OrderBean(Long id, MemberBeanTest memberbeantest, String payStatus, Date time, Integer totalPrice,
 			String transationType, String deliverStatus) {
 		super();
 		Id = id;
@@ -53,10 +53,10 @@ public class OrderBean implements Serializable{
 		DeliverStatus = deliverStatus;
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return Id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		Id = id;
 	}
 	public MemberBeanTest getMemberId() {

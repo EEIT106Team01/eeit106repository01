@@ -23,7 +23,7 @@ public class RefundBean implements Serializable{
 	private static final long serialVersionUID = -5659890739956492348L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer Id;
+	private Long Id;
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="FK_member_Id")
 	private MemberBeanTest memberBeanTest;
@@ -37,7 +37,7 @@ public class RefundBean implements Serializable{
 		super();
 
 	}
-	public RefundBean(Integer id, MemberBeanTest memberbeantest, String comment, String processStatus) {
+	public RefundBean(Long id, MemberBeanTest memberbeantest, String comment, String processStatus) {
 		super();
 		Id = id;
 		memberBeanTest = memberbeantest;
@@ -45,10 +45,10 @@ public class RefundBean implements Serializable{
 		ProcessStatus = processStatus;
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return Id;
 	}
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		Id = id;
 	}
 	public MemberBeanTest getMemberId() {

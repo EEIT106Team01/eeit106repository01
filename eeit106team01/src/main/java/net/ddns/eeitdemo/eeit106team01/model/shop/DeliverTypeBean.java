@@ -19,7 +19,7 @@ public class DeliverTypeBean implements Serializable{
 	private static final long serialVersionUID = 2054965599453849024L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	private Integer Id;
+	private Long Id;
 	private String Name;
 	private Integer Price;
 	@OneToMany(mappedBy = "deliverType", cascade = CascadeType.ALL)
@@ -29,7 +29,7 @@ public class DeliverTypeBean implements Serializable{
 		super();
 	}
 
-	public DeliverTypeBean(Integer id, String name, Integer price, List<OrderDetailBean> deliverTypeList) {
+	public DeliverTypeBean(Long id, String name, Integer price, List<OrderDetailBean> deliverTypeList) {
 		super();
 		Id = id;
 		Name = name;
@@ -37,11 +37,11 @@ public class DeliverTypeBean implements Serializable{
 		this.deliverTypeList = deliverTypeList;
 	}
 	
-	public Integer getId() {
+	public Long getId() {
 		return Id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		Id = id;
 	}
 

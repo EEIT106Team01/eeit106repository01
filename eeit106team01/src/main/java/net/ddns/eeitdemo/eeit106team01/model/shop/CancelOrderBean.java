@@ -16,8 +16,8 @@ public class CancelOrderBean implements Serializable {
 	private static final long serialVersionUID = 6911694576480865027L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer Id;
-	private Integer MemberId;
+	private Long Id;
+	private Long MemberId;
 	private String PayStatus;
 	private java.util.Date Time;
 	private Integer TotalPrice;
@@ -27,7 +27,7 @@ public class CancelOrderBean implements Serializable {
 		super();
 	}
 
-	public CancelOrderBean(Integer id, Integer memberId, String payStatus, Date time, Integer totalPrice,
+	public CancelOrderBean(Long id, Long memberId, String payStatus, Date time, Integer totalPrice,
 			String transationType) {
 		super();
 		Id = id;
@@ -38,19 +38,19 @@ public class CancelOrderBean implements Serializable {
 		TransationType = transationType;
 	}
 
-	public Integer getId() {
+	public Long getId() {
 		return Id;
 	}
 
-	public void setId(Integer id) {
+	public void setId(Long id) {
 		Id = id;
 	}
 
-	public Integer getMemberId() {
+	public Long getMemberId() {
 		return MemberId;
 	}
 
-	public void setMemberId(Integer memberId) {
+	public void setMemberId(Long memberId) {
 		MemberId = memberId;
 	}
 
