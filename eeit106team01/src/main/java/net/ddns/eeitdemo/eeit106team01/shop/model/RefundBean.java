@@ -24,9 +24,11 @@ public class RefundBean implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long Id;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="FK_member_Id")
 	private MemberBeanTest memberBeanTest;
+	
 	private String Comment;
 	private String ProcessStatus;
 	

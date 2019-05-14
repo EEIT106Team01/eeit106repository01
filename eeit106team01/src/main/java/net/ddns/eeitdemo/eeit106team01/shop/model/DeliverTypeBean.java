@@ -17,55 +17,53 @@ import javax.persistence.Table;
 public class DeliverTypeBean implements Serializable{
 
 	private static final long serialVersionUID = 2054965599453849024L;
+	
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long Id;
+	
 	private String Name;
 	private Integer Price;
+	
 	@OneToMany(mappedBy = "deliverType", cascade = CascadeType.ALL)
 	private List<OrderDetailBean> deliverTypeList = new ArrayList<OrderDetailBean>();
+	
+	
 	
 	public DeliverTypeBean() {
 		super();
 	}
-
-	public DeliverTypeBean(Long id, String name, Integer price, List<OrderDetailBean> deliverTypeList) {
+	public DeliverTypeBean(Long id, String name, Integer price) {
 		super();
 		Id = id;
 		Name = name;
 		Price = price;
-		this.deliverTypeList = deliverTypeList;
 	}
-	
 	public Long getId() {
 		return Id;
 	}
-
 	public void setId(Long id) {
 		Id = id;
 	}
-
 	public String getName() {
 		return Name;
 	}
-
 	public void setName(String name) {
 		Name = name;
 	}
-
 	public Integer getPrice() {
 		return Price;
 	}
-
 	public void setPrice(Integer price) {
 		Price = price;
 	}
-
 	public List<OrderDetailBean> getDeliverTypeList() {
 		return deliverTypeList;
 	}
-
 	public void setDeliverTypeList(List<OrderDetailBean> deliverTypeList) {
 		this.deliverTypeList = deliverTypeList;
+	}
+	public static long getSerialversionuid() {
+		return serialVersionUID;
 	}
 }

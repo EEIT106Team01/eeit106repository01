@@ -13,6 +13,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarGpsBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarRecorderBean;
@@ -41,7 +42,11 @@ public class OrderDetailBean implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Order_Id")
 	private OrderBean order;
-
+	
+	@OneToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_antiTheftBean_SerialNumber")
+	private AntiTheftBean antiTheftBean;
+	
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	@JoinColumn(name = "FK_carCare_SerialNumber")
 	

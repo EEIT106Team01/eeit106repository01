@@ -1,15 +1,21 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 import com.google.gson.JsonObject;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
@@ -24,6 +30,12 @@ public class AntiTheftBean implements Serializable {
 	@JoinColumn(name = "ProductBean_Id_FK")
 	private ProductBean productbean;
 
+	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
+	private List<RefundDetailBean> refundDetailBeanList = new ArrayList<RefundDetailBean>();
+	
+	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
+	private List<OrderDetailBean> orderDetailBeanList = new ArrayList<OrderDetailBean>();
+	
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
 	private Long serialnumber;

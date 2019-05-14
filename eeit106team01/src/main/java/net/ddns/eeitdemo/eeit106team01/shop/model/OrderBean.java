@@ -25,9 +25,11 @@ public class OrderBean implements Serializable{
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Long Id;
+	
 	@ManyToOne(cascade=CascadeType.ALL)
 	@JoinColumn(name="FK_member_Id") 
 	private MemberBeanTest memberBeanTest;
+	
 	private String PayStatus;
 	private java.util.Date Time;
 	private Integer TotalPrice;
@@ -35,7 +37,7 @@ public class OrderBean implements Serializable{
 	private String DeliverStatus;
 	
 	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-	private List<OrderDetailBean> OrderDetails = new ArrayList<OrderDetailBean>();
+	private List<OrderDetailBean> orderDetailList = new ArrayList<OrderDetailBean>();
 	
 	public OrderBean() {
 		super();
@@ -96,9 +98,9 @@ public class OrderBean implements Serializable{
 		DeliverStatus = deliverStatus;
 	}
 	public List<OrderDetailBean> getOrderList() {
-		return OrderDetails;
+		return orderDetailList;
 	}
 	public void setOrderList(List<OrderDetailBean> OrderDetails) {
-		this.OrderDetails = OrderDetails;
+		this.orderDetailList = OrderDetails;
 	}
 }
