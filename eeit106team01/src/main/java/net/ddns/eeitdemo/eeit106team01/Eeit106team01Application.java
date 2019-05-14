@@ -20,6 +20,8 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import net.ddns.eeitdemo.eeit106team01.model.ArticleContentCurrentBean;
+import net.ddns.eeitdemo.eeit106team01.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.model.CustomerBean;
 import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.model.ShopBean;
@@ -68,9 +70,11 @@ public class Eeit106team01Application {
 	@Bean
 	public SessionFactory sessionFactory(@Autowired DataSource dataSource) {
 		LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(dataSource);
-		builder.addAnnotatedClass(CustomerBean.class);
-		builder.addAnnotatedClass(ProductBean.class);
+//		builder.addAnnotatedClass(CustomerBean.class);
+//		builder.addAnnotatedClass(ProductBean.class);
 		builder.addAnnotatedClass(ShopBean.class);
+		builder.addAnnotatedClass(ArticleContentCurrentBean.class);
+		builder.addAnnotatedClass(ArticleTopicCurrentBean.class);
 		
 		Properties props = new Properties();
 		props.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
