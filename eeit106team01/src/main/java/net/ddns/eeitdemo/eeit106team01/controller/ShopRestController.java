@@ -17,22 +17,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
 
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.model.ProductBean1;
 import net.ddns.eeitdemo.eeit106team01.model.ShopBean;
 
-@RestController
+//@RestController
 public class ShopRestController {
 	@Autowired
 	private SessionFactory sessionFactory;
 
 	@GetMapping(value = { "/products" })
 	@SuppressWarnings("unchecked")
-	public List<ProductBean> findAll() {
+	public List<ProductBean1> findAll() {
 		Session session = sessionFactory.openSession();
-		Query query = session.createQuery("from ProductBean", ProductBean.class);
-		List<ProductBean> result = query.getResultList();
+		Query query = session.createQuery("from ProductBean", ProductBean1.class);
+		List<ProductBean1> result = query.getResultList();
 		return result;
 	}
 
@@ -69,7 +68,7 @@ public class ShopRestController {
 		Long endTime;
 		Long durationInNano;
 		Float durationInSeconds;
-		
+
 		List<ShopBean> result = new ArrayList<ShopBean>();
 		try {
 			URL url = new URL("https://feebee.com.tw/all/iphone/?mode=t&page=1");
@@ -80,7 +79,7 @@ public class ShopRestController {
 
 			startTime = System.nanoTime();
 			System.out.printf("\nFetching '%s' ...\n", html);
-			
+
 			Elements names = doc.select(".pure-u-1-4 .container h3");
 			Elements prices = doc.select(".pure-u-1-4 .price");
 			Elements imgLinks = doc.select(".pure-u-1-4 img");
@@ -89,9 +88,9 @@ public class ShopRestController {
 			Elements platformLinks = doc.select(".pure-u-1-4 .items_layer_link");
 			Elements productCounts = doc.select("#result_total");
 			Elements pageCounts = doc.select(".pagination_last");
-			
+
 			String pageCountHref = pageCounts.get(0).absUrl("href");
-			
+
 //			final String cardFooterOneStar = "&#9733; &#9734; &#9734; &#9734; &#9734;";
 //			final String cardFooterTwoStar = "&#9733; &#9733; &#9734; &#9734; &#9734;";
 //			final String cardFooterThreeStar = "&#9733; &#9733; &#9733; &#9734; &#9734;";
@@ -105,7 +104,8 @@ public class ShopRestController {
 					ShopBean bean = new ShopBean();
 					System.out.printf("\n[This is P.%s No.%s]\n", 1, nodeCount + 1);
 					System.out.println("Name: " + names.get(nodeCount).text());
-					System.out.println("Price: " + prices.get(nodeCount).text().replace("價格", "").replace(",", "").trim());
+					System.out.println(
+							"Price: " + prices.get(nodeCount).text().replace("價格", "").replace(",", "").trim());
 					System.out.println("ImgLink: " + imgLinks.get(nodeCount).absUrl("src"));
 					System.out.println("ImgSetLink: " + imgSetLinks.get(nodeCount).absUrl("srcset"));
 					System.out.println("Platform: " + platforms.get(nodeCount).text());
@@ -118,12 +118,14 @@ public class ShopRestController {
 					bean.setImgSetLink(imgSetLinks.get(nodeCount).absUrl("srcset"));
 					bean.setPlatformName(platforms.get(nodeCount).text());
 					bean.setPlatformLink(platformLinks.get(nodeCount).absUrl("href"));
-					bean.setTotalCount(String.valueOf(pageCountHref.substring(pageCountHref.indexOf("page=") + 5, pageCountHref.length())));
+					bean.setTotalCount(String.valueOf(
+							pageCountHref.substring(pageCountHref.indexOf("page=") + 5, pageCountHref.length())));
 					bean.setTotalPage(String.valueOf(productCounts.text()));
 					result.add(nodeCount, bean);
 				}
 			}
-			System.out.printf("\n[There are %s... products match your search!]\n", pageCountHref.substring(pageCountHref.indexOf("page=") + 5, pageCountHref.length()));
+			System.out.printf("\n[There are %s... products match your search!]\n",
+					pageCountHref.substring(pageCountHref.indexOf("page=") + 5, pageCountHref.length()));
 			System.out.printf("\n[There will be %s... pages match your search!]\n", productCounts.text());
 			System.out.printf("\nFinished! Fetched from '%s'\n", html);
 		} catch (IOException e) {
@@ -137,7 +139,7 @@ public class ShopRestController {
 		durationInSeconds = (float) TimeUnit.NANOSECONDS.toMillis(durationInNano) / 1000;
 		System.out.printf("\n本次搜尋使用   %s 秒...", durationInSeconds);
 //		String spendTimeString = String.format("\n本次搜尋使用   %s 秒...", durationInSeconds);
-		
+
 		return result;
 	}
 

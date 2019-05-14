@@ -1,26 +1,24 @@
-package net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car;
+package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
-import com.google.gson.JsonObject;
-
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
- * @author 冒竣瑋 - This is an Entity for CarGps.
+ * @author 冒竣瑋 - Entity for Car Care.
  */
-public class CarGpsBean implements Serializable {
+public class CarCareBean implements Serializable {
 
-	private static final long serialVersionUID = -7853050511010305279L;
-
-	@ManyToOne
-	@JoinColumn(name = "ProductBean_Id_FK")
-	private ProductBean productBean;
+	private static final long serialVersionUID = -4031176785222281587L;
 
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
@@ -39,28 +37,23 @@ public class CarGpsBean implements Serializable {
 	private Integer stock;
 
 	@Column(nullable = false)
-	private JsonObject description;
+	private String description;
 
 	@Column(nullable = false)
-	private JsonObject information;
+	private String information;
 
 	@Column(nullable = false)
 	private String imagelink;
 
-	@Override
-	public String toString() {
-		return "CarSeatBean [productBean=" + productBean + ", serialnumber=" + serialnumber + ", brand=" + brand
-				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
-				+ ", information=" + information + ", imagelink=" + imagelink + "]";
-	}
+	@ManyToOne
+	@JoinColumn(name = "FK_ProductBean_Id")
+	private ProductBean productBean;
 
-	public ProductBean getProduct_id() {
-		return productBean;
-	}
+	@OneToOne(mappedBy = "carCareBean", cascade = CascadeType.ALL)
+	private RefundDetailBean refundDetailBean;
 
-	public void setProduct_id(ProductBean productBean) {
-		this.productBean = productBean;
-	}
+	@OneToOne(mappedBy = "carCareBean", cascade = CascadeType.ALL)
+	private OrderDetailBean orderDetailBean;
 
 	public Long getSerialnumber() {
 		return serialnumber;
@@ -102,27 +95,27 @@ public class CarGpsBean implements Serializable {
 		this.stock = stock;
 	}
 
-	public JsonObject getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(JsonObject description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public JsonObject getInformation() {
+	public String getInformation() {
 		return information;
 	}
 
-	public void setInformation(JsonObject information) {
+	public void setInformation(String information) {
 		this.information = information;
 	}
 
-	public String getImage() {
+	public String getImagelink() {
 		return imagelink;
 	}
 
-	public void setImage(String imagelink) {
+	public void setImagelink(String imagelink) {
 		this.imagelink = imagelink;
 	}
 
