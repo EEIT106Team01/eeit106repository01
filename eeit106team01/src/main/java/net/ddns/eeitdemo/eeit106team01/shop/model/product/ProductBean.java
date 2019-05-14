@@ -14,6 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
 
 /**
@@ -43,6 +44,9 @@ public class ProductBean implements Serializable {
 	@OneToMany(mappedBy = "productbean")
 	List<AntiTheftBean> antiTheftBeans = new ArrayList<AntiTheftBean>();
 
+	@OneToMany(mappedBy = "product")
+	List<OrderDetailBean> orderDetailBean = new ArrayList<OrderDetailBean>();
+	
 //	 Automotive - Car
 //	@OneToMany(mappedBy = "productbean")
 //	List<CarCareBean> carcares = new ArrayList<CarCareBean>();
