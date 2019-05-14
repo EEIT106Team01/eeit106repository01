@@ -11,61 +11,68 @@ import javax.persistence.Table;
 @Entity
 @Table(name="CancelOrderDetail")
 public class CancelOrderDetailBean implements Serializable{
-
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="FK_CancelOrder_Id") 
-	private CancelOrderBean cancelOrder;
-	private String ItemSerialNumber;
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="FK_Product_Id") 
-	private ProductBean product;
-	private Integer Price;
-	@ManyToOne(cascade=CascadeType.ALL)
-	@JoinColumn(name="FK_DeliverType_Id") 
-	private DeliverTypeBean deliverType;
 	
+	private static final long serialVersionUID = 3873757388653464094L;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_cancelOrder_Id") 
+	private CancelOrderBean cancelOrder;
+	private String Item_SerialNumber;
+	private Integer Product_Id;
+	private Integer Price;
+	private Integer DeliverType_Id;
+
 	public CancelOrderDetailBean() {
 		super();
 	}
 	
-	public CancelOrderDetailBean(CancelOrderBean cancelOrder, String itemSerialNumber, ProductBean product,
-			Integer price, DeliverTypeBean deliverType) {
+	public CancelOrderDetailBean(CancelOrderBean cancelOrder, String item_SerialNumber, Integer product_Id,
+			Integer price, Integer deliverType_Id) {
 		super();
 		this.cancelOrder = cancelOrder;
-		ItemSerialNumber = itemSerialNumber;
-		this.product = product;
+		Item_SerialNumber = item_SerialNumber;
+		Product_Id = product_Id;
 		Price = price;
-		this.deliverType = deliverType;
+		DeliverType_Id = deliverType_Id;
 	}
-	
+
 	public CancelOrderBean getCancelOrder() {
 		return cancelOrder;
 	}
+
 	public void setCancelOrder(CancelOrderBean cancelOrder) {
 		this.cancelOrder = cancelOrder;
 	}
-	public String getItemSerialNumber() {
-		return ItemSerialNumber;
+
+	public String getItem_SerialNumber() {
+		return Item_SerialNumber;
 	}
-	public void setItemSerialNumber(String itemSerialNumber) {
-		ItemSerialNumber = itemSerialNumber;
+
+	public void setItem_SerialNumber(String item_SerialNumber) {
+		Item_SerialNumber = item_SerialNumber;
 	}
-	public ProductBean getProduct() {
-		return product;
+
+	public Integer getProduct_Id() {
+		return Product_Id;
 	}
-	public void setProduct(ProductBean product) {
-		this.product = product;
+
+	public void setProduct_Id(Integer product_Id) {
+		Product_Id = product_Id;
 	}
+
 	public Integer getPrice() {
 		return Price;
 	}
+
 	public void setPrice(Integer price) {
 		Price = price;
 	}
-	public DeliverTypeBean getDeliverType() {
-		return deliverType;
+
+	public Integer getDeliverType_Id() {
+		return DeliverType_Id;
 	}
-	public void setDeliverType(DeliverTypeBean deliverType) {
-		this.deliverType = deliverType;
+
+	public void setDeliverType_Id(Integer deliverType_Id) {
+		DeliverType_Id = deliverType_Id;
 	}
+	
 }

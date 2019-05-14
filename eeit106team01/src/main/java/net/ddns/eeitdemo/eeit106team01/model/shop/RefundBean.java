@@ -9,31 +9,37 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
 
 @Entity
 @Table(name="Refund")
 public class RefundBean implements Serializable{
-	
-	
+
+	private static final long serialVersionUID = -5659890739956492348L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
-	private Integer MemberId;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_member_Id")
+	private MemberBeanTest memberBeanTest;
 	private String Comment;
 	private String ProcessStatus;
-	@OneToMany(mappedBy = "RefundDetail", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "refund", cascade = CascadeType.ALL)
 	private List<RefundBean> RefundList = new ArrayList<>();
 	
 	public RefundBean() {
 		super();
 
 	}
-	public RefundBean(Integer id, Integer memberId, String comment, String processStatus) {
+	public RefundBean(Integer id, MemberBeanTest memberbeantest, String comment, String processStatus) {
 		super();
 		Id = id;
-		MemberId = memberId;
+		memberBeanTest = memberbeantest;
 		Comment = comment;
 		ProcessStatus = processStatus;
 	}
@@ -44,11 +50,11 @@ public class RefundBean implements Serializable{
 	public void setId(Integer id) {
 		Id = id;
 	}
-	public Integer getMemberId() {
-		return MemberId;
+	public MemberBeanTest getMemberId() {
+		return memberBeanTest;
 	}
-	public void setMemberId(Integer memberId) {
-		MemberId = memberId;
+	public void setMemberId(MemberBeanTest memberBeanTest) {
+		this.memberBeanTest = memberBeanTest;
 	}
 	public String getComment() {
 		return Comment;

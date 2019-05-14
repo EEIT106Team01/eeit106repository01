@@ -15,13 +15,14 @@ import javax.persistence.Table;
 @Entity
 @Table(name="DeliverType")
 public class DeliverTypeBean implements Serializable{
-	
+
+	private static final long serialVersionUID = 2054965599453849024L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
 	private String Name;
 	private Integer Price;
-	@OneToMany(mappedBy = "OrderDetail", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "deliverType", cascade = CascadeType.ALL)
 	private List<DeliverTypeBean> deliverTypeList = new ArrayList<>();
 	
 	public DeliverTypeBean() {

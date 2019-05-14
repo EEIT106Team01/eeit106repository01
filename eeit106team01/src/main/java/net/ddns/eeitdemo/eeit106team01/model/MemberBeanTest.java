@@ -19,9 +19,12 @@ public class MemberBeanTest implements Serializable {
 	private Long id;
 	private String name;
 	
-	@OneToMany(mappedBy = "productbean")
+	@OneToMany(mappedBy = "memberbeantest")
 	List<ReviewBean> reviews = new ArrayList<ReviewBean>();
-
+	@OneToMany(mappedBy = "memberBeanTest")
+	List<ReviewBean> OrderBean = new ArrayList<ReviewBean>();
+	@OneToMany(mappedBy = "memberBeanTest")
+	List<ReviewBean> RefundBean = new ArrayList<ReviewBean>();
 	public Long getId() {
 		return id;
 	}

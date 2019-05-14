@@ -10,34 +10,41 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
+
+import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
 
 @Entity
 @Table(name="Order")
 public class OrderBean implements Serializable{
-	
+
+	private static final long serialVersionUID = -2108352266354853778L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
-	private Integer MemberId;
+	@ManyToOne(cascade=CascadeType.ALL)
+	@JoinColumn(name="FK_member_Id") 
+	private MemberBeanTest memberBeanTest;
 	private String PayStatus;
 	private java.util.Date Time;
 	private Integer TotalPrice;
 	private String TransationType;
 	private String DeliverStatus;
-	@OneToMany(mappedBy = "OrderDetail", cascade = CascadeType.ALL)
+	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
 	private List<OrderBean> OrderList = new ArrayList<>();
 	
 	public OrderBean() {
 		super();
 	}
 	
-	public OrderBean(Integer id, Integer memberId, String payStatus, Date time, Integer totalPrice,
+	public OrderBean(Integer id, MemberBeanTest memberbeantest, String payStatus, Date time, Integer totalPrice,
 			String transationType, String deliverStatus) {
 		super();
 		Id = id;
-		MemberId = memberId;
+		memberBeanTest = memberbeantest;
 		PayStatus = payStatus;
 		Time = time;
 		TotalPrice = totalPrice;
@@ -51,11 +58,11 @@ public class OrderBean implements Serializable{
 	public void setId(Integer id) {
 		Id = id;
 	}
-	public Integer getMemberId() {
-		return MemberId;
+	public MemberBeanTest getMemberId() {
+		return memberBeanTest;
 	}
-	public void setMemberId(Integer memberId) {
-		MemberId = memberId;
+	public void setMemberId(MemberBeanTest memberbeantest) {
+		this.memberBeanTest = memberbeantest;
 	}
 	public String getPayStatus() {
 		return PayStatus;

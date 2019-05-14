@@ -13,12 +13,11 @@ import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import net.ddns.eeitdemo.eeit106team01.model.ArticleContentCurrentBean;
-
 @Entity
 @Table(name="CancelOrder")
 public class CancelOrderBean implements Serializable{
-	
+
+	private static final long serialVersionUID = 6911694576480865027L;
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	private Integer Id;
@@ -27,7 +26,7 @@ public class CancelOrderBean implements Serializable{
 	private java.util.Date Time;
 	private Integer TotalPrice;
 	private String TransationType;
-	@OneToMany(mappedBy = "CancelOrderDetail", cascade = CascadeType.ALL)
+
 	private List<CancelOrderBean> cancelOrderList = new ArrayList<>();
 	
 	public CancelOrderBean() {
