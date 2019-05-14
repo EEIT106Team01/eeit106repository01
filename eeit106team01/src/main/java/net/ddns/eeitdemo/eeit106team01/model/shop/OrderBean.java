@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.model.shop;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,26 +11,27 @@ import javax.persistence.Table;
 @Table(name="Order")
 public class OrderBean {
 	
-	private int Id;
-	private int MemberId;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer Id;
+	@Column(name="Member_Id")
+	private Integer MemberId;
 	private String PayStatus;
 	private java.util.Date Time;
-	private int TotalPrice;
+	private Integer TotalPrice;
 	private String TransationType;
 	private String DeliverStatus;
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
+	public Integer getId() {
 		return Id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		Id = id;
 	}
-	public int getMemberId() {
+	public Integer getMemberId() {
 		return MemberId;
 	}
-	public void setMemberId(int memberId) {
+	public void setMemberId(Integer memberId) {
 		MemberId = memberId;
 	}
 	public String getPayStatus() {
@@ -44,10 +46,10 @@ public class OrderBean {
 	public void setTime(java.util.Date time) {
 		Time = time;
 	}
-	public int getTotalPrice() {
+	public Integer getTotalPrice() {
 		return TotalPrice;
 	}
-	public void setTotalPrice(int totalPrice) {
+	public void setTotalPrice(Integer totalPrice) {
 		TotalPrice = totalPrice;
 	}
 	public String getTransationType() {
@@ -62,6 +64,4 @@ public class OrderBean {
 	public void setDeliverStatus(String deliverStatus) {
 		DeliverStatus = deliverStatus;
 	}
-
-
 }

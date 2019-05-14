@@ -1,22 +1,27 @@
 package net.ddns.eeitdemo.eeit106team01.model.shop;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
 @Entity
 @Table(name="OrderDetail")
 public class OrderDetailBean {
-	
-	private int OrderId;
+
+	@Column(name="Order_Id")
+	private Integer OrderId;
+	@Column(name="Item_SerialNumber")
 	private String ItemSerialNumber;
-	private int ProductId;
-	private int Price;
-	private int DeliverTypeId;
+	@Column(name="Product_Id")
+	private Integer ProductId;
+	private Integer Price;
+	@Column(name="DeliverType_Id")
+	private Integer DeliverTypeId;
 	
-	public int getOrderId() {
+	public Integer getOrderId() {
 		return OrderId;
 	}
-	public void setOrderId(int orderId) {
+	public void setOrderId(Integer orderId) {
 		OrderId = orderId;
 	}
 	public String getItemSerialNumber() {
@@ -25,23 +30,22 @@ public class OrderDetailBean {
 	public void setItemSerialNumber(String itemSerialNumber) {
 		ItemSerialNumber = itemSerialNumber;
 	}
-	public int getProductId() {
+	public Integer getProductId() {
 		return ProductId;
 	}
-	public void setProductId(int productId) {
+	public void setProductId(Integer productId) {
 		ProductId = productId;
 	}
-	public int getPrice() {
+	public Integer getPrice() {
 		return Price;
 	}
-	public void setPrice(int price) {
+	public void setPrice(Integer price) {
 		Price = price;
 	}
-	public int getDeliverTypeId() {
+	public Integer getDeliverTypeId() {
 		return DeliverTypeId;
 	}
-	public void setDeliverTypeId(int deliverTypeId) {
+	public void setDeliverTypeId(Integer deliverTypeId) {
 		DeliverTypeId = deliverTypeId;
 	}
-
 }

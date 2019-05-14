@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.model.shop;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -10,23 +11,24 @@ import javax.persistence.Table;
 @Table(name="Refund")
 public class RefundBean {
 	
-	private int Id;
-	private int MemberId;
+	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	private Integer Id;
+	@Column(name="Member_Id")
+	private Integer MemberId;
 	private String Comment;
 	private String ProcessStatus;
 	
-	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	public int getId() {
+	public Integer getId() {
 		return Id;
 	}
-	public void setId(int id) {
+	public void setId(Integer id) {
 		Id = id;
 	}
-	public int getMemberId() {
+	public Integer getMemberId() {
 		return MemberId;
 	}
-	public void setMemberId(int memberId) {
+	public void setMemberId(Integer memberId) {
 		MemberId = memberId;
 	}
 	public String getComment() {
@@ -41,5 +43,4 @@ public class RefundBean {
 	public void setProcessStatus(String processStatus) {
 		ProcessStatus = processStatus;
 	}
-
 }

@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.model.shop;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -7,21 +8,26 @@ import javax.persistence.Table;
 @Table(name="RefundDetail")
 public class RefundDetailBean {
 	
-	private int Refund_Id;
-	private int Product_Id;
+	@Column(name="Refund_Id")
+	private Integer RefundId;
+	
+	@Column(name="Product_Id")
+	private Integer ProductId;
+	
+	@Column(name="Item_SerialNumber")
 	private String ItemSerialNumber;
 	
-	public int getRefund_Id() {
-		return Refund_Id;
+	public Integer getRefundId() {
+		return RefundId;
 	}
-	public void setRefund_Id(int refund_Id) {
-		Refund_Id = refund_Id;
+	public void setRefundId(Integer refundId) {
+		RefundId = refundId;
 	}
-	public int getProduct_Id() {
-		return Product_Id;
+	public Integer getProductId() {
+		return ProductId;
 	}
-	public void setProduct_Id(int product_Id) {
-		Product_Id = product_Id;
+	public void setProductId(Integer productId) {
+		ProductId = productId;
 	}
 	public String getItemSerialNumber() {
 		return ItemSerialNumber;
@@ -29,5 +35,4 @@ public class RefundDetailBean {
 	public void setItemSerialNumber(String itemSerialNumber) {
 		ItemSerialNumber = itemSerialNumber;
 	}
-
 }
