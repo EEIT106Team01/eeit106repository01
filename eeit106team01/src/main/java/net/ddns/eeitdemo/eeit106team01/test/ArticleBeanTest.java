@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 
-@Component
+//@Component
 public class ArticleBeanTest implements CommandLineRunner {
 
 	@Autowired
