@@ -8,7 +8,6 @@ import java.io.OutputStream;
 import java.net.URI;
 import java.nio.charset.Charset;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.apache.catalina.util.URLEncoder;
@@ -42,8 +41,8 @@ public class VideoController {
 	private Environment env;
 
 	@GetMapping(path = { "/video" }, produces = { "application/json" })
-	public List<VideoBean> getVideoList() {
-		return videoService.findAll();
+	public ResponseEntity<?> getVideoList() {
+		return ResponseEntity.ok(videoService.findAll());
 	}
 
 	@GetMapping(path = { "/video/{id}" }, produces = { "application/json" })
