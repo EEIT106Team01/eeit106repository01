@@ -28,9 +28,9 @@ public class RefundBean implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_member_Id")
 	private MemberBeanTest memberBeanTest;
-	
-	@OneToMany(mappedBy = "refund", cascade = CascadeType.ALL)
-	private List<RefundDetailBean> RefundList = new ArrayList<RefundDetailBean>();
+
+	@OneToMany(mappedBy = "refundBean", cascade = CascadeType.ALL)
+	private List<RefundDetailBean> refundDetailBeans = new ArrayList<RefundDetailBean>();
 
 	public Long getId() {
 		return id;

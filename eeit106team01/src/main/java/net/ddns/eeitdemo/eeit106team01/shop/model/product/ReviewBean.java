@@ -3,6 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.product;
 import java.io.Serializable;
 import java.sql.Blob;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +16,7 @@ import javax.persistence.TemporalType;
 import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
 /**
- * @author 冒竣瑋 - This is an Entity for Review.
+ * @author 冒竣瑋 - Entity for Review.
  */
 @Entity
 public class ReviewBean implements Serializable {
@@ -25,33 +26,33 @@ public class ReviewBean implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
+	@Temporal(TemporalType.DATE)
+	@Column(nullable = false)
+	private java.util.Date date;
+
+	@Column(nullable = false)
+	private Integer rating;
+
+	@Column(nullable = false)
+	private String comment;
+
+	private Blob image;
+
 	@ManyToOne
 	@JoinColumn(name = "MemberBeanTest_Id_FK")
-	private MemberBeanTest memberbeantest;
-	
-	@Temporal(TemporalType.DATE)
-	private java.util.Date date;
-	private Integer rating;
-	private String comment;
-	private Blob image;
-	
+	private MemberBeanTest memberBeanTest;
+
 	@ManyToOne
 	@JoinColumn(name = "ProductBean_Id_FK")
-	private ProductBean productbean;
+	private ProductBean productBean;
 
-	@Override
-	public String toString() {
-		return "ReviewBean [memberbeantest=" + memberbeantest + ", date=" + date + ", rating=" + rating + ", comment=" + comment
-				+ ", image=" + image + ", product_id=" + productbean + "]";
+	public Long getId() {
+		return id;
 	}
 
-	public MemberBeanTest getMember_id() {
-		return memberbeantest;
-	}
-
-	public void setMember_id(MemberBeanTest memberbeantest) {
-		this.memberbeantest = memberbeantest;
+	public void setId(Long id) {
+		this.id = id;
 	}
 
 	public java.util.Date getDate() {
@@ -84,14 +85,6 @@ public class ReviewBean implements Serializable {
 
 	public void setImage(Blob image) {
 		this.image = image;
-	}
-
-	public ProductBean getProduct_id() {
-		return productbean;
-	}
-
-	public void setProduct_id(ProductBean productbean) {
-		this.productbean = productbean;
 	}
 
 }

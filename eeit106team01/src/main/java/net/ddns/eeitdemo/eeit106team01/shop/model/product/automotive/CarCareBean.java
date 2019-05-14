@@ -2,18 +2,19 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-
-import com.google.gson.JsonObject;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
- * @author 冒竣瑋 - This is an Entity for CarCare.
+ * @author 冒竣瑋 - Entity for Car Care.
  */
 public class CarCareBean implements Serializable {
 
@@ -36,32 +37,23 @@ public class CarCareBean implements Serializable {
 	private Integer stock;
 
 	@Column(nullable = false)
-	private JsonObject description;
+	private String description;
 
 	@Column(nullable = false)
-	private JsonObject information;
+	private String information;
 
 	@Column(nullable = false)
 	private String imagelink;
 
-//	@OneToOne
-//	@JoinColumn(name = "CarCareBean_Id_PK")
-//	private OrderDetailBean orderdetailbean;
-//
-//	@OneToOne
-//	@JoinColumn(name = "carCareBean")
-//	private RefundDetailBean refunddetailbean;
+	@ManyToOne
+	@JoinColumn(name = "FK_ProductBean_Id")
+	private ProductBean productBean;
 
-//	@ManyToOne
-//	@JoinColumn(name = "ProductBean_Id_FK")
-//	private ProductBean productbean;
+	@OneToOne(mappedBy = "carCareBean", cascade = CascadeType.ALL)
+	private RefundDetailBean refundDetailBean;
 
-//	@Override
-//	public String toString() {
-//		return "CarSeatBean [productbean=" + productbean + ", serialnumber=" + serialnumber + ", brand=" + brand
-//				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
-//				+ ", information=" + information + ", imagelink=" + imagelink + "]";
-//	}
+	@OneToOne(mappedBy = "carCareBean", cascade = CascadeType.ALL)
+	private OrderDetailBean orderDetailBean;
 
 	public Long getSerialnumber() {
 		return serialnumber;
@@ -103,27 +95,27 @@ public class CarCareBean implements Serializable {
 		this.stock = stock;
 	}
 
-	public JsonObject getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(JsonObject description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public JsonObject getInformation() {
+	public String getInformation() {
 		return information;
 	}
 
-	public void setInformation(JsonObject information) {
+	public void setInformation(String information) {
 		this.information = information;
 	}
 
-	public String getImage() {
+	public String getImagelink() {
 		return imagelink;
 	}
 
-	public void setImage(String imagelink) {
+	public void setImagelink(String imagelink) {
 		this.imagelink = imagelink;
 	}
 

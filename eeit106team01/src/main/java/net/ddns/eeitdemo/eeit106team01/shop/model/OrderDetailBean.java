@@ -35,52 +35,52 @@ public class OrderDetailBean implements Serializable {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Product_Id")
-	private ProductBean product;
-	
+	private ProductBean productBean;
+
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_DeliverType_Id")
-	private DeliverTypeBean deliverType;
+	private DeliverTypeBean deliverTypeBean;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Order_Id")
-	private OrderBean order;
+	private OrderBean orderBean;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_AntiTheftBean_SerialNumber")
 	private AntiTheftBean antiTheftBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_CarCareBean_SerialNumber")
 	private CarCareBean carCareBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_CarGpsBean_SerialNumber")
 	private CarGpsBean carGpsBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_CarRecorderBean_SerialNumber")
 	private CarRecorderBean carRecorderBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_CarSeatBean_SerialNumber")
 	private CarSeatBean carSeatBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_EmergencyToolBean_SerialNumber")
 	private EmergencyToolBean emergencyToolBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_HelmetRecorderBean_SerialNumber")
 	private HelmetRecorderBean helmetRecorderBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_MotorcycleGpsBean_SerialNumber")
 	private MotorcycleGpsBean motorcycleGpsBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_MotorcycleRecorderBean_SerialNumber")
 	private MotorcycleRecorderBean motorcycleRecorderBean;
-	
+
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_TireGaugeBean_SerialNumber")
 	private TireGaugeBean tireGaugeBean;

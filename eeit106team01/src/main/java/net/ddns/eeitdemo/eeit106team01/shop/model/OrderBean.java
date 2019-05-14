@@ -31,9 +31,9 @@ public class OrderBean implements Serializable {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_member_Id")
 	private MemberBeanTest memberBeanTest;
-	
-	@OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
-	private List<OrderDetailBean> orderDetailList = new ArrayList<OrderDetailBean>();
+
+	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL)
+	private List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
 
 	public Long getId() {
 		return id;
@@ -59,6 +59,14 @@ public class OrderBean implements Serializable {
 		this.time = time;
 	}
 
+	public Integer getTotalPrice() {
+		return totalPrice;
+	}
+
+	public void setTotalPrice(Integer totalPrice) {
+		this.totalPrice = totalPrice;
+	}
+
 	public String getTransationType() {
 		return transationType;
 	}
@@ -74,4 +82,5 @@ public class OrderBean implements Serializable {
 	public void setDeliverStatus(String deliverStatus) {
 		this.deliverStatus = deliverStatus;
 	}
+
 }

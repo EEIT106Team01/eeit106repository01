@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.Table;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
@@ -35,11 +34,11 @@ public class RefundDetailBean implements Serializable {
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Product_Id")
-	private ProductBean product;
+	private ProductBean productBean;
 
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_Refund_Id")
-	private RefundBean refund;
+	private RefundBean refundBean;
 
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "FK_AntiTheftBean_SerialNumber")

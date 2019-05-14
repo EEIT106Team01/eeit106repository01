@@ -14,6 +14,9 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ReviewBean;
 
+/**
+ * @author 冒竣瑋 - Entity for Member [Test].
+ */
 @Entity
 public class MemberBeanTest implements Serializable {
 
@@ -24,12 +27,14 @@ public class MemberBeanTest implements Serializable {
 	private Long id;
 	private String name;
 
-	@OneToMany(mappedBy = "memberbeantest")
-	List<ReviewBean> reviews = new ArrayList<ReviewBean>();
 	@OneToMany(mappedBy = "memberBeanTest")
-	List<OrderBean> OrderBean = new ArrayList<OrderBean>();
+	List<ReviewBean> reviewBeans = new ArrayList<ReviewBean>();
+	
 	@OneToMany(mappedBy = "memberBeanTest")
-	List<RefundBean> RefundBean = new ArrayList<RefundBean>();
+	List<OrderBean> orderBeans = new ArrayList<OrderBean>();
+	
+	@OneToMany(mappedBy = "memberBeanTest")
+	List<RefundBean> refundBeans = new ArrayList<RefundBean>();
 
 	public Long getId() {
 		return id;

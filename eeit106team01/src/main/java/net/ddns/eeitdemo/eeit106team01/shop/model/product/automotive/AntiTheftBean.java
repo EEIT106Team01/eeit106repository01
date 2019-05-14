@@ -15,22 +15,12 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
- * @author 冒竣瑋 - This is an Entity for AntiTheft.
+ * @author 冒竣瑋 - Entity for Anti-Theft.
  */
 @Entity
 public class AntiTheftBean implements Serializable {
 
 	private static final long serialVersionUID = 5338967047050522712L;
-
-	@ManyToOne
-	@JoinColumn(name = "FK_ProductBean_Id")
-	private ProductBean productbean;
-
-	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
-	private RefundDetailBean refundDetailBeanList;
-
-	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
-	private OrderDetailBean orderDetailBeanList;
 
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
@@ -57,13 +47,15 @@ public class AntiTheftBean implements Serializable {
 	@Column(nullable = false)
 	private String imagelink;
 
-	public ProductBean getProductbean() {
-		return productbean;
-	}
+	@ManyToOne
+	@JoinColumn(name = "FK_ProductBean_Id")
+	private ProductBean productBean;
 
-	public void setProductbean(ProductBean productbean) {
-		this.productbean = productbean;
-	}
+	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
+	private RefundDetailBean refundDetailBean;
+
+	@OneToOne(mappedBy = "antiTheftBean", cascade = CascadeType.ALL)
+	private OrderDetailBean orderDetailBean;
 
 	public Long getSerialnumber() {
 		return serialnumber;

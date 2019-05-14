@@ -35,6 +35,15 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarGpsBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarRecorderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarSeatBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.EmergencyToolBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.HelmetRecorderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.MotorcycleGpsBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.MotorcycleRecorderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.TireGaugeBean;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class,
@@ -84,9 +93,9 @@ public class Eeit106team01Application {
 		LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(dataSource);
 //		builder.addAnnotatedClass(CustomerBean.class);
 //		builder.addAnnotatedClass(ProductBean.class);
-
 		// Test
 //		builder.addAnnotatedClass(ShopBean.class);
+
 		// Shop
 		builder.addAnnotatedClass(MemberBeanTest.class);
 		builder.addAnnotatedClass(ProductBean.class);
@@ -96,21 +105,21 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(RefundBean.class);
 		builder.addAnnotatedClass(RefundDetailBean.class);
 		builder.addAnnotatedClass(DeliverTypeBean.class);
-		// Product - car
-//		builder.addAnnotatedClass(CarCareBean.class);
-//		builder.addAnnotatedClass(CarGpsBean.class);
-//		builder.addAnnotatedClass(CarRecorderBean.class);
-//		builder.addAnnotatedClass(CarSeatBean.class);
-//		// Product - motor
-//		builder.addAnnotatedClass(HelmetRecorderBean.class);
-//		builder.addAnnotatedClass(MotorcycleGpsBean.class);
-//		builder.addAnnotatedClass(MotorcycleRecorderBean.class);
-//		// others
-		builder.addAnnotatedClass(AntiTheftBean.class);
-//		builder.addAnnotatedClass(EmergencyToolBean.class);
-//		builder.addAnnotatedClass(TireGaugeBean.class);
+		// Cancel
 
-		//
+		// Product
+		builder.addAnnotatedClass(AntiTheftBean.class);
+		builder.addAnnotatedClass(CarCareBean.class);
+		builder.addAnnotatedClass(CarGpsBean.class);
+		builder.addAnnotatedClass(CarRecorderBean.class);
+		builder.addAnnotatedClass(CarSeatBean.class);
+		builder.addAnnotatedClass(EmergencyToolBean.class);
+		builder.addAnnotatedClass(HelmetRecorderBean.class);
+		builder.addAnnotatedClass(MotorcycleGpsBean.class);
+		builder.addAnnotatedClass(MotorcycleRecorderBean.class);
+		builder.addAnnotatedClass(TireGaugeBean.class);
+
+		// Forum
 		builder.addAnnotatedClass(ArticleContentCurrentBean.class);
 		builder.addAnnotatedClass(ArticleTopicCurrentBean.class);
 		builder.addAnnotatedClass(VideoBean.class);

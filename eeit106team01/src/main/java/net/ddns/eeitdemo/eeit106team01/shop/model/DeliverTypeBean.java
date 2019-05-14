@@ -10,21 +10,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
-import javax.persistence.Table;
 
 @Entity
-public class DeliverTypeBean implements Serializable{
+public class DeliverTypeBean implements Serializable {
 
 	private static final long serialVersionUID = 2054965599453849024L;
-	
+
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
 	private Integer price;
-	
-	@OneToMany(mappedBy = "deliverType", cascade = CascadeType.ALL)
-	private List<OrderDetailBean> deliverTypeList = new ArrayList<OrderDetailBean>();
+
+	@OneToMany(mappedBy = "deliverTypeBean", cascade = CascadeType.ALL)
+	private List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
 
 	public Long getId() {
 		return id;
