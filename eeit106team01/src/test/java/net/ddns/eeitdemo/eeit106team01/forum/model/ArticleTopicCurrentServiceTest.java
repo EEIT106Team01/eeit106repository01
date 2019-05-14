@@ -61,7 +61,9 @@ public class ArticleTopicCurrentServiceTest {
 				53.53, // accidentLocationLatitude
 				"主題內文53", // topicContent
 				new java.util.Date(53), // topicContentUpdateTime
-				"使用者修改53" // updateMessage
+				"使用者修改53", // updateMessage
+				null, //MemberBean memberBean
+				null //VideoBean videoBean
 		);
 		ArticleTopicCurrentBean insertResult = articleTopicCurrentService.insert(topic53);
 		assertEquals(insertResult.getTopicRegion(), "高譚市");
@@ -84,7 +86,9 @@ public class ArticleTopicCurrentServiceTest {
 				null, // accidentLocationLatitude
 				null, // topicContent
 				null, // topicContentUpdateTime
-				null // updateMessage
+				null, // updateMessage
+				null, //MemberBean memberBean
+				null //VideoBean videoBean
 		);
 		ArticleTopicCurrentBean updateResult = articleTopicCurrentService.update(7, topic54);
 		assertEquals(updateResult.getTopicHeader(), "文章標題53");

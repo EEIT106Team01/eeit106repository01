@@ -9,6 +9,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
@@ -41,7 +42,10 @@ public class ArticleTopicCurrentBean {
 	private String updateMessage;
 
 //	memberPK
-
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "member_id")
+	private MemberBean memberBean;
+	
 //	vedioPK
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "video_id")
@@ -54,7 +58,8 @@ public class ArticleTopicCurrentBean {
 	public ArticleTopicCurrentBean(String topicHeader, String topicType, String topicRegion, Integer topicLikeNum,
 			Integer contentReplyNum, Date topicCreateTime, Date topicUpdateTime, String topicStatus, Date accidentTime,
 			String accidentLocation, Double accidentLocationLongitude, Double accidentLocationLatitude,
-			String topicContent, Date topicContentUpdateTime, String updateMessage) {
+			String topicContent, Date topicContentUpdateTime, String updateMessage, MemberBean memberBean,
+			VideoBean videoBean) {
 		super();
 		this.topicHeader = topicHeader;
 		this.topicType = topicType;
@@ -71,6 +76,8 @@ public class ArticleTopicCurrentBean {
 		this.topicContent = topicContent;
 		this.topicContentUpdateTime = topicContentUpdateTime;
 		this.updateMessage = updateMessage;
+		this.memberBean = memberBean;
+		this.videoBean = videoBean;
 	}
 
 	public Integer getId() {
@@ -199,6 +206,14 @@ public class ArticleTopicCurrentBean {
 
 	public void setUpdateMessage(String updateMessage) {
 		this.updateMessage = updateMessage;
+	}
+
+	public MemberBean getMemberBean() {
+		return memberBean;
+	}
+
+	public void setMemberBean(MemberBean memberBean) {
+		this.memberBean = memberBean;
 	}
 
 	public VideoBean getVideoBean() {

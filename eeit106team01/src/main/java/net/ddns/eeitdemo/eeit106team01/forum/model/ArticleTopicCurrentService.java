@@ -21,9 +21,8 @@ public class ArticleTopicCurrentService {
 		return articleTopicCurrentDAO.findAll();
 	};
 
-	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean, VideoBean videoBean) {
+	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {
 		if (bean != null) {
-			bean.setVideoBean(videoBean);
 			return articleTopicCurrentDAO.insert(bean);
 		}
 		return null;
