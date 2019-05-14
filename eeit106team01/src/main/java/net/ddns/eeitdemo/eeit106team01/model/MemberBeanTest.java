@@ -8,9 +8,9 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
-import net.ddns.eeitdemo.eeit106team01.model.shop.OrderBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.ReviewBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ReviewBean;
 
 @Entity
 public class MemberBeanTest implements Serializable {

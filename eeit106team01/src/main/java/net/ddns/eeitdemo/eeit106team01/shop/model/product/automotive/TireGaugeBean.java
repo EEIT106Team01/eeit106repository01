@@ -1,26 +1,28 @@
-package net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car;
+package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.google.gson.JsonObject;
 
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
- * @author 冒竣瑋 - This is an Entity for CarGps.
+ * @author 冒竣瑋 - This is an Entity for TireGauge.
  */
-public class CarGpsBean implements Serializable {
+@Entity
+public class TireGaugeBean implements Serializable{
 
-	private static final long serialVersionUID = -7853050511010305279L;
-
+	private static final long serialVersionUID = -7302435493616639288L;
+	
 	@ManyToOne
 	@JoinColumn(name = "ProductBean_Id_FK")
-	private ProductBean productBean;
+	private ProductBean productbean;
 
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
@@ -49,17 +51,17 @@ public class CarGpsBean implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CarSeatBean [productBean=" + productBean + ", serialnumber=" + serialnumber + ", brand=" + brand
+		return "CarSeatBean [productbean=" + productbean + ", serialnumber=" + serialnumber + ", brand=" + brand
 				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
 				+ ", information=" + information + ", imagelink=" + imagelink + "]";
 	}
 
 	public ProductBean getProduct_id() {
-		return productBean;
+		return productbean;
 	}
 
-	public void setProduct_id(ProductBean productBean) {
-		this.productBean = productBean;
+	public void setProduct_id(ProductBean productbean) {
+		this.productbean = productbean;
 	}
 
 	public Long getSerialnumber() {

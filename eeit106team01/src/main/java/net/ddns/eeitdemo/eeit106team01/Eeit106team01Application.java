@@ -27,14 +27,14 @@ import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.model.MemberBeanTest;
-import net.ddns.eeitdemo.eeit106team01.model.shop.DeliverTypeBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.OrderBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.OrderDetailBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.RefundDetailBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.ProductBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.ReviewBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarCareBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.DeliverTypeBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ReviewBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class,

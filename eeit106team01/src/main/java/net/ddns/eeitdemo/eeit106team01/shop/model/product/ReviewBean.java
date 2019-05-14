@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model.shop.product;
+package net.ddns.eeitdemo.eeit106team01.shop.model.product;
 
 import java.io.Serializable;
 import java.sql.Blob;

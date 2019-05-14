@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive;
+package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
 
@@ -10,15 +10,15 @@ import javax.persistence.ManyToOne;
 
 import com.google.gson.JsonObject;
 
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
- * @author 冒竣瑋 - This is an Entity for AntiTheft.
+ * @author 冒竣瑋 - This is an Entity for EmergencyTool.
  */
 @Entity
-public class AntiTheftBean implements Serializable {
+public class EmergencyToolBean implements Serializable {
 
-	private static final long serialVersionUID = 5338967047050522712L;
+	private static final long serialVersionUID = 1095675299363359313L;
 
 	@ManyToOne
 	@JoinColumn(name = "ProductBean_Id_FK")

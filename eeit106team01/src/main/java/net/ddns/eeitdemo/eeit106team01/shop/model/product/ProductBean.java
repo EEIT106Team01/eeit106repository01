@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model.shop.product;
+package net.ddns.eeitdemo.eeit106team01.shop.model.product;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -14,7 +14,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarCareBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
 
 /**
  * @author 冒竣瑋 - This is an Entity for Product.

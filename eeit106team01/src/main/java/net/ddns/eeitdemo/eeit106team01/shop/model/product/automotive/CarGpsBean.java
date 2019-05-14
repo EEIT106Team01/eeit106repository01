@@ -1,23 +1,26 @@
-package net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car;
+package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
 
 import javax.persistence.Column;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.ManyToOne;
 
 import com.google.gson.JsonObject;
 
-import net.ddns.eeitdemo.eeit106team01.model.shop.OrderDetailBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.RefundDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
- * @author 冒竣瑋 - This is an Entity for CarCare.
+ * @author 冒竣瑋 - This is an Entity for CarGps.
  */
-public class CarCareBean implements Serializable {
+public class CarGpsBean implements Serializable {
 
-	private static final long serialVersionUID = -4031176785222281587L;
+	private static final long serialVersionUID = -7853050511010305279L;
+
+	@ManyToOne
+	@JoinColumn(name = "ProductBean_Id_FK")
+	private ProductBean productBean;
 
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
@@ -44,24 +47,20 @@ public class CarCareBean implements Serializable {
 	@Column(nullable = false)
 	private String imagelink;
 
-//	@OneToOne
-//	@JoinColumn(name = "CarCareBean_Id_PK")
-//	private OrderDetailBean orderdetailbean;
-//
-//	@OneToOne
-//	@JoinColumn(name = "carCareBean")
-//	private RefundDetailBean refunddetailbean;
+	@Override
+	public String toString() {
+		return "CarSeatBean [productBean=" + productBean + ", serialnumber=" + serialnumber + ", brand=" + brand
+				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
+				+ ", information=" + information + ", imagelink=" + imagelink + "]";
+	}
 
-//	@ManyToOne
-//	@JoinColumn(name = "ProductBean_Id_FK")
-//	private ProductBean productbean;
+	public ProductBean getProduct_id() {
+		return productBean;
+	}
 
-//	@Override
-//	public String toString() {
-//		return "CarSeatBean [productbean=" + productbean + ", serialnumber=" + serialnumber + ", brand=" + brand
-//				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
-//				+ ", information=" + information + ", imagelink=" + imagelink + "]";
-//	}
+	public void setProduct_id(ProductBean productBean) {
+		this.productBean = productBean;
+	}
 
 	public Long getSerialnumber() {
 		return serialnumber;

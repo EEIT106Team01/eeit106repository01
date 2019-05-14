@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.motorcycle;
+package net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive;
 
 import java.io.Serializable;
 
@@ -10,19 +10,19 @@ import javax.persistence.ManyToOne;
 
 import com.google.gson.JsonObject;
 
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
- * @author 冒竣瑋 - This is an Entity for MotorcycleRecorder.
+ * @author 冒竣瑋 - This is an Entity for AntiTheft.
  */
 @Entity
-public class MotorcycleRecorderBean implements Serializable {
+public class AntiTheftBean implements Serializable {
 
-	private static final long serialVersionUID = -2025964121129193026L;
+	private static final long serialVersionUID = 5338967047050522712L;
 
 	@ManyToOne
 	@JoinColumn(name = "ProductBean_Id_FK")
-	private ProductBean productBean;
+	private ProductBean productbean;
 
 	@Id
 	@Column(unique = true, nullable = false, updatable = false)
@@ -51,17 +51,17 @@ public class MotorcycleRecorderBean implements Serializable {
 
 	@Override
 	public String toString() {
-		return "CarSeatBean [productBean=" + productBean + ", serialnumber=" + serialnumber + ", brand=" + brand
+		return "CarSeatBean [productbean=" + productbean + ", serialnumber=" + serialnumber + ", brand=" + brand
 				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
 				+ ", information=" + information + ", imagelink=" + imagelink + "]";
 	}
 
 	public ProductBean getProduct_id() {
-		return productBean;
+		return productbean;
 	}
 
-	public void setProduct_id(ProductBean productBean) {
-		this.productBean = productBean;
+	public void setProduct_id(ProductBean productbean) {
+		this.productbean = productbean;
 	}
 
 	public Long getSerialnumber() {

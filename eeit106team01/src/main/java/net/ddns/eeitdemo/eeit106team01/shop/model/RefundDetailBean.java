@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model.shop;
+package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 
@@ -12,11 +12,11 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.ProductBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarCareBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarGpsBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarRecorderBean;
-import net.ddns.eeitdemo.eeit106team01.model.shop.product.automotive.car.CarSeatBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarGpsBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarRecorderBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarSeatBean;
 
 @Entity
 @Table(name = "RefundDetail")
