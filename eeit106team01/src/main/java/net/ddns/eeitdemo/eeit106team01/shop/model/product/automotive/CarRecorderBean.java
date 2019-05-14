@@ -9,7 +9,6 @@ import javax.persistence.FetchType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToOne;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
@@ -52,11 +51,13 @@ public class CarRecorderBean implements Serializable {
 	@JoinColumn(name = "FK_ProductBean_Id")
 	private ProductBean productBean;
 
-	@OneToOne(mappedBy = "carRecorderBean", cascade = CascadeType.ALL)
-	private RefundDetailBean refundDetailBean;
-
-	@OneToOne(mappedBy = "carRecorderBean", cascade = CascadeType.ALL)
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_OrderDetailBean_SerialNumber")
 	private OrderDetailBean orderDetailBean;
+
+	@ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+	@JoinColumn(name = "FK_RefundDetailBean_SerialNumber")
+	private RefundDetailBean refundDetailBean;
 
 	public Long getSerialnumber() {
 		return serialnumber;

@@ -42,11 +42,11 @@ public class ReviewBean implements Serializable {
 	private Blob image;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "MemberBeanTest_Id_FK")
+	@JoinColumn(name = "FK_MemberBeanTest_Id")
 	private MemberBeanTest memberBeanTest;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "ProductBean_Id_FK")
+	@JoinColumn(name = "FK_ProductBean_Id")
 	private ProductBean productBean;
 
 	public Long getId() {

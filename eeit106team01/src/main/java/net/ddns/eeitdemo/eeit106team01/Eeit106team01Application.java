@@ -91,11 +91,6 @@ public class Eeit106team01Application {
 	@Bean
 	public SessionFactory sessionFactory(@Autowired DataSource dataSource) {
 		LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(dataSource);
-//		builder.addAnnotatedClass(CustomerBean.class);
-//		builder.addAnnotatedClass(ProductBean.class);
-		// Test
-//		builder.addAnnotatedClass(ShopBean.class);
-
 		// Shop
 		builder.addAnnotatedClass(MemberBeanTest.class);
 		builder.addAnnotatedClass(ProductBean.class);

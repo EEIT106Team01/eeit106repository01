@@ -1,19 +1,11 @@
 package net.ddns.eeitdemo.eeit106team01.shop;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
-
-import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.ReviewBean;
 
 /**
  * @author 冒竣瑋 - Entity for Member [Test].
@@ -28,14 +20,14 @@ public class MemberBeanTest implements Serializable {
 	private Long id;
 	private String name;
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
-	List<ReviewBean> reviewBeans = new ArrayList<ReviewBean>();
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
-	List<OrderBean> orderBeans = new ArrayList<OrderBean>();
-
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
-	List<RefundBean> refundBeans = new ArrayList<RefundBean>();
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
+//	List<ReviewBean> reviewBeans = new ArrayList<ReviewBean>();
+//
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
+//	List<OrderBean> orderBeans = new ArrayList<OrderBean>();
+//
+//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
+//	List<RefundBean> refundBeans = new ArrayList<RefundBean>();
 
 	public Long getId() {
 		return id;
