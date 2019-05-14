@@ -8,9 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
-import net.ddns.eeitdemo.eeit106team01.model.ArticleContentCurrentBean;
-import net.ddns.eeitdemo.eeit106team01.model.ArticleTopicCurrentBean;
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 
 @Component
 public class ArticleBeanTest implements CommandLineRunner {
@@ -22,7 +21,8 @@ public class ArticleBeanTest implements CommandLineRunner {
 	public void run(String... args) throws Exception {
 		System.out.println("ArticleBeanTest Begin !");
 
-		ArticleTopicCurrentBean topic1 = new ArticleTopicCurrentBean("協尋0513錄像", // topicHeader
+		ArticleTopicCurrentBean topic1 = new ArticleTopicCurrentBean(
+				"協尋0513錄像", // topicHeader
 				"協尋文", // topicType
 				"台北市", // topicRegion
 				11, // topicLikeNum
@@ -39,7 +39,8 @@ public class ArticleBeanTest implements CommandLineRunner {
 				"使用者修改" // updateMessage
 		);
 
-		ArticleContentCurrentBean content1 = new ArticleContentCurrentBean(21, // contentLikeNum
+		ArticleContentCurrentBean content1 = new ArticleContentCurrentBean(
+				21, // contentLikeNum
 				21, // contentReplyNum
 				new java.util.Date(80000), // contentCreateTime
 				new java.util.Date(100000), // contentUpdateTime
@@ -48,7 +49,8 @@ public class ArticleBeanTest implements CommandLineRunner {
 				"使用者修改" // updateMessage
 		);
 
-		ArticleContentCurrentBean content2 = new ArticleContentCurrentBean(22, // contentLikeNum
+		ArticleContentCurrentBean content2 = new ArticleContentCurrentBean(
+				22, // contentLikeNum
 				22, // contentReplyNum
 				new java.util.Date(80000), // contentCreateTime
 				new java.util.Date(100000), // contentUpdateTime
@@ -57,7 +59,8 @@ public class ArticleBeanTest implements CommandLineRunner {
 				"使用者修改" // updateMessage
 		);
 
-		ArticleContentCurrentBean content3 = new ArticleContentCurrentBean(23, // contentLikeNum
+		ArticleContentCurrentBean content3 = new ArticleContentCurrentBean(
+				23, // contentLikeNum
 				23, // contentReplyNum
 				new java.util.Date(80000), // contentCreateTime
 				new java.util.Date(100000), // contentUpdateTime

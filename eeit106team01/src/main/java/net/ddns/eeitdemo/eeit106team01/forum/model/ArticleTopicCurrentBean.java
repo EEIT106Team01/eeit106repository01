@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model;
+package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.util.ArrayList;
 import java.util.Date;
