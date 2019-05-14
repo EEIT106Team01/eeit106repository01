@@ -44,35 +44,35 @@ public class RefundDetailBean implements Serializable {
 	private RefundBean refundBean;
 
 	// product
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<AntiTheftBean> antiTheftBean = new ArrayList<AntiTheftBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<CarCareBean> carCareBean = new ArrayList<CarCareBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<CarGpsBean> carGpsBean = new ArrayList<CarGpsBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<CarRecorderBean> carRecorderBean = new ArrayList<CarRecorderBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<CarSeatBean> carSeatBean = new ArrayList<CarSeatBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<EmergencyToolBean> emergencyToolBean = new ArrayList<EmergencyToolBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<HelmetRecorderBean> helmetRecorderBean = new ArrayList<HelmetRecorderBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<MotorcycleGpsBean> motorcycleGpsBean = new ArrayList<MotorcycleGpsBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<MotorcycleRecorderBean> motorcycleRecorderBean = new ArrayList<MotorcycleRecorderBean>();
-
-	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<TireGaugeBean> tireGaugeBean = new ArrayList<TireGaugeBean>();
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<AntiTheftBean> antiTheftBean = new ArrayList<AntiTheftBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<CarCareBean> carCareBean = new ArrayList<CarCareBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<CarGpsBean> carGpsBean = new ArrayList<CarGpsBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<CarRecorderBean> carRecorderBean = new ArrayList<CarRecorderBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<CarSeatBean> carSeatBean = new ArrayList<CarSeatBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<EmergencyToolBean> emergencyToolBean = new ArrayList<EmergencyToolBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<HelmetRecorderBean> helmetRecorderBean = new ArrayList<HelmetRecorderBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<MotorcycleGpsBean> motorcycleGpsBean = new ArrayList<MotorcycleGpsBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<MotorcycleRecorderBean> motorcycleRecorderBean = new ArrayList<MotorcycleRecorderBean>();
+//
+//	@OneToMany(mappedBy = "refundDetailBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//	private List<TireGaugeBean> tireGaugeBean = new ArrayList<TireGaugeBean>();
 
 	public Long getId() {
 		return id;
