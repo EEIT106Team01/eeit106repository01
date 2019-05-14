@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
 @Entity
-//@Table(name = "Order")
 public class OrderBean implements Serializable {
 
 	private static final long serialVersionUID = -2108352266354853778L;

@@ -16,7 +16,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
 
 @Entity
-@Table(name = "OrderDetail")
 public class OrderDetailBean implements Serializable {
 
 	private static final long serialVersionUID = 7412479144382182019L;

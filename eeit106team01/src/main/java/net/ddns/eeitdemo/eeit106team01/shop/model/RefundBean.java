@@ -17,7 +17,6 @@ import javax.persistence.Table;
 import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
 @Entity
-@Table(name = "Refund")
 public class RefundBean implements Serializable {
 
 	private static final long serialVersionUID = -5659890739956492348L;

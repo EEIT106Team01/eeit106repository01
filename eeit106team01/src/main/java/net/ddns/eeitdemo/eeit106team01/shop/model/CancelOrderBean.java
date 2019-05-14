@@ -10,7 +10,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
-@Table(name = "CancelOrder")
 public class CancelOrderBean implements Serializable {
 
 	private static final long serialVersionUID = 6911694576480865027L;

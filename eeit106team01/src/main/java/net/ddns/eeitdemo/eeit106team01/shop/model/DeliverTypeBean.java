@@ -13,7 +13,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
-@Table(name="DeliverType")
 public class DeliverTypeBean implements Serializable{
 
 	private static final long serialVersionUID = 2054965599453849024L;
