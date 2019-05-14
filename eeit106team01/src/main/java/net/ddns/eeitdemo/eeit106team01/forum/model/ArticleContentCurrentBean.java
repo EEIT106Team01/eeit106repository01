@@ -51,7 +51,7 @@ public class ArticleContentCurrentBean {
 	
 //	vedioPK
 	@OneToOne
-	@PrimaryKeyJoinColumn
+	@JoinColumn(name = "video_id")
 	private VideoBean videoBean;
 
 	public ArticleContentCurrentBean() {

@@ -10,6 +10,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 import javax.persistence.PrimaryKeyJoinColumn;
@@ -52,7 +53,7 @@ public class ArticleTopicCurrentBean {
 	
 //	vedioPK
 	@OneToOne
-	@PrimaryKeyJoinColumn
+	@JoinColumn(name = "video_id")
 	private VideoBean videoBean;
 
 	public ArticleTopicCurrentBean() {
