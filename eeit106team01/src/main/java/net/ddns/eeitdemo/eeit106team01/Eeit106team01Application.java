@@ -11,7 +11,10 @@ import org.apache.tomcat.util.descriptor.web.SecurityConstraint;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceTransactionManagerAutoConfiguration;
+import org.springframework.boot.autoconfigure.orm.jpa.HibernateJpaAutoConfiguration;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.core.env.Environment;
@@ -23,11 +26,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
-import net.ddns.eeitdemo.eeit106team01.model.CustomerBean;
-import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.model.ShopBean;
 
 @SpringBootApplication
+@EnableAutoConfiguration(exclude = {
+		HibernateJpaAutoConfiguration.class,
+		DataSourceTransactionManagerAutoConfiguration.class
+})
 public class Eeit106team01Application {
 
 	@Autowired

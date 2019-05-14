@@ -2,13 +2,11 @@ package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.util.Date;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -30,10 +28,6 @@ public class VideoBean {
 	private Long videoLength;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String updateMessage;
-	@OneToOne(mappedBy = "videoBean", cascade = CascadeType.ALL)
-	private ArticleTopicCurrentBean articleTopicCurrentBean;
-	@OneToOne(mappedBy = "videoBean", cascade = CascadeType.ALL)
-	private ArticleContentCurrentBean articleContentCurrentBean;
 
 	public VideoBean() {
 		super();
@@ -113,21 +107,5 @@ public class VideoBean {
 
 	public void setUpdateMessage(String updateMessage) {
 		this.updateMessage = updateMessage;
-	}
-
-	public ArticleTopicCurrentBean getArticleTopicCurrentBean() {
-		return articleTopicCurrentBean;
-	}
-
-	public void setArticleTopicCurrentBean(ArticleTopicCurrentBean articleTopicCurrentBean) {
-		this.articleTopicCurrentBean = articleTopicCurrentBean;
-	}
-
-	public ArticleContentCurrentBean getArticleContentCurrentBean() {
-		return articleContentCurrentBean;
-	}
-
-	public void setArticleContentCurrentBean(ArticleContentCurrentBean articleContentCurrentBean) {
-		this.articleContentCurrentBean = articleContentCurrentBean;
 	}
 }

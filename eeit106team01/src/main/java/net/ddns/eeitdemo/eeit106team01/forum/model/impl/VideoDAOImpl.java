@@ -4,11 +4,12 @@ import java.util.List;
 
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoDAO;
 
-//@Repository
+@Repository
 public class VideoDAOImpl implements VideoDAO {
 	@Autowired
 	private SessionFactory sessionFactory;
