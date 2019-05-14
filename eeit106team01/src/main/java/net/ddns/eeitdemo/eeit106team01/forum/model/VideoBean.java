@@ -30,20 +30,19 @@ public class VideoBean {
 	private Long videoLength;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String updateMessage;
-	@OneToOne(mappedBy = "articleTopicCurrent", cascade = CascadeType.ALL)
+	
+	@OneToOne(mappedBy = "videoBean", cascade = CascadeType.ALL)
 	private ArticleTopicCurrentBean articleTopicCurrentBean;
-	@OneToOne(mappedBy = "articleContentCurrent", cascade = CascadeType.ALL)
+	@OneToOne(mappedBy = "videoBean", cascade = CascadeType.ALL)
 	private ArticleContentCurrentBean articleContentCurrentBean;
 
 	public VideoBean() {
 		super();
 	}
 
-	public VideoBean(Integer id, Date uploadTime, String videoStatus, String videoURI, String thumbnailURI,
-			String gifURI, Long videoLength, String updateMessage, ArticleTopicCurrentBean articleTopicCurrentBean,
-			ArticleContentCurrentBean articleContentCurrentBean) {
+	public VideoBean(Date uploadTime, String videoStatus, String videoURI, String thumbnailURI,
+			String gifURI, Long videoLength, String updateMessage) {
 		super();
-		this.id = id;
 		this.uploadTime = uploadTime;
 		this.videoStatus = videoStatus;
 		this.videoURI = videoURI;
@@ -51,8 +50,6 @@ public class VideoBean {
 		this.gifURI = gifURI;
 		this.videoLength = videoLength;
 		this.updateMessage = updateMessage;
-		this.articleTopicCurrentBean = articleTopicCurrentBean;
-		this.articleContentCurrentBean = articleContentCurrentBean;
 	}
 
 	public Integer getId() {

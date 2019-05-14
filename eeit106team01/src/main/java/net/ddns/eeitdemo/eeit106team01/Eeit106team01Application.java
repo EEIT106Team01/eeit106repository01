@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.model.CustomerBean;
 import net.ddns.eeitdemo.eeit106team01.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.model.ShopBean;
@@ -75,6 +76,7 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(ShopBean.class);
 		builder.addAnnotatedClass(ArticleContentCurrentBean.class);
 		builder.addAnnotatedClass(ArticleTopicCurrentBean.class);
+		builder.addAnnotatedClass(VideoBean.class);
 		
 		Properties props = new Properties();
 		props.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));

@@ -48,9 +48,10 @@ public class ArticleContentCurrentBean {
 	private List<ArticleContentCurrentBean> subReplyList = new ArrayList<>();
 
 //	memberPK
+	
 //	vedioPK
 	@OneToOne
-	@PrimaryKeyJoinColumn
+	@JoinColumn(name = "video_id")
 	private VideoBean videoBean;
 
 	public ArticleContentCurrentBean() {
