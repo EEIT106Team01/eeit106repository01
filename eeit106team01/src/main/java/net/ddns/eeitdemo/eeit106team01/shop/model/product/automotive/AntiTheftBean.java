@@ -8,8 +8,6 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import com.google.gson.JsonObject;
-
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 
 /**
@@ -21,7 +19,7 @@ public class AntiTheftBean implements Serializable {
 	private static final long serialVersionUID = 5338967047050522712L;
 
 	@ManyToOne
-	@JoinColumn(name = "ProductBean_Id_FK")
+	@JoinColumn(name = "FK_ProductBean_Id")
 	private ProductBean productbean;
 
 	@Id
@@ -41,26 +39,19 @@ public class AntiTheftBean implements Serializable {
 	private Integer stock;
 
 	@Column(nullable = false)
-	private JsonObject description;
+	private String description;
 
 	@Column(nullable = false)
-	private JsonObject information;
+	private String information;
 
 	@Column(nullable = false)
 	private String imagelink;
 
-	@Override
-	public String toString() {
-		return "CarSeatBean [productbean=" + productbean + ", serialnumber=" + serialnumber + ", brand=" + brand
-				+ ", name=" + name + ", price=" + price + ", stock=" + stock + ", description=" + description
-				+ ", information=" + information + ", imagelink=" + imagelink + "]";
-	}
-
-	public ProductBean getProduct_id() {
+	public ProductBean getProductbean() {
 		return productbean;
 	}
 
-	public void setProduct_id(ProductBean productbean) {
+	public void setProductbean(ProductBean productbean) {
 		this.productbean = productbean;
 	}
 
@@ -104,27 +95,27 @@ public class AntiTheftBean implements Serializable {
 		this.stock = stock;
 	}
 
-	public JsonObject getDescription() {
+	public String getDescription() {
 		return description;
 	}
 
-	public void setDescription(JsonObject description) {
+	public void setDescription(String description) {
 		this.description = description;
 	}
 
-	public JsonObject getInformation() {
+	public String getInformation() {
 		return information;
 	}
 
-	public void setInformation(JsonObject information) {
+	public void setInformation(String information) {
 		this.information = information;
 	}
 
-	public String getImage() {
+	public String getImagelink() {
 		return imagelink;
 	}
 
-	public void setImage(String imagelink) {
+	public void setImagelink(String imagelink) {
 		this.imagelink = imagelink;
 	}
 

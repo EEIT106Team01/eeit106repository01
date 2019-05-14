@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoService;
 
-@Component
+//@Component
 public class VideoTest implements CommandLineRunner {
 	@Autowired
 	private VideoService videoService;
