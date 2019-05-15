@@ -15,32 +15,47 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
-
 @Entity
+@Table(name = "SHOP_Order")
 public class OrderBean implements Serializable {
 
 	private static final long serialVersionUID = -2108352266354853778L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
+	@Column(nullable = false)
 	private String payStatus;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private java.util.Date time;
-	private Integer totalPrice;
-	private String transationType;
+
+	@Column(nullable = false)
+	private Integer productTotalPrice;
+
+	@Column(nullable = false)
 	private String deliverStatus;
 
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "FK_member_Id")
+	@Column(nullable = false)
+	private String deliverType;
+
+	@Column(nullable = false)
+	private Integer deliverPrice;
+
+	@Column(nullable = false, columnDefinition = "nvarchar(max)")
+	private String receiverInformation;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "Member_Id")
 	private MemberBeanTest memberBeanTest;
 
-	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
 
 	public Long getId() {
@@ -67,20 +82,12 @@ public class OrderBean implements Serializable {
 		this.time = new Date(System.currentTimeMillis());
 	}
 
-	public Integer getTotalPrice() {
-		return totalPrice;
+	public Integer getProductTotalPrice() {
+		return productTotalPrice;
 	}
 
-	public void setTotalPrice(Integer totalPrice) {
-		this.totalPrice = totalPrice;
-	}
-
-	public String getTransationType() {
-		return transationType;
-	}
-
-	public void setTransationType(String transationType) {
-		this.transationType = transationType;
+	public void setProductTotalPrice(Integer productTotalPrice) {
+		this.productTotalPrice = productTotalPrice;
 	}
 
 	public String getDeliverStatus() {
@@ -89,6 +96,46 @@ public class OrderBean implements Serializable {
 
 	public void setDeliverStatus(String deliverStatus) {
 		this.deliverStatus = deliverStatus;
+	}
+
+	public String getDeliverType() {
+		return deliverType;
+	}
+
+	public void setDeliverType(String deliverType) {
+		this.deliverType = deliverType;
+	}
+
+	public Integer getDeliverPrice() {
+		return deliverPrice;
+	}
+
+	public void setDeliverPrice(Integer deliverPrice) {
+		this.deliverPrice = deliverPrice;
+	}
+
+	public String getReceiverInformation() {
+		return receiverInformation;
+	}
+
+	public void setReceiverInformation(String receiverInformation) {
+		this.receiverInformation = receiverInformation;
+	}
+
+	public MemberBeanTest getMemberBeanTest() {
+		return memberBeanTest;
+	}
+
+	public void setMemberBeanTest(MemberBeanTest memberBeanTest) {
+		this.memberBeanTest = memberBeanTest;
+	}
+
+	public List<OrderDetailBean> getOrderDetailBeans() {
+		return orderDetailBeans;
+	}
+
+	public void setOrderDetailBeans(List<OrderDetailBean> orderDetailBeans) {
+		this.orderDetailBeans = orderDetailBeans;
 	}
 
 }

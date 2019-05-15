@@ -1,16 +1,19 @@
-package net.ddns.eeitdemo.eeit106team01.shop;
+package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * @author 冒竣瑋 - Entity for Member [Test].
  */
 @Entity
+@Table(name = "SHOP_Member")
 public class MemberBeanTest implements Serializable {
 
 	private static final long serialVersionUID = 6440126604397615997L;
@@ -18,16 +21,9 @@ public class MemberBeanTest implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	private String name;
 
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
-//	List<ReviewBean> reviewBeans = new ArrayList<ReviewBean>();
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
-//	List<OrderBean> orderBeans = new ArrayList<OrderBean>();
-//
-//	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
-//	List<RefundBean> refundBeans = new ArrayList<RefundBean>();
+	@Column(nullable = false, unique = true)
+	private String account;
 
 	public Long getId() {
 		return id;
@@ -37,12 +33,12 @@ public class MemberBeanTest implements Serializable {
 		this.id = id;
 	}
 
-	public String getName() {
-		return name;
+	public String getAccount() {
+		return account;
 	}
 
-	public void setName(String name) {
-		this.name = name;
+	public void setAccount(String account) {
+		this.account = account;
 	}
 
 }
