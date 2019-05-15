@@ -2,6 +2,8 @@ package net.ddns.eeitdemo.eeit106team01.forum.model.impl;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -42,41 +44,20 @@ public class ArticleContentCurrentDAOImpl implements ArticleContentCurrentDAO {
 
 	@Override
 	public ArticleContentCurrentBean update(ArticleContentCurrentBean bean) {
-		ArticleContentCurrentBean findOne = findByPrimaryKey(bean.getId());
-		if (findOne != null) {
-			if (bean.getContentLikeNum() != null) {
-				findOne.setContentLikeNum(bean.getContentLikeNum());
-			}
-			if (bean.getContentReplyNum() != null) {
-				findOne.setContentReplyNum(bean.getContentReplyNum());
-			}
-			if (bean.getContentCreateTime() != null) {
-				findOne.setContentCreateTime(bean.getContentCreateTime());
-			}
-			if (bean.getContentUpdateTime() != null) {
-				findOne.setContentUpdateTime(bean.getContentUpdateTime());
-			}
-			if (bean.getContentStatus() != null) {
-				findOne.setContentStatus(bean.getContentStatus());
-			}
-			if (bean.getContentContent() != null) {
-				findOne.setContentContent(bean.getContentContent());
-			}
-			if (bean.getUpdateMessage() != null) {
-				findOne.setUpdateMessage(bean.getUpdateMessage());
-			}
-			if (bean.getArticleTopicCurrent() != null) {
-				findOne.setArticleTopicCurrent(bean.getArticleTopicCurrent());
-			}
-			if (bean.getReply() != null) {
-				findOne.setReply(bean.getReply());
-			}
-			if (bean.getVideoBean() != null) {
-				findOne.setVideoBean(bean.getVideoBean());
-			}
-			return findOne;
+		if (bean != null) {
+			getSession().update(bean);
+			return findByPrimaryKey(bean.getId());
 		}
 		return null;
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleContentCurrentBean> queryList(String hql, int startPosition, int maxResult) {
+		Query query = getSession().createQuery(hql, ArticleContentCurrentBean.class);
+		query.setFirstResult(startPosition);
+		query.setMaxResults(maxResult);
+		return query.getResultList();
 	}
 
 	@Override
