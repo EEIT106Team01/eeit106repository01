@@ -1,8 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -11,12 +9,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-//	yaowei: 0513
 
 @Entity
 @Table(name = "ArticleTopicCurrent")
@@ -46,13 +41,13 @@ public class ArticleTopicCurrentBean {
 	@Column(columnDefinition = "nvarchar(255)")
 	private String updateMessage;
 
-	@OneToMany(mappedBy = "articleTopicCurrent", cascade = CascadeType.ALL)
-	List<ArticleContentCurrentBean> articleContentCurrentBeanList = new ArrayList<>();
-	
 //	memberPK
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "member_id")
+	private MemberBean memberBean;
 	
 //	vedioPK
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "video_id")
 	private VideoBean videoBean;
 
@@ -61,9 +56,10 @@ public class ArticleTopicCurrentBean {
 	}
 
 	public ArticleTopicCurrentBean(String topicHeader, String topicType, String topicRegion, Integer topicLikeNum,
-		Integer contentReplyNum, Date topicCreateTime, Date topicUpdateTime, String topicStatus, Date accidentTime,
-		String accidentLocation, Double accidentLocationLongitude, Double accidentLocationLatitude, String topicContent,
-		Date topicContentUpdateTime, String updateMessage, VideoBean videoBean) {
+			Integer contentReplyNum, Date topicCreateTime, Date topicUpdateTime, String topicStatus, Date accidentTime,
+			String accidentLocation, Double accidentLocationLongitude, Double accidentLocationLatitude,
+			String topicContent, Date topicContentUpdateTime, String updateMessage, MemberBean memberBean,
+			VideoBean videoBean) {
 		super();
 		this.topicHeader = topicHeader;
 		this.topicType = topicType;
@@ -80,10 +76,9 @@ public class ArticleTopicCurrentBean {
 		this.topicContent = topicContent;
 		this.topicContentUpdateTime = topicContentUpdateTime;
 		this.updateMessage = updateMessage;
+		this.memberBean = memberBean;
 		this.videoBean = videoBean;
 	}
-	
-	
 
 	public Integer getId() {
 		return id;
@@ -213,12 +208,12 @@ public class ArticleTopicCurrentBean {
 		this.updateMessage = updateMessage;
 	}
 
-	public List<ArticleContentCurrentBean> getArticleContentCurrentBeanList() {
-		return articleContentCurrentBeanList;
+	public MemberBean getMemberBean() {
+		return memberBean;
 	}
 
-	public void setArticleContentCurrentBeanList(List<ArticleContentCurrentBean> articleContentCurrentBeanList) {
-		this.articleContentCurrentBeanList = articleContentCurrentBeanList;
+	public void setMemberBean(MemberBean memberBean) {
+		this.memberBean = memberBean;
 	}
 
 	public VideoBean getVideoBean() {

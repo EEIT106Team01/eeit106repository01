@@ -1,6 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.product;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -22,12 +23,36 @@ public class ProductBean implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private java.util.Date date;
 
 	@Column(nullable = false)
 	private String name;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public java.util.Date getDate() {
+		return date;
+	}
+
+	public void setDate() {
+		this.date = new Date(System.currentTimeMillis());
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
 
 //	@OneToMany(fetch = FetchType.LAZY, mappedBy = "productBean")
 //	private List<ReviewBean> reviewBeans = new ArrayList<ReviewBean>();

@@ -1,8 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -12,12 +10,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Table;
-
-//yaowei: 0513
 
 @Entity
 @Table(name = "ArticleContentCurrent")
@@ -44,13 +38,14 @@ public class ArticleContentCurrentBean {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "reply_id")
 	private ArticleContentCurrentBean reply;
-	@OneToMany(mappedBy = "reply", cascade = CascadeType.ALL)
-	private List<ArticleContentCurrentBean> subReplyList = new ArrayList<>();
 
 //	memberPK
-	
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "member_id")
+	private MemberBean memberBean;
+
 //	vedioPK
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "video_id")
 	private VideoBean videoBean;
 
@@ -60,6 +55,7 @@ public class ArticleContentCurrentBean {
 
 	public ArticleContentCurrentBean(Integer contentLikeNum, Integer contentReplyNum, Date contentCreateTime,
 			Date contentUpdateTime, String contentStatus, String contentContent, String updateMessage,
+			ArticleTopicCurrentBean articleTopicCurrent, ArticleContentCurrentBean reply, MemberBean memberBean,
 			VideoBean videoBean) {
 		super();
 		this.contentLikeNum = contentLikeNum;
@@ -69,6 +65,9 @@ public class ArticleContentCurrentBean {
 		this.contentStatus = contentStatus;
 		this.contentContent = contentContent;
 		this.updateMessage = updateMessage;
+		this.articleTopicCurrent = articleTopicCurrent;
+		this.reply = reply;
+		this.memberBean = memberBean;
 		this.videoBean = videoBean;
 	}
 
@@ -152,12 +151,12 @@ public class ArticleContentCurrentBean {
 		this.reply = reply;
 	}
 
-	public List<ArticleContentCurrentBean> getSubReplyList() {
-		return subReplyList;
+	public MemberBean getMemberBean() {
+		return memberBean;
 	}
 
-	public void setSubReplyList(List<ArticleContentCurrentBean> subReplyList) {
-		this.subReplyList = subReplyList;
+	public void setMemberBean(MemberBean memberBean) {
+		this.memberBean = memberBean;
 	}
 
 	public VideoBean getVideoBean() {
