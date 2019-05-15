@@ -2,9 +2,11 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
@@ -24,9 +28,12 @@ public class OrderBean implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String payStatus;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
 	private java.util.Date time;
 	private Integer totalPrice;
-	private String transationType;
+	private String transactionType;
 	private String deliverStatus;
 
 	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
@@ -56,8 +63,8 @@ public class OrderBean implements Serializable {
 		return time;
 	}
 
-	public void setTime(java.util.Date time) {
-		this.time = time;
+	public void setTime() {
+		this.time = new Date(System.currentTimeMillis());
 	}
 
 	public Integer getTotalPrice() {
@@ -68,12 +75,12 @@ public class OrderBean implements Serializable {
 		this.totalPrice = totalPrice;
 	}
 
-	public String getTransationType() {
-		return transationType;
+	public String getTransactionType() {
+		return transactionType;
 	}
 
-	public void setTransationType(String transationType) {
-		this.transationType = transationType;
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
 	}
 
 	public String getDeliverStatus() {
