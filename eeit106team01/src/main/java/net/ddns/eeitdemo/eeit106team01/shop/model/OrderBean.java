@@ -33,7 +33,7 @@ public class OrderBean implements Serializable {
 	@Column(nullable = false)
 	private java.util.Date time;
 	private Integer totalPrice;
-	private String transationType;
+	private String transactionType;
 	private String deliverStatus;
 
 	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
@@ -75,12 +75,12 @@ public class OrderBean implements Serializable {
 		this.totalPrice = totalPrice;
 	}
 
-	public String getTransationType() {
-		return transationType;
+	public String getTransactionType() {
+		return transactionType;
 	}
 
-	public void setTransationType(String transationType) {
-		this.transationType = transationType;
+	public void setTransactionType(String transactionType) {
+		this.transactionType = transactionType;
 	}
 
 	public String getDeliverStatus() {

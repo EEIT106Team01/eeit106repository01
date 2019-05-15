@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 @Entity
 public class TopSearchBean implements Serializable{
 
@@ -15,8 +17,10 @@ public class TopSearchBean implements Serializable{
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private String keyWord;
-	private java.util.Date time;
 	private Integer searchTimes;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	private java.util.Date time;
 	
 	public Integer getId() {
 		return id;
