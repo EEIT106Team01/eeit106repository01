@@ -15,11 +15,11 @@ public class ArticleContentController {
 	@Autowired
 	private ArticleContentCurrentService articleContentCurrentService;
 
-	@GetMapping(path = { "/articleTopics/{id}/articleContents" }, produces = {
+	@GetMapping(path = { "/articleTopics/{id}/articleContents?begin=11&end=20&orderType=like" }, produces = {
 			"application/json" })
 	public ResponseEntity<?> getVideoList(
 			@PathVariable String id,
-			@RequestParam Integer begin,
+			@RequestParam Integer begin, 
 			@RequestParam Integer end,
 			@RequestParam String orderType
 			) {

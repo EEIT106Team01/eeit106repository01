@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.product;
 
 import java.io.Serializable;
 import java.sql.Blob;
+import java.util.Date;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -29,7 +30,7 @@ public class ReviewBean implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@Temporal(TemporalType.DATE)
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private java.util.Date date;
 
@@ -61,8 +62,8 @@ public class ReviewBean implements Serializable {
 		return date;
 	}
 
-	public void setDate(java.util.Date date) {
-		this.date = date;
+	public void setDate() {
+		this.date = new Date(System.currentTimeMillis());
 	}
 
 	public Integer getRating() {
