@@ -2,9 +2,11 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,6 +15,8 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
@@ -23,6 +27,10 @@ public class RefundBean implements Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	private java.util.Date time;
 	private String comment;
 	private String processStatus;
 
@@ -39,6 +47,14 @@ public class RefundBean implements Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+
+	public java.util.Date getTime() {
+		return time;
+	}
+
+	public void setTime() {
+		this.time = new Date(System.currentTimeMillis());
 	}
 
 	public String getComment() {

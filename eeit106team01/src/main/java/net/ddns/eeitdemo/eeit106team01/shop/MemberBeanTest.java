@@ -19,7 +19,7 @@ public class MemberBeanTest implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	private String name;
-
+	private String memberShip;
 //	@OneToMany(fetch = FetchType.LAZY, mappedBy = "memberBeanTest")
 //	List<ReviewBean> reviewBeans = new ArrayList<ReviewBean>();
 //
@@ -44,5 +44,11 @@ public class MemberBeanTest implements Serializable {
 	public void setName(String name) {
 		this.name = name;
 	}
+	public String getMemberShip() {
+		return memberShip;
+	}
 
+	public void setMemberShip(String memberShip) {
+		this.memberShip = memberShip;
+	}
 }

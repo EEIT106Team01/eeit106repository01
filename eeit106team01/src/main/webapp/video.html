@@ -48,7 +48,7 @@
 		<!-- 		</div> -->
 	</div>
 	<script>
-		$.get("video", "", getVideo, "json");
+		$.get("videos", "", getVideo, "json");
 		function getVideo(datas){
 			for (let i = 0; i < datas.length; i++){
 				let thumbnailURI = "preparing.jpg";
@@ -71,9 +71,9 @@
 				let video = document.createElement("video");
 				video.id = "player" + i;
 				video.className = "card-img-top";
-				video.poster = "storage/jpg/" + thumbnailURI;
+				video.poster = "storage/jpgs/" + thumbnailURI;
 				video.controls = true;
-				video.src = "storage/video/" + datas[i].videoURI;
+				video.src = "storage/videos/" + datas[i].videoURI;
 				let cardBody = document.createElement("div");
 				cardBody.className = "card-body";
 				cardBody.textContent = datas[i].videoURI.substr(0, 13);
@@ -84,9 +84,9 @@
 				const player = new Plyr('#player' + i);
 				$(document.getElementById('player' + i).nextElementSibling).hover(function(){
 					console.log($(this));
-					$(this).css("background-image", "url('storage/gif/" + gifURI + "')");
+					$(this).css("background-image", "url('storage/gifs/" + gifURI + "')");
 					}, function(){
-					$(this).css("background-image", "url('storage/jpg/" + thumbnailURI + "')");
+					$(this).css("background-image", "url('storage/jpgs/" + thumbnailURI + "')");
 				});
 			}
 		}
