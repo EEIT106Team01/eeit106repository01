@@ -27,3 +27,8 @@ HELP.md
 
 ### VS Code ###
 .vscode/
+<<<<<<< HEAD
+=======
+/application.properties
+/storage/
+>>>>>>> branch 'master' of https://github.com/EEIT106Team01/eeit106repository01.git
