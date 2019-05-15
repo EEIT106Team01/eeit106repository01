@@ -19,7 +19,7 @@ public class ArticleContentController {
 			"application/json" })
 	public ResponseEntity<?> getVideoList(
 			@PathVariable String id,
-			@RequestParam Integer begin,
+			@RequestParam Integer begin, 
 			@RequestParam Integer end,
 			@RequestParam String orderType
 			) {
