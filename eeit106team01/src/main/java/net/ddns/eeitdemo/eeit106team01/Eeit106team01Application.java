@@ -33,9 +33,9 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
-
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.TopSearchBean;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class,
@@ -91,11 +91,8 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(OrderDetailBean.class);
 		builder.addAnnotatedClass(RefundBean.class);
 		builder.addAnnotatedClass(RefundDetailBean.class);
-
-		// Cancel
-
-		// Product
 		builder.addAnnotatedClass(SerialNumberBean.class);
+		builder.addAnnotatedClass(TopSearchBean.class);
 
 		// Forum
 		builder.addAnnotatedClass(ArticleContentCurrentBean.class);
