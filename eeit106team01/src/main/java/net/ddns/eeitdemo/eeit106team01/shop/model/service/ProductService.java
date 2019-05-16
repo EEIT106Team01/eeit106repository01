@@ -70,17 +70,17 @@ public class ProductService {
 		return null;
 	}
 	
-	@SuppressWarnings("unchecked")
-	public List<ProductBean> recommendProducts (String name) {
-		ProductBean findOne = productDAO.findProductsByName(name);
-		if(findOne != null) {
-			List<ProductBean> rp = productDAO.findProductsByType(findOne.getType());
-			Query query = this.getSession().createQuery("select top(10) from SerialNumberBean s join ProductBean p where s.availabilityStatus = sold and p.type = :type order by totalSold desc",ProductBean.class);
-			query.setParameter("id", "id");
-			query.setParameter("type", findOne.getType());
-			return query.getResultList();
-		}
-		return null;
-	}
+//	@SuppressWarnings("unchecked")
+//	public List<ProductBean> recommendProducts (String name) {
+//		ProductBean findOne = productDAO.findProductsByName(name);
+//		if(findOne != null) {
+//			List<ProductBean> rp = productDAO.findProductsByType(findOne.getType());
+//			Query query = this.getSession().createQuery("select top(10) from SerialNumberBean s join ProductBean p where s.availabilityStatus = sold and p.type = :type order by totalSold desc",ProductBean.class);
+//			query.setParameter("id", "id");
+//			query.setParameter("type", findOne.getType());
+//			return query.getResultList();
+//		}
+//		return null;
+//	}
 
 }
