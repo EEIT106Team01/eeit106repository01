@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -64,6 +65,7 @@ public class InsertData extends ShopTest {
 		ProductBean productBean1 = new ProductBean();
 		productBean1.setName("Dash Cam 1080P 全高清迷你汽車行駛記錄儀 170° 廣角，運動檢測，G-Sensor，循環記錄，夜視功能");
 		productBean1.setTime();
+		productBean1.setType("行車紀錄器");
 		productBean1.setBrand("APEMAN");
 		productBean1.setPrice(49);
 		productBean1.setStock(3);
@@ -83,6 +85,7 @@ public class InsertData extends ShopTest {
 		productBean2.setName(
 				"Dash Cam 1080P FHD DVR Car Driving Recorder 3\" LCD Screen 170°Wide Angle, G-Sensor, WDR, Parking Monitor, Loop Recording, Motion Detection");
 		productBean2.setTime();
+		productBean2.setType("行車紀錄器");
 		productBean2.setBrand("APEMAN");
 		productBean2.setPrice(44);
 		productBean2.setStock(4);
@@ -112,7 +115,7 @@ public class InsertData extends ShopTest {
 		Session session = sessionFactory.openSession();
 
 		Query query1 = session.createQuery("From ProductBean where id= :productId");
-		query1.setParameter("productId", 1L);
+		query1.setParameter("productId", 3L);
 		List<ProductBean> productBeans1 = query1.getResultList();
 
 		ProductBean productBean1 = productBeans1.get(0);
@@ -127,7 +130,7 @@ public class InsertData extends ShopTest {
 		}
 
 		Query query2 = session.createQuery("From ProductBean where id= :productId");
-		query2.setParameter("productId", 2L);
+		query2.setParameter("productId", 4L);
 		List<ProductBean> productBeans2 = query2.getResultList();
 
 		ProductBean productBean2 = productBeans2.get(0);
@@ -151,7 +154,7 @@ public class InsertData extends ShopTest {
 
 		int buyCount = 2;
 		Query ProductBean = session.createQuery("From ProductBean where id= :productId");
-		ProductBean.setParameter("productId", 1L);
+		ProductBean.setParameter("productId", 4L);
 		List<ProductBean> productBeans = ProductBean.getResultList();
 		ProductBean productBean2 = productBeans.get(0);
 
@@ -206,7 +209,7 @@ public class InsertData extends ShopTest {
 		MemberBeanTest memberBeanTest2 = memberBeanTests.get(0);
 
 		Query ProductBean = session.createQuery("From ProductBean where id= :productId");
-		ProductBean.setParameter("productId", 1L);
+		ProductBean.setParameter("productId", 4L);
 		List<ProductBean> productBeans = ProductBean.getResultList();
 		ProductBean productBean2 = productBeans.get(0);
 
