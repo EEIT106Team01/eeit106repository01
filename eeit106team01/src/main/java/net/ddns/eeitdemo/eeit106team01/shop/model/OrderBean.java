@@ -27,6 +27,7 @@ public class OrderBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Column(nullable = false)

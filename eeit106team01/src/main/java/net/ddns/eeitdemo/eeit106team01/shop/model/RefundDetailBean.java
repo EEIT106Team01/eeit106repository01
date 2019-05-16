@@ -21,6 +21,7 @@ public class RefundDetailBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
