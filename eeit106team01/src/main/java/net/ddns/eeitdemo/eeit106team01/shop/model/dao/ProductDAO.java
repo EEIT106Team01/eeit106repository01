@@ -28,6 +28,6 @@ public interface ProductDAO {
 
 	abstract List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice);
 
-	abstract List<ProductBean> findProductsByTime(Date time);
+	abstract List<ProductBean> findProductsByTime(Integer day);
 
 }

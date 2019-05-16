@@ -26,8 +26,12 @@ public class ProductBean implements Serializable {
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private java.util.Date createTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private java.util.Date time;
+	private java.util.Date updatedTime;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String name;
@@ -61,12 +65,20 @@ public class ProductBean implements Serializable {
 		this.id = id;
 	}
 
-	public java.util.Date getTime() {
-		return time;
+	public java.util.Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setTime() {
-		this.time = new Date(System.currentTimeMillis());
+	public void setCreateTime() {
+		this.createTime = new Date(System.currentTimeMillis());
+	}
+
+	public java.util.Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime() {
+		this.updatedTime = new Date(System.currentTimeMillis());
 	}
 
 	public String getName() {
