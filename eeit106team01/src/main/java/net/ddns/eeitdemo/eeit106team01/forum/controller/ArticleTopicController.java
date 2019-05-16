@@ -30,13 +30,13 @@ public class ArticleTopicController {
 	
 	@GetMapping(path = { "/articleTopics" }, produces = { "application/json" })
 	public ResponseEntity<?> getTopicList(
-			@RequestParam(name = "begin") Integer begin,
-			@RequestParam(name = "end") Integer end, 
-			@RequestParam(name = "orderType") String orderType,	//orderByTime orderByLike
-			@RequestParam(name = "lowerLatitude") Double lowerLatitude,
-			@RequestParam(name = "upperLatitude") Double upperLatitude,
-			@RequestParam(name = "lowerLongitude") Double lowerLongitude,
-			@RequestParam(name = "upperLongitude") Double upperLongitude
+			@RequestParam(required = false) Integer begin,
+			@RequestParam(required = false) Integer end, 
+			@RequestParam(required = false) String orderType,	//orderByTime orderByLike
+			@RequestParam(required = false) Double lowerLatitude,
+			@RequestParam(required = false) Double upperLatitude,
+			@RequestParam(required = false) Double lowerLongitude,
+			@RequestParam(required = false) Double upperLongitude
 			) {
 		System.out.println("getTopicList method running");
 		

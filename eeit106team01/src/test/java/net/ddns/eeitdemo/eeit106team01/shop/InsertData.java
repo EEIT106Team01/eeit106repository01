@@ -5,7 +5,6 @@ import java.util.List;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -145,7 +144,7 @@ public class InsertData extends ShopTest {
 		session.close();
 	}
 
-	@Test
+//	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void order() {
 		Session session = sessionFactory.openSession();
@@ -196,37 +195,29 @@ public class InsertData extends ShopTest {
 	}
 
 //	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void insertReview() {
 
 		Session session = sessionFactory.openSession();
 
-		ReviewBean beanTest1 = new ReviewBean();
-		ReviewBean beanTest2 = new ReviewBean();
-		ReviewBean beanTest3 = new ReviewBean();
-		ReviewBean beanTest4 = new ReviewBean();
-		ReviewBean beanTest5 = new ReviewBean();
+		Query MemberBeanTest = session.createQuery("From MemberBeanTest where account= :Account");
+		MemberBeanTest.setParameter("Account", "alex123");
+		List<MemberBeanTest> memberBeanTests = MemberBeanTest.getResultList();
+		MemberBeanTest memberBeanTest2 = memberBeanTests.get(0);
 
-		beanTest1.setComment("Good!");
-		beanTest1.setDate();
-		beanTest1.setRating(10);
-		beanTest2.setComment("Good!");
-		beanTest2.setDate();
-		beanTest2.setRating(5);
-		beanTest3.setComment("還好");
-		beanTest3.setDate();
-		beanTest3.setRating(6);
-		beanTest4.setComment("還可以拉");
-		beanTest4.setDate();
-		beanTest4.setRating(6);
-		beanTest5.setComment("有待加強");
-		beanTest5.setDate();
-		beanTest5.setRating(7);
+		Query ProductBean = session.createQuery("From ProductBean where id= :productId");
+		ProductBean.setParameter("productId", 1L);
+		List<ProductBean> productBeans = ProductBean.getResultList();
+		ProductBean productBean2 = productBeans.get(0);
 
-		session.save(beanTest1);
-		session.save(beanTest2);
-		session.save(beanTest3);
-		session.save(beanTest4);
-		session.save(beanTest5);
+		ReviewBean reviewBean = new ReviewBean();
+		reviewBean.setTime();
+		reviewBean.setRating(9d);
+		reviewBean.setComment("很不錯喔! 好用。");
+		reviewBean.setMemberBeanTest(memberBeanTest2);
+		reviewBean.setProductBean(productBean2);
+
+		session.save(reviewBean);
 
 		session.beginTransaction().commit();
 		session.close();

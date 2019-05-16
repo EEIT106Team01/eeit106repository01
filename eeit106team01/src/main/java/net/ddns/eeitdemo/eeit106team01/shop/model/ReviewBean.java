@@ -35,7 +35,7 @@ public class ReviewBean implements Serializable {
 	private java.util.Date time;
 
 	@Column(nullable = false)
-	private Integer rating;
+	private Double rating;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String comment;
@@ -59,19 +59,19 @@ public class ReviewBean implements Serializable {
 		this.id = id;
 	}
 
-	public java.util.Date getDate() {
+	public java.util.Date getTime() {
 		return time;
 	}
 
-	public void setDate() {
+	public void setTime() {
 		this.time = new Date(System.currentTimeMillis());
 	}
 
-	public Integer getRating() {
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(Integer rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 
@@ -89,6 +89,22 @@ public class ReviewBean implements Serializable {
 
 	public void setImage(Blob image) {
 		this.image = image;
+	}
+
+	public MemberBeanTest getMemberBeanTest() {
+		return memberBeanTest;
+	}
+
+	public void setMemberBeanTest(MemberBeanTest memberBeanTest) {
+		this.memberBeanTest = memberBeanTest;
+	}
+
+	public ProductBean getProductBean() {
+		return productBean;
+	}
+
+	public void setProductBean(ProductBean productBean) {
+		this.productBean = productBean;
 	}
 
 }
