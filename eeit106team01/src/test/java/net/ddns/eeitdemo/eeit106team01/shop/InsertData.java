@@ -64,7 +64,8 @@ public class InsertData extends ShopTest {
 
 		ProductBean productBean1 = new ProductBean();
 		productBean1.setName("Dash Cam 1080P 全高清迷你汽車行駛記錄儀 170° 廣角，運動檢測，G-Sensor，循環記錄，夜視功能");
-		productBean1.setTime();
+		productBean1.setCreateTime();
+		productBean1.setUpdatedTime();
 		productBean1.setType("行車紀錄器");
 		productBean1.setBrand("APEMAN");
 		productBean1.setPrice(49);
@@ -84,7 +85,8 @@ public class InsertData extends ShopTest {
 		ProductBean productBean2 = new ProductBean();
 		productBean2.setName(
 				"Dash Cam 1080P FHD DVR Car Driving Recorder 3\" LCD Screen 170°Wide Angle, G-Sensor, WDR, Parking Monitor, Loop Recording, Motion Detection");
-		productBean2.setTime();
+		productBean2.setCreateTime();
+		productBean2.setUpdatedTime();
 		productBean2.setType("行車紀錄器");
 		productBean2.setBrand("APEMAN");
 		productBean2.setPrice(44);
@@ -170,7 +172,8 @@ public class InsertData extends ShopTest {
 
 		OrderBean orderBean = new OrderBean();
 		orderBean.setMemberBeanTest(memberBeanTest2);
-		orderBean.setTime();
+		orderBean.setCreateTime();
+		orderBean.setUpdatedTime();
 		orderBean.setPayStatus("未付款");
 		orderBean.setDeliverStatus("訂單成立");
 		orderBean.setDeliverPrice(200);
@@ -214,7 +217,8 @@ public class InsertData extends ShopTest {
 		ProductBean productBean2 = productBeans.get(0);
 
 		ReviewBean reviewBean = new ReviewBean();
-		reviewBean.setTime();
+		reviewBean.setCreateTime();
+		reviewBean.setUpdatedTime();
 		reviewBean.setRating(9d);
 		reviewBean.setComment("很不錯喔! 好用。");
 		reviewBean.setMemberBeanTest(memberBeanTest2);
