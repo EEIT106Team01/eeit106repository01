@@ -135,12 +135,8 @@ public class OrderDAOImpl implements OrderDAO {
 	@Override
 	public ReviewBean updateReview(ReviewBean reviewBean) {
 		if (reviewBean != null) {
-			ReviewBean result = this.findReviewByPrimaryKey(reviewBean.getId());
-			if (result != null) {
-				return result;
-			} else {
-				return null;
-			}
+			getSession().update(reviewBean);
+			return findReviewByPrimaryKey(reviewBean.getId());
 		}
 		return null;
 	}

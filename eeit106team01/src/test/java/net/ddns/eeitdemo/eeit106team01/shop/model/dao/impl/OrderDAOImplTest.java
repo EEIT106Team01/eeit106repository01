@@ -92,7 +92,7 @@ public class OrderDAOImplTest extends ShopTest {
 	public void testInsertOrderDetail() throws Exception {
 		OrderDetailBean orderDetailBean = new OrderDetailBean();
 		orderDetailBean.setPrice(2000);
-		orderDetailBean.setSerialnumber("A2");
+		orderDetailBean.setSerialNumber("A2");
 		orderDAO.insertOrderDetail(orderDetailBean);
 		Integer actual = 2000;
 		assertEquals(orderDAO.findOrderDetailByPrimaryKey(1L).getPrice(), actual);
@@ -120,25 +120,39 @@ public class OrderDAOImplTest extends ShopTest {
 		assertNotNull(orderDAO.findOrderDetails());
 	}
 
-	@Test
+//	@Test
 	public void testInsertReview() throws Exception {
 		ReviewBean reviewBean = new ReviewBean();
-		
+		reviewBean.setCreateTime();
+		reviewBean.setUpdatedTime();
+		reviewBean.setRating(9d);
+		reviewBean.setComment("很不錯喔! 好用。");
+		orderDAO.insertReview(reviewBean);
+
+		Double actual = 9d;
+		assertEquals(orderDAO.findReviewByPrimaryKey(1L).getRating(), actual);
 	}
 
 //	@Test
 	public void testUpdateReview() throws Exception {
-		throw new RuntimeException("not yet implemented");
+		ReviewBean reviewBean = orderDAO.findReviewByPrimaryKey(1L);
+		reviewBean.setRating(10d);
+		orderDAO.updateReview(reviewBean);
+
+		Double actual = 10d;
+		assertEquals(orderDAO.findReviewByPrimaryKey(1L).getRating(), actual);
 	}
 
 //	@Test
 	public void testFindReviewByPrimaryKey() throws Exception {
-		throw new RuntimeException("not yet implemented");
+		assertNotNull(orderDAO.findReviewByPrimaryKey(2L));
+		System.out.println(orderDAO.findReviewByPrimaryKey(2L).toString());
 	}
 
-//	@Test
+	@Test
 	public void testFindReviews() throws Exception {
-		throw new RuntimeException("not yet implemented");
+		assertNotNull(orderDAO.findReviews());
+		System.out.println(orderDAO.findReviews());
 	}
 
 }

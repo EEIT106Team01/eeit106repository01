@@ -53,7 +53,7 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String description;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
 	private HashMap<String, String> information;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")

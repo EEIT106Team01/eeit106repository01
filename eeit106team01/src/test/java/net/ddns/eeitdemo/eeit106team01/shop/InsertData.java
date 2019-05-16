@@ -209,7 +209,7 @@ public class InsertData extends ShopTest {
 			OrderDetailBean orderDetailBean1 = new OrderDetailBean();
 			orderDetailBean1.setPrice(productBean2.getPrice());
 			orderDetailBean1.setProductBean(productBean2);
-			orderDetailBean1.setSerialnumber(serialNumber.get(count).getSerialNumber());
+			orderDetailBean1.setSerialNumber(serialNumber.get(count).getSerialNumber());
 			serialNumber.get(count).setAvailabilityStatus("sold");
 			orderDetailBean1.setOrderBean(orderBean);
 			session.save(orderDetailBean1);

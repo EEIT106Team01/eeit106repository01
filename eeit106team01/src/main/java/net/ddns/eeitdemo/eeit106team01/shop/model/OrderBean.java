@@ -54,7 +54,7 @@ public class OrderBean implements Serializable {
 	@Column(nullable = false)
 	private Integer deliverPrice;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
 	private HashMap<String, String> receiverInformation;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)

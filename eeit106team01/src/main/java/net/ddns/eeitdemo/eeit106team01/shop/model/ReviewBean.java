@@ -56,6 +56,12 @@ public class ReviewBean implements Serializable {
 	@JoinColumn(name = "Product_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
 
+	@Override
+	public String toString() {
+		return "ReviewBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", rating="
+				+ rating + ", comment=" + comment + ", image=" + image + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}
