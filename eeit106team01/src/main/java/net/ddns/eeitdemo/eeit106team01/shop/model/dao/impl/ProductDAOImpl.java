@@ -1,8 +1,8 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import java.util.List;
+
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
-@Transactional
 @Repository
 public class ProductDAOImpl implements ProductDAO {
 

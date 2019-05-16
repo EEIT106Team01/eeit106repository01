@@ -49,6 +49,9 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false)
 	private Integer stock;
 
+	@Column(nullable = false)
+	private Integer totalSold;
+	
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String description;
 
@@ -62,7 +65,8 @@ public class ProductBean implements Serializable {
 	public String toString() {
 		return "ProductBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", name="
 				+ name + ", type=" + type + ", brand=" + brand + ", price=" + price + ", stock=" + stock
-				+ ", description=" + description + ", information=" + information + ", imageLink=" + imageLink + "]";
+				+ ", totalSold=" + totalSold + ", description=" + description + ", information=" + information
+				+ ", imageLink=" + imageLink + "]";
 	}
 
 	public Long getId() {
@@ -127,6 +131,14 @@ public class ProductBean implements Serializable {
 
 	public void setStock(Integer stock) {
 		this.stock = stock;
+	}
+
+	public Integer getTotalSold() {
+		return totalSold;
+	}
+
+	public void setTotalSold(Integer totalSold) {
+		this.totalSold = totalSold;
 	}
 
 	public String getDescription() {
