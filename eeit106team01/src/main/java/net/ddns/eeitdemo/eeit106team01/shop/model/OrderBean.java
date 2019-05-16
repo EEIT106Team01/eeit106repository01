@@ -33,8 +33,12 @@ public class OrderBean implements Serializable {
 	private String payStatus;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private java.util.Date createTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private java.util.Date time;
+	private java.util.Date updatedTime;
 
 	@Column(nullable = false)
 	private Integer productTotalPrice;
@@ -58,6 +62,14 @@ public class OrderBean implements Serializable {
 	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
 
+	@Override
+	public String toString() {
+		return "OrderBean [id=" + id + ", payStatus=" + payStatus + ", createTime=" + createTime + ", updatedTime="
+				+ updatedTime + ", productTotalPrice=" + productTotalPrice + ", deliverStatus=" + deliverStatus
+				+ ", deliverType=" + deliverType + ", deliverPrice=" + deliverPrice + ", receiverInformation="
+				+ receiverInformation + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -74,12 +86,20 @@ public class OrderBean implements Serializable {
 		this.payStatus = payStatus;
 	}
 
-	public java.util.Date getTime() {
-		return time;
+	public java.util.Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setTime() {
-		this.time = new Date(System.currentTimeMillis());
+	public void setCreateTime() {
+		this.createTime = new Date(System.currentTimeMillis());
+	}
+
+	public java.util.Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime() {
+		this.updatedTime = new Date(System.currentTimeMillis());
 	}
 
 	public Integer getProductTotalPrice() {

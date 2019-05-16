@@ -31,11 +31,15 @@ public class ReviewBean implements Serializable {
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private java.util.Date createTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private java.util.Date time;
+	private java.util.Date updatedTime;
 
 	@Column(nullable = false)
-	private Integer rating;
+	private Double rating;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String comment;
@@ -59,19 +63,27 @@ public class ReviewBean implements Serializable {
 		this.id = id;
 	}
 
-	public java.util.Date getDate() {
-		return time;
+	public java.util.Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setDate() {
-		this.time = new Date(System.currentTimeMillis());
+	public void setCreateTime() {
+		this.createTime = new Date(System.currentTimeMillis());
 	}
 
-	public Integer getRating() {
+	public java.util.Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime() {
+		this.updatedTime = new Date(System.currentTimeMillis());
+	}
+
+	public Double getRating() {
 		return rating;
 	}
 
-	public void setRating(Integer rating) {
+	public void setRating(Double rating) {
 		this.rating = rating;
 	}
 
@@ -89,6 +101,22 @@ public class ReviewBean implements Serializable {
 
 	public void setImage(Blob image) {
 		this.image = image;
+	}
+
+	public MemberBeanTest getMemberBeanTest() {
+		return memberBeanTest;
+	}
+
+	public void setMemberBeanTest(MemberBeanTest memberBeanTest) {
+		this.memberBeanTest = memberBeanTest;
+	}
+
+	public ProductBean getProductBean() {
+		return productBean;
+	}
+
+	public void setProductBean(ProductBean productBean) {
+		this.productBean = productBean;
 	}
 
 }

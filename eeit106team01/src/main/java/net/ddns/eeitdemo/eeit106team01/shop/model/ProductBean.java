@@ -26,11 +26,18 @@ public class ProductBean implements Serializable {
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private java.util.Date createTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private java.util.Date time;
+	private java.util.Date updatedTime;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String name;
+
+	@Column(nullable = false)
+	private String type;
 
 	@Column(nullable = false)
 	private String brand;
@@ -50,6 +57,13 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String imageLink;
 
+	@Override
+	public String toString() {
+		return "ProductBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", name="
+				+ name + ", type=" + type + ", brand=" + brand + ", price=" + price + ", stock=" + stock
+				+ ", description=" + description + ", information=" + information + ", imageLink=" + imageLink + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -58,12 +72,20 @@ public class ProductBean implements Serializable {
 		this.id = id;
 	}
 
-	public java.util.Date getTime() {
-		return time;
+	public java.util.Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setTime() {
-		this.time = new Date(System.currentTimeMillis());
+	public void setCreateTime() {
+		this.createTime = new Date(System.currentTimeMillis());
+	}
+
+	public java.util.Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime() {
+		this.updatedTime = new Date(System.currentTimeMillis());
 	}
 
 	public String getName() {
@@ -72,6 +94,14 @@ public class ProductBean implements Serializable {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getBrand() {

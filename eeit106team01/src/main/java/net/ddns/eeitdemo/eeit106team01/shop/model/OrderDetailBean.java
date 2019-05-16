@@ -30,11 +30,17 @@ public class OrderDetailBean implements Serializable {
 	private ProductBean productBean;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-//	@JoinColumn(name = "Order_Id")
+	@JoinColumn(name = "Order_Id")
 	private OrderBean orderBean;
 
 	@Column(nullable = false)
 	private String serialNumber;
+
+	@Override
+	public String toString() {
+		return "OrderDetailBean [id=" + id + ", price=" + price + ", productBean=" + productBean + ", orderBean="
+				+ orderBean + ", serialNumber=" + serialNumber + "]";
+	}
 
 	public Long getId() {
 		return id;
