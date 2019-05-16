@@ -3,9 +3,12 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import org.junit.Test;
+import java.util.HashMap;
+
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import net.ddns.eeitdemo.eeit106team01.shop.ShopTest;
@@ -31,7 +34,13 @@ public class OrderDAOImplTest extends ShopTest {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("收件人", "Alex");
 		jsonObject.addProperty("地址", "台北市大安區");
-		orderBean.setReceiverInformation(jsonObject.toString());
+
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap = new Gson().fromJson(jsonObject.toString(),
+				new TypeToken<HashMap<String, Object>>() {
+				}.getType());
+
+		orderBean.setReceiverInformation(jsonMap);
 		orderBean.setProductTotalPrice(2000);
 
 		orderDAO.insertOrder(orderBean);
@@ -50,7 +59,13 @@ public class OrderDAOImplTest extends ShopTest {
 		JsonObject jsonObject = new JsonObject();
 		jsonObject.addProperty("收件人", "Alex");
 		jsonObject.addProperty("地址", "台北市大安區");
-		orderBean.setReceiverInformation(jsonObject.toString());
+
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap = new Gson().fromJson(jsonObject.toString(),
+				new TypeToken<HashMap<String, Object>>() {
+				}.getType());
+
+		orderBean.setReceiverInformation(jsonMap);
 		orderBean.setProductTotalPrice(2001);
 
 		orderDAO.updateOrder(orderBean);

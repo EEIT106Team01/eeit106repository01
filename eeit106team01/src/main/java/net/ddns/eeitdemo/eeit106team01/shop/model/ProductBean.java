@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -53,7 +54,7 @@ public class ProductBean implements Serializable {
 	private String description;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
-	private String information;
+	private HashMap<String, String> information;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String imageLink;
@@ -137,11 +138,11 @@ public class ProductBean implements Serializable {
 		this.description = description;
 	}
 
-	public String getInformation() {
+	public HashMap<String, String> getInformation() {
 		return information;
 	}
 
-	public void setInformation(String information) {
+	public void setInformation(HashMap<String, String> information) {
 		this.information = information;
 	}
 
