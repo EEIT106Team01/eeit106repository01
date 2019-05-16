@@ -10,6 +10,8 @@ public interface ArticleContentCurrentDAO {
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean);
 
 	public ArticleContentCurrentBean update(ArticleContentCurrentBean bean);
+	
+	public List<ArticleContentCurrentBean> queryList(String hql, int startPosition, int maxResult);
 
 	public boolean delete(int id);
 }

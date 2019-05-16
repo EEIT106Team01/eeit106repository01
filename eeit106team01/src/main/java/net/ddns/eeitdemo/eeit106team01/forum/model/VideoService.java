@@ -33,25 +33,27 @@ public class VideoService {
 	public VideoBean update(VideoBean videoBean) {
 		VideoBean vb = this.findByPrimaryKey(videoBean.getId());
 		if (vb != null) {
-			if (videoBean.getVideoURI() != null) {
+			if (videoBean.getVideoURI() != null && videoBean.getVideoURI().length() != 0) {
 				vb.setVideoURI(videoBean.getVideoURI());
 			}
-			if (videoBean.getVideoStatus() != null) {
+			if (videoBean.getVideoStatus() != null && videoBean.getVideoStatus().length() != 0) {
 				vb.setVideoStatus(videoBean.getVideoStatus());
 			}
 			if (videoBean.getVideoLength() != null) {
-				vb.setVideoLength(videoBean.getVideoLength());
+//				影片長度不應該被修改
+//				vb.setVideoLength(videoBean.getVideoLength());
 			}
 			if (videoBean.getUploadTime() != null) {
-				vb.setUploadTime(videoBean.getUploadTime());
+//				上傳時間不應該被修改
+//				vb.setUploadTime(videoBean.getUploadTime());
 			}
-			if (videoBean.getUpdateMessage() != null) {
+			if (videoBean.getUpdateMessage() != null && videoBean.getUpdateMessage().length() != 0) {
 				vb.setUpdateMessage(videoBean.getUpdateMessage());
 			}
-			if (videoBean.getThumbnailURI() != null) {
+			if (videoBean.getThumbnailURI() != null && videoBean.getThumbnailURI().length() != 0) {
 				vb.setThumbnailURI(videoBean.getThumbnailURI());
 			}
-			if (videoBean.getGifURI() != null) {
+			if (videoBean.getGifURI() != null && videoBean.getGifURI().length() != 0) {
 				vb.setGifURI(videoBean.getGifURI());
 			}
 			return videoDAO.update(vb);

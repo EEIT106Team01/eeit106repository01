@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.shop.model.product;
+package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 import java.sql.Blob;
@@ -13,15 +13,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-
-import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
 
 /**
  * @author 冒竣瑋 - Entity for Review.
  */
 @Entity
+@Table(name = "SHOP_Review")
 public class ReviewBean implements Serializable {
 
 	private static final long serialVersionUID = 2337078640768450244L;
@@ -32,22 +32,23 @@ public class ReviewBean implements Serializable {
 
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private java.util.Date date;
+	private java.util.Date time;
 
 	@Column(nullable = false)
 	private Integer rating;
 
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String comment;
 
+	@Column(nullable = true)
 	private Blob image;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "FK_MemberBeanTest_Id")
+	@JoinColumn(name = "Member_Id")
 	private MemberBeanTest memberBeanTest;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "FK_ProductBean_Id")
+	@JoinColumn(name = "Product_Id")
 	private ProductBean productBean;
 
 	public Long getId() {
@@ -59,11 +60,11 @@ public class ReviewBean implements Serializable {
 	}
 
 	public java.util.Date getDate() {
-		return date;
+		return time;
 	}
 
 	public void setDate() {
-		this.date = new Date(System.currentTimeMillis());
+		this.time = new Date(System.currentTimeMillis());
 	}
 
 	public Integer getRating() {
