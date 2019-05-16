@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.MemberBeanTest;
@@ -27,7 +30,7 @@ public class InsertData extends ShopTest {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-//	@Test
+	@Test
 	public void member() {
 
 		Session session = sessionFactory.openSession();
@@ -64,7 +67,10 @@ public class InsertData extends ShopTest {
 
 		ProductBean productBean1 = new ProductBean();
 		productBean1.setName("Dash Cam 1080P 全高清迷你汽車行駛記錄儀 170° 廣角，運動檢測，G-Sensor，循環記錄，夜視功能");
-		productBean1.setTime();
+		productBean1.setCreateTime();
+		productBean1.setUpdatedTime();
+		productBean1.setType("行車紀錄器");
+		productBean1.setTotalSold(0);
 		productBean1.setBrand("APEMAN");
 		productBean1.setPrice(49);
 		productBean1.setStock(3);
@@ -77,13 +83,22 @@ public class InsertData extends ShopTest {
 		JsonObject jsonObject1 = new JsonObject();
 		jsonObject1.addProperty("Model Number", "C420");
 		jsonObject1.addProperty("Camera Type", "Single");
-		productBean1.setInformation(jsonObject1.toString());
+
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap1 = new Gson().fromJson(jsonObject1.toString(),
+				new TypeToken<HashMap<String, Object>>() {
+				}.getType());
+
+		productBean1.setInformation(jsonMap1);
 		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
 		ProductBean productBean2 = new ProductBean();
 		productBean2.setName(
 				"Dash Cam 1080P FHD DVR Car Driving Recorder 3\" LCD Screen 170°Wide Angle, G-Sensor, WDR, Parking Monitor, Loop Recording, Motion Detection");
-		productBean2.setTime();
+		productBean2.setCreateTime();
+		productBean2.setUpdatedTime();
+		productBean2.setType("行車紀錄器");
+		productBean2.setTotalSold(0);
 		productBean2.setBrand("APEMAN");
 		productBean2.setPrice(44);
 		productBean2.setStock(4);
@@ -96,7 +111,13 @@ public class InsertData extends ShopTest {
 		JsonObject jsonObject2 = new JsonObject();
 		jsonObject2.addProperty("Model Number", "C450");
 		jsonObject2.addProperty("Camera Type", "Single");
-		productBean2.setInformation(jsonObject2.toString());
+
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap2 = new Gson().fromJson(jsonObject2.toString(),
+				new TypeToken<HashMap<String, Object>>() {
+				}.getType());
+
+		productBean2.setInformation(jsonMap2);
 		productBean2.setImageLink(
 				"https://m.media-amazon.com/images/S/aplus-seller-content-images-us-east-1/ATVPDKIKX0DER/A1FYYQ65E5PX24/323102fa-8523-4996-83c4-698b4764e4a9._CR0,0,150,300_PT0_SX150__.jpg");
 
@@ -113,7 +134,7 @@ public class InsertData extends ShopTest {
 		Session session = sessionFactory.openSession();
 
 		Query query1 = session.createQuery("From ProductBean where id= :productId");
-		query1.setParameter("productId", 1L);
+		query1.setParameter("productId", 3L);
 		List<ProductBean> productBeans1 = query1.getResultList();
 
 		ProductBean productBean1 = productBeans1.get(0);
@@ -128,7 +149,7 @@ public class InsertData extends ShopTest {
 		}
 
 		Query query2 = session.createQuery("From ProductBean where id= :productId");
-		query2.setParameter("productId", 2L);
+		query2.setParameter("productId", 4L);
 		List<ProductBean> productBeans2 = query2.getResultList();
 
 		ProductBean productBean2 = productBeans2.get(0);
@@ -145,14 +166,14 @@ public class InsertData extends ShopTest {
 		session.close();
 	}
 
-	@Test
+//	@Test
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public void order() {
 		Session session = sessionFactory.openSession();
 
 		int buyCount = 2;
 		Query ProductBean = session.createQuery("From ProductBean where id= :productId");
-		ProductBean.setParameter("productId", 1L);
+		ProductBean.setParameter("productId", 4L);
 		List<ProductBean> productBeans = ProductBean.getResultList();
 		ProductBean productBean2 = productBeans.get(0);
 
@@ -168,7 +189,8 @@ public class InsertData extends ShopTest {
 
 		OrderBean orderBean = new OrderBean();
 		orderBean.setMemberBeanTest(memberBeanTest2);
-		orderBean.setTime();
+		orderBean.setCreateTime();
+		orderBean.setUpdatedTime();
 		orderBean.setPayStatus("未付款");
 		orderBean.setDeliverStatus("訂單成立");
 		orderBean.setDeliverPrice(200);
@@ -176,14 +198,20 @@ public class InsertData extends ShopTest {
 		JsonObject jsonObject2 = new JsonObject();
 		jsonObject2.addProperty("收件人", "Alex");
 		jsonObject2.addProperty("地址", "台北市大安區");
-		orderBean.setReceiverInformation(jsonObject2.toString());
+
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap = new Gson().fromJson(jsonObject2.toString(),
+				new TypeToken<HashMap<String, Object>>() {
+				}.getType());
+
+		orderBean.setReceiverInformation(jsonMap);
 		orderBean.setProductTotalPrice(productBean2.getPrice() * buyCount);
 
 		for (int count = 1; count <= buyCount; count++) {
 			OrderDetailBean orderDetailBean1 = new OrderDetailBean();
 			orderDetailBean1.setPrice(productBean2.getPrice());
 			orderDetailBean1.setProductBean(productBean2);
-			orderDetailBean1.setSerialnumber(serialNumber.get(count).getSerialNumber());
+			orderDetailBean1.setSerialNumber(serialNumber.get(count).getSerialNumber());
 			serialNumber.get(count).setAvailabilityStatus("sold");
 			orderDetailBean1.setOrderBean(orderBean);
 			session.save(orderDetailBean1);
@@ -196,37 +224,30 @@ public class InsertData extends ShopTest {
 	}
 
 //	@Test
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public void insertReview() {
 
 		Session session = sessionFactory.openSession();
 
-		ReviewBean beanTest1 = new ReviewBean();
-		ReviewBean beanTest2 = new ReviewBean();
-		ReviewBean beanTest3 = new ReviewBean();
-		ReviewBean beanTest4 = new ReviewBean();
-		ReviewBean beanTest5 = new ReviewBean();
+		Query MemberBeanTest = session.createQuery("From MemberBeanTest where account= :Account");
+		MemberBeanTest.setParameter("Account", "alex123");
+		List<MemberBeanTest> memberBeanTests = MemberBeanTest.getResultList();
+		MemberBeanTest memberBeanTest2 = memberBeanTests.get(0);
 
-		beanTest1.setComment("Good!");
-		beanTest1.setDate();
-		beanTest1.setRating(10);
-		beanTest2.setComment("Good!");
-		beanTest2.setDate();
-		beanTest2.setRating(5);
-		beanTest3.setComment("還好");
-		beanTest3.setDate();
-		beanTest3.setRating(6);
-		beanTest4.setComment("還可以拉");
-		beanTest4.setDate();
-		beanTest4.setRating(6);
-		beanTest5.setComment("有待加強");
-		beanTest5.setDate();
-		beanTest5.setRating(7);
+		Query ProductBean = session.createQuery("From ProductBean where id= :productId");
+		ProductBean.setParameter("productId", 4L);
+		List<ProductBean> productBeans = ProductBean.getResultList();
+		ProductBean productBean2 = productBeans.get(0);
 
-		session.save(beanTest1);
-		session.save(beanTest2);
-		session.save(beanTest3);
-		session.save(beanTest4);
-		session.save(beanTest5);
+		ReviewBean reviewBean = new ReviewBean();
+		reviewBean.setCreateTime();
+		reviewBean.setUpdatedTime();
+		reviewBean.setRating(9d);
+		reviewBean.setComment("很不錯喔! 好用。");
+		reviewBean.setMemberBeanTest(memberBeanTest2);
+		reviewBean.setProductBean(productBean2);
+
+		session.save(reviewBean);
 
 		session.beginTransaction().commit();
 		session.close();

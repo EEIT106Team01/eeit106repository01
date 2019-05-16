@@ -1,7 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.fail;
 
 import java.util.List;
 
@@ -51,6 +50,7 @@ public class ArticleTopicCurrentServiceTest {
 				"文章類別53", // topicType
 				"高譚市", // topicRegion
 				53, // topicLikeNum
+				null, //topicLikeWho
 				53, // contentReplyNum
 				new java.util.Date(53), // topicCreateTime
 				new java.util.Date(53), // topicUpdateTime
@@ -61,6 +61,7 @@ public class ArticleTopicCurrentServiceTest {
 				53.53, // accidentLocationLatitude
 				"主題內文53", // topicContent
 				new java.util.Date(53), // topicContentUpdateTime
+				30, //pageViews
 				"使用者修改53", // updateMessage
 				null, //MemberBean memberBean
 				null //VideoBean videoBean
@@ -76,6 +77,7 @@ public class ArticleTopicCurrentServiceTest {
 				null, // topicType
 				null, // topicRegion
 				null, // topicLikeNum
+				null, //topicLikeWho
 				null, // contentReplyNum
 				null, // topicCreateTime
 				null, // topicUpdateTime
@@ -86,6 +88,7 @@ public class ArticleTopicCurrentServiceTest {
 				null, // accidentLocationLatitude
 				null, // topicContent
 				null, // topicContentUpdateTime
+				null, //pageViews
 				null, // updateMessage
 				null, //MemberBean memberBean
 				null //VideoBean videoBean

@@ -26,11 +26,16 @@ public class RefundBean implements Serializable {
 	private static final long serialVersionUID = -5659890739956492348L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private java.util.Date createTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private java.util.Date time;
+	private java.util.Date updatedTime;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String comment;
@@ -39,11 +44,17 @@ public class RefundBean implements Serializable {
 	private String processStatus;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Member_Id")
+	@JoinColumn(name = "Member_Id", columnDefinition = "bigint")
 	private MemberBeanTest memberBeanTest;
 
 	@OneToMany(mappedBy = "refundBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<RefundDetailBean> refundDetailBeans = new ArrayList<RefundDetailBean>();
+
+	@Override
+	public String toString() {
+		return "RefundBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", comment="
+				+ comment + ", processStatus=" + processStatus + "]";
+	}
 
 	public Long getId() {
 		return id;
@@ -53,12 +64,20 @@ public class RefundBean implements Serializable {
 		this.id = id;
 	}
 
-	public java.util.Date getTime() {
-		return time;
+	public java.util.Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setTime() {
-		this.time = new Date(System.currentTimeMillis());
+	public void setCreateTime() {
+		this.createTime = new Date(System.currentTimeMillis());
+	}
+
+	public java.util.Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime() {
+		this.updatedTime = new Date(System.currentTimeMillis());
 	}
 
 	public String getComment() {

@@ -21,22 +21,23 @@ public class ArticleTopicCurrentService {
 		return articleTopicCurrentDAO.findAll();
 	};
 
-	public List<ArticleTopicCurrentBean> findByTopRange(int begin, int end, String order) {
-		String hqlOrderByTime = "from ArticleTopicCurrentBean";
+	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String order) {
+		String hqlOrderByTime = "from ArticleTopicCurrentBean order by topicUpdateTime desc";
 		String hqlOrderByLike = "from ArticleTopicCurrentBean order by topicLikeNum desc";
 
-		List<ArticleTopicCurrentBean> topRangeResult = null;
+		List<ArticleTopicCurrentBean> lastRangeResult = null;
 		if ("orderByLike".equals(order)) {
-			topRangeResult = articleTopicCurrentDAO.findByTopRange(hqlOrderByLike, begin, end);
-		} else if ("orderByTime".equals(order)){
-			topRangeResult = articleTopicCurrentDAO.findByTopRange(hqlOrderByTime, begin, end);
+			lastRangeResult = articleTopicCurrentDAO.findByLastRange(hqlOrderByLike, startPosition, maxResult);
+		} else if ("orderByTime".equals(order)) {
+			lastRangeResult = articleTopicCurrentDAO.findByLastRange(hqlOrderByTime, startPosition, maxResult);
 		}
-		return topRangeResult;
+		return lastRangeResult;
 	}
-	
+
 	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude,
-			Double lowerLongitude, Double upperLongitude){
-		return articleTopicCurrentDAO.findByCoordinateRange(lowerLatitude, upperLatitude, lowerLongitude, upperLongitude);
+			Double lowerLongitude, Double upperLongitude) {
+		return articleTopicCurrentDAO.findByCoordinateRange(lowerLatitude, upperLatitude, lowerLongitude,
+				upperLongitude);
 	}
 
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {
@@ -60,6 +61,9 @@ public class ArticleTopicCurrentService {
 			}
 			if (bean.getTopicLikeNum() != null) {
 				findOne.setTopicLikeNum(bean.getTopicLikeNum());
+			}
+			if (bean.getTopicLikeWho() != null) {
+				findOne.setTopicLikeWho(bean.getTopicLikeWho());
 			}
 			if (bean.getContentReplyNum() != null) {
 				findOne.setContentReplyNum(bean.getContentReplyNum());
@@ -88,8 +92,14 @@ public class ArticleTopicCurrentService {
 			if (bean.getTopicContentUpdateTime() != null) {
 				findOne.setTopicContentUpdateTime(bean.getTopicContentUpdateTime());
 			}
+			if (bean.getPageViews() != null) {
+				findOne.setPageViews(bean.getPageViews());
+			}
 			if (bean.getUpdateMessage() != null) {
 				findOne.setUpdateMessage(bean.getUpdateMessage());
+			}
+			if (bean.getMemberBean() != null) {
+				findOne.setMemberBean(bean.getMemberBean());
 			}
 			if (bean.getVideoBean() != null) {
 				findOne.setVideoBean(bean.getVideoBean());
@@ -99,6 +109,22 @@ public class ArticleTopicCurrentService {
 		return null;
 	};
 
+	public void increasePageViews(int id) {
+		ArticleTopicCurrentBean findOne = findByPrimaryKey(id);
+		if (findOne != null) {
+			findOne.setPageViews(findOne.getPageViews() + 1);
+			articleTopicCurrentDAO.update(findOne);
+		}
+	}
+
+	public void increaseContentReplyNum(int id) {
+		ArticleTopicCurrentBean findOne = findByPrimaryKey(id);
+		if (findOne != null) {
+			findOne.setContentReplyNum(findOne.getContentReplyNum() + 1);
+			articleTopicCurrentDAO.update(findOne);
+		}
+	}
+	
 	public boolean delete(int id) {
 		return articleTopicCurrentDAO.delete(id);
 	};

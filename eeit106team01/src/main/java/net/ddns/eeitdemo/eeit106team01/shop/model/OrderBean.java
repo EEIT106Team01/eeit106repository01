@@ -3,6 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,14 +28,19 @@ public class OrderBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Column(nullable = false)
 	private String payStatus;
 
 	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private java.util.Date createTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
-	private java.util.Date time;
+	private java.util.Date updatedTime;
 
 	@Column(nullable = false)
 	private Integer productTotalPrice;
@@ -48,15 +54,23 @@ public class OrderBean implements Serializable {
 	@Column(nullable = false)
 	private Integer deliverPrice;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
-	private String receiverInformation;
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
+	private HashMap<String, String> receiverInformation;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Member_Id")
+	@JoinColumn(name = "Member_Id", columnDefinition = "bigint")
 	private MemberBeanTest memberBeanTest;
 
 	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
+
+	@Override
+	public String toString() {
+		return "OrderBean [id=" + id + ", payStatus=" + payStatus + ", createTime=" + createTime + ", updatedTime="
+				+ updatedTime + ", productTotalPrice=" + productTotalPrice + ", deliverStatus=" + deliverStatus
+				+ ", deliverType=" + deliverType + ", deliverPrice=" + deliverPrice + ", receiverInformation="
+				+ receiverInformation + "]";
+	}
 
 	public Long getId() {
 		return id;
@@ -74,12 +88,20 @@ public class OrderBean implements Serializable {
 		this.payStatus = payStatus;
 	}
 
-	public java.util.Date getTime() {
-		return time;
+	public java.util.Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setTime() {
-		this.time = new Date(System.currentTimeMillis());
+	public void setCreateTime() {
+		this.createTime = new Date(System.currentTimeMillis());
+	}
+
+	public java.util.Date getUpdatedTime() {
+		return updatedTime;
+	}
+
+	public void setUpdatedTime() {
+		this.updatedTime = new Date(System.currentTimeMillis());
 	}
 
 	public Integer getProductTotalPrice() {
@@ -114,11 +136,11 @@ public class OrderBean implements Serializable {
 		this.deliverPrice = deliverPrice;
 	}
 
-	public String getReceiverInformation() {
+	public HashMap<String, String> getReceiverInformation() {
 		return receiverInformation;
 	}
 
-	public void setReceiverInformation(String receiverInformation) {
+	public void setReceiverInformation(HashMap<String, String> receiverInformation) {
 		this.receiverInformation = receiverInformation;
 	}
 

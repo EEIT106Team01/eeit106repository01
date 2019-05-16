@@ -21,18 +21,24 @@ public class RefundDetailBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Product_Id")
+	@JoinColumn(name = "Product_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Refund_Id")
+	@JoinColumn(name = "Refund_Id", columnDefinition = "bigint")
 	private RefundBean refundBean;
 
 	@Column(nullable = false)
 	private String serialNumber;
+
+	@Override
+	public String toString() {
+		return "RefundDetailBean [id=" + id + ", serialNumber=" + serialNumber + "]";
+	}
 
 	public Long getId() {
 		return id;

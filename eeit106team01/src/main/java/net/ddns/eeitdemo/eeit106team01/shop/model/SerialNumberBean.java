@@ -23,6 +23,7 @@ public class SerialNumberBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Column(nullable = false, updatable = false, unique = true)
@@ -32,7 +33,7 @@ public class SerialNumberBean implements Serializable {
 	private String availabilityStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ProductBean_Id")
+	@JoinColumn(name = "ProductBean_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
 
 	public Long getId() {
