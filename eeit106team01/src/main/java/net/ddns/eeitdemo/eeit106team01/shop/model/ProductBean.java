@@ -35,7 +35,7 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false)
 	private java.util.Date updatedTime;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
+	@Column(nullable = false, unique = true, columnDefinition = "nvarchar(max)")
 	private String name;
 
 	@Column(nullable = false)
