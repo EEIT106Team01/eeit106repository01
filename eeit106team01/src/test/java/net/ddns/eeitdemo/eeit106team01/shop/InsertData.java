@@ -70,6 +70,7 @@ public class InsertData extends ShopTest {
 		productBean1.setCreateTime();
 		productBean1.setUpdatedTime();
 		productBean1.setType("行車紀錄器");
+		productBean1.setTotalSold(0);
 		productBean1.setBrand("APEMAN");
 		productBean1.setPrice(49);
 		productBean1.setStock(3);
@@ -97,6 +98,7 @@ public class InsertData extends ShopTest {
 		productBean2.setCreateTime();
 		productBean2.setUpdatedTime();
 		productBean2.setType("行車紀錄器");
+		productBean2.setTotalSold(0);
 		productBean2.setBrand("APEMAN");
 		productBean2.setPrice(44);
 		productBean2.setStock(4);
