@@ -71,7 +71,7 @@ public class OrderDAOImplTest extends ShopTest {
 		assertNotNull(orderDAO.findOrders());
 	}
 
-	@Test
+//	@Test
 	public void testInsertOrderDetail() throws Exception {
 		OrderDetailBean orderDetailBean = new OrderDetailBean();
 		orderDetailBean.setPrice(2000);
@@ -84,6 +84,13 @@ public class OrderDAOImplTest extends ShopTest {
 
 //	@Test
 	public void testUpdateOrderDetail() throws Exception {
+		OrderDetailBean orderDetailBean = orderDAO.findOrderDetailByPrimaryKey(1L);
+		orderDetailBean.setPrice(3000);
+		orderDAO.updateOrderDetail(orderDetailBean);
+		
+		Integer actual = 3000;
+		assertEquals(orderDAO.findOrderDetailByPrimaryKey(1L).getPrice(), actual);
+		
 	}
 
 //	@Test

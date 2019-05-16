@@ -23,6 +23,7 @@ public class SerialNumberBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Column(nullable = false, updatable = false, unique = true)

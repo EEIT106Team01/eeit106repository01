@@ -28,6 +28,7 @@ public class ReviewBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)

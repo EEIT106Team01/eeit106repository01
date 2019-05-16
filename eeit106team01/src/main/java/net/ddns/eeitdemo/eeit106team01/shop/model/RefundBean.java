@@ -26,6 +26,7 @@ public class RefundBean implements Serializable {
 	private static final long serialVersionUID = -5659890739956492348L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
