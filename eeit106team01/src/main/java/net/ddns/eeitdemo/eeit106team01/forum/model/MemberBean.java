@@ -28,6 +28,5 @@ public class MemberBean {
 
 	public MemberBean() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 }
