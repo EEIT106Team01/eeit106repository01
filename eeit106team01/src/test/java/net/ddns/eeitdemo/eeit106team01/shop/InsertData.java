@@ -27,7 +27,7 @@ public class InsertData extends ShopTest {
 	@Autowired
 	private SessionFactory sessionFactory;
 
-//	@Test
+	@Test
 	public void member() {
 
 		Session session = sessionFactory.openSession();

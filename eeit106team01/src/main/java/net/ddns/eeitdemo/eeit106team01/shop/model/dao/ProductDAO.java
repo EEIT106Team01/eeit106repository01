@@ -1,6 +1,5 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
