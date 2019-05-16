@@ -50,6 +50,12 @@ public class RefundBean implements Serializable {
 	@OneToMany(mappedBy = "refundBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<RefundDetailBean> refundDetailBeans = new ArrayList<RefundDetailBean>();
 
+	@Override
+	public String toString() {
+		return "RefundBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", comment="
+				+ comment + ", processStatus=" + processStatus + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}
