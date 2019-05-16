@@ -125,26 +125,49 @@ public class OrderDAOImpl implements OrderDAO {
 
 	@Override
 	public ReviewBean insertReview(ReviewBean reviewBean) {
-
+		if (reviewBean != null) {
+			getSession().save(reviewBean);
+			return this.findReviewByPrimaryKey(reviewBean.getId());
+		}
 		return null;
 	}
 
 	@Override
 	public ReviewBean updateReview(ReviewBean reviewBean) {
-
+		if (reviewBean != null) {
+			getSession().update(reviewBean);
+			return findReviewByPrimaryKey(reviewBean.getId());
+		}
 		return null;
 	}
 
 	@Override
 	public ReviewBean findReviewByPrimaryKey(Long id) {
-
+		if (id != null) {
+			ReviewBean result = getSession().get(ReviewBean.class, id);
+			if (result != null) {
+				return result;
+			} else {
+				return null;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<ReviewBean> findReviews() {
+		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
+		CriteriaQuery<ReviewBean> criteriaQuery = criteriaBuilder.createQuery(ReviewBean.class);
+		Root<ReviewBean> root = criteriaQuery.from(ReviewBean.class);
+		criteriaQuery.select(root);
 
-		return null;
+		Query<ReviewBean> query = getSession().createQuery(criteriaQuery);
+		List<ReviewBean> result = query.getResultList();
+		if (result != null) {
+			return result;
+		} else {
+			return null;
+		}
 	}
 
 }

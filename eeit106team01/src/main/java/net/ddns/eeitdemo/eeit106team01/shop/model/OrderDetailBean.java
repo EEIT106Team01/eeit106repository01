@@ -75,11 +75,12 @@ public class OrderDetailBean implements Serializable {
 		this.orderBean = orderBean;
 	}
 
-	public String getSerialnumber() {
+	public String getSerialNumber() {
 		return serialNumber;
 	}
 
-	public void setSerialnumber(String serialNumber) {
+	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
+
 }

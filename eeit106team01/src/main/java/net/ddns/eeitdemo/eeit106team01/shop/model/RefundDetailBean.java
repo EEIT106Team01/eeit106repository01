@@ -35,6 +35,11 @@ public class RefundDetailBean implements Serializable {
 	@Column(nullable = false)
 	private String serialNumber;
 
+	@Override
+	public String toString() {
+		return "RefundDetailBean [id=" + id + ", serialNumber=" + serialNumber + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}
