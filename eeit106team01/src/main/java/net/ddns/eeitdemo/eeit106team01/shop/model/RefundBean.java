@@ -15,30 +15,34 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
-import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
-
 @Entity
+@Table(name = "SHOP_Refund")
 public class RefundBean implements Serializable {
 
 	private static final long serialVersionUID = -5659890739956492348L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	@Column(nullable = false)
 	private java.util.Date time;
+
+	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String comment;
+
+	@Column(nullable = false)
 	private String processStatus;
 
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "FK_member_Id")
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "Member_Id")
 	private MemberBeanTest memberBeanTest;
 
-	@OneToMany(mappedBy = "refundBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "refundBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<RefundDetailBean> refundDetailBeans = new ArrayList<RefundDetailBean>();
 
 	public Long getId() {

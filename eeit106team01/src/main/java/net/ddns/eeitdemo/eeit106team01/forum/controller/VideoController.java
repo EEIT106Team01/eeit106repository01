@@ -122,9 +122,9 @@ public class VideoController {
 	}
 
 	@PutMapping(path = { "/videos/{id}" }, consumes = { "application/json" }, produces = { "application/json" })
-	public ResponseEntity<?> updateVideo(@PathVariable String id, @RequestBody VideoBean videoBean,
+	public ResponseEntity<?> updateVideo(@PathVariable Integer id, @RequestBody VideoBean videoBean,
 			BindingResult bindingResult) {
-		if (id != null && id.length() != 0) {
+		if (id != null && id.intValue() != 0) {
 			if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 				Map<String, String> errors = new HashMap<String, String>();
 				if (bindingResult.hasFieldErrors("uploadTime")) {
@@ -150,15 +150,11 @@ public class VideoController {
 				}
 				return ResponseEntity.badRequest().body(errors);
 			}
-			try {
-				Integer intId = Integer.valueOf(id);
-				VideoBean result = videoService.findByPrimaryKey(intId);
+			if ((videoBean != null) && (id == videoBean.getId())) {
+				VideoBean result = videoService.update(videoBean);
 				if (result != null) {
-					result = videoService.update(videoBean);
 					return ResponseEntity.ok(result);
 				}
-			} catch (NumberFormatException e) {
-				return ResponseEntity.badRequest().build();
 			}
 		}
 		return ResponseEntity.notFound().build();
@@ -171,7 +167,7 @@ public class VideoController {
 				Integer intId = Integer.valueOf(id);
 				VideoBean videoBean = videoService.findByPrimaryKey(intId);
 				if (videoBean != null) {
-					if(videoService.delete(intId)) {
+					if (videoService.delete(intId)) {
 						storageService.delete("jpgs/" + videoBean.getThumbnailURI());
 						storageService.delete("gifs/" + videoBean.getGifURI());
 						storageService.delete("videos/" + videoBean.getVideoURI());

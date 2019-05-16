@@ -2,11 +2,14 @@ package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 @Entity
@@ -15,7 +18,9 @@ public class VideoBean {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
-//	private Integer memberPK;
+	@ManyToOne(cascade = CascadeType.ALL)
+	@JoinColumn(name = "member_id")
+	private MemberBean memberBean;
 	private java.util.Date uploadTime;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String videoStatus;
@@ -33,9 +38,10 @@ public class VideoBean {
 		super();
 	}
 
-	public VideoBean(Date uploadTime, String videoStatus, String videoURI, String thumbnailURI,
+	public VideoBean(MemberBean memberBean, Date uploadTime, String videoStatus, String videoURI, String thumbnailURI,
 			String gifURI, Double videoLength, String updateMessage) {
 		super();
+		this.memberBean = memberBean;
 		this.uploadTime = uploadTime;
 		this.videoStatus = videoStatus;
 		this.videoURI = videoURI;
@@ -51,6 +57,14 @@ public class VideoBean {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public MemberBean getMemberBean() {
+		return memberBean;
+	}
+
+	public void setMemberBean(MemberBean memberBean) {
+		this.memberBean = memberBean;
 	}
 
 	public java.util.Date getUploadTime() {
