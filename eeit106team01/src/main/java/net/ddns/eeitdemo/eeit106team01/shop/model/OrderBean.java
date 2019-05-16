@@ -62,6 +62,14 @@ public class OrderBean implements Serializable {
 	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
 
+	@Override
+	public String toString() {
+		return "OrderBean [id=" + id + ", payStatus=" + payStatus + ", createTime=" + createTime + ", updatedTime="
+				+ updatedTime + ", productTotalPrice=" + productTotalPrice + ", deliverStatus=" + deliverStatus
+				+ ", deliverType=" + deliverType + ", deliverPrice=" + deliverPrice + ", receiverInformation="
+				+ receiverInformation + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}
