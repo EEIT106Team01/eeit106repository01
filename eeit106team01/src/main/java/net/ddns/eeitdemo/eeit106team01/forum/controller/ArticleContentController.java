@@ -77,7 +77,7 @@ public class ArticleContentController {
 		return ResponseEntity.noContent().build();
 	}
 	
-	@PutMapping(path = { "/articleTopics/{id}/articleContents/{contentId}" }, consumes = { "application/json" }, produces = {
+	@PutMapping(path = { "/articleTopics/{id}/articleContents/{contentId}" }, consumes = { "application/json; charset=UTF-8" }, produces = {
 	"application/json" })
 	public ResponseEntity<?> updateContent(
 			@PathVariable Integer id,
