@@ -33,6 +33,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.TopSearchBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
@@ -101,6 +102,7 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(RefundBean.class);
 		builder.addAnnotatedClass(RefundDetailBean.class);
 		builder.addAnnotatedClass(DeliverTypeBean.class);
+		builder.addAnnotatedClass(TopSearchBean.class);
 		// Cancel
 
 		// Product
