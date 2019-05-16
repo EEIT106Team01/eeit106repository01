@@ -90,7 +90,7 @@ public class ArticleTopicCurrentServiceTest {
 				null, //MemberBean memberBean
 				null //VideoBean videoBean
 		);
-		ArticleTopicCurrentBean updateResult = articleTopicCurrentService.update(7, topic54);
+		ArticleTopicCurrentBean updateResult = articleTopicCurrentService.updateIgnoreNullColumn(topic54);
 		assertEquals(updateResult.getTopicHeader(), "文章標題53");
 	}
 
