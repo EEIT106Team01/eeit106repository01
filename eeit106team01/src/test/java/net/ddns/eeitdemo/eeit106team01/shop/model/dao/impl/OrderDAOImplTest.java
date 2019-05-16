@@ -79,6 +79,7 @@ public class OrderDAOImplTest extends ShopTest {
 		orderDAO.insertOrderDetail(orderDetailBean);
 		Integer actual = 2000;
 		assertEquals(orderDAO.findOrderDetailByPrimaryKey(1L).getPrice(), actual);
+		System.out.println(orderDAO.findOrderDetailByPrimaryKey(1L).toString());
 	}
 
 //	@Test

@@ -24,11 +24,11 @@ public class RefundDetailBean implements Serializable {
 	private Long id;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Product_Id")
+	@JoinColumn(name = "Product_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Refund_Id")
+	@JoinColumn(name = "Refund_Id", columnDefinition = "bigint")
 	private RefundBean refundBean;
 
 	@Column(nullable = false)

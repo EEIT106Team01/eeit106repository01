@@ -26,11 +26,11 @@ public class OrderDetailBean implements Serializable {
 	private Integer price;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "Product_Id")
+	@JoinColumn(name = "Product_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "Order_Id")
+	@JoinColumn(name = "Order_Id", columnDefinition = "bigint")
 	private OrderBean orderBean;
 
 	@Column(nullable = false)

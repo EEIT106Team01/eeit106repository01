@@ -32,7 +32,7 @@ public class SerialNumberBean implements Serializable {
 	private String availabilityStatus;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "ProductBean_Id")
+	@JoinColumn(name = "ProductBean_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
 
 	public Long getId() {
