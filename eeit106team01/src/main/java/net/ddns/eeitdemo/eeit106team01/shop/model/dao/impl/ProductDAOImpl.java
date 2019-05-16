@@ -10,7 +10,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@Override
 	public ProductBean insertProduct(ProductBean productBean) {
-		// TODO Auto-generated method stub
+		
 		return null;
 	}
 
