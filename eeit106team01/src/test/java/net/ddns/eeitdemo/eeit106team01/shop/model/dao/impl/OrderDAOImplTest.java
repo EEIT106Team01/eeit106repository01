@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 
 import java.util.HashMap;
 
+import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import com.google.common.reflect.TypeToken;
@@ -14,6 +15,7 @@ import com.google.gson.JsonObject;
 import net.ddns.eeitdemo.eeit106team01.shop.ShopTest;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
 
 public class OrderDAOImplTest extends ShopTest {
@@ -116,6 +118,27 @@ public class OrderDAOImplTest extends ShopTest {
 //	@Test
 	public void testFindOrderDetails() throws Exception {
 		assertNotNull(orderDAO.findOrderDetails());
+	}
+
+	@Test
+	public void testInsertReview() throws Exception {
+		ReviewBean reviewBean = new ReviewBean();
+		
+	}
+
+//	@Test
+	public void testUpdateReview() throws Exception {
+		throw new RuntimeException("not yet implemented");
+	}
+
+//	@Test
+	public void testFindReviewByPrimaryKey() throws Exception {
+		throw new RuntimeException("not yet implemented");
+	}
+
+//	@Test
+	public void testFindReviews() throws Exception {
+		throw new RuntimeException("not yet implemented");
 	}
 
 }
