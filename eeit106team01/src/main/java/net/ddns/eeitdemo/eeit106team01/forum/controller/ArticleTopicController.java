@@ -27,7 +27,7 @@ public class ArticleTopicController {
 
 	@Autowired
 	private ArticleTopicCurrentService articleTopicCurrentService;
-
+	
 	@GetMapping(path = { "/articleTopics" }, produces = { "application/json" })
 	public ResponseEntity<?> getTopicList(
 			@RequestParam(name = "begin") Integer begin,
@@ -49,7 +49,7 @@ public class ArticleTopicController {
 			}else if("orderByLike".equals(orderType)) {
 				findRange = articleTopicCurrentService.findByTopRange(begin, end, "orderByLike");
 			}
-		} else if ((begin == null) && (end == null) && (orderType == null) &&
+		} else if ((begin == null) && (end == null) && ("".equals(orderType)) &&
 				(lowerLatitude != null) && (upperLatitude != null) && 
 				(lowerLongitude != null) && (upperLongitude != null)){
 			findRange = articleTopicCurrentService.findByCoordinateRange(lowerLatitude, upperLatitude, lowerLongitude, upperLongitude);

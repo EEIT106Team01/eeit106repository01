@@ -27,9 +27,9 @@ public class ArticleTopicCurrentService {
 
 		List<ArticleTopicCurrentBean> topRangeResult = null;
 		if ("orderByLike".equals(order)) {
-			topRangeResult = articleTopicCurrentDAO.findByTopRange(hqlOrderByLike, begin - 1, end - 1);
+			topRangeResult = articleTopicCurrentDAO.findByTopRange(hqlOrderByLike, begin, end);
 		} else if ("orderByTime".equals(order)){
-			topRangeResult = articleTopicCurrentDAO.findByTopRange(hqlOrderByTime, begin - 1, end - 1);
+			topRangeResult = articleTopicCurrentDAO.findByTopRange(hqlOrderByTime, begin, end);
 		}
 		return topRangeResult;
 	}

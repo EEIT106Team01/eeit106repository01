@@ -36,7 +36,7 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 	@Override
 	public List<ArticleTopicCurrentBean> findByTopRange(String queryString, int startPosition, int maxResult) {
 		Query query = getSession().createQuery(queryString, ArticleTopicCurrentBean.class);
-		query.setFirstResult(startPosition);
+		query.setFirstResult(startPosition - 1);
 		query.setMaxResults(maxResult);
 		return query.getResultList();
 	}
