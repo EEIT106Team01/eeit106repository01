@@ -1,6 +1,8 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -26,6 +28,7 @@ public class ArticleTopicCurrentBean {
 	@Column(columnDefinition = "nvarchar(255)")
 	private String topicRegion;
 	private Integer topicLikeNum;
+	private HashMap<Integer, String> topicLikeWho;
 	private Integer contentReplyNum;
 	private java.util.Date topicCreateTime;
 	private java.util.Date topicUpdateTime;
@@ -38,6 +41,7 @@ public class ArticleTopicCurrentBean {
 	@Column(columnDefinition = "nvarchar(255)")
 	private String topicContent;
 	private java.util.Date topicContentUpdateTime;
+	private Integer pageViews;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String updateMessage;
 
@@ -45,7 +49,7 @@ public class ArticleTopicCurrentBean {
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "member_id")
 	private MemberBean memberBean;
-	
+
 //	vedioPK
 	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "video_id")
@@ -56,15 +60,16 @@ public class ArticleTopicCurrentBean {
 	}
 
 	public ArticleTopicCurrentBean(String topicHeader, String topicType, String topicRegion, Integer topicLikeNum,
-			Integer contentReplyNum, Date topicCreateTime, Date topicUpdateTime, String topicStatus, Date accidentTime,
-			String accidentLocation, Double accidentLocationLongitude, Double accidentLocationLatitude,
-			String topicContent, Date topicContentUpdateTime, String updateMessage, MemberBean memberBean,
-			VideoBean videoBean) {
+			HashMap<Integer, String> topicLikeWho, Integer contentReplyNum, Date topicCreateTime, Date topicUpdateTime,
+			String topicStatus, Date accidentTime, String accidentLocation, Double accidentLocationLongitude,
+			Double accidentLocationLatitude, String topicContent, Date topicContentUpdateTime, Integer pageViews,
+			String updateMessage, MemberBean memberBean, VideoBean videoBean) {
 		super();
 		this.topicHeader = topicHeader;
 		this.topicType = topicType;
 		this.topicRegion = topicRegion;
 		this.topicLikeNum = topicLikeNum;
+		this.topicLikeWho = topicLikeWho;
 		this.contentReplyNum = contentReplyNum;
 		this.topicCreateTime = topicCreateTime;
 		this.topicUpdateTime = topicUpdateTime;
@@ -75,6 +80,7 @@ public class ArticleTopicCurrentBean {
 		this.accidentLocationLatitude = accidentLocationLatitude;
 		this.topicContent = topicContent;
 		this.topicContentUpdateTime = topicContentUpdateTime;
+		this.pageViews = pageViews;
 		this.updateMessage = updateMessage;
 		this.memberBean = memberBean;
 		this.videoBean = videoBean;
@@ -118,6 +124,14 @@ public class ArticleTopicCurrentBean {
 
 	public void setTopicLikeNum(Integer topicLikeNum) {
 		this.topicLikeNum = topicLikeNum;
+	}
+
+	public HashMap<Integer, String> getTopicLikeWho() {
+		return topicLikeWho;
+	}
+
+	public void setTopicLikeWho(HashMap<Integer, String> topicLikeWho) {
+		this.topicLikeWho = topicLikeWho;
 	}
 
 	public Integer getContentReplyNum() {
@@ -198,6 +212,14 @@ public class ArticleTopicCurrentBean {
 
 	public void setTopicContentUpdateTime(java.util.Date topicContentUpdateTime) {
 		this.topicContentUpdateTime = topicContentUpdateTime;
+	}
+
+	public Integer getPageViews() {
+		return pageViews;
+	}
+
+	public void setPageViews(Integer pageViews) {
+		this.pageViews = pageViews;
 	}
 
 	public String getUpdateMessage() {

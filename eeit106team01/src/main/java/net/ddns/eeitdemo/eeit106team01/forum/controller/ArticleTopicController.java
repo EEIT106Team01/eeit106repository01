@@ -45,9 +45,9 @@ public class ArticleTopicController {
 			(lowerLatitude == null) && (upperLatitude == null) && 
 			(lowerLongitude == null) && (upperLongitude == null)) {
 			if("orderByTime".equals(orderType)) {
-				findRange = articleTopicCurrentService.findByTopRange(begin, end, "orderByTime");
+				findRange = articleTopicCurrentService.findByLastRange(begin, end, "orderByTime");
 			}else if("orderByLike".equals(orderType)) {
-				findRange = articleTopicCurrentService.findByTopRange(begin, end, "orderByLike");
+				findRange = articleTopicCurrentService.findByLastRange(begin, end, "orderByLike");
 			}
 		} else if ((begin == null) && (end == null) && ("".equals(orderType)) &&
 				(lowerLatitude != null) && (upperLatitude != null) && 

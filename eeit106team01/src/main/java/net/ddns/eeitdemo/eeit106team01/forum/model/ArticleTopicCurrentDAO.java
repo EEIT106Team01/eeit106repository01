@@ -8,7 +8,7 @@ public interface ArticleTopicCurrentDAO {
 
 	public List<ArticleTopicCurrentBean> findAll();
 	
-	public List<ArticleTopicCurrentBean> findByTopRange(String queryString, int startPosition, int maxResult);
+	public List<ArticleTopicCurrentBean> findByLastRange(String queryString, int startPosition, int maxResult);
 
 	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude, Double lowerLongitude, Double upperLongitude);
 	

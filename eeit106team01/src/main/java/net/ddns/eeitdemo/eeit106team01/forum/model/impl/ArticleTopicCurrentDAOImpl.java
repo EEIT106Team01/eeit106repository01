@@ -34,7 +34,7 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ArticleTopicCurrentBean> findByTopRange(String queryString, int startPosition, int maxResult) {
+	public List<ArticleTopicCurrentBean> findByLastRange(String queryString, int startPosition, int maxResult) {
 		Query query = getSession().createQuery(queryString, ArticleTopicCurrentBean.class);
 		query.setFirstResult(startPosition - 1);
 		query.setMaxResults(maxResult);
