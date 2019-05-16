@@ -22,7 +22,7 @@
             getTopic();
         })
 
-        let urlGetTopicList = "http://localhost:8080/articleTopics?begin=1&end=7&orderType=orderByTime";
+        let urlGetTopicList = "http://localhost:8080/articleTopics?begin=1&end=9&orderType=orderByTime";
 
         function getTopic() {
             $.ajax({
@@ -36,43 +36,83 @@
 
         function createTopicView(dataTopicList) {
             // console.log(dataTopicList[0]);
-            console.log(dataTopicList[0].abc);
+            // console.log(dataTopicList[0].abc);
             
             for (let i = 0; i < dataTopicList.length; i++) {
-                let tdAccidentLocation = $("<td></td>").text(dataTopicList[i].accidentLocation);
-                let tdAccidentLocationLatitude = $("<td></td>").text(dataTopicList[i].accidentLocationLatitude);
-                let tdAccidentLocationLongitude = $("<td></td>").text(dataTopicList[i].accidentLocationLongitude);
-                let tdTopicHeader = $("<td></td>").text(dataTopicList[i].topicHeader);
-                let tdTopicRegion = $("<td></td>").text(dataTopicList[i].topicRegion);
-                let tdTopicContent = $("<td></td>").text(dataTopicList[i].topicContent);
-                let tr1 = $("<tr></tr>").append(tdAccidentLocation);
-                let tr2 = $("<tr></tr>").append(tdAccidentLocationLatitude);
-                let tr3 = $("<tr></tr>").append(tdAccidentLocationLongitude);
-                let tr4 = $("<tr></tr>").append(tdTopicHeader);
-                let tr5 = $("<tr></tr>").append(tdTopicRegion);
-                let tr6 = $("<tr></tr>").append(tdTopicContent);
-                let table = $("<table></table>").append(tr1).append(tr2).append(tr3).append(tr4).append(tr5).append(tr6);
-                table.addClass("table table-dark table-striped");
-                $("#search > div").append(table);
+                // let tdAccidentLocation = $("<td></td>").text(dataTopicList[i].accidentLocation);
+                // let tdAccidentLocationLatitude = $("<td></td>").text(dataTopicList[i].accidentLocationLatitude);
+                // let tdAccidentLocationLongitude = $("<td></td>").text(dataTopicList[i].accidentLocationLongitude);
+                // let tdTopicHeader = $("<td></td>").text(dataTopicList[i].topicHeader);
+                // let tdTopicRegion = $("<td></td>").text(dataTopicList[i].topicRegion);
+                // let tdTopicContent = $("<td></td>").text(dataTopicList[i].topicContent);
+                // let tr1 = $("<tr></tr>").append(tdAccidentLocation);
+                // let tr2 = $("<tr></tr>").append(tdAccidentLocationLatitude);
+                // let tr3 = $("<tr></tr>").append(tdAccidentLocationLongitude);
+                // let tr4 = $("<tr></tr>").append(tdTopicHeader);
+                // let tr5 = $("<tr></tr>").append(tdTopicRegion);
+                // let tr6 = $("<tr></tr>").append(tdTopicContent);
+                // let table = $("<table></table>").append(tr1).append(tr2).append(tr3).append(tr4).append(tr5).append(tr6);
+                // table.addClass("table table-dark table-striped");
+                // $("#search > div").append(table);
 
-                // console.log(dataTopicList[i].accidentLocation);
-                // console.log(dataTopicList[i].accidentLocationLatitude);
-                // console.log(dataTopicList[i].accidentLocationLongitude);
-                // console.log(dataTopicList[i].accidentTime);
-                // console.log(dataTopicList[i].contentReplyNum);
-                // console.log(dataTopicList[i].id);
-                // console.log(dataTopicList[i].memberBean);
-                // console.log(dataTopicList[i].topicContent);
-                // console.log(dataTopicList[i].topicContentUpdateTime);
-                // console.log(dataTopicList[i].topicCreateTime);
-                // console.log(dataTopicList[i].topicHeader);
-                // console.log(dataTopicList[i].topicLikeNum);
-                // console.log(dataTopicList[i].topicRegion);
-                // console.log(dataTopicList[i].topicStatus);
-                // console.log(dataTopicList[i].topicType);
-                // console.log(dataTopicList[i].topicUpdateTime);
-                // console.log(dataTopicList[i].updateMessage);
-                // console.log(dataTopicList[i].videoBean);
+                let h4TopicHeader = $("<h4></h4>").text(dataTopicList[i].topicHeader);
+                    h4TopicHeader.addClass("card-title");
+                let pTopicContent = $("<p></p>").text(dataTopicList[i].topicContent);
+                    pTopicContent.addClass("card-text");
+                    let aLinkToContent = $("<a></a>").text("<詳細內容>");
+                        aLinkToContent.attr("href", "#");
+                        aLinkToContent.addClass("card-link");
+                        pTopicContent.append(aLinkToContent);
+                let pMemberName = $("<p></p>").text("Fadachai");
+                    pMemberName.addClass("card-text");
+                let spanPageViews = $("<span></span>").text(dataTopicList[i].pageViews);
+                    spanPageViews.addClass("badge badge-dark");
+                let spanTopicLikeNum = $("<span></span>").text(dataTopicList[i].topicLikeNum);
+                    spanTopicLikeNum.addClass("badge badge-dark");
+                let spanContentReplyNum = $("<span></span>").text(dataTopicList[i].contentReplyNum);
+                    spanContentReplyNum.addClass("badge badge-dark");
+                let spanAccidentTime = $("<span></span>").text(dataTopicList[i].accidentTime);
+                    spanAccidentTime.addClass("badge badge-warning");
+
+                let divCardBody = $("<div></div>")
+                    .append(h4TopicHeader)
+                    .append(pTopicContent)
+                    .append(pMemberName)
+                    .append(spanPageViews)
+                    .append(spanTopicLikeNum)
+                    .append(spanContentReplyNum)
+                    .append(spanAccidentTime);
+                    divCardBody.addClass("card-body");
+                
+                let imgBloodTrial = $('<img />',
+                            { class: 'card-img-topMyid',
+                            src: 'images/bloodtrial.jpg'
+                            });
+
+                let divCard = $("<div></div>").append(imgBloodTrial).append(divCardBody);
+                    divCard.addClass("card");
+                let divCardDeck = $("<div></div>").append(divCard);
+                    divCardDeck.addClass("card-deck");
+                    divCardDeck.width(900);
+
+                $("#search").append(divCardDeck);
+                
+                // <div class="card-deck" style="width:900px;">
+                //     <div class="card">
+                //         <img class="card-img-top" src="images/bloodtrial.jpg" alt="Card image" style="width:100%">
+                //         <div class="card-body">
+                //             <h4 class="card-title">三寶上路囉 碰碰碰</h4>
+                //             <p class="card-text">發大財高雄發大財大發財發大財高雄發大財大發財......
+                //                 <a href="#" class="card-link">&lt;詳細內容&gt;</a>
+                //             </p>
+                //             <p class="card-text">Fadachai</p>
+                //             <span class="badge badge-dark">153</span>
+                //             <span class="badge badge-dark">1</span>
+                //             <span class="badge badge-dark">5</span>
+                //             <span class="badge badge-warning">2019-05-16</span>
+                //         </div>
+                //     </div>
+                // </div>
 
             }
         }
@@ -81,11 +121,64 @@
 
 <body>
     <!-- <input type="button" value="testButton" onclick="createTopicView('body')"> -->
-    <div class="spinner-border"></div>
-    <div id="search">
-        <div></div>
+    <div class="spinner-border">123</div>
+    <div id="search"></div>
+
+    <div id="share">
+        <div class="card-deck" style="width:900px;">
+            <div class="card">
+                <img class="card-img-top" src="images/bloodtrial.jpg" alt="Card image" style="width:100%">
+                <div class="card-body">
+                    <h4 class="card-title">三寶上路囉 碰碰碰</h4>
+                    <p class="card-text">發大財高雄發大財大發財發大財高雄發大財大發財......
+                        <a href="#" class="card-link">&lt;詳細內容&gt;</a>
+                    </p>
+                    <p class="card-text">Fadachai</p>
+                    <span class="badge badge-dark">153</span>
+                    <span class="badge badge-dark">1</span>
+                    <span class="badge badge-dark">5</span>
+                    <span class="badge badge-warning">2019-05-16</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <img class="card-img-top" src="images/bloodtrial.jpg" alt="Card image" style="width:100%">
+                <div class="card-body">
+                    <h4 class="card-title">三寶上路囉 碰碰碰</h4>
+                    <p class="card-text">發大財高雄發大財大發財發大財高雄發大財大發財......
+                        <a href="#" class="card-link">&lt;詳細內容&gt;</a>
+                    </p>
+                    <p class="card-text">Fadachai</p>
+                    <span class="badge badge-dark">153</span>
+                    <span class="badge badge-dark">1</span>
+                    <span class="badge badge-dark">5</span>
+                    <span class="badge badge-warning">2019-05-16</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <img class="card-img-top" src="images/bloodtrial.jpg" alt="Card image" style="width:100%">
+                <div class="card-body">
+                    <h4 class="card-title">三寶上路囉 碰碰碰</h4>
+                    <p class="card-text">發大財高雄發大財大發財發大財高雄發大財大發財......
+                        <a href="#" class="card-link">&lt;詳細內容&gt;</a>
+                    </p>
+                    <p class="card-text">Fadachai</p>
+                    <span class="badge badge-dark">153</span>
+                    <span class="badge badge-dark">1</span>
+                    <span class="badge badge-dark">5</span>
+                    <span class="badge badge-warning">2019-05-16</span>
+                </div>
+            </div>
+        </div>
+
     </div>
-    <div id="share"></div>
+
+
+
+    
+
+    
 </body>
 
 </html>
