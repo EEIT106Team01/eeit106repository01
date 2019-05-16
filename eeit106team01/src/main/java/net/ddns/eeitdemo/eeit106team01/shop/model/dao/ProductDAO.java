@@ -22,7 +22,7 @@ public interface ProductDAO {
 
 	abstract List<ProductBean> findProductsByBrand(String brand);
 
-	abstract List<ProductBean> findProductsByStock(Integer stock);
+	abstract List<ProductBean> findProductsByStock(String stockType);
 
 	abstract List<ProductBean> findProductsByType(String type);
 

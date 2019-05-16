@@ -2,16 +2,22 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import java.util.List;
 import javax.persistence.Query;
+import javax.transaction.Transactional;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
+@Transactional
+@Repository
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired
-	private SessionFactory sessionFactory = null;
+	private SessionFactory sessionFactory;
 
 	public Session getSession() {
 		return sessionFactory.getCurrentSession();
@@ -20,8 +26,10 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public ProductBean insertProduct(ProductBean productBean) {
 		if (productBean != null) {
-			ProductBean result = this.getSession().get(ProductBean.class, productBean.getId());
-			if (result == null) {
+			Query query = this.getSession().createQuery("from ProductBean where name = :name", ProductBean.class);
+			query.setParameter("name", productBean.getName());
+			ProductBean result=(ProductBean) query.getSingleResult();
+			if (result == null) { //name不能重複
 				this.getSession().save(productBean);
 				return productBean;
 			}
@@ -56,32 +64,36 @@ public class ProductDAOImpl implements ProductDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProductBean> findProductsByName(String name) {
-		Query query = this.getSession().createQuery("from ProductBean where name :name", ProductBean.class);
-		query.setParameter("brand", name);
+		Query query = this.getSession().createQuery("from ProductBean where name like :name", ProductBean.class);
+		query.setParameter("name", "%"+name+"%");
 		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProductBean> findProductsByBrand(String brand) {
-		Query query = this.getSession().createQuery("from ProductBean where brand :brand", ProductBean.class);
+		Query query = this.getSession().createQuery("from ProductBean where brand =:brand", ProductBean.class);
 		query.setParameter("brand", brand);
 		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ProductBean> findProductsByStock(Integer stock) {
-		Query query = this.getSession().createQuery("from ProductBean where stock :stock", ProductBean.class);
-		query.setParameter("brand", stock);
-		return query.getResultList();
+	public List<ProductBean> findProductsByStock(String stockType) {
+		if(stockType.equals("notEmpty")) {
+			Query query = this.getSession().createQuery("from ProductBean where stock > 0", ProductBean.class);
+			return query.getResultList();
+		}else {  //stockType.equals("Empty")
+			Query query = this.getSession().createQuery("from ProductBean where stock = 0", ProductBean.class);
+			return query.getResultList();
+		}
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProductBean> findProductsByType(String type) {
-		Query query = this.getSession().createQuery("from ProductBean where type :type", ProductBean.class);
-		query.setParameter("brand", type);
+		Query query = this.getSession().createQuery("from ProductBean where type =:type", ProductBean.class);
+		query.setParameter("type", type);
 		return query.getResultList();
 	}
 
@@ -99,7 +111,7 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<ProductBean> findProductsByTime(Integer day) {
 		Query query = this.getSession().createQuery(
-				"from SHOP_Order where time > DATEADD(day,:day ,GETDATE()) AND time <=  DATEADD(day,0,GETDATE())",
+				"from ProductBean where updatedTime > DATEADD(day,:day ,GETDATE()) AND updatedTime <=  DATEADD(day,0,GETDATE())",
 				ProductBean.class);
 		query.setParameter("day", day);
 		return query.getResultList();

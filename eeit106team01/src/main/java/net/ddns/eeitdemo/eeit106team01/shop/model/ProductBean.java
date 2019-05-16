@@ -57,6 +57,13 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String imageLink;
 
+	@Override
+	public String toString() {
+		return "ProductBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", name="
+				+ name + ", type=" + type + ", brand=" + brand + ", price=" + price + ", stock=" + stock
+				+ ", description=" + description + ", information=" + information + ", imageLink=" + imageLink + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}
