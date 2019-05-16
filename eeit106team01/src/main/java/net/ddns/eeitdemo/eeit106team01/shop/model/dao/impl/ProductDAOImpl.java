@@ -107,5 +107,4 @@ public class ProductDAOImpl implements ProductDAO {
 		query.setParameter("day", day);
 		return query.getResultList();
 	}
-
 }
