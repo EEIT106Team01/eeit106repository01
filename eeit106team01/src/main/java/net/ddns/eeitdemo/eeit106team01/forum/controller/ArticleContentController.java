@@ -111,6 +111,20 @@ public class ArticleContentController {
 		return ResponseEntity.notFound().build();
 	}
 	
+	@PutMapping(path = { "/articleTopics/{id}/articleContents/{contentId}/{likeOrDislike}" }, produces = { "application/json" })
+	public ResponseEntity<?> ContentWhoLike(
+			@PathVariable Integer id,
+			@PathVariable Integer contentId,
+			@PathVariable String likeOrDislike
+			) {
+		Integer memberId = 2;
+		Map<Integer, String> result = articleContentCurrentService.contentWhoLike(contentId, memberId, likeOrDislike.toLowerCase());
+		if (result != null) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
 	@DeleteMapping(path = { "/articleTopics/{id}/articleContents/{contentId}" }, produces = { "application/json" })
 	public ResponseEntity<?> deleteContent(
 			@PathVariable Integer id,
