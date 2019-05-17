@@ -18,7 +18,7 @@ public interface OrderDAO {
 	abstract List<OrderBean> findOrders();
 
 	// Order Detail
-	abstract OrderDetailBean insertOrderDetail(OrderDetailBean orderDetailBean);
+	abstract OrderDetailBean insertOrderDetail(OrderDetailBean orderDetailBeans);
 
 	abstract OrderDetailBean updateOrderDetail(OrderDetailBean orderDetailBean);
 

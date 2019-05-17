@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,6 +19,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
 
 @Repository
+@Transactional
 public class OrderDAOImpl implements OrderDAO {
 
 	@Autowired
@@ -75,10 +77,10 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public OrderDetailBean insertOrderDetail(OrderDetailBean orderDetailBean) {
-		if (orderDetailBean != null) {
-			getSession().save(orderDetailBean);
-			return findOrderDetailByPrimaryKey(orderDetailBean.getId());
+	public OrderDetailBean insertOrderDetail(OrderDetailBean orderDetailBeans) {
+		if (orderDetailBeans != null) {
+			getSession().save(orderDetailBeans);
+			return findOrderDetailByPrimaryKey(orderDetailBeans.getId());
 		}
 		return null;
 	}
