@@ -50,13 +50,15 @@ public class ArticleContentCurrentDAOImpl implements ArticleContentCurrentDAO {
 		}
 		return null;
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ArticleContentCurrentBean> queryList(String hql, int startPosition, int maxResult) {
 		Query query = getSession().createQuery(hql, ArticleContentCurrentBean.class);
-		query.setFirstResult(startPosition);
-		query.setMaxResults(maxResult);
+		if ((startPosition != 0) && (maxResult != 0)) {
+			query.setFirstResult(startPosition);
+			query.setMaxResults(maxResult);
+		}
 		return query.getResultList();
 	}
 
