@@ -22,15 +22,18 @@ public class ProductDAOImpl implements ProductDAO {
 		return sessionFactory.getCurrentSession();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public ProductBean insertProduct(ProductBean productBean) {
 		if (productBean != null) {
 			Query query = this.getSession().createQuery("from ProductBean where name = :name", ProductBean.class);
 			query.setParameter("name", productBean.getName());
-			ProductBean result=(ProductBean) query.getSingleResult();
-			if (result == null) { //name不能重複
-				this.getSession().save(productBean);
+			List<ProductBean> result= query.getResultList();
+			if (result.size()==0) { //name不能重複			
+				getSession().save(productBean);
 				return productBean;
+			}else {
+				return null;
 			}
 		}
 		return null;
@@ -108,7 +111,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ProductBean> findProductsByTime(Integer day) {
+	public List<ProductBean> findProductsByUpdatedTime(Integer day) {
 		Query query = this.getSession().createQuery(
 				"from ProductBean where updatedTime > DATEADD(day,:day ,GETDATE()) AND updatedTime <=  DATEADD(day,0,GETDATE())",
 				ProductBean.class);

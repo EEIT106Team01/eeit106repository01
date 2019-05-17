@@ -1,7 +1,10 @@
-package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
+package net.ddns.eeitdemo.eeit106team01.shop.model.service;
+
+import static org.junit.Assert.fail;
 
 import java.util.HashMap;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,23 +15,21 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ProductDAOImplTest {
+public class ProductServiceTest {
 
-	@Autowired
-	private ProductDAO productDAO;
-
+	@Autowired private ProductService productService;
+	
 //	@Test
 	public void testInsertProduct() {
 		ProductBean productBean1 = new ProductBean();
-		productBean1.setName("Dash Cam 1080P 全高清迷你汽車行駛記錄儀 170° 廣角，運動檢測，G-Sensor，循環記錄，夜視功能");
+		productBean1.setName("Dash Cam 1080P 高清無碼");
 		productBean1.setCreateTime();
 		productBean1.setUpdatedTime();
 		productBean1.setType("行車紀錄器");
-		productBean1.setBrand("APEMAN");
+		productBean1.setBrand("ABC");
 		productBean1.setPrice(49);
 		productBean1.setStock(3);
 		productBean1.setDescription(
@@ -49,7 +50,7 @@ public class ProductDAOImplTest {
 		productBean1.setInformation(jsonMap1);
 		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
-		productDAO.insertProduct(productBean1);
+		productService.insertProduct(productBean1);
 	}
 
 //	@Test
@@ -76,13 +77,12 @@ public class ProductDAOImplTest {
 		productBean2.setInformation(jsonMap1);
 		productBean2.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
-		productDAO.updateProduct(productBean2);
+		productService.updateProduct(productBean2);
 	}
 
 //	@Test
 	public void testFindProductByPrimaryKey() {
-
-		ProductBean ProductBean3 = productDAO.findProductByPrimaryKey(1L);
+		ProductBean ProductBean3 = productService.findProductByPrimaryKey(1L);
 		System.out.println("------testFindProductByPrimaryKey--------");
 		System.out.println(ProductBean3.getId());
 		System.out.println(ProductBean3.getBrand());
@@ -99,48 +99,33 @@ public class ProductDAOImplTest {
 	}
 
 //	@Test
-	public void testFindProductBySerialNumber() {
-	}
-
-//	@Test
-	public void testFindProducts() {
-		System.out.println(productDAO.findProducts());
-		System.out.println("========================================");
-	}
-
-//	@Test
-	public void testFindProductsByName() {
-		System.out.println(productDAO.findProductsByName("Dash"));
+	public void testRecommendProducts() {
+		System.out.println(productService.recommendProducts("Dash Cam"));
 		System.out.println("========================================");
 	}
 
 //	@Test
 	public void testFindProductsByBrand() {
-		System.out.println(productDAO.findProductsByBrand("ABC"));
-		System.out.println("========================================");
-	}
-
-//	@Test
-	public void testFindProductsByStock() {
-		System.out.println(productDAO.findProductsByStock("notEmpty"));
-		System.out.println("========================================");
-	}
-
-//	@Test
-	public void testFindProductsByType() {
-		System.out.println(productDAO.findProductsByType("行車紀錄器"));
+		System.out.println(productService.findProductsByBrand("ABC"));
 		System.out.println("========================================");
 	}
 
 //	@Test
 	public void testFindProductsByPrice() {
-		System.out.println(productDAO.findProductsByPrice(0, 1000));
+		System.out.println(productService.findProductsByPrice(0, 1000));
 		System.out.println("========================================");
 	}
 
 //	@Test
-	public void testFindProductsByTime() {
-		System.out.println(productDAO.findProductsByUpdatedTime(-30));
+	public void testFindProductsByUpdatedTime() {
+		System.out.println(productService.findProductsByUpdatedTime(-30));
 		System.out.println("========================================");
 	}
+
+//	@Test
+	public void testFindProductsByTotalSold() {
+		System.out.println(productService.findProductsByTotalSold(1));
+		System.out.println("========================================");
+	}
+
 }
