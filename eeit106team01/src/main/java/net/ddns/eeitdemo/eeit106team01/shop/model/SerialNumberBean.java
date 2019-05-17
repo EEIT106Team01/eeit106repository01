@@ -36,6 +36,12 @@ public class SerialNumberBean implements Serializable {
 	@JoinColumn(name = "ProductBean_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
 
+	@Override
+	public String toString() {
+		return "SerialNumberBean [id=" + id + ", serialNumber=" + serialNumber + ", availabilityStatus="
+				+ availabilityStatus + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}
