@@ -39,6 +39,13 @@ public class ArticleTopicController {
 			@RequestParam(required = false) Double upperLongitude
 			) {
 		System.out.println("getTopicList method running");
+		System.out.println("begin: " + begin);
+		System.out.println("end: " + end);
+		System.out.println("orderType: " + orderType);
+		System.out.println("lowerLatitude: " + lowerLatitude);
+		System.out.println("upperLatitude: " + upperLatitude);
+		System.out.println("lowerLongitude: " + lowerLongitude);
+		System.out.println("upperLongitude: " + upperLongitude);
 		
 		List<ArticleTopicCurrentBean> findRange = null;
 		if((begin != null) && (end != null) && 
@@ -49,7 +56,7 @@ public class ArticleTopicController {
 			}else if("orderByLike".equals(orderType)) {
 				findRange = articleTopicCurrentService.findByLastRange(begin, end, "orderByLike");
 			}
-		} else if ((begin == null) && (end == null) && ("".equals(orderType)) &&
+		} else if ((begin == null) && (end == null) && (("".equals(orderType)) || (orderType == null)) &&
 				(lowerLatitude != null) && (upperLatitude != null) && 
 				(lowerLongitude != null) && (upperLongitude != null)){
 			findRange = articleTopicCurrentService.findByCoordinateRange(lowerLatitude, upperLatitude, lowerLongitude, upperLongitude);

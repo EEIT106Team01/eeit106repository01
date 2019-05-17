@@ -1,6 +1,8 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -26,6 +28,9 @@ public class ArticleContentCurrentService {
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
 //			videoDAO.findByPrimaryKey(bean.getVideoBean().getId());
+			if ((bean.getReply() != null) && (bean.getReply().getId() != null)) {
+				bean.getReply().setArticleTopicCurrent(bean.getArticleTopicCurrent());
+			}
 			return articleContentCurrentDAO.insert(bean);
 		}
 		return null;
@@ -65,7 +70,8 @@ public class ArticleContentCurrentService {
 //					findOne.setArticleTopicCurrent(bean.getArticleTopicCurrent());
 				}
 				if (bean.getReply() != null) {
-					findOne.setReply(bean.getReply());
+//					Reply不應該被修改
+//					findOne.setReply(bean.getReply());
 				}
 				if ((bean.getVideoBean() != null)) {
 					if (bean.getVideoBean().getId() == -1) {
@@ -85,14 +91,63 @@ public class ArticleContentCurrentService {
 
 	public List<ArticleContentCurrentBean> findByLike(int id, int startPosition, int maxResult) {
 		String hql = "from ArticleContentCurrentBean accb where accb.articleTopicCurrent.id ='" + id
-				+ "' order by accb.contentLikeNum desc, accb.contentCreateTime desc";
-		return articleContentCurrentDAO.queryList(hql, startPosition - 1, maxResult);
+				+ "' and accb.reply =null order by accb.contentLikeNum desc, accb.contentCreateTime desc";
+		List<ArticleContentCurrentBean> notRepliedContents = articleContentCurrentDAO.queryList(hql, startPosition - 1,
+				maxResult);
+		String idString = "accb.reply.id ='";
+		for (ArticleContentCurrentBean noRepliedContent : notRepliedContents) {
+			noRepliedContent.getId();
+			idString = idString + noRepliedContent.getId() + "' or accb.reply.id ='";
+		}
+		idString = idString.substring(0, idString.length() - 20);
+		String hql2 = "from ArticleContentCurrentBean accb where " + idString + " order by accb.contentLikeNum desc, accb.contentCreateTime asc";
+		List<ArticleContentCurrentBean> repliedContents = articleContentCurrentDAO.queryList(hql2, 0, 0);
+		notRepliedContents.addAll(repliedContents);
+		return notRepliedContents;
 	}
 
 	public List<ArticleContentCurrentBean> findByTime(int id, int startPosition, int maxResult) {
 		String hql = "from ArticleContentCurrentBean accb where accb.articleTopicCurrent.id ='" + id
-				+ "' order by accb.contentCreateTime desc";
-		return articleContentCurrentDAO.queryList(hql, startPosition - 1, maxResult);
+				+ "' and accb.reply =null order by accb.contentCreateTime asc";
+		List<ArticleContentCurrentBean> notRepliedContents = articleContentCurrentDAO.queryList(hql, startPosition - 1,
+				maxResult);
+		String idString = "accb.reply.id ='";
+		for (ArticleContentCurrentBean noRepliedContent : notRepliedContents) {
+			noRepliedContent.getId();
+			idString = idString + noRepliedContent.getId() + "' or accb.reply.id ='";
+		}
+		idString = idString.substring(0, idString.length() - 20);
+		String hql2 = "from ArticleContentCurrentBean accb where " + idString + " order by accb.contentCreateTime asc";
+		List<ArticleContentCurrentBean> repliedContents = articleContentCurrentDAO.queryList(hql2, 0, 0);
+		notRepliedContents.addAll(repliedContents);
+		return notRepliedContents;
+	}
+
+	public Map<Integer, String> contentWhoLike(int id, int memberId, String likeOrDislike) {
+		ArticleContentCurrentBean articleContentCurrentBean = this.findByPrimaryKey(id);
+		int likeNumber = 0;
+		if (likeOrDislike.equals("like")) {
+			likeNumber = 1;
+		} else if (likeOrDislike.equals("dislike")) {
+			likeNumber = -1;
+		}
+		HashMap<Integer, String> likeWho = null;
+		if (articleContentCurrentBean != null) {
+			likeWho = articleContentCurrentBean.getContentLikeWho();
+			if (likeWho != null) {
+				if (likeWho.containsKey(memberId)) {
+					likeWho.remove(memberId);
+				} else {
+					likeWho.put(memberId, likeOrDislike);
+				}
+			} else {
+				likeWho = new HashMap<Integer, String>();
+				likeWho.put(memberId, likeOrDislike);
+			}
+			articleContentCurrentBean.setContentLikeWho(likeWho);
+			articleContentCurrentBean.setContentLikeNum(articleContentCurrentBean.getContentLikeNum() + likeNumber);
+		}
+		return likeWho;
 	}
 
 	public boolean delete(int id) {

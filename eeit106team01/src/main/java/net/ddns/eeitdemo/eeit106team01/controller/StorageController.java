@@ -18,7 +18,7 @@ public class StorageController {
 	public ResponseEntity<Resource> forwardResources(@PathVariable("type") String type,
 			@PathVariable("name") String name) {
 //		System.out.println("forwardResources......" + type + "/" + name);
-		if (type.equals("videos") || type.equals("jpgs") || type.equals("gifs")) {
+		if (type.equals("videos") || type.equals("jpgs") || type.equals("gifs") || type.equals("others")) {
 			Resource resource = storageService.loadAsResource(type + "/" + name);
 			if (resource != null) {
 				return ResponseEntity.ok().body(resource);

@@ -149,4 +149,42 @@ public class ProductDAOImpl implements ProductDAO {
 		}
 		return null;
 	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SerialNumberBean> findsoldProducts() {
+		Query query = this.getSession().createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus",
+				SerialNumberBean.class);
+		query.setParameter("availabilityStatus", "sold");
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SerialNumberBean> findsoldProduct(Long id) {
+		Query query = this.getSession().createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :id",
+				SerialNumberBean.class);
+		query.setParameter("availabilityStatus", "sold");
+		query.setParameter("id",id);
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SerialNumberBean> findavailableProducts() {
+		Query query = this.getSession().createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus",
+				SerialNumberBean.class);
+		query.setParameter("availabilityStatus","available");
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SerialNumberBean> findavailableProduct(Long id) {
+		Query query = this.getSession().createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :id",
+				SerialNumberBean.class);
+		query.setParameter("availabilityStatus","available");
+		query.setParameter("id",id);
+		return query.getResultList();
+	}
 }

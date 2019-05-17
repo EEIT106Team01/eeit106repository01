@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-	<title>EditContent</title>
+	<title>PostContent</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
@@ -13,23 +13,42 @@
 	<script>
 		var contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
 		var contentPage = sessionStorage.getItem("contentPage");
+		var replyType = sessionStorage.getItem("replyType");
 		console.log(contentBean.id);
 
+		// *
 		function preInput() {
-			$("#contentId").text(contentBean.id);
-			$("#topicTitle").text(contentBean.articleTopicCurrent.topicHeader);
-			$("#contentCreateTime").text(contentBean.contentCreateTime);
-			$("#contentContent").val(contentBean.contentContent);
-			if (contentBean.videoBean) {
-				$("#videoURI").text(contentBean.videoBean.videoURI);
+			if (replyType == "topic") {
+				$("#contentId").text("Topic : " + contentBean.id);
+				$("#topicTitle").text(contentBean.topicHeader);
+				$("#contentCreateTime").text(contentBean.topicCreateTime);
+				$("#contentContent").val(
+					"---------------------\r\n" +
+					contentBean.topicContent +
+					"\r\n---------------------\r\n"
+				);
+			} else if (replyType == "content") {
+				$("#contentId").text("Content : " + contentBean.id);
+				$("#topicTitle").text(contentBean.articleTopicCurrent.topicHeader);
+				$("#contentCreateTime").text(contentBean.contentCreateTime);
+				$("#contentContent").val(
+					"---------------------\r\n" +
+					contentBean.contentContent +
+					"\r\n---------------------\r\n"
+				);
 			}
-			$("input[name=contentStatus][value='" + contentBean.contentStatus + "']").attr("checked", true);
-			$("#updateMessage").val(contentBean.updateMessage);
 		}
 
+		// *
 		function updateOrDeleteContentBean(newContentBean, httpMethod) {
+			var id;
+			if (replyType == "topic") {
+				id = contentBean.id;
+			} else if (replyType == "content") {
+				id = contentBean.articleTopicCurrent.id;
+			}
 			$.ajax({
-				url: "/articleTopics/" + newContentBean.articleTopicCurrent.id + "/articleContents/" + newContentBean.id,
+				url: "/articleTopics/" + id + "/articleContents",
 				method: httpMethod,
 				data: JSON.stringify(newContentBean),
 				contentType: "application/json; charset=UTF-8",
@@ -50,47 +69,47 @@
 
 		var videoUploadResult = null;
 
+		// *
 		function submit() {
 			$("#submit").attr('disabled', true);
 			$(".formField").attr("disabled", true);
-			var newContentBean = JSON.parse(JSON.stringify(contentBean));
-			var httpMethod = "";
-			var contentContent = $("#contentContent").val();
-			console.log("contentContent: " + contentContent);
-			var videoBean = $("#videoBean").val();
-			console.log("videoBean: " + videoBean);
-			var contentStatus = $("input[name=contentStatus]:checked").val();
-			console.log("contentStatus: " + contentStatus);
-			var updateMessage = $("#updateMessage").val();
-			console.log("updateMessage: " + updateMessage);
-			if ($("input[name=contentStatus]:checked").val() == "deleted") {
-				console.log($("input[name=contentStatus]:checked").val());
-				newContentBean.contentStatus = contentStatus;
-				httpMethod = "DELETE";
-				updateOrDeleteContentBean(newContentBean, httpMethod);
-			} else {
-				newContentBean.contentContent = contentContent;
-				newContentBean.contentStatus = contentStatus;
-				newContentBean.updateMessage = updateMessage;
-				httpMethod = "PUT";
-				if (videoBean) {
-					console.log("videoBean 不為空");
-					upload();
-					let checkVideo = setInterval(function () {
-						if (videoUploadResult) {
-							clearInterval(checkVideo);
-							console.log("videoUploadResult: " + videoUploadResult);
-							newContentBean.videoBean = videoUploadResult;
-							updateOrDeleteContentBean(newContentBean, httpMethod);
-						} else {
-							console.log("videoUploadResult: " + videoUploadResult);
-						}
-					}, 1000);
-				} else {
-					console.log(newContentBean);
-					updateOrDeleteContentBean(newContentBean, httpMethod);
-				}
+			var newArticleTopicCurrent = null;
+			var newContentContent = null;
+			var newVideoBean = null;
+			var newRply = null;
+			if (replyType == "topic") {
+				newArticleTopicCurrent = contentBean;
+			} else if (replyType == "content") {
+				newArticleTopicCurrent = contentBean.articleTopicCurrent;
+				newRply = contentBean;
 			}
+			newContentContent = $("#contentContent").val();
+			newVideoBean = $("#videoBean").val();
+			var newContentBean = {
+				articleTopicCurrent: newArticleTopicCurrent,
+				contentContent: newContentContent,
+				videoBean: null,
+				reply: newRply
+			};
+			var httpMethod = "POST";
+			if (newVideoBean) {
+				console.log("videoBean 不為空");
+				upload();
+				let checkVideo = setInterval(function () {
+					if (videoUploadResult) {
+						clearInterval(checkVideo);
+						console.log("videoUploadResult: " + videoUploadResult);
+						newContentBean.videoBean = videoUploadResult;
+						updateOrDeleteContentBean(newContentBean, httpMethod);
+					} else {
+						console.log("videoUploadResult: " + videoUploadResult);
+					}
+				}, 1000);
+			} else {
+				console.log(newContentBean);
+				updateOrDeleteContentBean(newContentBean, httpMethod);
+			}
+
 		}
 
 		document.addEventListener("DOMContentLoaded", function () {
@@ -241,12 +260,12 @@
 								<h4>內容： </h4><textarea style="resize: none;" class="form-control" id="contentContent"
 									cols="80" rows="8"></textarea>
 							</label><br>
+							<label>
 					</fieldset>
 				</form>
-				<label>
-					<h4>影片： <span id="videoURI" class="badge badge-light"></span></h4>
-					<form id="FileuploadForm"><input type="file" class="form-control-file border" id="videoBean"
-							name="videoFile" /></form>
+				<h4>影片： <span id="videoURI" class="badge badge-light"></span></h4>
+				<form id="FileuploadForm"><input type="file" class="form-control-file border" id="videoBean"
+						name="videoFile" /></form>
 				</label><br>
 
 
@@ -267,32 +286,28 @@
 							class="progress-info">請選擇檔案並點擊上傳按鈕</span>
 					</div>
 				</div>
-				<form>
-					<fieldset class="formField">
-						<hr>
-						<label>
-							<h4>狀態(管理員功能)： </h4>
-							<div class="form-check-inline">
-								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="contentStatus"
-										value="normal">Normal
-								</label>
-							</div>
-							<div class="form-check-inline">
-								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="contentStatus"
-										value="deleted">Deleted
-								</label>
-							</div>
-						</label><br>
-						<label>
-							<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
-						</label><br>
-						<hr>
-						<input type="button" class="form-control" value="submit" id="submit" />
+				<hr>
+				<!-- <label>
+						<h4>狀態(管理員功能)： </h4>
+						<div class="form-check-inline">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="contentStatus" value="normal">Normal
+							</label>
+						</div>
+						<div class="form-check-inline">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="contentStatus"
+									value="deleted">Deleted
+							</label>
+						</div>
+					</label><br>
+					<label>
+						<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
+					</label><br> -->
+				<hr>
+				<input type="button" class="form-control" value="submit" id="submit" />
 			</div>
-			</fieldset>
-			</form>
+
 		</div>
 		<div class="card-footer">
 		</div>
