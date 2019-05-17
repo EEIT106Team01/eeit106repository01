@@ -31,13 +31,10 @@ public class ProductService {
 			productBean.setUpdatedTime();
 			productBean.setCreateTime();
 			productBean.setTotalSold(0);
-			System.out.println("=============================");
 			return productDAO.insertProduct(productBean);
 
 		}
-		System.out.println("--------------------------------");
 		return null;
-
 	};
 
 	public ProductBean updateProduct(ProductBean productBean) {
@@ -118,18 +115,18 @@ public class ProductService {
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
 		return productDAO.insertProductsSN(id, stock);
 	}
-	
-	public List<SerialNumberBean> findProductStatus(Long id,String status) {
-		if(id == null) {
-			if(status.equals("sold")) {
+
+	public List<SerialNumberBean> findProductStatus(Long id, String status) {
+		if (id == null) {
+			if (status.equals("sold")) {
 				return productDAO.findsoldProducts();
-			}else {
+			} else {
 				return productDAO.findavailableProducts();
 			}
-		}else {
-			if(status.equals("sold")) {
+		} else {
+			if (status.equals("sold")) {
 				return productDAO.findsoldProduct(id);
-			}else {
+			} else {
 				return productDAO.findavailableProduct(id);
 			}
 		}
