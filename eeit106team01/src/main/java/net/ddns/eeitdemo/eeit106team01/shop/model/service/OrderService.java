@@ -1,6 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import javax.transaction.Transactional;
 
@@ -10,22 +11,38 @@ import org.springframework.stereotype.Service;
 import net.ddns.eeitdemo.eeit106team01.shop.model.MemberBeanTest;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberTestDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
 @Service
 @Transactional
 public class OrderService {
 
 	@Autowired
-//	private OrderDAO orderDAO;
+	private MemberTestDAO memberTestDAO;
+
+	@Autowired
+	private OrderDAO orderDAO;
+
+	@Autowired
+	private ProductDAO productDAO;
 
 	// Create a Order, Order Details
-	public OrderBean createOrder(ArrayList<ProductBean> products, Long memberId) {
-		if (products != null && memberId != null) {
-			MemberBeanTest member = new MemberBeanTest();
+	public OrderBean createOrder(ArrayList<Long> productIds, Long memberId, OrderBean order) {
+		if (productIds != null && memberId != null) {
 			
+			//List for productBeans, get all product details which include in this purchase
+			ArrayList<ProductBean> products = new ArrayList<ProductBean>();
+			Iterator<Long> iterator = productIds.iterator();
+			while (iterator.hasNext()) {
+				products.add(productDAO.findProductByPrimaryKey((Long) iterator.next()));
+			}
 			
-			
+			order.setCreateTime();
+			order.setUpdatedTime();
+			order.setMemberBeanTest(memberTestDAO.findByPrimaryKey(memberId));
+//			order.se
 			
 //			orderDAO.insertOrder(order);
 //			orderDAO.insertOrderDetail();
