@@ -128,10 +128,15 @@ public class ProductServiceTest {
 		System.out.println("========================================");
 	}
 
-	@Test
+//	@Test
 	public void testInsertProductsSN() throws Exception {
 		System.out.println(productService.insertProductsSN(1L, 10));
 		System.out.println("========================================");
 	}
-	
+
+	@Test
+	public void testFindProductStatus() throws Exception {
+		System.out.println(productService.findProductStatus( null, "sold"));
+		System.out.println("========================================");
+	}
 }

@@ -122,5 +122,19 @@ public class ProductService {
 		return productDAO.insertProductsSN(id, stock);
 	}
 	
-
+	public List<SerialNumberBean> findProductStatus(Long id,String status) {
+		if(id == null) {
+			if(status.equals("sold")) {
+				return productDAO.findsoldProducts();
+			}else {
+				return productDAO.findavailableProducts();
+			}
+		}else {
+			if(status.equals("sold")) {
+				return productDAO.findsoldProduct(id);
+			}else {
+				return productDAO.findavailableProduct(id);
+			}
+		}
+	}
 }

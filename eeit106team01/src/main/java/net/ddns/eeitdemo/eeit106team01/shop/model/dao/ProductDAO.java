@@ -31,4 +31,12 @@ public interface ProductDAO {
 	abstract List<ProductBean> findProductsByUpdatedTime(Integer day);
 	
 	abstract List<SerialNumberBean> insertProductsSN(Long id,Integer stock);
+	
+	abstract List<SerialNumberBean> findsoldProducts();
+	
+	abstract List<SerialNumberBean> findsoldProduct(Long id);
+	
+	abstract List<SerialNumberBean> findavailableProducts();
+	
+	abstract List<SerialNumberBean> findavailableProduct(Long id);
 }
