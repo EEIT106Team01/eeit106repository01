@@ -26,6 +26,11 @@ public class MemberBeanTest implements Serializable {
 	@Column(nullable = false, unique = true)
 	private String account;
 
+	@Override
+	public String toString() {
+		return "MemberBeanTest [id=" + id + ", account=" + account + "]";
+	}
+
 	public Long getId() {
 		return id;
 	}

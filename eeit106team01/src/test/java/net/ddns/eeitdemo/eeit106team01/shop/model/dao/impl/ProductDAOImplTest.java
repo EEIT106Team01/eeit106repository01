@@ -28,6 +28,7 @@ public class ProductDAOImplTest {
 		productBean1.setCreateTime();
 		productBean1.setUpdatedTime();
 		productBean1.setType("行車紀錄器");
+		productBean1.setTotalSold(0);
 		productBean1.setBrand("APEMAN");
 		productBean1.setPrice(49);
 		productBean1.setStock(3);
@@ -60,6 +61,7 @@ public class ProductDAOImplTest {
 //		productBean2.setCreateTime();  //不用紀錄
 		productBean2.setUpdatedTime();
 		productBean2.setType("行車紀錄器");
+		productBean2.setTotalSold(0);
 		productBean2.setBrand("ABC");
 		productBean2.setPrice(99);
 		productBean2.setStock(7);

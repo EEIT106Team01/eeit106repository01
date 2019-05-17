@@ -77,10 +77,10 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
-	public OrderDetailBean insertOrderDetail(OrderDetailBean orderDetailBean) {
-		if (orderDetailBean != null) {
-			getSession().save(orderDetailBean);
-			return findOrderDetailByPrimaryKey(orderDetailBean.getId());
+	public OrderDetailBean insertOrderDetail(OrderDetailBean orderDetailBeans) {
+		if (orderDetailBeans != null) {
+			getSession().save(orderDetailBeans);
+			return findOrderDetailByPrimaryKey(orderDetailBeans.getId());
 		}
 		return null;
 	}

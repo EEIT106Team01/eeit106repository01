@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>EditContent</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+	<script>
+		var contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
+		var contentPage = sessionStorage.getItem("contentPage");
+		console.log(contentBean.id);
+
+		function preInput() {
+			$("#contentId").text(contentBean.id);
+			$("#topicTitle").text(contentBean.articleTopicCurrent.topicHeader);
+			$("#contentCreateTime").text(contentBean.contentCreateTime);
+			$("#contentContent").val(contentBean.contentContent);
+			$("#videoURI").text(contentBean.videoBean.videoURI);
+			$("input[name=contentStatus][value='" + contentBean.contentStatus + "']").attr("checked", true);
+			$("#updateMessage").val(contentBean.updateMessage);
+		}
+
+		function updateContentBean(newContentBean) {
+			$.ajax({
+				url: "/articleTopics/" + newContentBean.articleTopicCurrent.id + "/articleContents/" + newContentBean.id,
+				method: "PUT",
+				data: JSON.stringify(newContentBean),
+				contentType: "application/json; charset=UTF-8",
+				dataType: "json",
+				success: function (data, textStatus, jqXHR) {
+					console.log("success");
+					console.log("回傳值 : " + data);
+					sessionStorage.removeItem("contentBean");
+					sessionStorage.removeItem("contentPage");
+					location.href = contentPage;
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+					console.log(textStatus);
+				}
+			})
+		}
+
+		function submit() {
+			var newContentBean = JSON.parse(JSON.stringify(contentBean));
+			var contentContent = $("#contentContent").val();
+			console.log("contentContent: " + contentContent);
+			var videoBean = $("#videoBean").val();
+			console.log("videoBean: " + videoBean);
+			var contentStatus = $("input[name=contentStatus]:checked").val();
+			console.log("contentStatus: " + contentStatus);
+			var updateMessage = $("#updateMessage").val();
+			console.log("updateMessage: " + updateMessage);
+			if (!videoBean) {
+				// 先上傳影片
+			}
+			newContentBean.contentContent = contentContent;
+			newContentBean.contentStatus = contentStatus;
+			newContentBean.updateMessage = updateMessage;
+			console.log(newContentBean);
+			updateContentBean(newContentBean);
+		}
+
+		document.addEventListener("DOMContentLoaded", function () {
+			document.getElementById("submit").addEventListener("click", submit);
+			preInput();
+		})
+	</script>
+</head>
+
+<body>
+
+	<div class="jumbotron text-center" style="margin-bottom: 0">
+		<h1>Index Page</h1>
+		<p>Resize this responsive page to see the effect!</p>
+
+	</div>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+			<ul class="navbar-nav">
+				<li class="nav-item active"><a class="nav-link" href="index.html">Index</a></li>
+				<li class="nav-item"><a class="nav-link" href="../video.html">Video</a></li>
+				<li class="nav-item"><a class="nav-link" href="../upload.html">Upload</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container" style="margin-top: 2%; background-color: aqua">
+		<div class="card">
+			<div class="card-header">
+
+			</div>
+			<div class="card-body">
+				<div class="form-group">
+					<label>
+						<h4>文章ID： <span id="contentId" class="badge badge-light"></span></h4>
+					</label><br>
+					<label>
+						<h4>標題： <span id="topicTitle" class="badge badge-light"></span></h4>
+					</label><br>
+					<label>
+						<h4>發布時間： <span id="contentCreateTime" class="badge badge-light"></span></h4>
+					</label><br>
+					<label>
+						<h4>內容： </h4><textarea style="resize: none;" class="form-control" id="contentContent" cols="80"
+							rows="8"></textarea>
+					</label><br>
+					<label>
+						<h4>影片： <span id="videoURI" class="badge badge-light"></span></h4><input type="file"
+							class="form-control" id="videoBean" />
+					</label><br>
+					<hr>
+					<label>
+						<h4>狀態(管理員功能)： </h4>
+						<div class="form-check-inline">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="contentStatus" value="normal">Normal
+							</label>
+						</div>
+						<div class="form-check-inline">
+							<label class="form-check-label">
+								<input type="radio" class="form-check-input" name="contentStatus"
+									value="deleted">Deleted
+							</label>
+						</div>
+					</label><br>
+					<label>
+						<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
+					</label><br>
+					<hr>
+					<input type="button" class="form-control" value="submit" id="submit" />
+				</div>
+			</div>
+			<div class="card-footer">
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
