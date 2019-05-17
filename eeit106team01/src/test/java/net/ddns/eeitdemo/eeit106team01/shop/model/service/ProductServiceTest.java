@@ -134,7 +134,7 @@ public class ProductServiceTest {
 		System.out.println("========================================");
 	}
 
-	@Test
+//	@Test
 	public void testFindProductStatus() throws Exception {
 		System.out.println(productService.findProductStatus( null, "sold"));
 		System.out.println("========================================");
