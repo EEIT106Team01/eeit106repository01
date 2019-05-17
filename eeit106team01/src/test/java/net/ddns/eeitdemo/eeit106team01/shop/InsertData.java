@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop;
 
+import java.util.HashMap;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.MemberBeanTest;
@@ -67,6 +70,7 @@ public class InsertData extends ShopTest {
 		productBean1.setCreateTime();
 		productBean1.setUpdatedTime();
 		productBean1.setType("行車紀錄器");
+		productBean1.setTotalSold(0);
 		productBean1.setBrand("APEMAN");
 		productBean1.setPrice(49);
 		productBean1.setStock(3);
@@ -79,7 +83,13 @@ public class InsertData extends ShopTest {
 		JsonObject jsonObject1 = new JsonObject();
 		jsonObject1.addProperty("Model Number", "C420");
 		jsonObject1.addProperty("Camera Type", "Single");
-		productBean1.setInformation(jsonObject1.toString());
+
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap1 = new Gson().fromJson(jsonObject1.toString(),
+				new TypeToken<HashMap<String, Object>>() {
+				}.getType());
+
+		productBean1.setInformation(jsonMap1);
 		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
 		ProductBean productBean2 = new ProductBean();
@@ -88,6 +98,7 @@ public class InsertData extends ShopTest {
 		productBean2.setCreateTime();
 		productBean2.setUpdatedTime();
 		productBean2.setType("行車紀錄器");
+		productBean2.setTotalSold(0);
 		productBean2.setBrand("APEMAN");
 		productBean2.setPrice(44);
 		productBean2.setStock(4);
@@ -100,7 +111,13 @@ public class InsertData extends ShopTest {
 		JsonObject jsonObject2 = new JsonObject();
 		jsonObject2.addProperty("Model Number", "C450");
 		jsonObject2.addProperty("Camera Type", "Single");
-		productBean2.setInformation(jsonObject2.toString());
+
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap2 = new Gson().fromJson(jsonObject2.toString(),
+				new TypeToken<HashMap<String, Object>>() {
+				}.getType());
+
+		productBean2.setInformation(jsonMap2);
 		productBean2.setImageLink(
 				"https://m.media-amazon.com/images/S/aplus-seller-content-images-us-east-1/ATVPDKIKX0DER/A1FYYQ65E5PX24/323102fa-8523-4996-83c4-698b4764e4a9._CR0,0,150,300_PT0_SX150__.jpg");
 
@@ -181,14 +198,20 @@ public class InsertData extends ShopTest {
 		JsonObject jsonObject2 = new JsonObject();
 		jsonObject2.addProperty("收件人", "Alex");
 		jsonObject2.addProperty("地址", "台北市大安區");
-		orderBean.setReceiverInformation(jsonObject2.toString());
+
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap = new Gson().fromJson(jsonObject2.toString(),
+				new TypeToken<HashMap<String, Object>>() {
+				}.getType());
+
+		orderBean.setReceiverInformation(jsonMap);
 		orderBean.setProductTotalPrice(productBean2.getPrice() * buyCount);
 
 		for (int count = 1; count <= buyCount; count++) {
 			OrderDetailBean orderDetailBean1 = new OrderDetailBean();
 			orderDetailBean1.setPrice(productBean2.getPrice());
 			orderDetailBean1.setProductBean(productBean2);
-			orderDetailBean1.setSerialnumber(serialNumber.get(count).getSerialNumber());
+			orderDetailBean1.setSerialNumber(serialNumber.get(count).getSerialNumber());
 			serialNumber.get(count).setAvailabilityStatus("sold");
 			orderDetailBean1.setOrderBean(orderBean);
 			session.save(orderDetailBean1);

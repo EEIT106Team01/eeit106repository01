@@ -1,6 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -20,6 +21,7 @@ public class ArticleContentCurrentBean {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	private Integer contentLikeNum;
+	private HashMap<Integer, String> contentLikeWho;
 	private Integer contentReplyNum;
 	private java.util.Date contentCreateTime;
 	private java.util.Date contentUpdateTime;
@@ -85,6 +87,14 @@ public class ArticleContentCurrentBean {
 
 	public void setContentLikeNum(Integer contentLikeNum) {
 		this.contentLikeNum = contentLikeNum;
+	}
+
+	public HashMap<Integer, String> getContentLikeWho() {
+		return contentLikeWho;
+	}
+
+	public void setContentLikeWho(HashMap<Integer, String> contentLikeWho) {
+		this.contentLikeWho = contentLikeWho;
 	}
 
 	public Integer getContentReplyNum() {
@@ -166,5 +176,4 @@ public class ArticleContentCurrentBean {
 	public void setVideoBean(VideoBean videoBean) {
 		this.videoBean = videoBean;
 	}
-
 }

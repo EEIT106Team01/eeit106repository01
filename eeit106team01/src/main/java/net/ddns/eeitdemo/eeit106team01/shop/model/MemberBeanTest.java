@@ -20,6 +20,7 @@ public class MemberBeanTest implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Column(nullable = false, unique = true)

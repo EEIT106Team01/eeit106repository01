@@ -26,6 +26,7 @@ public class RefundBean implements Serializable {
 	private static final long serialVersionUID = -5659890739956492348L;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -43,11 +44,17 @@ public class RefundBean implements Serializable {
 	private String processStatus;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Member_Id")
+	@JoinColumn(name = "Member_Id", columnDefinition = "bigint")
 	private MemberBeanTest memberBeanTest;
 
 	@OneToMany(mappedBy = "refundBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<RefundDetailBean> refundDetailBeans = new ArrayList<RefundDetailBean>();
+
+	@Override
+	public String toString() {
+		return "RefundBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", comment="
+				+ comment + ", processStatus=" + processStatus + "]";
+	}
 
 	public Long getId() {
 		return id;

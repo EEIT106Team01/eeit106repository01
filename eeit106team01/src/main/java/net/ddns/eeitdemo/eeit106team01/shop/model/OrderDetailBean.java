@@ -20,17 +20,18 @@ public class OrderDetailBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Column(nullable = false)
 	private Integer price;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "Product_Id")
+	@JoinColumn(name = "Product_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
 
 	@ManyToOne(cascade = CascadeType.ALL)
-	@JoinColumn(name = "Order_Id")
+	@JoinColumn(name = "Order_Id", columnDefinition = "bigint")
 	private OrderBean orderBean;
 
 	@Column(nullable = false)
@@ -74,11 +75,12 @@ public class OrderDetailBean implements Serializable {
 		this.orderBean = orderBean;
 	}
 
-	public String getSerialnumber() {
+	public String getSerialNumber() {
 		return serialNumber;
 	}
 
-	public void setSerialnumber(String serialNumber) {
+	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
+
 }

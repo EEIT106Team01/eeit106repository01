@@ -17,6 +17,7 @@ public class TopSearchBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")

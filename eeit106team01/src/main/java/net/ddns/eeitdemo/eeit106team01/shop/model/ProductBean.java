@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -23,6 +24,7 @@ public class ProductBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -33,7 +35,7 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false)
 	private java.util.Date updatedTime;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
+	@Column(nullable = false, unique = true, columnDefinition = "nvarchar(max)")
 	private String name;
 
 	@Column(nullable = false)
@@ -48,11 +50,14 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false)
 	private Integer stock;
 
+	@Column(nullable = false)
+	private Integer totalSold;
+	
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String description;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
-	private String information;
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
+	private HashMap<String, String> information;
 
 	@Column(nullable = false, columnDefinition = "nvarchar(max)")
 	private String imageLink;
@@ -61,7 +66,8 @@ public class ProductBean implements Serializable {
 	public String toString() {
 		return "ProductBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", name="
 				+ name + ", type=" + type + ", brand=" + brand + ", price=" + price + ", stock=" + stock
-				+ ", description=" + description + ", information=" + information + ", imageLink=" + imageLink + "]";
+				+ ", totalSold=" + totalSold + ", description=" + description + ", information=" + information
+				+ ", imageLink=" + imageLink + "]";
 	}
 
 	public Long getId() {
@@ -128,6 +134,14 @@ public class ProductBean implements Serializable {
 		this.stock = stock;
 	}
 
+	public Integer getTotalSold() {
+		return totalSold;
+	}
+
+	public void setTotalSold(Integer totalSold) {
+		this.totalSold = totalSold;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -136,11 +150,11 @@ public class ProductBean implements Serializable {
 		this.description = description;
 	}
 
-	public String getInformation() {
+	public HashMap<String, String> getInformation() {
 		return information;
 	}
 
-	public void setInformation(String information) {
+	public void setInformation(HashMap<String, String> information) {
 		this.information = information;
 	}
 

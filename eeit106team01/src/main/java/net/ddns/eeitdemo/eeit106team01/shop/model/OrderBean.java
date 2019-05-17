@@ -3,6 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.CascadeType;
@@ -27,6 +28,7 @@ public class OrderBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Column(nullable = false)
@@ -52,11 +54,11 @@ public class OrderBean implements Serializable {
 	@Column(nullable = false)
 	private Integer deliverPrice;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
-	private String receiverInformation;
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
+	private HashMap<String, String> receiverInformation;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Member_Id")
+	@JoinColumn(name = "Member_Id", columnDefinition = "bigint")
 	private MemberBeanTest memberBeanTest;
 
 	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -134,11 +136,11 @@ public class OrderBean implements Serializable {
 		this.deliverPrice = deliverPrice;
 	}
 
-	public String getReceiverInformation() {
+	public HashMap<String, String> getReceiverInformation() {
 		return receiverInformation;
 	}
 
-	public void setReceiverInformation(String receiverInformation) {
+	public void setReceiverInformation(HashMap<String, String> receiverInformation) {
 		this.receiverInformation = receiverInformation;
 	}
 

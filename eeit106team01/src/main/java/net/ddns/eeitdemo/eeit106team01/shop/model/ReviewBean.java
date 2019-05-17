@@ -28,6 +28,7 @@ public class ReviewBean implements Serializable {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
 
 	@Temporal(TemporalType.TIMESTAMP)
@@ -48,12 +49,18 @@ public class ReviewBean implements Serializable {
 	private Blob image;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Member_Id")
+	@JoinColumn(name = "Member_Id", columnDefinition = "bigint")
 	private MemberBeanTest memberBeanTest;
 
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	@JoinColumn(name = "Product_Id")
+	@JoinColumn(name = "Product_Id", columnDefinition = "bigint")
 	private ProductBean productBean;
+
+	@Override
+	public String toString() {
+		return "ReviewBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", rating="
+				+ rating + ", comment=" + comment + ", image=" + image + "]";
+	}
 
 	public Long getId() {
 		return id;

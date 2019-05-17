@@ -1,15 +1,16 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
-import static org.junit.Assert.*;
+import java.util.HashMap;
 
-import java.util.List;
-
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
 import com.google.gson.JsonObject;
+
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
@@ -17,9 +18,9 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 @SpringBootTest
 public class ProductDAOImplTest {
 
-@Autowired
-private ProductDAO productDAO;
-	
+	@Autowired
+	private ProductDAO productDAO;
+
 //	@Test
 	public void testInsertProduct() {
 		ProductBean productBean1 = new ProductBean();
@@ -27,6 +28,7 @@ private ProductDAO productDAO;
 		productBean1.setCreateTime();
 		productBean1.setUpdatedTime();
 		productBean1.setType("行車紀錄器");
+		productBean1.setTotalSold(0);
 		productBean1.setBrand("APEMAN");
 		productBean1.setPrice(49);
 		productBean1.setStock(3);
@@ -39,9 +41,15 @@ private ProductDAO productDAO;
 		JsonObject jsonObject1 = new JsonObject();
 		jsonObject1.addProperty("Model Number", "C420");
 		jsonObject1.addProperty("Camera Type", "Single");
-		productBean1.setInformation(jsonObject1.toString());
-		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 		
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap1 = new Gson().fromJson(jsonObject1.toString(),
+				new TypeToken<HashMap<String, String>>() {
+				}.getType());
+
+		productBean1.setInformation(jsonMap1);
+		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
+
 		productDAO.insertProduct(productBean1);
 	}
 
@@ -53,23 +61,29 @@ private ProductDAO productDAO;
 //		productBean2.setCreateTime();  //不用紀錄
 		productBean2.setUpdatedTime();
 		productBean2.setType("行車紀錄器");
+		productBean2.setTotalSold(0);
 		productBean2.setBrand("ABC");
 		productBean2.setPrice(99);
 		productBean2.setStock(7);
-		productBean2.setDescription(
-				"[1080P 全高清 & 170°廣角角度] ");
+		productBean2.setDescription("[1080P 全高清 & 170°廣角角度] ");
 		JsonObject jsonObject1 = new JsonObject();
 		jsonObject1.addProperty("Model Number", "A123");
 		jsonObject1.addProperty("Camera Type", "Single");
-		productBean2.setInformation(jsonObject1.toString());
-		productBean2.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 		
+		@SuppressWarnings("serial")
+		HashMap<String, String> jsonMap1 = new Gson().fromJson(jsonObject1.toString(),
+				new TypeToken<HashMap<String, String>>() {
+				}.getType());
+		
+		productBean2.setInformation(jsonMap1);
+		productBean2.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
+
 		productDAO.updateProduct(productBean2);
 	}
 
 //	@Test
 	public void testFindProductByPrimaryKey() {
-		
+
 		ProductBean ProductBean3 = productDAO.findProductByPrimaryKey(1L);
 		System.out.println("------testFindProductByPrimaryKey--------");
 		System.out.println(ProductBean3.getId());
@@ -88,13 +102,12 @@ private ProductDAO productDAO;
 
 //	@Test
 	public void testFindProductBySerialNumber() {
-		
 	}
 
 //	@Test
 	public void testFindProducts() {
 		System.out.println(productDAO.findProducts());
-			System.out.println("========================================");
+		System.out.println("========================================");
 	}
 
 //	@Test

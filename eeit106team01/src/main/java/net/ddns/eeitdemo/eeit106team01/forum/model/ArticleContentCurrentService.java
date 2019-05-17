@@ -38,6 +38,9 @@ public class ArticleContentCurrentService {
 				if (bean.getContentLikeNum() != null) {
 					findOne.setContentLikeNum(bean.getContentLikeNum());
 				}
+				if (bean.getContentLikeWho() != null) {
+					findOne.setContentLikeWho(bean.getContentLikeWho());
+				}
 				if (bean.getContentReplyNum() != null) {
 					findOne.setContentReplyNum(bean.getContentReplyNum());
 				}
@@ -46,7 +49,7 @@ public class ArticleContentCurrentService {
 //					findOne.setContentCreateTime(bean.getContentCreateTime());
 				}
 				if (bean.getContentUpdateTime() != null) {
-					findOne.setContentUpdateTime(bean.getContentUpdateTime());
+					findOne.setContentUpdateTime(new java.util.Date(System.currentTimeMillis()));
 				}
 				if (bean.getContentStatus() != null) {
 					findOne.setContentStatus(bean.getContentStatus());
@@ -68,8 +71,9 @@ public class ArticleContentCurrentService {
 					if (bean.getVideoBean().getId() == -1) {
 //						Video ID設為-1為上移除與影片的關聯
 						findOne.setVideoBean(null);
-					} else if (bean.getVideoBean().getId().toString().length() == 0) {
-//						Video ID設為空字串時為上傳新影片
+					} else if (bean.getVideoBean().getId() != findOne.getVideoBean().getId()) {
+//						Video ID不同時為上傳新影片
+						System.err.println(bean.getVideoBean().getId());
 						findOne.setVideoBean(bean.getVideoBean());
 					}
 				}
