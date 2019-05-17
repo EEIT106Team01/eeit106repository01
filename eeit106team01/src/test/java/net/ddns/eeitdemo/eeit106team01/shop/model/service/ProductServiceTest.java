@@ -48,7 +48,7 @@ public class ProductServiceTest {
 				}.getType());
 
 		productBean1.setInformation(jsonMap1);
-		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
+//		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
 		productService.insertProduct(productBean1);
 	}
@@ -75,7 +75,7 @@ public class ProductServiceTest {
 				}.getType());
 		
 		productBean2.setInformation(jsonMap1);
-		productBean2.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
+//		productBean2.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
 		productService.updateProduct(productBean2);
 	}

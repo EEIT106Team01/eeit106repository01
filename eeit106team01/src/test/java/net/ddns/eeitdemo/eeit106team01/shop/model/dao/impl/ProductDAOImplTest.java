@@ -48,7 +48,7 @@ public class ProductDAOImplTest {
 				}.getType());
 
 		productBean1.setInformation(jsonMap1);
-		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
+//		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
 		productDAO.insertProduct(productBean1);
 	}
@@ -76,7 +76,7 @@ public class ProductDAOImplTest {
 				}.getType());
 		
 		productBean2.setInformation(jsonMap1);
-		productBean2.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
+//		productBean2.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
 		productDAO.updateProduct(productBean2);
 	}

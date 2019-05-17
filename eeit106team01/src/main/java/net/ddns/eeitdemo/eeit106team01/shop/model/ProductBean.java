@@ -59,8 +59,8 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false, columnDefinition = "varbinary(max)")
 	private HashMap<String, String> information;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
-	private String imageLink;
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
+	private HashMap<String, String> imageLink;
 
 	@Override
 	public String toString() {
@@ -158,11 +158,11 @@ public class ProductBean implements Serializable {
 		this.information = information;
 	}
 
-	public String getImageLink() {
+	public HashMap<String, String> getImageLink() {
 		return imageLink;
 	}
 
-	public void setImageLink(String imageLink) {
+	public void setImageLink(HashMap<String, String> imageLink) {
 		this.imageLink = imageLink;
 	}
 

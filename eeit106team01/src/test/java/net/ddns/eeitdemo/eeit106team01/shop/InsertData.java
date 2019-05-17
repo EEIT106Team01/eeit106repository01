@@ -90,7 +90,7 @@ public class InsertData extends ShopTest {
 				}.getType());
 
 		productBean1.setInformation(jsonMap1);
-		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
+//		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
 		ProductBean productBean2 = new ProductBean();
 		productBean2.setName(
@@ -118,8 +118,8 @@ public class InsertData extends ShopTest {
 				}.getType());
 
 		productBean2.setInformation(jsonMap2);
-		productBean2.setImageLink(
-				"https://m.media-amazon.com/images/S/aplus-seller-content-images-us-east-1/ATVPDKIKX0DER/A1FYYQ65E5PX24/323102fa-8523-4996-83c4-698b4764e4a9._CR0,0,150,300_PT0_SX150__.jpg");
+//		productBean2.setImageLink(
+//				"https://m.media-amazon.com/images/S/aplus-seller-content-images-us-east-1/ATVPDKIKX0DER/A1FYYQ65E5PX24/323102fa-8523-4996-83c4-698b4764e4a9._CR0,0,150,300_PT0_SX150__.jpg");
 
 		session.save(productBean1);
 		session.save(productBean2);
