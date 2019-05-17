@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
 @Service
@@ -116,5 +117,10 @@ public class ProductService {
 		query.setMaxResults(top);
 		return query.getResultList();
 	}
+
+	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
+		return productDAO.insertProductsSN(id, stock);
+	}
+	
 
 }

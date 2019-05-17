@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -10,7 +11,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
 public class ProductDAOImpl implements ProductDAO {
@@ -28,11 +31,11 @@ public class ProductDAOImpl implements ProductDAO {
 		if (productBean != null) {
 			Query query = this.getSession().createQuery("from ProductBean where name = :name", ProductBean.class);
 			query.setParameter("name", productBean.getName());
-			List<ProductBean> result= query.getResultList();
-			if (result.size()==0) { //name不能重複			
+			List<ProductBean> result = query.getResultList();
+			if (result.size() == 0) { // name不能重複
 				getSession().save(productBean);
 				return productBean;
-			}else {
+			} else {
 				return null;
 			}
 		}
@@ -67,7 +70,7 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<ProductBean> findProductsByName(String name) {
 		Query query = this.getSession().createQuery("from ProductBean where name like :name", ProductBean.class);
-		query.setParameter("name", "%"+name+"%");
+		query.setParameter("name", "%" + name + "%");
 		return query.getResultList();
 	}
 
@@ -82,10 +85,10 @@ public class ProductDAOImpl implements ProductDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<ProductBean> findProductsByStock(String stockType) {
-		if(stockType.equals("notEmpty")) {
+		if (stockType.equals("notEmpty")) {
 			Query query = this.getSession().createQuery("from ProductBean where stock > 0", ProductBean.class);
 			return query.getResultList();
-		}else {  //stockType.equals("Empty")
+		} else { // stockType.equals("Empty")
 			Query query = this.getSession().createQuery("from ProductBean where stock = 0", ProductBean.class);
 			return query.getResultList();
 		}
@@ -117,5 +120,33 @@ public class ProductDAOImpl implements ProductDAO {
 				ProductBean.class);
 		query.setParameter("day", day);
 		return query.getResultList();
+	}
+
+	@Override
+	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
+		if (stock != null && id != null) {
+			List<SerialNumberBean> serialNumberBeans = new ArrayList<SerialNumberBean>();
+			loop: for (int i = 1; i <= stock; i++) {
+				SerialNumberGenerator serialNumberGenerator = new SerialNumberGenerator(20);
+				String sng = serialNumberGenerator.nextString();
+				Query query = this.getSession().createQuery("from SerialNumberBean where serialNumber = :serialNumber",
+						SerialNumberBean.class);
+				query.setParameter("serialNumber", sng);
+				List<SerialNumberBean> result = query.getResultList();
+
+				if (result.size() == 0) {
+					SerialNumberBean serialNumberBean = new SerialNumberBean();
+					serialNumberBean.setProductBean(this.findProductByPrimaryKey(id));
+					serialNumberBean.setAvailabilityStatus("available");
+					serialNumberBean.setSerialNumber(sng);
+					getSession().save(serialNumberBean);
+					serialNumberBeans.add(serialNumberBean);
+				} else {
+					break loop;
+				}
+			}
+			return serialNumberBeans;
+		}
+		return null;
 	}
 }

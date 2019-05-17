@@ -3,6 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao;
 import java.util.List;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 
 public interface ProductDAO {
 
@@ -28,4 +29,6 @@ public interface ProductDAO {
 	abstract List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice);
 
 	abstract List<ProductBean> findProductsByUpdatedTime(Integer day);
+	
+	abstract List<SerialNumberBean> insertProductsSN(Long id,Integer stock);
 }
