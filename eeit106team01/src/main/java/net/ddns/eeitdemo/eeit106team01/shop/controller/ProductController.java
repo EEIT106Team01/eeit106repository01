@@ -20,7 +20,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 
-@Controller
+//@Controller
 public class ProductController {
 	@Autowired private ServletContext application;
 	@Autowired private ProductService productService;

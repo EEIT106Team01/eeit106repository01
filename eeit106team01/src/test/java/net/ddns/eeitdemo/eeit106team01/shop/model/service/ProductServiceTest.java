@@ -22,7 +22,7 @@ public class ProductServiceTest {
 
 	@Autowired private ProductService productService;
 	
-//	@Test
+	@Test
 	public void testInsertProduct() {
 		ProductBean productBean1 = new ProductBean();
 		productBean1.setName("Dash Cam 1080P 高清無碼");

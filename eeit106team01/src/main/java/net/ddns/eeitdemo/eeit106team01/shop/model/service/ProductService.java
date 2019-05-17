@@ -19,6 +19,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 public class ProductService {
 	@Autowired
 	private ProductDAO productDAO;
+
 	@Autowired
 	private SessionFactory sessionFactory;
 

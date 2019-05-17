@@ -11,8 +11,10 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 
 public class AmazonCrawler {
 
@@ -25,11 +27,10 @@ public class AmazonCrawler {
 			String string = (String) iterator.next();
 			System.out.println(string);
 		}
-
 	}
 
 	// Get Products
-	public ProductBean findProductInfos(String productLink) {
+	public ProductBean findProductInfos(String productLink, String productType) {
 		StringBuffer URL = new StringBuffer("https://www.amazon.com/dp/").append(productLink).append("?language=zh_TW");
 
 		ProductBean productBean = new ProductBean();
@@ -48,7 +49,9 @@ public class AmazonCrawler {
 			productBean.setBrand(brand.attr("data-brand"));
 
 			Element price = doc.selectFirst("#priceblock_ourprice");
-			productBean.setPrice(Integer.valueOf(price.text().replaceAll("USD", "").trim()));
+			Integer USD = Math.round(Float.valueOf(price.text().replaceAll("USD", "").trim()));
+			Integer TWD = USD * 31;
+			productBean.setPrice(TWD);
 
 			ArrayList<String> arrayList = new ArrayList<String>();
 			Elements discriptions = doc.select("#feature-bullets .a-unordered-list .a-list-item");
@@ -57,12 +60,14 @@ public class AmazonCrawler {
 			}
 			productBean.setDescription(arrayList);
 
-			productBean.setCreateTime();
-			productBean.setUpdatedTime();
+			HashMap<String, String> hashMap = new HashMap<String, String>();
+			Element imageLink = doc.selectFirst("img[data-old-hires]");
+			hashMap.put("alt", productBean.getName());
+			hashMap.put("src", imageLink.attr("data-old-hires"));
+			productBean.setImageLink(hashMap);
+
 			productBean.setStock(5);
-//		productBean.setTotalSold();
-//		productBean.setType("");
-//		productBean.setImageLink(imageLink);
+			productBean.setType(productType);
 
 		} catch (IOException e) {
 			e.printStackTrace();

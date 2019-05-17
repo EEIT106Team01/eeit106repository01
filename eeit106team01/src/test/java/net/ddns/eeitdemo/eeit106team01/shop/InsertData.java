@@ -22,15 +22,26 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
+import net.ddns.eeitdemo.eeit106team01.shop.util.AmazonCrawler;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class InsertData extends ShopTest {
 
 	@Autowired
-	private SessionFactory sessionFactory;
+	private ProductService productService;
 
 	@Test
+	public void insetByCrawler() {
+		AmazonCrawler amazonCrawler = new AmazonCrawler();
+//		ProductBean productBean = amazonCrawler.findProductInfos("B07NC68QQ6", "Recorder");
+//		productService.insertProduct(productBean);
+		System.out.println(productService.findProductByPrimaryKey(2L).toString());
+		
+	}
+
+//	@Test
 	public void member() {
 
 		Session session = sessionFactory.openSession();
