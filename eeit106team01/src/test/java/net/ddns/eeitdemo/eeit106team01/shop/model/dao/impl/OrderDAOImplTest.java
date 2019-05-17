@@ -3,10 +3,14 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 
-import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import com.google.common.reflect.TypeToken;
 import com.google.gson.Gson;
@@ -18,6 +22,8 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
 
+@RunWith(SpringRunner.class)
+@SpringBootTest
 public class OrderDAOImplTest extends ShopTest {
 
 	@Autowired
@@ -93,10 +99,25 @@ public class OrderDAOImplTest extends ShopTest {
 		OrderDetailBean orderDetailBean = new OrderDetailBean();
 		orderDetailBean.setPrice(2000);
 		orderDetailBean.setSerialNumber("A2");
-		orderDAO.insertOrderDetail(orderDetailBean);
-		Integer actual = 2000;
-		assertEquals(orderDAO.findOrderDetailByPrimaryKey(1L).getPrice(), actual);
-		System.out.println(orderDAO.findOrderDetailByPrimaryKey(1L).toString());
+		orderDetailBean.setOrderBean(orderDAO.findOrderByPrimaryKey(1L));
+
+		OrderDetailBean orderDetailBean1 = new OrderDetailBean();
+		orderDetailBean1.setPrice(3000);
+		orderDetailBean1.setSerialNumber("A5");
+		orderDetailBean1.setOrderBean(orderDAO.findOrderByPrimaryKey(1L));
+
+		ArrayList<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
+		orderDetailBeans.add(orderDetailBean);
+		orderDetailBeans.add(orderDetailBean1);
+
+		Iterator<OrderDetailBean> iterator = orderDetailBeans.iterator();
+		while (iterator.hasNext()) {
+			orderDAO.insertOrderDetail((OrderDetailBean) iterator.next());
+		}
+
+		Long actual = 1L;
+		assertEquals(orderDAO.findOrderDetailByPrimaryKey(2L).getOrderBean().getId(), actual);
+		System.out.println(orderDAO.findOrderDetails().toString());
 	}
 
 //	@Test
@@ -149,7 +170,7 @@ public class OrderDAOImplTest extends ShopTest {
 		System.out.println(orderDAO.findReviewByPrimaryKey(2L).toString());
 	}
 
-	@Test
+//	@Test
 	public void testFindReviews() throws Exception {
 		assertNotNull(orderDAO.findReviews());
 		System.out.println(orderDAO.findReviews());
