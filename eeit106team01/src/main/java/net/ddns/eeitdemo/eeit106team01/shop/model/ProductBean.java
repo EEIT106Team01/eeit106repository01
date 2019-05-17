@@ -1,6 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -52,12 +53,9 @@ public class ProductBean implements Serializable {
 
 	@Column(nullable = false)
 	private Integer totalSold;
-	
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
-	private String description;
 
-	@Column(nullable = false, columnDefinition = "varbinary(max)")
-	private HashMap<String, String> information;
+	@Column(nullable = false, columnDefinition = "nvarchar(max)")
+	private ArrayList<String> description;
 
 	@Column(nullable = false, columnDefinition = "varbinary(max)")
 	private HashMap<String, String> imageLink;
@@ -66,8 +64,7 @@ public class ProductBean implements Serializable {
 	public String toString() {
 		return "ProductBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", name="
 				+ name + ", type=" + type + ", brand=" + brand + ", price=" + price + ", stock=" + stock
-				+ ", totalSold=" + totalSold + ", description=" + description + ", information=" + information
-				+ ", imageLink=" + imageLink + "]";
+				+ ", totalSold=" + totalSold + ", description=" + description + ", imageLink=" + imageLink + "]";
 	}
 
 	public Long getId() {
@@ -142,20 +139,12 @@ public class ProductBean implements Serializable {
 		this.totalSold = totalSold;
 	}
 
-	public String getDescription() {
+	public ArrayList<String> getDescription() {
 		return description;
 	}
 
-	public void setDescription(String description) {
+	public void setDescription(ArrayList<String> description) {
 		this.description = description;
-	}
-
-	public HashMap<String, String> getInformation() {
-		return information;
-	}
-
-	public void setInformation(HashMap<String, String> information) {
-		this.information = information;
 	}
 
 	public HashMap<String, String> getImageLink() {

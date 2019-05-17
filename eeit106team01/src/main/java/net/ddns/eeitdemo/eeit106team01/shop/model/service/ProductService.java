@@ -55,9 +55,6 @@ public class ProductService {
 			if (productBean.getImageLink() != null) {
 				findOne.setImageLink(productBean.getImageLink());
 			}
-			if (productBean.getInformation() != null) {
-				findOne.setInformation(productBean.getInformation());
-			}
 			if (productBean.getName() != null) {
 				findOne.setName(productBean.getName());
 			}
