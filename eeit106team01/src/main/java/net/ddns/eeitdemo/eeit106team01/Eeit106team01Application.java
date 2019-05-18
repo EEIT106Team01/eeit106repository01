@@ -27,24 +27,15 @@ import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
-import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
-import net.ddns.eeitdemo.eeit106team01.shop.model.DeliverTypeBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.MemberBeanTest;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.ProductBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.ReviewBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.AntiTheftBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarCareBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarGpsBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarRecorderBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.CarSeatBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.EmergencyToolBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.HelmetRecorderBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.MotorcycleGpsBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.MotorcycleRecorderBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.product.automotive.TireGaugeBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.TopSearchBean;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class,
@@ -100,20 +91,8 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(OrderDetailBean.class);
 		builder.addAnnotatedClass(RefundBean.class);
 		builder.addAnnotatedClass(RefundDetailBean.class);
-		builder.addAnnotatedClass(DeliverTypeBean.class);
-		// Cancel
-
-		// Product
-		builder.addAnnotatedClass(AntiTheftBean.class);
-		builder.addAnnotatedClass(CarCareBean.class);
-		builder.addAnnotatedClass(CarGpsBean.class);
-		builder.addAnnotatedClass(CarRecorderBean.class);
-		builder.addAnnotatedClass(CarSeatBean.class);
-		builder.addAnnotatedClass(EmergencyToolBean.class);
-		builder.addAnnotatedClass(HelmetRecorderBean.class);
-		builder.addAnnotatedClass(MotorcycleGpsBean.class);
-		builder.addAnnotatedClass(MotorcycleRecorderBean.class);
-		builder.addAnnotatedClass(TireGaugeBean.class);
+		builder.addAnnotatedClass(SerialNumberBean.class);
+		builder.addAnnotatedClass(TopSearchBean.class);
 
 		// Forum
 		builder.addAnnotatedClass(ArticleContentCurrentBean.class);

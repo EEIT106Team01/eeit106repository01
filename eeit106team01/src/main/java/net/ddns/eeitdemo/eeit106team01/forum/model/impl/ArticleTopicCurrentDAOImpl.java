@@ -2,6 +2,8 @@ package net.ddns.eeitdemo.eeit106team01.forum.model.impl;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,11 +32,31 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 		return getSession().createQuery("from ArticleTopicCurrentBean", ArticleTopicCurrentBean.class).getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTopicCurrentBean> findByLastRange(String queryString, int startPosition, int maxResult) {
+		Query query = getSession().createQuery(queryString, ArticleTopicCurrentBean.class);
+		query.setFirstResult(startPosition - 1);
+		query.setMaxResults(maxResult);
+		return query.getResultList();
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude,
+			Double lowerLongitude, Double upperLongitude) {
+		Query query = getSession().createQuery("from ArticleTopicCurrentBean where accidentLocationLatitude between :lowerLat and :upperLat and accidentLocationLongitude between :lowerLong and :upperLong", ArticleTopicCurrentBean.class);
+		query.setParameter("lowerLat", lowerLatitude);
+		query.setParameter("upperLat", upperLatitude);
+		query.setParameter("lowerLong", lowerLongitude);
+		query.setParameter("upperLong", upperLongitude);
+		return query.getResultList();
+	}
+
 	@Override
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {
 		if (bean != null) {
 			Integer id = (Integer) getSession().save(bean);
-			System.out.println("this is daoImpl, id: "+id);
 			return findByPrimaryKey(id);
 		}
 		return null;
@@ -42,57 +64,9 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 
 	@Override
 	public ArticleTopicCurrentBean update(ArticleTopicCurrentBean bean) {
-		ArticleTopicCurrentBean findOne = findByPrimaryKey(bean.getId());
-		if (findOne != null) {
-			if (bean.getTopicHeader() != null) {
-				findOne.setTopicHeader(bean.getTopicHeader());
-			}
-			if (bean.getTopicType() != null) {
-				findOne.setTopicType(bean.getTopicType());
-			}
-			if (bean.getTopicRegion() != null) {
-				findOne.setTopicRegion(bean.getTopicRegion());
-			}
-			if (bean.getTopicLikeNum() != null) {
-				findOne.setTopicLikeNum(bean.getTopicLikeNum());
-			}
-			if (bean.getContentReplyNum() != null) {
-				findOne.setContentReplyNum(bean.getContentReplyNum());
-			}
-			if (bean.getTopicCreateTime() != null) {
-				findOne.setTopicCreateTime(bean.getTopicCreateTime());
-			}
-			if (bean.getTopicUpdateTime() != null) {
-				findOne.setTopicUpdateTime(bean.getTopicUpdateTime());
-			}
-			if (bean.getTopicStatus() != null) {
-				findOne.setTopicStatus(bean.getTopicStatus());
-			}
-			if (bean.getAccidentTime() != null) {
-				findOne.setAccidentTime(bean.getAccidentTime());
-			}
-			if (bean.getAccidentLocation() != null) {
-				findOne.setAccidentLocation(bean.getAccidentLocation());
-			}
-			if (bean.getAccidentLocationLongitude() != null) {
-				findOne.setAccidentLocationLongitude(bean.getAccidentLocationLongitude());
-			}
-			if (bean.getAccidentLocationLatitude() != null) {
-				findOne.setAccidentLocationLatitude(bean.getAccidentLocationLatitude());
-			}
-			if (bean.getTopicContent() != null) {
-				findOne.setTopicContent(bean.getTopicContent());
-			}
-			if (bean.getTopicContentUpdateTime() != null) {
-				findOne.setTopicContentUpdateTime(bean.getTopicContentUpdateTime());
-			}
-			if (bean.getUpdateMessage() != null) {
-				findOne.setUpdateMessage(bean.getUpdateMessage());
-			}
-			if (bean.getVideoBean()!=null) {
-				findOne.setVideoBean(bean.getVideoBean());
-			}
-			return findOne;
+		if (bean != null) {
+			getSession().update(bean);
+			return findByPrimaryKey(bean.getId());
 		}
 		return null;
 	}

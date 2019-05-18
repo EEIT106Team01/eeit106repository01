@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>探索</title>
+    <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script
+        src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script
+        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
+    <script type="text/javascript">
+        $(window).on('load', mapInitialize);
+        let map;
+        let markers = [];
+        let listener;
+
+        function mapInitialize() {
+            map = new google.maps.Map(document.getElementById("map_canvas"), {
+                    zoom: 13    //0-21
+                    , center: { lat: 25.033793, lng: 121.543427 }
+                    , scaleControl: true
+                    // , maxZoom: 15
+                    // , minZoom: 8
+                });
+            
+            google.maps.event.addListener(map, 'dragstart', onDragstart);
+            google.maps.event.addListener(map, 'dragend', onDragend);
+            listener = google.maps.event.addListener(map, 'bounds_changed', onBounds_changed);
+        }
+
+        function getTopicList() {
+            let lowerLatitude = map.getBounds().getSouthWest().lat();   //南緯
+            let upperLatitude = map.getBounds().getNorthEast().lat();   //北緯
+            let lowerLongitude = map.getBounds().getSouthWest().lng();  //西經
+            let upperLongitude = map.getBounds().getNorthEast().lng();  //東經
+            $.ajax({
+                url: `http://localhost:8080/articleTopics?lowerLatitude=${lowerLatitude}&upperLatitude=${upperLatitude}&lowerLongitude=${lowerLongitude}&upperLongitude=${upperLongitude}`,
+                type: "GET",
+                success: function (dataTopicList) {
+                    createTopicView(dataTopicList);
+                    addMarker(dataTopicList);
+                }
+            })
+        }
+
+        function createTopicView(dataTopicList) {
+            $("#topicList").text("");
+            let divCardDeck;
+            for (let i = 0; i < dataTopicList.length; i++) {
+                if(( i + 1 ) % 3 == 1){
+                    divCardDeck = $("<div></div>").addClass("card-deck").width("900px").appendTo($("#topicList"));
+                }
+                let divCard = $("<div></div>").addClass("card").attr('id', dataTopicList[i].id).appendTo(divCardDeck);
+                    let imgBloodTrial = $('<img />',
+                                { class: 'card-img-topMyid',
+                                src: '../images/bloodtrial.jpg',
+                                width: '100%'
+                                }).appendTo(divCard);
+                    let divCardBody = $("<div></div>").addClass("card-body").appendTo(divCard);
+                        let h4TopicHeader = $("<h4></h4>").addClass("card-title").text(dataTopicList[i].topicHeader).appendTo(divCardBody);
+                        let pTopicContent = $("<p></p>").addClass("card-text").text(dataTopicList[i].topicContent).appendTo(divCardBody);
+                            let aLinkToContent = $("<a></a>").addClass("card-link").attr("href", "#").text("<詳細內容>").appendTo(pTopicContent);
+                        let pMemberName = $("<p></p>").addClass("card-text").text("Fadachai").appendTo(divCardBody);
+                        let spanPageViews = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].pageViews).appendTo(divCardBody);
+                        let spanTopicLikeNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].topicLikeNum).appendTo(divCardBody);
+                        let spanContentReplyNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].contentReplyNum).appendTo(divCardBody);
+                        let spanAccidentTime = $("<span></span>").addClass("badge badge-warning").text(dataTopicList[i].accidentTime).appendTo(divCardBody);
+            }
+        }
+
+        function addMarker(dataTopicList) {
+            for (let i = 0; i < markers.length; i++){
+                markers[i].setMap(null);
+            }
+
+            for (let i = 0; i < dataTopicList.length; i++) {
+                markers[i] = 
+                    new google.maps.Marker({
+                        position: {
+                            lat: dataTopicList[i].accidentLocationLatitude,
+                            lng: dataTopicList[i].accidentLocationLongitude
+                        }
+                        , map: map
+                        , label: `${dataTopicList[i].id}`
+                        // , animation: google.maps.Animation.BOUNCE    //for marker remove check
+                    });
+
+                markers[i].addListener('mouseover', function() {
+                    $("#" + dataTopicList[i].id).addClass("bg-info");
+                });
+
+                markers[i].addListener('mouseout', function() {
+                    $("#" + dataTopicList[i].id).removeClass("bg-info");
+                });
+            }
+        }
+
+        function onDragstart() {
+            google.maps.event.removeListener(listener);
+        }
+
+        function onDragend() {
+            listener = google.maps.event.addListener(map, 'bounds_changed', onBounds_changed);
+        }
+
+        function onBounds_changed() {
+            getTopicList();
+
+            let bounds = map.getBounds();
+            document.getElementById("boundinfo").innerHTML =
+                'bounds:<br>&nbsp&nbsp西南角' + bounds.getSouthWest() + '<br>&nbsp&nbsp東北角' + bounds.getNorthEast();
+        }
+
+
+    </script>
+
+
+</head>
+
+<body>
+    <div id="map_canvas" style="width:600px; height:500px; float: right;"></div>
+    <div id="boundinfo"></div>
+    <hr>
+    <div id="topicList"></div>
+</body>
+
+</html>

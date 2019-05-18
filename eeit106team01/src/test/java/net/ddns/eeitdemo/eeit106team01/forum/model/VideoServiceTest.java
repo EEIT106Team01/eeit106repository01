@@ -19,7 +19,7 @@ public class VideoServiceTest {
 
 	@Before
 	public void setUp() throws Exception {
-		videoBean = new VideoBean(new java.util.Date(), "new video", "iAmVideoUri", "iAmThumbnailUri", "iAmGifUri",
+		videoBean = new VideoBean(null, new java.util.Date(), "new video", "iAmVideoUri", "iAmThumbnailUri", "iAmGifUri",
 				Double.valueOf(System.currentTimeMillis()), "newInsertVideo");
 		videoBean = videoService.insert(videoBean);
 	}

@@ -2,9 +2,12 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -13,28 +16,61 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
-
-import net.ddns.eeitdemo.eeit106team01.shop.MemberBeanTest;
+import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 @Entity
+@Table(name = "SHOP_Order")
 public class OrderBean implements Serializable {
 
 	private static final long serialVersionUID = -2108352266354853778L;
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@Column(columnDefinition = "bigint")
 	private Long id;
+
+	@Column(nullable = false)
 	private String payStatus;
-	private java.util.Date time;
-	private Integer totalPrice;
-	private String transationType;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false, updatable = false)
+	private java.util.Date createTime;
+
+	@Temporal(TemporalType.TIMESTAMP)
+	@Column(nullable = false)
+	private java.util.Date updatedTime;
+
+	@Column(nullable = false)
+	private Integer productTotalPrice;
+
+	@Column(nullable = false)
 	private String deliverStatus;
 
-	@ManyToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-	@JoinColumn(name = "FK_member_Id")
+	@Column(nullable = false)
+	private String deliverType;
+
+	@Column(nullable = false)
+	private Integer deliverPrice;
+
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
+	private HashMap<String, String> receiverInformation;
+
+	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@JoinColumn(name = "Member_Id", columnDefinition = "bigint")
 	private MemberBeanTest memberBeanTest;
 
-	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL,fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "orderBean", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
 	private List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
+
+	@Override
+	public String toString() {
+		return "OrderBean [id=" + id + ", payStatus=" + payStatus + ", createTime=" + createTime + ", updatedTime="
+				+ updatedTime + ", productTotalPrice=" + productTotalPrice + ", deliverStatus=" + deliverStatus
+				+ ", deliverType=" + deliverType + ", deliverPrice=" + deliverPrice + ", receiverInformation="
+				+ receiverInformation + "]";
+	}
 
 	public Long getId() {
 		return id;
@@ -52,28 +88,28 @@ public class OrderBean implements Serializable {
 		this.payStatus = payStatus;
 	}
 
-	public java.util.Date getTime() {
-		return time;
+	public java.util.Date getCreateTime() {
+		return createTime;
 	}
 
-	public void setTime(java.util.Date time) {
-		this.time = time;
+	public void setCreateTime() {
+		this.createTime = new Date(System.currentTimeMillis());
 	}
 
-	public Integer getTotalPrice() {
-		return totalPrice;
+	public java.util.Date getUpdatedTime() {
+		return updatedTime;
 	}
 
-	public void setTotalPrice(Integer totalPrice) {
-		this.totalPrice = totalPrice;
+	public void setUpdatedTime() {
+		this.updatedTime = new Date(System.currentTimeMillis());
 	}
 
-	public String getTransationType() {
-		return transationType;
+	public Integer getProductTotalPrice() {
+		return productTotalPrice;
 	}
 
-	public void setTransationType(String transationType) {
-		this.transationType = transationType;
+	public void setProductTotalPrice(Integer productTotalPrice) {
+		this.productTotalPrice = productTotalPrice;
 	}
 
 	public String getDeliverStatus() {
@@ -82,6 +118,46 @@ public class OrderBean implements Serializable {
 
 	public void setDeliverStatus(String deliverStatus) {
 		this.deliverStatus = deliverStatus;
+	}
+
+	public String getDeliverType() {
+		return deliverType;
+	}
+
+	public void setDeliverType(String deliverType) {
+		this.deliverType = deliverType;
+	}
+
+	public Integer getDeliverPrice() {
+		return deliverPrice;
+	}
+
+	public void setDeliverPrice(Integer deliverPrice) {
+		this.deliverPrice = deliverPrice;
+	}
+
+	public HashMap<String, String> getReceiverInformation() {
+		return receiverInformation;
+	}
+
+	public void setReceiverInformation(HashMap<String, String> receiverInformation) {
+		this.receiverInformation = receiverInformation;
+	}
+
+	public MemberBeanTest getMemberBeanTest() {
+		return memberBeanTest;
+	}
+
+	public void setMemberBeanTest(MemberBeanTest memberBeanTest) {
+		this.memberBeanTest = memberBeanTest;
+	}
+
+	public List<OrderDetailBean> getOrderDetailBeans() {
+		return orderDetailBeans;
+	}
+
+	public void setOrderDetailBeans(List<OrderDetailBean> orderDetailBeans) {
+		this.orderDetailBeans = orderDetailBeans;
 	}
 
 }
