@@ -1,14 +1,17 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -55,22 +58,6 @@ public class ProductController {
 			path = { "/products" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductStatus(
-						@RequestParam Long id,@RequestParam Integer stock){
-		if((id != null) && (id.intValue() > 0) 
-			&& (stock != null) && (stock.intValue()> 0 )){
-			List<SerialNumberBean> result = productService.insertProductsSN(id, stock);
-			if(result != null) {
-				return new ResponseEntity<List<SerialNumberBean>>(result, HttpStatus.OK);
-			}
-			return ResponseEntity.notFound().build();
-		}
-		return ResponseEntity.notFound().build();
-	}
-	
-	@GetMapping(
-			path = { "/products" }, 
-			produces = { "application/json" })
-	public ResponseEntity<?> getProductStatus(
 						@RequestParam Long id,@RequestParam String status){
 		if(status != null) {
 			List<SerialNumberBean> result = productService.findProductStatus(id, status);
@@ -91,14 +78,69 @@ public class ProductController {
 			if(result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
-		return ResponseEntity.notFound().build();
+			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.notFound().build();
 	}
-			
+	
+	@GetMapping(
+			path = { "/products" }, 
+			produces = { "application/json" })
+	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand){
+		if(brand != null) {
+			List<ProductBean> result = productService.findProductsByBrand(brand);
+			if(result != null) {
+				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
+			}
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping(
+			path = { "/products" }, 
+			produces = { "application/json" })
+	public ResponseEntity<?> getProductsByPrice(
+				@RequestParam Integer minPrice,@RequestParam Integer maxPrice){
+		if ((minPrice != null) && (minPrice.intValue() > 0) &&
+			(maxPrice != null) && (maxPrice.intValue() > 0)){
+				List<ProductBean> result = 
+						productService.findProductsByPrice(minPrice, maxPrice);
+			if(result != null) {
+					return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
+				}
+				return ResponseEntity.notFound().build();
+			}
+		return ResponseEntity.notFound().build();	
+	}
+	
+	@GetMapping(
+			path = { "/products" }, 
+			produces = { "application/json" })
+	public ResponseEntity<?> getRecommendProducts(@RequestParam String name){
+		if(name != null) {
+			List<ProductBean> result = productService.recommendProducts(name);
+			if(result != null) {
+				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
+			}
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
+		
 	@PutMapping(path={"/products"},
-			consumes={"application/json; charset=UTF-8"})
-	public ResponseEntity<?> putProduct(@RequestBody ProductBean productBean){
+			consumes={"application/json; charset=UTF-8"}, 
+			produces = { "application/json" })
+	public ResponseEntity<?> putProduct
+			(@RequestBody ProductBean productBean,BindingResult bindingResult){
+		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			Map<String, String> errors = new HashMap<String, String>();
+			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+			for (ObjectError bindingError : bindingErrors) {
+				errors.put(bindingError.getObjectName(), bindingError.toString());
+			}
+			return ResponseEntity.badRequest().body(errors);
+		}
 		if(productBean != null) {
 			ProductBean result = productService.updateProduct(productBean);
 			if(result != null) {
@@ -111,10 +153,47 @@ public class ProductController {
 	}
 	
 	@PostMapping(
+			path = { "/products/{id}" }, 
+			consumes = {"application/json" }, 
+			produces = {"application/json" })
+	public ResponseEntity<?> postProductsSN(    //可能有問題
+			@PathVariable Long id,@RequestBody Integer stock,BindingResult bindingResult){
+		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			Map<String, String> errors = new HashMap<String, String>();
+			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+			for (ObjectError bindingError : bindingErrors) {
+				errors.put(bindingError.getObjectName(), bindingError.toString());
+			}
+			return ResponseEntity.badRequest().body(errors);
+		}
+		ProductBean temp = productService.findProductByPrimaryKey(id);
+		if(temp !=null) {
+			List<SerialNumberBean> result = productService.insertProductsSN(id, stock);
+			if(result != null) {
+				URI uri = URI.create(application.getContextPath()+"/products/"+result.get(0).getProductBean().getId());
+				return ResponseEntity.created(uri).body(result);
+			} else {
+				return ResponseEntity.noContent().build();
+			}
+		}else {
+			return ResponseEntity.noContent().build();
+		}
+	}
+	
+	@PostMapping(
 			path = { "/products" }, 
 			consumes = {"application/json" }, 
 			produces = {"application/json" })
-	public ResponseEntity<?> postProduct(@RequestBody ProductBean productBean){
+	public ResponseEntity<?> postProduct
+				(@RequestBody ProductBean productBean,BindingResult bindingResult){
+		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			Map<String, String> errors = new HashMap<String, String>();
+			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+			for (ObjectError bindingError : bindingErrors) {
+				errors.put(bindingError.getObjectName(), bindingError.toString());
+			}
+			return ResponseEntity.badRequest().body(errors);
+		}
 		ProductBean result = productService.insertProduct(productBean);
 		if(result != null) {
 			URI uri = URI.create(application.getContextPath()+"/products/"+productBean.getId());

@@ -88,7 +88,7 @@ public class ProductDAOImpl implements ProductDAO {
 		if (stockType.equals("notEmpty")) {
 			Query query = this.getSession().createQuery("from ProductBean where stock > 0", ProductBean.class);
 			return query.getResultList();
-		} else { // stockType.equals("Empty")
+		} else { 
 			Query query = this.getSession().createQuery("from ProductBean where stock = 0", ProductBean.class);
 			return query.getResultList();
 		}
@@ -122,6 +122,7 @@ public class ProductDAOImpl implements ProductDAO {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
 		if (stock != null && id != null) {

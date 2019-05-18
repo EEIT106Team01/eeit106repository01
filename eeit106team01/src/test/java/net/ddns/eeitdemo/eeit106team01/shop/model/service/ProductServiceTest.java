@@ -1,7 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
-import static org.junit.Assert.fail;
-
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import org.junit.Test;
@@ -22,16 +21,20 @@ public class ProductServiceTest {
 
 	@Autowired private ProductService productService;
 	
-	@Test
+//	@Test
 	public void testInsertProduct() {
 		ProductBean productBean1 = new ProductBean();
-		productBean1.setName("Dash Cam 1080P 高清無碼");
+		productBean1.setName("Dash Cam");
 		productBean1.setCreateTime();
 		productBean1.setUpdatedTime();
 		productBean1.setType("行車紀錄器");
 		productBean1.setBrand("ABC");
 		productBean1.setPrice(49);
 		productBean1.setStock(3);
+		
+		ArrayList<String> array = new ArrayList<String>();
+		array.add("1123567");
+		productBean1.setDescription(array);
 //		productBean1.setDescription(
 //				"[1080P 全高清 & 170°廣角角度] 卓越的 1080P 全高清分辨率，170° 廣角鏡頭提供您出色的畫質，視野範圍更廣，可有效減少百葉窗點、每個駕駛流程的真實記錄。\r\n"
 //						+ "[SUPER NIGHT VISION] 配備 Advanced Sensor 和 F1.8 寬光圈，收集更多光源，消除即使在低光環境下的輔助光源需求，輕鬆獲得銳利、顏色準確的圖像，為您帶來更明亮的夜晚，而不會產生更明亮的光線。 即使是在晚上，也可以確保圖像的清晰度。\r\n"
@@ -50,6 +53,8 @@ public class ProductServiceTest {
 //		productBean1.setInformation(jsonMap1);
 //		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
+		productBean1.setImageLink(jsonMap1);
+		
 		productService.insertProduct(productBean1);
 	}
 
@@ -128,7 +133,7 @@ public class ProductServiceTest {
 		System.out.println("========================================");
 	}
 
-//	@Test
+	@Test
 	public void testInsertProductsSN() throws Exception {
 		System.out.println(productService.insertProductsSN(1L, 10));
 		System.out.println("========================================");
