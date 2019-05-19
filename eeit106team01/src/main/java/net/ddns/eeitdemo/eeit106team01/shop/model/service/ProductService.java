@@ -87,7 +87,7 @@ public class ProductService {
 				Query query = this.getSession()
 						.createQuery("from ProductBean where type = :type order by totalSold desc", ProductBean.class);
 				query.setParameter("type", findOne.getType());
-				query.setMaxResults(3);
+				query.setMaxResults(5);
 				return query.getResultList();
 			}
 		}

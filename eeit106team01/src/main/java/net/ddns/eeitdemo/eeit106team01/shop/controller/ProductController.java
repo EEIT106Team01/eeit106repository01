@@ -18,18 +18,19 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 
-//@Controller
+@RestController
 public class ProductController {
 	@Autowired private ServletContext application;
 	@Autowired private ProductService productService;
 	
 	@GetMapping(
-			path = { "/products/{id}" }, 
+			path = { "/product/{id}" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductByPrimaryKey(@PathVariable Long id){
 		if ((id != null) && (id.intValue() > 0)) {
@@ -44,7 +45,7 @@ public class ProductController {
 	}
 	
 	@GetMapping(
-			path = { "/products" }, 
+			path = { "/products/totalSold" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductsByTotalSold(@RequestParam Integer top){
 		if ((top != null) && (top.intValue() > 0)) {
@@ -55,10 +56,11 @@ public class ProductController {
 	}
 	
 	@GetMapping(
-			path = { "/products" }, 
+			path = { "/products/status" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductStatus(
-						@RequestParam Long id,@RequestParam String status){
+						@RequestParam(required = false) Long id,
+						@RequestParam String status){
 		if(status != null) {
 			List<SerialNumberBean> result = productService.findProductStatus(id, status);
 			if(result != null) {
@@ -71,7 +73,7 @@ public class ProductController {
 	
 	@GetMapping(
 			path = { "/products" }, 
-			produces = { "application/json" })
+			produces = { "application/json" })  //待測試
 	public ResponseEntity<?> getProductsByUpdatedTime(@RequestParam Integer day){
 		if ((day != null) && (day.intValue() > 0)) {
 			List<ProductBean> result = productService.findProductsByUpdatedTime(day);
@@ -84,7 +86,7 @@ public class ProductController {
 	}
 	
 	@GetMapping(
-			path = { "/products" }, 
+			path = { "/products/brand" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand){
 		if(brand != null) {
@@ -98,11 +100,11 @@ public class ProductController {
 	}
 	
 	@GetMapping(
-			path = { "/products" }, 
+			path = { "/products/price" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductsByPrice(
 				@RequestParam Integer minPrice,@RequestParam Integer maxPrice){
-		if ((minPrice != null) && (minPrice.intValue() > 0) &&
+		if ((minPrice != null) && (minPrice.intValue() >= 0) &&
 			(maxPrice != null) && (maxPrice.intValue() > 0)){
 				List<ProductBean> result = 
 						productService.findProductsByPrice(minPrice, maxPrice);
@@ -115,8 +117,8 @@ public class ProductController {
 	}
 	
 	@GetMapping(
-			path = { "/products" }, 
-			produces = { "application/json" })
+			path = { "/products/recommend" }, 
+			produces = { "application/json" }) //待測試 %%有點怪
 	public ResponseEntity<?> getRecommendProducts(@RequestParam String name){
 		if(name != null) {
 			List<ProductBean> result = productService.recommendProducts(name);
@@ -153,11 +155,11 @@ public class ProductController {
 	}
 	
 	@PostMapping(
-			path = { "/products/{id}" }, 
+			path = { "/products/productsSN/{id}" }, 
 			consumes = {"application/json" }, 
 			produces = {"application/json" })
-	public ResponseEntity<?> postProductsSN(    //可能有問題
-			@PathVariable Long id,@RequestBody Integer stock,BindingResult bindingResult){
+	public ResponseEntity<?> postProductsSN(    //待測試
+			@PathVariable Long id,@RequestParam Integer stock,BindingResult bindingResult){
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 			Map<String, String> errors = new HashMap<String, String>();
 			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
@@ -173,6 +175,7 @@ public class ProductController {
 				URI uri = URI.create(application.getContextPath()+"/products/"+result.get(0).getProductBean().getId());
 				return ResponseEntity.created(uri).body(result);
 			} else {
+				System.out.println(" failed to insert SN ");
 				return ResponseEntity.noContent().build();
 			}
 		}else {
@@ -181,7 +184,7 @@ public class ProductController {
 	}
 	
 	@PostMapping(
-			path = { "/products" }, 
+			path = { "/products/insert" }, 
 			consumes = {"application/json" }, 
 			produces = {"application/json" })
 	public ResponseEntity<?> postProduct
@@ -196,7 +199,7 @@ public class ProductController {
 		}
 		ProductBean result = productService.insertProduct(productBean);
 		if(result != null) {
-			URI uri = URI.create(application.getContextPath()+"/products/"+productBean.getId());
+			URI uri = URI.create(application.getContextPath()+"/products/"+"insert/"+productBean.getId());
 			return ResponseEntity.created(uri).body(result);
 		} else {
 			return ResponseEntity.noContent().build();
