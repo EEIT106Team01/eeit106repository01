@@ -47,27 +47,17 @@ public class ProductService {
 	public ProductBean updateProduct(ProductBean productBean) {
 		ProductBean findOne = findProductByPrimaryKey(productBean.getId());
 		if (findOne != null) {
-			if (productBean.getBrand() != null) {
 				findOne.setBrand(productBean.getBrand());
-			}
-			if (productBean.getUpdatedTime() != null) {
 				findOne.setUpdatedTime();
-			}
-			if (productBean.getDescription() != null) {
 				findOne.setDescription(productBean.getDescription());
-			}
-			if (productBean.getImageLink() != null) {
+				findOne.setStock(productBean.getStock());
 				findOne.setImageLink(productBean.getImageLink());
-			}
-			if (productBean.getName() != null) {
 				findOne.setName(productBean.getName());
-			}
-			if (productBean.getPrice() != null) {
 				findOne.setPrice(productBean.getPrice());
-			}
-			if (productBean.getType() != null) {
 				findOne.setType(productBean.getType());
-			}
+				findOne.setTotalSold(productBean.getTotalSold());
+				findOne.setDescription(productBean.getDescription());
+				findOne.setImageLink(productBean.getImageLink());
 			return productDAO.updateProduct(findOne);
 		}
 		return null;
