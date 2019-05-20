@@ -114,6 +114,10 @@ public class ProductService {
 		return query.getResultList();
 	}
 
+	public List<ProductBean> findProductsByType(String type){
+		return productDAO.findProductsByType(type);
+	}
+	
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
 		ProductBean temp = productDAO.findProductByPrimaryKey(id);
 		if(temp != null) {
