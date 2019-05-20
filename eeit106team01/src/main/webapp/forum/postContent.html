@@ -7,10 +7,20 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-
+	<script src="js/uploadVideo.js"></script>
 	<script>
+		var memberBean = Cookies.get("MemberBean");
+		console.log(Cookies.get("MemberBean"));
+		if (!memberBean) {
+			sessionStorage.setItem("previousPage", location.pathname);
+			location.href = "/forum/login.html";
+		}
+		var memberBean = JSON.parse(Cookies.get("MemberBean"));
+		console.log(memberBean);
+
 		var contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
 		var contentPage = sessionStorage.getItem("contentPage");
 		var replyType = sessionStorage.getItem("replyType");
@@ -40,7 +50,7 @@
 		}
 
 		// *
-		function updateOrDeleteContentBean(newContentBean, httpMethod) {
+		function insertContentBean(newContentBean, httpMethod) {
 			var id;
 			if (replyType == "topic") {
 				id = contentBean.id;
@@ -62,7 +72,15 @@
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log("error");
-					console.log(textStatus);
+					console.log("status: " + jqXHR.status);
+					if (jqXHR.status == 401) {
+						sessionStorage.setItem("previousPage", location.pathname);
+						location.href = "/forum/login.html";
+					}
+					if (jqXHR.status == 404) {
+						sessionStorage.setItem("previousPage", location.pathname);
+						location.href = "/forum/login.html";
+					}
 				}
 			})
 		}
@@ -72,7 +90,7 @@
 		// *
 		function submit() {
 			$("#submit").attr('disabled', true);
-			$(".formField").attr("disabled", true);
+			$(".formField input").attr("readonly", true);
 			var newArticleTopicCurrent = null;
 			var newContentContent = null;
 			var newVideoBean = null;
@@ -89,6 +107,7 @@
 				articleTopicCurrent: newArticleTopicCurrent,
 				contentContent: newContentContent,
 				videoBean: null,
+				memberBean: memberBean,
 				reply: newRply
 			};
 			var httpMethod = "POST";
@@ -99,15 +118,19 @@
 					if (videoUploadResult) {
 						clearInterval(checkVideo);
 						console.log("videoUploadResult: " + videoUploadResult);
+						if (videoUploadResult == 401) {
+							sessionStorage.setItem("previousPage", location.pathname);
+							location.href = "/forum/login.html";
+						}
 						newContentBean.videoBean = videoUploadResult;
-						updateOrDeleteContentBean(newContentBean, httpMethod);
+						insertContentBean(newContentBean, httpMethod);
 					} else {
 						console.log("videoUploadResult: " + videoUploadResult);
 					}
 				}, 1000);
 			} else {
 				console.log(newContentBean);
-				updateOrDeleteContentBean(newContentBean, httpMethod);
+				insertContentBean(newContentBean, httpMethod);
 			}
 
 		}
@@ -116,105 +139,6 @@
 			document.getElementById("submit").addEventListener("click", submit);
 			preInput();
 		})
-
-		function upload() {
-			$("#msg").text("");
-			var checkFile = $("#videoBean").val();
-			var msgInfo = "";
-			if (null == checkFile || "" == checkFile) {
-				$("#msg").text("檔案不存在，請檢查檔案！");
-			} else {
-				$("#videoBean").attr('disabled', true);
-				var formData = new FormData(document.getElementById("FileuploadForm"));
-				$.ajax({
-					type: "POST",
-					enctype: 'multipart/form-data',
-					url: '/videos',
-					data: formData,
-					cache: false,
-					processData: false,
-					contentType: false,
-					error: function (result) {
-						console.log("error");
-						console.log(result);
-						flag = false;
-						$("#msg").text("連接伺服器錯誤，請重試");
-					},
-					success: function (data, textStatus, jqXHR) {
-						console.log("data = " + data);
-						console.log("jqXHR.status = " + jqXHR.status);
-						console.log("jqXHR.getResponseHeader('location') = " + jqXHR.getResponseHeader('location'));
-						if (jqXHR.status === 201) {
-							console.log("success");
-							videoUploadResult = data;
-						} else if (jqXHR.status === 204) {
-							console.log("upload error, http status code = 204");
-							console.log("jqXHR.getResponseHeader('errorMsg') = " + jqXHR.getResponseHeader('location'));
-						}
-					},
-					xhr: function () {
-						var xhr = $.ajaxSettings.xhr();
-						if (xhr.upload) {
-							//監聽處理事件
-							xhr.upload.addEventListener("progress", progressHandle, false);
-							//監聽完成事件
-							xhr.addEventListener("load", completeHandle, false);
-							//監聽錯誤事件
-							xhr.addEventListener("error", failedHandle, false);
-							//監聽取消事件
-							xhr.addEventListener("abort", canceledHandle, false);
-							//開始顯示進度條
-							showProgress();
-							return xhr;
-						}
-					}
-				}, 'json');
-			}
-		}
-		var start = 0;
-		//顯示進度條
-		function showProgress() {
-			start = new Date().getTime();
-			$(".progress-body").css("display", "block");
-		}
-		//隱藏進度條
-		function hideProgress() {
-			$("#videoBean").val('');
-			$('.progress-body .progress-speed').html("0 M/S, 0/0M");
-			$('.progress-bar').css("width", "0%");
-			$('.progress-body .progress-info').html("請選擇上傳檔案，並點擊上傳檔案按鈕");
-			$("#submit").attr('disabled', false);
-			$(".progress-body").css("display", "none");
-		}
-		//進度條更新
-		function progressHandle(e) {
-			var percent = e.loaded / e.total * 100;
-			var time = ((new Date().getTime() - start) / 1000).toFixed(3);
-			if (time == 0) {
-				time = 1;
-			}
-			$('.progress-body .progress-speed').html(((e.loaded / 1024) / 1024 / time).toFixed(2) + "M/S, " + ((e.loaded / 1024) / 1024).toFixed(2) + "/" + ((e.total / 1024) / 1024).toFixed(2) + " MB. ");
-			$('.progress-bar').css("width", percent.toFixed(2) + "%");
-			$('.percentage').html(percent.toFixed(2) + "%");
-			if (percent == 100) {
-				$('.progress-body .progress-info').html("上傳完成，檔案處理中...");
-			} else {
-				$('.progress-body .progress-info').html("檔案上傳中...");
-			}
-		};
-		//上傳完成處理
-		function completeHandle(e) {
-			$('.progress-body .progress-info').html("上傳檔案完成。");
-			setTimeout(hideProgress, 2000);
-		};
-		//上傳出錯處理
-		function failedHandle(e) {
-			$('.progress-body .progress-info').html("上傳檔案出錯，檔案過大或服務不可用。");
-		};
-		//上傳取消處理
-		function canceledHandle(e) {
-			$('.progress-body .progress-info').html("上傳檔案取消。");
-		};
 	</script>
 </head>
 

@@ -13,32 +13,28 @@
 	<link rel="stylesheet" href="https://cdn.plyr.io/3.5.3/plyr.css" />
 	<script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
 	<script>
-		Cookies.set("memberBean", {
-			"id": 2,
-			"name": "cola"
-		});
-		var memberBean = JSON.parse(Cookies.get("memberBean"));
 
+		var memberBean = Cookies.get("MemberBean");
+		console.log(Cookies.get("MemberBean"));
 		if (!memberBean) {
-			console.log("memberBean does not exsist")
-			Cookies.set("memberBean", {
-				"id": 2,
-				"name": "cola"
-			});
+			memberBean = null;
 		} else {
-			console.log("memberBean = " + memberBean["id"]);
-
+			var memberBean = JSON.parse(Cookies.get("MemberBean"));
+			console.log(memberBean);
 		}
-		var topicId = 2;
+
+		Cookies.set("topicBean", { "id": 2, "topicHeader": "哈哈我是標題", "topicType": "主題類型協尋文", "topicRegion": "台北市", "topicLikeNum": 100, "topicLikeWho": null, "contentReplyNum": 2, "topicCreateTime": "2019-05-15T07:51:41.807+0000", "topicUpdateTime": "2019-05-15T07:51:41.807+0000", "topicStatus": "normal", "accidentTime": "2019-05-15T07:51:41.807+0000", "accidentLocation": "accidentLocation", "accidentLocationLongitude": 24.24, "accidentLocationLatitude": 121.121, "topicContent": "哈哈我是內文", "topicContentUpdateTime": "2019-05-15T07:51:41.807+0000", "pageViews": null, "updateMessage": null, "memberBean": { "id": 1, "name": "pikachu" }, "videoBean": { "id": 1, "memberBean": { "id": 1, "name": "pikachu" }, "uploadTime": "2019-05-15T07:51:07.703+0000", "videoStatus": "processing", "videoURI": "1557906667703cat.mp4", "thumbnailURI": "1557906667703cat.mp4.jpg", "gifURI": "1557906667703cat.mp4.gif", "videoLength": 637.458, "updateMessage": "new insert: Generating thumbnail and gif completed." } });
+		var topicBean = JSON.parse(Cookies.get("topicBean"));
+
 		function getContents() {
 			$(".container").html("");
 			$.ajax({
-				url: "/articleTopics/" + topicId + "/articleContents?begin=1&end=100&orderType=orderByLike",
+				url: "/articleTopics/" + topicBean.id + "/articleContents?begin=1&end=100&orderType=orderByLike",
 				method: "GET",
 				dataType: "json",
 				success: function (data, textStatus, jqXHR) {
 					console.log(data);
-					show(data[0].articleTopicCurrent, data);
+					show(topicBean, data);
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log(textStatus);
@@ -68,10 +64,12 @@
 			for (let i = 0; i < noRepliedContents.length; i++) {
 				let content = createContent(noRepliedContents[i]);
 				$(".container").append(content);
-				$(content).children(".card-body").append(createReplyBtn(noRepliedContents[i], "content"));
-				if ((noRepliedContents[i].contentStatus !== "deleted") && (noRepliedContents[i].videoBean != null)) {
-					$(content).children(".card-body").prepend(createVideo(noRepliedContents[i].videoBean, content.id + "player"));
-					createVideoPlayer(noRepliedContents[i].videoBean, content.id + "player");
+				if ((noRepliedContents[i].contentStatus !== "deleted")) {
+					$(content).children(".card-body").append(createReplyBtn(noRepliedContents[i], "content"));
+					if ((noRepliedContents[i].videoBean != null)) {
+						$(content).children(".card-body").prepend(createVideo(noRepliedContents[i].videoBean, content.id + "player"));
+						createVideoPlayer(noRepliedContents[i].videoBean, content.id + "player");
+					}
 				}
 			}
 			for (let i = 0; i < repliedContents.length; i++) {
@@ -89,9 +87,11 @@
 			let title = document.createElement("div");
 			let content = document.createElement("div");
 			let information = document.createElement("div");
+			let author = topicBean.memberBean.name;
 			$(title).html(
 				"[" + topicBean.topicType + "] " +
-				topicBean.topicHeader
+				topicBean.topicHeader + "<br>" +
+				"<dl><dt>作者</dt><dd>- " + author + "</dd><dl>"
 			);
 			$(content).text(topicBean.topicContent);
 			$(information).html(
@@ -105,12 +105,17 @@
 			card.id = "topic" + topicBean.id;
 			card.style.minWidth = "320px";
 			card.style.margin = "1%";
+			// if (
+			// 	(topicBean.topicStatus !== "deleted")
+			// 	(contentBean.memberBean) &&
+			// 	(memberBean) &&
+			// 	(contentBean.memberBean.id == memberBean.id)
+			// ) {
+			// 	content.appendChild(createEditBtn(topicBean));
+			// }
 			if (
 				(topicBean.topicStatus !== "deleted")
-				// (contentBean.memberBean) &&
-				// (contentBean.memberBean.id == memberBean.id)
-			) {
-				// content.appendChild(createEditBtn(topicBean));
+			){
 				content.appendChild(createReplyBtn(topicBean, "topic"));
 			}
 			card.appendChild(title);
@@ -124,7 +129,11 @@
 			let title = document.createElement("div");
 			let content = document.createElement("div");
 			let information = document.createElement("div");
-			$(title).html("Re: " + contentBean.articleTopicCurrent.topicHeader);
+			let author = contentBean.memberBean.name;
+			$(title).html(
+				"Re: " + contentBean.articleTopicCurrent.topicHeader +
+				"<dl><dt>作者</dt><dd>- " + author + "</dd><dl>"
+			);
 			let contentContent = contentBean.contentContent.replace(/\n/g, '<br/>');
 			$(content).html(contentContent);
 			$(information).html(
@@ -140,12 +149,12 @@
 			card.style.minWidth = "400px";
 			card.style.margin = "1%";
 			if (
-				(contentBean.contentStatus !== "deleted")
-				// (contentBean.memberBean) &&
-				// (contentBean.memberBean.id == memberBean.id)
+				(contentBean.contentStatus !== "deleted") &&
+				(contentBean.memberBean) &&
+				(memberBean) &&
+				(contentBean.memberBean.id == memberBean.id)
 			) {
 				content.appendChild(createEditBtn(contentBean));
-				// content.appendChild(createReplyBtn(contentBean, "content"));
 			}
 			information.appendChild(createLikeImg(contentBean));
 			card.appendChild(title);
@@ -221,8 +230,6 @@
 					});
 				})
 			}
-
-
 			span.appendChild(like);
 			span.appendChild(text);
 			span.appendChild(disLike);
