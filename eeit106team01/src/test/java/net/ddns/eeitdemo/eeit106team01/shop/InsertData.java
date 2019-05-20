@@ -38,12 +38,7 @@ public class InsertData extends ShopTest {
 	public void insetByCrawler() {
 		AmazonCrawler amazonCrawler = new AmazonCrawler();
 
-		ArrayList<String> list = amazonCrawler.findProductLinks("Car Recorder", 3, 4, 1);
-		
-//		ProductBean productBean = amazonCrawler.findProductInfos("B07L7VDY7S", "Car Recorder", 2);
-//		if (productBean != null) {
-//			productService.insertProduct(productBean);
-//		}
+		ArrayList<String> list = amazonCrawler.findProductLinks("Car Recorder", 2, 4, 3);
 		
 		int count = 0;
 		for (String string : list) {

@@ -32,13 +32,12 @@ public class ProductService {
 			productBean.setUpdatedTime();
 			productBean.setCreateTime();
 			productBean.setTotalSold(0);
-			ProductBean result =productDAO.insertProduct(productBean);
-			System.out.println("id=" + result.getId());
+			ProductBean result = productDAO.insertProduct(productBean);
 			ProductBean temp = productDAO.findProductByPrimaryKey(result.getId());
-			if(temp != null) {
-				productDAO.insertProductsSN(temp.getId(),temp.getStock());
+			if (temp != null) {
+				productDAO.insertProductsSN(temp.getId(), temp.getStock());
 				return result;
-			}else {
+			} else {
 				return null;
 			}
 		}
@@ -48,17 +47,17 @@ public class ProductService {
 	public ProductBean updateProduct(ProductBean productBean) {
 		ProductBean findOne = findProductByPrimaryKey(productBean.getId());
 		if (findOne != null) {
-				findOne.setBrand(productBean.getBrand());
-				findOne.setUpdatedTime();
-				findOne.setDescription(productBean.getDescription());
-				findOne.setStock(productBean.getStock());
-				findOne.setImageLink(productBean.getImageLink());
-				findOne.setName(productBean.getName());
-				findOne.setPrice(productBean.getPrice());
-				findOne.setType(productBean.getType());
-				findOne.setTotalSold(productBean.getTotalSold());
-				findOne.setDescription(productBean.getDescription());
-				findOne.setImageLink(productBean.getImageLink());
+			findOne.setBrand(productBean.getBrand());
+			findOne.setUpdatedTime();
+			findOne.setDescription(productBean.getDescription());
+			findOne.setStock(productBean.getStock());
+			findOne.setImageLink(productBean.getImageLink());
+			findOne.setName(productBean.getName());
+			findOne.setPrice(productBean.getPrice());
+			findOne.setType(productBean.getType());
+			findOne.setTotalSold(productBean.getTotalSold());
+			findOne.setDescription(productBean.getDescription());
+			findOne.setImageLink(productBean.getImageLink());
 			return productDAO.updateProduct(findOne);
 		}
 		return null;
@@ -103,10 +102,10 @@ public class ProductService {
 		return productDAO.findProductsByUpdatedTime(day);
 	}
 
-	public List<ProductBean> findProductsByName(String name){
+	public List<ProductBean> findProductsByName(String name) {
 		return productDAO.findProductsByName(name);
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public List<ProductBean> findProductsByTotalSold(Integer top) {
 		Query query = this.getSession().createQuery("from ProductBean", ProductBean.class);
@@ -116,9 +115,9 @@ public class ProductService {
 
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
 		ProductBean temp = productDAO.findProductByPrimaryKey(id);
-		if(temp != null) {
+		if (temp != null) {
 			return productDAO.insertProductsSN(id, stock);
-		}else {
+		} else {
 			return null;
 		}
 	}
@@ -138,10 +137,11 @@ public class ProductService {
 			}
 		}
 	}
-	
+
 	public SerialNumberBean updateSNStatus(SerialNumberBean serialNumberBean) {
-		if(serialNumberBean != null) {
+		if (serialNumberBean != null) {
 			return productDAO.updateSNStatus(serialNumberBean);
-		}return null;
+		}
+		return null;
 	}
 }
