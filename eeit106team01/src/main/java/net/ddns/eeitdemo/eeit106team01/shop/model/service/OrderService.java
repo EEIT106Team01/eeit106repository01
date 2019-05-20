@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberTestDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
@@ -29,7 +28,7 @@ public class OrderService {
 
 	@Autowired
 	private ProductDAO productDAO;
-	
+
 	// Create a Order, Order Details
 	public OrderBean createOrder(ArrayList<Long> productIds, Long memberId, OrderBean order) {
 		if (productIds != null && memberId != null) {
@@ -37,27 +36,32 @@ public class OrderService {
 			order.setCreateTime();
 			order.setUpdatedTime();
 			order.setMemberBeanTest(memberTestDAO.findByPrimaryKey(memberId));
-			
-			// List for SerialNumberBeans, get all available SerialNumbers which need for this purchase
+
+			// List for SerialNumberBeans, get all available SerialNumbers which need for
+			// this purchase
 			List<SerialNumberBean> serialNumbers = new ArrayList<SerialNumberBean>();
-			
+			List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
+
 			Iterator<Long> iteratorLong = productIds.iterator();
 			while (iteratorLong.hasNext()) {
 				serialNumbers = (productDAO.findavailableProduct((Long) iteratorLong.next()));
 			}
-			
-			Iterator<SerialNumberBean>iteratorSNB = serialNumbers.iterator();
+
+			Iterator<SerialNumberBean> iteratorSNB = serialNumbers.iterator();
 			while (iteratorSNB.hasNext()) {
-				// Order Details			
+				SerialNumberBean serialNumberBean = iteratorSNB.next();
+				// Order Details
 				OrderDetailBean orderDetail = new OrderDetailBean();
 				orderDetail.setOrderBean(order);
-				orderDetail.setSerialNumber(iteratorSNB.next().getSerialNumber());
-				
-				orderDetail.setPrice(1);
-				orderDAO.insertOrderDetail(orderDetail);
+				orderDetail.setSerialNumber(serialNumberBean.getSerialNumber());
+				serialNumberBean.setAvailabilityStatus("sold");
+				productDAO.updateSNStatus(serialNumberBean);
+				orderDetail.setPrice(serialNumberBean.getProductBean().getPrice());
+				OrderDetailBean orderDetailBean = orderDAO.insertOrderDetail(orderDetail);
+				orderDetailBeans.add(orderDetailBean);
 			}
-			
-			
+			order.setOrderDetailBeans(orderDetailBeans);
+
 			return orderDAO.insertOrder(order);
 		}
 		return null;

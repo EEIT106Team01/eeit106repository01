@@ -3,18 +3,13 @@ package net.ddns.eeitdemo.eeit106team01.shop.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 
 public class AmazonCrawler {
 
