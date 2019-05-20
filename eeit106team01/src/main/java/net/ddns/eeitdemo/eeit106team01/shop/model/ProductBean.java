@@ -54,7 +54,7 @@ public class ProductBean implements Serializable {
 	@Column(nullable = false)
 	private Integer totalSold;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
 	private ArrayList<String> description;
 
 	@Column(nullable = false, columnDefinition = "varbinary(max)")
