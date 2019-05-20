@@ -116,7 +116,7 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<ProductBean> findProductsByUpdatedTime(Integer day) {
 		Query query = this.getSession().createQuery(
-				"from ProductBean where updatedTime > DATEADD(day,:day ,GETDATE()) AND updatedTime <=  DATEADD(day,:day1,GETDATE())",
+				"from ProductBean where updatedTime >= DATEADD(day,:day ,GETDATE()) AND updatedTime <= DATEADD(day,:day1,GETDATE())",
 				ProductBean.class);
 		query.setParameter("day", day);
 		query.setParameter("day1", 0);

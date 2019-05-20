@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -21,7 +22,7 @@ public class ProductServiceTest {
 
 	@Autowired private ProductService productService;
 	
-	@Test
+//	@Test
 	public void testInsertProduct() {
 		ProductBean productBean1 = new ProductBean();
 		productBean1.setName("DashCam");
@@ -123,8 +124,11 @@ public class ProductServiceTest {
 
 //	@Test
 	public void testFindProductsByUpdatedTime() {
-		System.out.println(productService.findProductsByUpdatedTime(-30));
-		System.out.println("========================================");
+		List<ProductBean> productList = 
+				productService.findProductsByUpdatedTime(-30);
+		for(int i=0;i<=productList.size();i++) {
+			System.out.println("id="+productList.get(i).getId());
+		}
 	}
 
 //	@Test
@@ -133,7 +137,7 @@ public class ProductServiceTest {
 		System.out.println("========================================");
 	}
 
-	@Test
+//	@Test
 	public void testInsertProductsSN() throws Exception {
 		System.out.println(productService.insertProductsSN(1L, 10));
 		System.out.println("========================================");

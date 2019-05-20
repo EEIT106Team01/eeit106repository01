@@ -72,10 +72,10 @@ public class ProductController {
 	}
 	
 	@GetMapping(
-			path = { "/products" }, 
-			produces = { "application/json" })  //待測試
+			path = { "/products/updatedTime" }, 
+			produces = { "application/json" })
 	public ResponseEntity<?> getProductsByUpdatedTime(@RequestParam Integer day){
-		if ((day != null) && (day.intValue() > 0)) {
+		if ((day != null) && (day.intValue() <= 0)) {
 			List<ProductBean> result = productService.findProductsByUpdatedTime(day);
 			if(result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
@@ -103,7 +103,8 @@ public class ProductController {
 			path = { "/products/price" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductsByPrice(
-				@RequestParam Integer minPrice,@RequestParam Integer maxPrice){
+				@RequestParam(defaultValue = "0") Integer minPrice,
+				@RequestParam Integer maxPrice){
 		if ((minPrice != null) && (minPrice.intValue() >= 0) &&
 			(maxPrice != null) && (maxPrice.intValue() > 0)){
 				List<ProductBean> result = 
@@ -187,8 +188,6 @@ public class ProductController {
 		}
 		ProductBean result = productService.insertProduct(productBean);
 		if(result != null) {
-			productService.insertProductsSN(
-					result.getId(),result.getStock());
 			URI uri = URI.create(application.getContextPath()+"/products/"+result.getId());
 			return ResponseEntity.created(uri).body(result);
 		} else {
