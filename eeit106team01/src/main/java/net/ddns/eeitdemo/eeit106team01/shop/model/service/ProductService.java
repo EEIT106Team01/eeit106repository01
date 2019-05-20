@@ -33,9 +33,10 @@ public class ProductService {
 			productBean.setCreateTime();
 			productBean.setTotalSold(0);
 			ProductBean result =productDAO.insertProduct(productBean);
-			ProductBean temp = productDAO.findProductByPrimaryKey(productBean.getId());
+			System.out.println("id=" + result.getId());
+			ProductBean temp = productDAO.findProductByPrimaryKey(result.getId());
 			if(temp != null) {
-				productDAO.insertProductsSN(productBean.getId(),productBean.getStock());
+				productDAO.insertProductsSN(temp.getId(),temp.getStock());
 				return result;
 			}else {
 				return null;
