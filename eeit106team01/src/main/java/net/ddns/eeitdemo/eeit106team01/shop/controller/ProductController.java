@@ -72,10 +72,10 @@ public class ProductController {
 	}
 	
 	@GetMapping(
-			path = { "/products" }, 
-			produces = { "application/json" })  //待測試
+			path = { "/products/updatedTime" }, 
+			produces = { "application/json" })
 	public ResponseEntity<?> getProductsByUpdatedTime(@RequestParam Integer day){
-		if ((day != null) && (day.intValue() > 0)) {
+		if ((day != null) && (day.intValue() <= 0)) {
 			List<ProductBean> result = productService.findProductsByUpdatedTime(day);
 			if(result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
