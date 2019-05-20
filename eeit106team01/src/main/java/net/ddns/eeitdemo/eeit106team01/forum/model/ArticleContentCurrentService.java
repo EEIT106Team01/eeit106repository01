@@ -14,8 +14,8 @@ public class ArticleContentCurrentService {
 
 	@Autowired
 	private ArticleContentCurrentDAO articleContentCurrentDAO;
-//	@Autowired
-//	private VideoDAO videoDAO;
+	@Autowired
+	private MemberBeanService memberBeanService;
 
 	public ArticleContentCurrentBean findByPrimaryKey(int id) {
 		return articleContentCurrentDAO.findByPrimaryKey(id);
@@ -27,9 +27,35 @@ public class ArticleContentCurrentService {
 
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
-//			videoDAO.findByPrimaryKey(bean.getVideoBean().getId());
+			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
+			bean.setMemberBean(memberBean);
+			if (bean.getArticleTopicCurrent().getMemberBean().getId() == bean.getMemberBean().getId()) {
+				bean.getArticleTopicCurrent().setMemberBean(memberBean);
+			}
+			if ((bean.getArticleTopicCurrent().getVideoBean() != null)) {
+				if ((bean.getArticleTopicCurrent().getVideoBean().getMemberBean().getId() == bean.getMemberBean().getId())){
+					bean.getArticleTopicCurrent().getVideoBean().setMemberBean(memberBean);
+				} else {
+					bean.getArticleTopicCurrent().getVideoBean().setMemberBean(bean.getArticleTopicCurrent().getMemberBean());
+				}
+			}
+			if (
+					(bean.getVideoBean() != null) &&
+					(bean.getVideoBean().getMemberBean().getId() == bean.getMemberBean().getId())
+					) {
+				bean.getVideoBean().setMemberBean(memberBean);
+			}
 			if ((bean.getReply() != null) && (bean.getReply().getId() != null)) {
 				bean.getReply().setArticleTopicCurrent(bean.getArticleTopicCurrent());
+				if (bean.getReply().getMemberBean().getId() == bean.getMemberBean().getId()) {
+					bean.getReply().setMemberBean(memberBean);
+				}
+				if (
+						(bean.getReply().getVideoBean() != null) &&
+						(bean.getReply().getVideoBean().getMemberBean().getId() == bean.getMemberBean().getId())						
+						) {
+					bean.getReply().getVideoBean().setMemberBean(memberBean);
+				}
 			}
 			return articleContentCurrentDAO.insert(bean);
 		}
@@ -77,9 +103,13 @@ public class ArticleContentCurrentService {
 					if (bean.getVideoBean().getId() == -1) {
 //						Video ID設為-1為上移除與影片的關聯
 						findOne.setVideoBean(null);
-					} else if (bean.getVideoBean().getId() != findOne.getVideoBean().getId()) {
+					} else if (
+							(findOne.getVideoBean() == null) ||
+							(bean.getVideoBean().getId() != findOne.getVideoBean().getId())
+							) {
 //						Video ID不同時為上傳新影片
 						System.err.println(bean.getVideoBean().getId());
+						bean.getVideoBean().setMemberBean(findOne.getMemberBean());
 						findOne.setVideoBean(bean.getVideoBean());
 					}
 				}
@@ -94,15 +124,17 @@ public class ArticleContentCurrentService {
 				+ "' and accb.reply =null order by accb.contentLikeNum desc, accb.contentCreateTime desc";
 		List<ArticleContentCurrentBean> notRepliedContents = articleContentCurrentDAO.queryList(hql, startPosition - 1,
 				maxResult);
-		String idString = "accb.reply.id ='";
-		for (ArticleContentCurrentBean noRepliedContent : notRepliedContents) {
-			noRepliedContent.getId();
-			idString = idString + noRepliedContent.getId() + "' or accb.reply.id ='";
+		if (!notRepliedContents.isEmpty()) {
+			String idString = "accb.reply.id ='";
+			for (ArticleContentCurrentBean noRepliedContent : notRepliedContents) {
+				noRepliedContent.getId();
+				idString = idString + noRepliedContent.getId() + "' or accb.reply.id ='";
+			}
+			idString = idString.substring(0, idString.length() - 20);
+			String hql2 = "from ArticleContentCurrentBean accb where " + idString + " order by accb.contentLikeNum desc, accb.contentCreateTime asc";
+			List<ArticleContentCurrentBean> repliedContents = articleContentCurrentDAO.queryList(hql2, 0, 0);
+			notRepliedContents.addAll(repliedContents);
 		}
-		idString = idString.substring(0, idString.length() - 20);
-		String hql2 = "from ArticleContentCurrentBean accb where " + idString + " order by accb.contentLikeNum desc, accb.contentCreateTime asc";
-		List<ArticleContentCurrentBean> repliedContents = articleContentCurrentDAO.queryList(hql2, 0, 0);
-		notRepliedContents.addAll(repliedContents);
 		return notRepliedContents;
 	}
 
@@ -111,15 +143,17 @@ public class ArticleContentCurrentService {
 				+ "' and accb.reply =null order by accb.contentCreateTime asc";
 		List<ArticleContentCurrentBean> notRepliedContents = articleContentCurrentDAO.queryList(hql, startPosition - 1,
 				maxResult);
-		String idString = "accb.reply.id ='";
-		for (ArticleContentCurrentBean noRepliedContent : notRepliedContents) {
-			noRepliedContent.getId();
-			idString = idString + noRepliedContent.getId() + "' or accb.reply.id ='";
+		if (!notRepliedContents.isEmpty()) {
+			String idString = "accb.reply.id ='";
+			for (ArticleContentCurrentBean noRepliedContent : notRepliedContents) {
+				noRepliedContent.getId();
+				idString = idString + noRepliedContent.getId() + "' or accb.reply.id ='";
+			}
+			idString = idString.substring(0, idString.length() - 20);
+			String hql2 = "from ArticleContentCurrentBean accb where " + idString + " order by accb.contentCreateTime asc";
+			List<ArticleContentCurrentBean> repliedContents = articleContentCurrentDAO.queryList(hql2, 0, 0);
+			notRepliedContents.addAll(repliedContents);
 		}
-		idString = idString.substring(0, idString.length() - 20);
-		String hql2 = "from ArticleContentCurrentBean accb where " + idString + " order by accb.contentCreateTime asc";
-		List<ArticleContentCurrentBean> repliedContents = articleContentCurrentDAO.queryList(hql2, 0, 0);
-		notRepliedContents.addAll(repliedContents);
 		return notRepliedContents;
 	}
 
