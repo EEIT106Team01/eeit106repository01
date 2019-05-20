@@ -120,6 +120,8 @@ public class ProductService {
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
 		ProductBean temp = productDAO.findProductByPrimaryKey(id);
 		if (temp != null) {
+			temp.setStock(stock);
+			productDAO.updateProduct(temp);
 			return productDAO.insertProductsSN(id, stock);
 		} else {
 			return null;

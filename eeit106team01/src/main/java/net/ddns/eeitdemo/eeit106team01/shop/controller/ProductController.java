@@ -57,6 +57,17 @@ public class ProductController {
 	}
 	
 	@GetMapping(
+			path = { "/products/type" }, 
+			produces = { "application/json" })
+	public ResponseEntity<?> getProductsByType(@RequestParam String type){
+		if(type != null) {
+			List<ProductBean> result = productService.findProductsByType(type);
+			return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping(
 			path = { "/products/status" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductStatus(
