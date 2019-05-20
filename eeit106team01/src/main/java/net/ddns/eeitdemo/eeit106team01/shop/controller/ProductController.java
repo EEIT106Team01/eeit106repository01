@@ -103,7 +103,8 @@ public class ProductController {
 			path = { "/products/price" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductsByPrice(
-				@RequestParam Integer minPrice,@RequestParam Integer maxPrice){
+				@RequestParam(defaultValue = "0") Integer minPrice,
+				@RequestParam Integer maxPrice){
 		if ((minPrice != null) && (minPrice.intValue() >= 0) &&
 			(maxPrice != null) && (maxPrice.intValue() > 0)){
 				List<ProductBean> result = 
@@ -187,8 +188,6 @@ public class ProductController {
 		}
 		ProductBean result = productService.insertProduct(productBean);
 		if(result != null) {
-			productService.insertProductsSN(
-					result.getId(),result.getStock());
 			URI uri = URI.create(application.getContextPath()+"/products/"+result.getId());
 			return ResponseEntity.created(uri).body(result);
 		} else {

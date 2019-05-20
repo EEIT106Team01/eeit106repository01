@@ -32,8 +32,14 @@ public class ProductService {
 			productBean.setUpdatedTime();
 			productBean.setCreateTime();
 			productBean.setTotalSold(0);
-			return productDAO.insertProduct(productBean);
-
+			ProductBean result =productDAO.insertProduct(productBean);
+			ProductBean temp = productDAO.findProductByPrimaryKey(productBean.getId());
+			if(temp != null) {
+				productDAO.insertProductsSN(productBean.getId(),productBean.getStock());
+				return result;
+			}else {
+				return null;
+			}
 		}
 		return null;
 	};
@@ -71,17 +77,17 @@ public class ProductService {
 		return productDAO.findProductByPrimaryKey(id);
 	};
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<ProductBean> recommendProducts(String name) {
 		List<ProductBean> temp = productDAO.findProductsByName(name);
 		ProductBean thisOne = null;
 		for (int i = 0; i <= temp.size(); i++) { //
 			thisOne = temp.get(i); // 找出相同名字的bean
-			if (thisOne.getName().equals(name)) {
+			if (thisOne.getName().equalsIgnoreCase(name)) {
 				break;
 			}
 		}
-		if (thisOne.getName().equals(name)) {
+		if (thisOne.getName().equalsIgnoreCase(name)) {
 			ProductBean findOne = thisOne;
 			if (findOne != null) {
 				Query query = this.getSession()
@@ -128,13 +134,13 @@ public class ProductService {
 
 	public List<SerialNumberBean> findProductStatus(Long id, String status) {
 		if (id == null) {
-			if (status.equals("sold")) {
+			if (status.equalsIgnoreCase("sold")) {
 				return productDAO.findsoldProducts();
 			} else {
 				return productDAO.findavailableProducts();
 			}
 		} else {
-			if (status.equals("sold")) {
+			if (status.equalsIgnoreCase("sold")) {
 				return productDAO.findsoldProduct(id);
 			} else {
 				return productDAO.findavailableProduct(id);
