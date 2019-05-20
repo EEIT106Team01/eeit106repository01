@@ -32,8 +32,14 @@ public class ProductService {
 			productBean.setUpdatedTime();
 			productBean.setCreateTime();
 			productBean.setTotalSold(0);
-			return productDAO.insertProduct(productBean);
-
+			ProductBean result = productDAO.insertProduct(productBean);
+			ProductBean temp = productDAO.findProductByPrimaryKey(result.getId());
+			if (temp != null) {
+				productDAO.insertProductsSN(temp.getId(), temp.getStock());
+				return result;
+			} else {
+				return null;
+			}
 		}
 		return null;
 	};
@@ -41,27 +47,17 @@ public class ProductService {
 	public ProductBean updateProduct(ProductBean productBean) {
 		ProductBean findOne = findProductByPrimaryKey(productBean.getId());
 		if (findOne != null) {
-			if (productBean.getBrand() != null) {
-				findOne.setBrand(productBean.getBrand());
-			}
-			if (productBean.getUpdatedTime() != null) {
-				findOne.setUpdatedTime();
-			}
-			if (productBean.getDescription() != null) {
-				findOne.setDescription(productBean.getDescription());
-			}
-			if (productBean.getImageLink() != null) {
-				findOne.setImageLink(productBean.getImageLink());
-			}
-			if (productBean.getName() != null) {
-				findOne.setName(productBean.getName());
-			}
-			if (productBean.getPrice() != null) {
-				findOne.setPrice(productBean.getPrice());
-			}
-			if (productBean.getType() != null) {
-				findOne.setType(productBean.getType());
-			}
+			findOne.setBrand(productBean.getBrand());
+			findOne.setUpdatedTime();
+			findOne.setDescription(productBean.getDescription());
+			findOne.setStock(productBean.getStock());
+			findOne.setImageLink(productBean.getImageLink());
+			findOne.setName(productBean.getName());
+			findOne.setPrice(productBean.getPrice());
+			findOne.setType(productBean.getType());
+			findOne.setTotalSold(productBean.getTotalSold());
+			findOne.setDescription(productBean.getDescription());
+			findOne.setImageLink(productBean.getImageLink());
 			return productDAO.updateProduct(findOne);
 		}
 		return null;
@@ -71,17 +67,17 @@ public class ProductService {
 		return productDAO.findProductByPrimaryKey(id);
 	};
 
-	@SuppressWarnings("unchecked")
+	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<ProductBean> recommendProducts(String name) {
 		List<ProductBean> temp = productDAO.findProductsByName(name);
 		ProductBean thisOne = null;
 		for (int i = 0; i <= temp.size(); i++) { //
 			thisOne = temp.get(i); // 找出相同名字的bean
-			if (thisOne.getName().equals(name)) {
+			if (thisOne.getName().equalsIgnoreCase(name)) {
 				break;
 			}
 		}
-		if (thisOne.getName().equals(name)) {
+		if (thisOne.getName().equalsIgnoreCase(name)) {
 			ProductBean findOne = thisOne;
 			if (findOne != null) {
 				Query query = this.getSession()
@@ -106,6 +102,10 @@ public class ProductService {
 		return productDAO.findProductsByUpdatedTime(day);
 	}
 
+	public List<ProductBean> findProductsByName(String name) {
+		return productDAO.findProductsByName(name);
+	}
+
 	@SuppressWarnings("unchecked")
 	public List<ProductBean> findProductsByTotalSold(Integer top) {
 		Query query = this.getSession().createQuery("from ProductBean", ProductBean.class);
@@ -113,23 +113,41 @@ public class ProductService {
 		return query.getResultList();
 	}
 
+	public List<ProductBean> findProductsByType(String type){
+		return productDAO.findProductsByType(type);
+	}
+	
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
-		return productDAO.insertProductsSN(id, stock);
+		ProductBean temp = productDAO.findProductByPrimaryKey(id);
+		if (temp != null) {
+			temp.setStock(stock);
+			productDAO.updateProduct(temp);
+			return productDAO.insertProductsSN(id, stock);
+		} else {
+			return null;
+		}
 	}
 
 	public List<SerialNumberBean> findProductStatus(Long id, String status) {
 		if (id == null) {
-			if (status.equals("sold")) {
+			if (status.equalsIgnoreCase("sold")) {
 				return productDAO.findsoldProducts();
 			} else {
 				return productDAO.findavailableProducts();
 			}
 		} else {
-			if (status.equals("sold")) {
+			if (status.equalsIgnoreCase("sold")) {
 				return productDAO.findsoldProduct(id);
 			} else {
 				return productDAO.findavailableProduct(id);
 			}
 		}
+	}
+
+	public SerialNumberBean updateSNStatus(SerialNumberBean serialNumberBean) {
+		if (serialNumberBean != null) {
+			return productDAO.updateSNStatus(serialNumberBean);
+		}
+		return null;
 	}
 }

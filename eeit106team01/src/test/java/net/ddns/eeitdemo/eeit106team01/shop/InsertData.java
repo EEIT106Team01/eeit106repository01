@@ -1,6 +1,8 @@
 package net.ddns.eeitdemo.eeit106team01.shop;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -32,13 +34,31 @@ public class InsertData extends ShopTest {
 	@Autowired
 	private ProductService productService;
 
-	@Test
+//	@Test
 	public void insetByCrawler() {
 		AmazonCrawler amazonCrawler = new AmazonCrawler();
-//		ProductBean productBean = amazonCrawler.findProductInfos("B07NC68QQ6", "Recorder");
-//		productService.insertProduct(productBean);
-		System.out.println(productService.findProductByPrimaryKey(2L).toString());
+
+		ArrayList<String> list = amazonCrawler.findProductLinks("Car Recorder", 2, 4, 5);
 		
+		int count = 0;
+		for (String string : list) {
+			ProductBean productBean = amazonCrawler.findProductInfos(string, "Car Recorder", 5);
+			if (productBean != null) {
+				productService.insertProduct(productBean);
+				count++;
+			}
+		}
+		System.err.println("Total insert: " + count + "products");
+	}
+	
+	@Test
+	public void insertSN() {
+		List<ProductBean> productBeans = productService.findProductsByUpdatedTime(-1);
+		Iterator<ProductBean> iterator = productBeans.iterator();
+		while (iterator.hasNext()) {
+			productService.insertProductsSN(iterator.next().getId(), 3);
+			
+		}
 	}
 
 //	@Test
