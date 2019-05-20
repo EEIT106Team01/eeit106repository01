@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,7 +16,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
-@Transactional
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired

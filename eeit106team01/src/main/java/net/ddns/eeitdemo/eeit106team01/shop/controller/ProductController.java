@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
 import java.net.URI;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -22,13 +23,13 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 
 @RestController
 public class ProductController {
 	@Autowired private ServletContext application;
 	@Autowired private ProductService productService;
-	
 	@GetMapping(
 			path = { "/product/{id}" }, 
 			produces = { "application/json" })
@@ -162,12 +163,38 @@ public class ProductController {
 			return ResponseEntity.badRequest().body(errors);
 		}
 		if(productBean != null) {
-			ProductBean result = productService.updateProduct(productBean);
-			if(result != null) {
-				return ResponseEntity.ok(result);
-			}else {
-				return ResponseEntity.notFound().build();
+			ProductBean origin = productService.findProductByPrimaryKey(productBean.getId());
+			if(origin!=null) {
+				ProductBean result = productService.updateProduct(productBean);
+				if(origin.getStock()==productBean.getStock()) {
+					if(result != null) {
+						return ResponseEntity.ok(result);
+					}else {
+						return ResponseEntity.notFound().build();
+					}
+				}else if(origin.getStock() < productBean.getStock()){
+					List<SerialNumberBean> insertSN = 
+							productService.insertProductsSN(
+									productBean.getId(),
+									( productBean.getStock() - origin.getStock()) );
+					if(insertSN != null) {
+						URI uri = URI.create(application.getContextPath()+"/products/"+insertSN.get(0).getProductBean().getId()+"/"+productBean.getStock());
+						return ResponseEntity.created(uri).body(result);
+					} else {
+						return ResponseEntity.noContent().build();
+					}
+				}else if((origin.getStock() > productBean.getStock())){
+					List<SerialNumberBean> sNList = productService.findProductStatus(productBean.getId(),"available");
+					for (int i = 0; i < (origin.getStock() - productBean.getStock());i++) {
+						sNList.get(i).setAvailabilityStatus("sold");
+						productService.updateSNStatus(sNList.get(i));
+					}
+					URI uri = URI.create(application.getContextPath()+"/products/"+sNList.get(0).getProductBean().getId());
+					return ResponseEntity.created(uri).body(result);
+				}
+				return ResponseEntity.noContent().build();
 			}
+			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.notFound().build();
 	}

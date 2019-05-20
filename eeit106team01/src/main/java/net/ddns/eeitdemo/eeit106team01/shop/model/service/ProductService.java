@@ -137,4 +137,10 @@ public class ProductService {
 			}
 		}
 	}
+	
+	public SerialNumberBean updateSNStatus(SerialNumberBean serialNumberBean) {
+		if(serialNumberBean != null) {
+			return productDAO.updateSNStatus(serialNumberBean);
+		}return null;
+	}
 }
