@@ -117,8 +117,25 @@ public class ProductController {
 	}
 	
 	@GetMapping(
+			path = { "/products/name" }, 
+			produces = { "application/json" })
+	public ResponseEntity<?> getProductsByName(@RequestParam String productName){
+		if(productName != null) {
+			List<ProductBean> result = 
+					productService.findProductsByName(productName);
+			if(result != null) {
+				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
+			}
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.notFound().build();	
+	}
+	
+	
+	
+	@GetMapping(
 			path = { "/products/recommend" }, 
-			produces = { "application/json" }) //待測試 %%有點怪
+			produces = { "application/json" })
 	public ResponseEntity<?> getRecommendProducts(@RequestParam String name){
 		if(name != null) {
 			List<ProductBean> result = productService.recommendProducts(name);
@@ -155,35 +172,6 @@ public class ProductController {
 	}
 	
 	@PostMapping(
-			path = { "/products/productsSN/{id}" }, 
-			consumes = {"application/json" }, 
-			produces = {"application/json" })
-	public ResponseEntity<?> postProductsSN(    //待測試
-			@PathVariable Long id,@RequestParam Integer stock,BindingResult bindingResult){
-		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
-			Map<String, String> errors = new HashMap<String, String>();
-			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
-			for (ObjectError bindingError : bindingErrors) {
-				errors.put(bindingError.getObjectName(), bindingError.toString());
-			}
-			return ResponseEntity.badRequest().body(errors);
-		}
-		ProductBean temp = productService.findProductByPrimaryKey(id);
-		if(temp !=null) {
-			List<SerialNumberBean> result = productService.insertProductsSN(id, stock);
-			if(result != null) {
-				URI uri = URI.create(application.getContextPath()+"/products/"+result.get(0).getProductBean().getId());
-				return ResponseEntity.created(uri).body(result);
-			} else {
-				System.out.println(" failed to insert SN ");
-				return ResponseEntity.noContent().build();
-			}
-		}else {
-			return ResponseEntity.noContent().build();
-		}
-	}
-	
-	@PostMapping(
 			path = { "/products/insert" }, 
 			consumes = {"application/json" }, 
 			produces = {"application/json" })
@@ -199,7 +187,9 @@ public class ProductController {
 		}
 		ProductBean result = productService.insertProduct(productBean);
 		if(result != null) {
-			URI uri = URI.create(application.getContextPath()+"/products/"+"insert/"+productBean.getId());
+			productService.insertProductsSN(
+					result.getId(),result.getStock());
+			URI uri = URI.create(application.getContextPath()+"/products/"+result.getId());
 			return ResponseEntity.created(uri).body(result);
 		} else {
 			return ResponseEntity.noContent().build();

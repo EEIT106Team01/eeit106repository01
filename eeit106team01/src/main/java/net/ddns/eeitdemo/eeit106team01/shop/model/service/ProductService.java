@@ -106,6 +106,10 @@ public class ProductService {
 		return productDAO.findProductsByUpdatedTime(day);
 	}
 
+	public List<ProductBean> findProductsByName(String name){
+		return productDAO.findProductsByName(name);
+	}
+	
 	@SuppressWarnings("unchecked")
 	public List<ProductBean> findProductsByTotalSold(Integer top) {
 		Query query = this.getSession().createQuery("from ProductBean", ProductBean.class);
@@ -114,7 +118,12 @@ public class ProductService {
 	}
 
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
-		return productDAO.insertProductsSN(id, stock);
+		ProductBean temp = productDAO.findProductByPrimaryKey(id);
+		if(temp != null) {
+			return productDAO.insertProductsSN(id, stock);
+		}else {
+			return null;
+		}
 	}
 
 	public List<SerialNumberBean> findProductStatus(Long id, String status) {

@@ -21,10 +21,10 @@ public class ProductServiceTest {
 
 	@Autowired private ProductService productService;
 	
-//	@Test
+	@Test
 	public void testInsertProduct() {
 		ProductBean productBean1 = new ProductBean();
-		productBean1.setName("Dash Cam");
+		productBean1.setName("DashCam");
 		productBean1.setCreateTime();
 		productBean1.setUpdatedTime();
 		productBean1.setType("行車紀錄器");
