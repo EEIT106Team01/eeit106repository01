@@ -19,11 +19,11 @@ public class AmazonCrawler {
 		if (userAgentNo == 1) {
 			userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14931";
 		} else if (userAgentNo == 2) {
-			userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:64.0) Gecko/20100101 Firefox/64.0";
+			userAgent = "Chrome (AppleWebKit/537.1; Chrome50.0; Windows NT 10) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
 		} else if (userAgentNo == 3) {
-			userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36";
+			userAgent = "Mozilla/5.0 (Windows NT 10; WOW64; Trident/7.0; AS; rv:11.0) like Gecko";
 		} else {
-			userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36";
+			userAgent = "W3C-checklink/4.5 [4.160] libwww-perl/5.823";
 		}
 
 		StringBuffer URL = new StringBuffer("https://www.amazon.com/dp/").append(productLink).append("?language=en_US");
@@ -113,11 +113,11 @@ public class AmazonCrawler {
 		if (userAgentNo == 1) {
 			userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14931";
 		} else if (userAgentNo == 2) {
-			userAgent = "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:64.0) Gecko/20100101 Firefox/64.0";
+			userAgent = "Chrome (AppleWebKit/537.1; Chrome50.0; Windows NT 10) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
 		} else if (userAgentNo == 3) {
-			userAgent = "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/37.0.2062.124 Safari/537.36";
+			userAgent = "Mozilla/5.0 (Windows NT 10; WOW64; Trident/7.0; AS; rv:11.0) like Gecko";
 		} else {
-			userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36";
+			userAgent = "W3C-checklink/4.5 [4.160] libwww-perl/5.823";
 		}
 
 		if (endPage == null) {
