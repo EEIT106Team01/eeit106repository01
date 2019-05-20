@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -16,6 +17,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
+@Transactional
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired
@@ -88,7 +90,7 @@ public class ProductDAOImpl implements ProductDAO {
 		if (stockType.equals("notEmpty")) {
 			Query query = this.getSession().createQuery("from ProductBean where stock > 0", ProductBean.class);
 			return query.getResultList();
-		} else { 
+		} else {
 			Query query = this.getSession().createQuery("from ProductBean where stock = 0", ProductBean.class);
 			return query.getResultList();
 		}
@@ -155,8 +157,8 @@ public class ProductDAOImpl implements ProductDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SerialNumberBean> findsoldProducts() {
-		Query query = this.getSession().createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus",
-				SerialNumberBean.class);
+		Query query = this.getSession().createQuery(
+				"from SerialNumberBean where availabilityStatus = :availabilityStatus", SerialNumberBean.class);
 		query.setParameter("availabilityStatus", "sold");
 		return query.getResultList();
 	}
@@ -164,29 +166,55 @@ public class ProductDAOImpl implements ProductDAO {
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SerialNumberBean> findsoldProduct(Long id) {
-		Query query = this.getSession().createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :id",
+		Query query = this.getSession().createQuery(
+				"from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :id",
 				SerialNumberBean.class);
 		query.setParameter("availabilityStatus", "sold");
-		query.setParameter("id",id);
+		query.setParameter("id", id);
 		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SerialNumberBean> findavailableProducts() {
-		Query query = this.getSession().createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus",
-				SerialNumberBean.class);
-		query.setParameter("availabilityStatus","available");
+		Query query = this.getSession().createQuery(
+				"from SerialNumberBean where availabilityStatus = :availabilityStatus", SerialNumberBean.class);
+		query.setParameter("availabilityStatus", "available");
 		return query.getResultList();
 	}
 
 	@SuppressWarnings("unchecked")
 	@Override
 	public List<SerialNumberBean> findavailableProduct(Long id) {
-		Query query = this.getSession().createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :id",
+		Query query = this.getSession().createQuery(
+				"from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :id",
 				SerialNumberBean.class);
-		query.setParameter("availabilityStatus","available");
-		query.setParameter("id",id);
+		query.setParameter("availabilityStatus", "available");
+		query.setParameter("id", id);
 		return query.getResultList();
 	}
+
+	@Override
+	public SerialNumberBean findSNBeanBySerialNumber(String serialNumber) {
+		if (serialNumber != null) {
+			Query query = getSession().createQuery("from SerialNumberBean where serialNumber = :serialNumber",
+					SerialNumberBean.class);
+			query.setParameter("serialNumber", serialNumber);
+			SerialNumberBean result = (SerialNumberBean) query.getSingleResult();
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public SerialNumberBean updateSNStatus(SerialNumberBean serialNumberBean) {
+		if (serialNumberBean != null) {
+			getSession().update(serialNumberBean);
+			return findSNBeanBySerialNumber(serialNumberBean.getSerialNumber());
+		}
+		return null;
+	}
+
 }

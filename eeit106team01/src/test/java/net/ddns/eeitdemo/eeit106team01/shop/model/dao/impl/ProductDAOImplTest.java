@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import java.util.HashMap;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -12,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
 @RunWith(SpringRunner.class)
@@ -145,4 +147,17 @@ public class ProductDAOImplTest {
 		System.out.println(productDAO.findProductsByUpdatedTime(-30));
 		System.out.println("========================================");
 	}
+
+//	@Test
+	public void testFindSNBeanBySerialNumber() throws Exception {
+		System.out.println(productDAO.findSNBeanBySerialNumber("3zZ7ru9D6EHPrIy2yN24").toString());
+	}
+
+//	@Test
+	public void testUpdateSNStatus() throws Exception {
+		 SerialNumberBean newBean = productDAO.findSNBeanBySerialNumber("EZ6O7qF6BolJuYP3qL0j");
+		 newBean.setAvailabilityStatus("sold");
+		System.out.println(productDAO.updateSNStatus(newBean).toString());
+	}
+	
 }
