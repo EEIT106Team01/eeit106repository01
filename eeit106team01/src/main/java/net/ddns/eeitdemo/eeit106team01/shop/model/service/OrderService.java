@@ -1,8 +1,10 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
-import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.transaction.Transactional;
 
@@ -11,7 +13,7 @@ import org.springframework.stereotype.Service;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberTestDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
@@ -31,37 +33,45 @@ public class OrderService {
 
 	// Create a Order, Order Details
 	public OrderBean createOrder(ArrayList<Long> productIds, Long memberId, OrderBean order) {
+
 		if (productIds != null && memberId != null) {
-			// Order
+
+			// find products which have been purchase
+			HashMap<Long, ProductBean> products = new HashMap<Long, ProductBean>();
+
+			Iterator<Long> ids = productIds.iterator();
+			while (ids.hasNext()) {
+				Long id = (Long) ids.next();
+				products.put(id, productDAO.findProductByPrimaryKey(id));
+			}
+
+			// Order set default value
 			order.setCreateTime();
 			order.setUpdatedTime();
+			order.setDeliverStatus("order created");
 			order.setMemberBeanTest(memberTestDAO.findByPrimaryKey(memberId));
 
-			// List for SerialNumberBeans, get all available SerialNumbers which need for
-			// this purchase
-			List<SerialNumberBean> serialNumbers = new ArrayList<SerialNumberBean>();
-			List<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
+			// Order Detail
+			ArrayList<OrderDetailBean> orderDetails = new ArrayList<OrderDetailBean>();
 
-			Iterator<Long> iteratorLong = productIds.iterator();
-			while (iteratorLong.hasNext()) {
-				serialNumbers = (productDAO.findavailableProduct((Long) iteratorLong.next()));
-			}
+			Iterator<Entry<Long, ProductBean>> product = products.entrySet().iterator();
+			while (product.hasNext()) {
+				Map.Entry<java.lang.Long, ProductBean> entry = (Map.Entry<java.lang.Long, ProductBean>) product.next();
+				Long id = entry.getKey();
+				ProductBean productBean = entry.getValue();
 
-			Iterator<SerialNumberBean> iteratorSNB = serialNumbers.iterator();
-			while (iteratorSNB.hasNext()) {
-				SerialNumberBean serialNumberBean = iteratorSNB.next();
-				// Order Details
 				OrderDetailBean orderDetail = new OrderDetailBean();
 				orderDetail.setOrderBean(order);
-				orderDetail.setSerialNumber(serialNumberBean.getSerialNumber());
-				serialNumberBean.setAvailabilityStatus("sold");
-				productDAO.updateSNStatus(serialNumberBean);
-				orderDetail.setPrice(serialNumberBean.getProductBean().getPrice());
-				OrderDetailBean orderDetailBean = orderDAO.insertOrderDetail(orderDetail);
-				orderDetailBeans.add(orderDetailBean);
+				orderDetail.setProductBean(productBean);
+				orderDetail.setPrice(productBean.getPrice());
+				orderDetail.setSerialNumber(productDAO.findavailableProduct(id).get(0).getSerialNumber());
+				OrderDetailBean insertResult = orderDAO.insertOrderDetail(orderDetail);
+				
+//				productDAO.updateSNStatus();
+				orderDetails.add(orderDAO.findOrderDetailByPrimaryKey(insertResult.getId()));
 			}
-			order.setOrderDetailBeans(orderDetailBeans);
 
+			// Create Order
 			return orderDAO.insertOrder(order);
 		}
 		return null;

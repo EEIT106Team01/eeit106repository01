@@ -6,7 +6,6 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
 import org.junit.Test;
 import org.junit.runner.RunWith;
