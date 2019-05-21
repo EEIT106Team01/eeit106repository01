@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -59,6 +60,25 @@ public class OrderDAOImpl implements OrderDAO {
 	}
 
 	@Override
+	public List<OrderBean> findOrderByMemberId(Long id) {
+		if (id != null) {
+			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
+			CriteriaQuery<OrderBean> criteriaQuery = criteriaBuilder.createQuery(OrderBean.class);
+			Root<OrderBean> order = criteriaQuery.from(OrderBean.class);
+			criteriaQuery.select(order).where(criteriaBuilder.equal(order.get("memberBeanTest"), id));
+
+			Query<OrderBean> query = getSession().createQuery(criteriaQuery);
+			List<OrderBean> result = query.getResultList();
+			if (result != null) {
+				return result;
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
 	public List<OrderBean> findOrders() {
 		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
 		CriteriaQuery<OrderBean> criteriaQuery = criteriaBuilder.createQuery(OrderBean.class);
@@ -96,6 +116,25 @@ public class OrderDAOImpl implements OrderDAO {
 	public OrderDetailBean findOrderDetailByPrimaryKey(Long id) {
 		if (id != null) {
 			OrderDetailBean result = getSession().get(OrderDetailBean.class, id);
+			if (result != null) {
+				return result;
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<OrderDetailBean> findOrderDetailsByOrderId(Long id) {
+		if (id != null) {
+			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
+			CriteriaQuery<OrderDetailBean> criteriaQuery = criteriaBuilder.createQuery(OrderDetailBean.class);
+			Root<OrderDetailBean> oderDetail = criteriaQuery.from(OrderDetailBean.class);
+			criteriaQuery.select(oderDetail).where(criteriaBuilder.equal(oderDetail.get("orderBean"), id));
+
+			Query<OrderDetailBean> query = getSession().createQuery(criteriaQuery);
+			List<OrderDetailBean> result = query.getResultList();
 			if (result != null) {
 				return result;
 			} else {

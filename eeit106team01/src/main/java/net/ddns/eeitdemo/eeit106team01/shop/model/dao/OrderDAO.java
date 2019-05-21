@@ -14,6 +14,8 @@ public interface OrderDAO {
 	abstract OrderBean updateOrder(OrderBean orderBean);
 
 	abstract OrderBean findOrderByPrimaryKey(Long id);
+	
+	abstract List<OrderBean> findOrderByMemberId(Long id);
 
 	abstract List<OrderBean> findOrders();
 
@@ -23,6 +25,8 @@ public interface OrderDAO {
 	abstract OrderDetailBean updateOrderDetail(OrderDetailBean orderDetailBean);
 
 	abstract OrderDetailBean findOrderDetailByPrimaryKey(Long id);
+	
+	abstract List<OrderDetailBean> findOrderDetailsByOrderId(Long id);
 
 	abstract List<OrderDetailBean> findOrderDetails();
 
