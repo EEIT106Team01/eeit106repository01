@@ -29,7 +29,7 @@
 			console.log("memberBean = " + memberBean["id"]);
 
 		}
-		var topicId = 2;
+		var topicId = 7;
 		function getContents() {
 			$(".container").html("");
 			$.ajax({
@@ -110,7 +110,7 @@
 				// (contentBean.memberBean) &&
 				// (contentBean.memberBean.id == memberBean.id)
 			) {
-				// content.appendChild(createEditBtn(topicBean));
+				content.appendChild(createEditBtn(topicBean));
 				content.appendChild(createReplyBtn(topicBean, "topic"));
 			}
 			card.appendChild(title);
