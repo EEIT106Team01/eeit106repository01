@@ -28,6 +28,7 @@ import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
+import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
 import net.ddns.eeitdemo.eeit106team01.shop.model.MemberBeanTest;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
@@ -37,7 +38,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.TopSearchBean;
-import net.ddns.eeitdemo.eeit106team01.utils.FFmpegUtils;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class,

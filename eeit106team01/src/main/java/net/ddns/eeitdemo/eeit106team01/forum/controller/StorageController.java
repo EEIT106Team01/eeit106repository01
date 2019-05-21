@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.controller;
+package net.ddns.eeitdemo.eeit106team01.forum.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;

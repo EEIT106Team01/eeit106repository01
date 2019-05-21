@@ -10,6 +10,27 @@
 	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<!-- Main Quill library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script src="/forum/quill/quill.js"></script>
+	<script src="/forum/quill/quill.min.js"></script>
+
+	<!-- Theme included stylesheets -->
+	<link href="/forum/quill/quill.snow.css" rel="stylesheet">
+	<link href="/forum/quill/quill.bubble.css" rel="stylesheet">
+
+	<style>
+		body>#standalone-container {
+			margin: 50px auto;
+			max-width: 720px;
+		}
+
+		#editor-container {
+			height: 350px;
+		}
+	</style>
+
 	<script src="js/uploadVideo.js"></script>
 	<script>
 		var memberBean = JSON.parse(Cookies.get("MemberBean"));
@@ -26,7 +47,7 @@
 			$("#contentId").text(contentBean.id);
 			$("#topicTitle").text(contentBean.articleTopicCurrent.topicHeader);
 			$("#contentCreateTime").text(contentBean.contentCreateTime);
-			$("#contentContent").val(contentBean.contentContent);
+			quill.setContents(JSON.parse(contentBean.contentContent));
 			if (contentBean.videoBean) {
 				$("#videoURI").text(contentBean.videoBean.videoURI);
 			}
@@ -68,10 +89,11 @@
 
 		function submit() {
 			$("#submit").attr('disabled', true);
+			quill.enable(false)
 			$(".formField input").attr("readonly", true);
 			var newContentBean = JSON.parse(JSON.stringify(contentBean));
 			var httpMethod = "";
-			var contentContent = $("#contentContent").val();
+			var contentContent = JSON.stringify(quill.getContents());
 			console.log("contentContent: " + contentContent);
 			var videoBean = $("#videoBean").val();
 			console.log("videoBean: " + videoBean);
@@ -115,6 +137,15 @@
 
 		document.addEventListener("DOMContentLoaded", function () {
 			document.getElementById("submit").addEventListener("click", submit);
+			//<!-- Initialize Quill editor -->
+			quill = new Quill('#editor-container', {
+				modules: {
+					formula: true,
+					syntax: true,
+					toolbar: '#toolbar-container'
+				},
+				theme: 'snow'
+			});
 			preInput();
 		})
 	</script>
@@ -158,10 +189,55 @@
 							<label>
 								<h4>發布時間： <span id="contentCreateTime" class="badge badge-light"></span></h4>
 							</label><br>
-							<label>
-								<h4>內容： </h4><textarea style="resize: none;" class="form-control" id="contentContent"
-									cols="80" rows="8"></textarea>
-							</label><br>
+							<h4>內容： </h4>
+							<div id="standalone-container">
+								<div id="toolbar-container">
+									<span class="ql-formats">
+										<select class="ql-font"></select>
+										<select class="ql-size"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-bold"></button>
+										<button class="ql-italic"></button>
+										<button class="ql-underline"></button>
+										<button class="ql-strike"></button>
+									</span>
+									<span class="ql-formats">
+										<select class="ql-color"></select>
+										<select class="ql-background"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-script" value="sub"></button>
+										<button class="ql-script" value="super"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-header" value="1"></button>
+										<button class="ql-header" value="2"></button>
+										<button class="ql-blockquote"></button>
+										<button class="ql-code-block"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-list" value="ordered"></button>
+										<button class="ql-list" value="bullet"></button>
+										<button class="ql-indent" value="-1"></button>
+										<button class="ql-indent" value="+1"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-direction" value="rtl"></button>
+										<select class="ql-align"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-link"></button>
+										<button class="ql-image"></button>
+										<button class="ql-video"></button>
+										<button class="ql-formula"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-clean"></button>
+									</span>
+								</div>
+								<div id="editor-container"></div>
+							</div><br>
 					</fieldset>
 				</form>
 				<label>

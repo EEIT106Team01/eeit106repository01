@@ -12,6 +12,18 @@
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 	<link rel="stylesheet" href="https://cdn.plyr.io/3.5.3/plyr.css" />
 	<script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
+
+	<!-- Quill -->
+	<link rel="stylesheet" href="/forum/quill/quill.bubble.css" />
+	<style>
+		.standalone-container {
+			margin: 0px auto;
+			max-width: 720px;
+			border: 0px;
+		}
+	</style>
+	<script src="/forum/quill/quill.min.js"></script>
+
 	<script>
 
 		var memberBean = Cookies.get("MemberBean");
@@ -23,7 +35,7 @@
 			console.log(memberBean);
 		}
 
-		Cookies.set("topicBean", { "id": 2, "topicHeader": "哈哈我是標題", "topicType": "主題類型協尋文", "topicRegion": "台北市", "topicLikeNum": 100, "topicLikeWho": null, "contentReplyNum": 2, "topicCreateTime": "2019-05-15T07:51:41.807+0000", "topicUpdateTime": "2019-05-15T07:51:41.807+0000", "topicStatus": "normal", "accidentTime": "2019-05-15T07:51:41.807+0000", "accidentLocation": "accidentLocation", "accidentLocationLongitude": 24.24, "accidentLocationLatitude": 121.121, "topicContent": "哈哈我是內文", "topicContentUpdateTime": "2019-05-15T07:51:41.807+0000", "pageViews": null, "updateMessage": null, "memberBean": { "id": 1, "name": "pikachu" }, "videoBean": { "id": 1, "memberBean": { "id": 1, "name": "pikachu" }, "uploadTime": "2019-05-15T07:51:07.703+0000", "videoStatus": "processing", "videoURI": "1557906667703cat.mp4", "thumbnailURI": "1557906667703cat.mp4.jpg", "gifURI": "1557906667703cat.mp4.gif", "videoLength": 637.458, "updateMessage": "new insert: Generating thumbnail and gif completed." } });
+		Cookies.set("topicBean", {"id":2,"topicHeader":"哈哈我是標題","topicType":"shareTopic","topicRegion":"centralRegion","topicLikeNum":0,"topicLikeWho":null,"contentReplyNum":2,"topicCreateTime":"2019-05-21T05:37:03.476+0000","topicUpdateTime":"2019-05-21T05:37:03.476+0000","topicStatus":"normal","accidentTime":"2019-05-15T07:51:41.807+0000","accidentLocation":"9527","accidentLocationLongitude":121.5425343600541,"accidentLocationLatitude":25.01566986412309,"topicContent":"{\r\n  \"ops\": [\r\n    {\r\n      \"insert\": \"哈哈哈我是內文\\n\"\r\n    }\r\n  ]\r\n}","topicContentUpdateTime":"2019-05-21T05:37:03.476+0000","pageViews":0,"updateMessage":"使用者發文","memberBean":{"id":1,"name":"pikachu"},"videoBean":{"id":1,"memberBean":{"id":1,"name":"pikachu"},"uploadTime":"2019-05-21T05:30:38.378+0000","videoStatus":"processing","videoURI":"1558416638378Incredibles 2 - Final Battle.mp4","thumbnailURI":"1558416638378Incredibles 2 - Final Battle.mp4.jpg","gifURI":"1558416638378Incredibles 2 - Final Battle.mp4.gif","videoLength":493.517,"updateMessage":"new insert: Generating thumbnail and gif completed."}});
 		var topicBean = JSON.parse(Cookies.get("topicBean"));
 
 		function getContents() {
@@ -48,6 +60,7 @@
 		function show(topicBean, contentBeans) {
 			let topic = createTopic(topicBean);
 			$(".container").append(topic);
+			createShowContentQuill(topicBean.topicContent, "quillTopicContent" + topicBean.id);
 			if (topicBean.videoBean) {
 				$(topic).children(".card-body").prepend(createVideo(topicBean.videoBean, topic.id + "player"));
 				createVideoPlayer(topicBean.videoBean, topic.id + "player");
@@ -64,6 +77,7 @@
 			for (let i = 0; i < noRepliedContents.length; i++) {
 				let content = createContent(noRepliedContents[i]);
 				$(".container").append(content);
+				createShowContentQuill(noRepliedContents[i].contentContent, "quillContent" + noRepliedContents[i].id);
 				if ((noRepliedContents[i].contentStatus !== "deleted")) {
 					$(content).children(".card-body").append(createReplyBtn(noRepliedContents[i], "content"));
 					if ((noRepliedContents[i].videoBean != null)) {
@@ -75,6 +89,7 @@
 			for (let i = 0; i < repliedContents.length; i++) {
 				let content = createContent(repliedContents[i]);
 				$("#content" + repliedContents[i].reply.id).append(content);
+				createShowContentQuill(repliedContents[i].contentContent, "quillContent" + repliedContents[i].id);
 				if ((repliedContents[i].contentStatus !== "deleted") && (repliedContents[i].videoBean != null)) {
 					$(content).children(".card-body").prepend(createVideo(repliedContents[i].videoBean, content.id + "player"));
 					createVideoPlayer(repliedContents[i].videoBean, content.id + "player");
@@ -93,7 +108,14 @@
 				topicBean.topicHeader + "<br>" +
 				"<dl><dt>作者</dt><dd>- " + author + "</dd><dl>"
 			);
-			$(content).text(topicBean.topicContent);
+
+			let container = document.createElement("div");
+			let quillContainer = document.createElement("div");
+			$(container).addClass("standalone-container");
+			$(quillContainer).attr("id", "quillTopicContent" + topicBean.id);
+			container.appendChild(quillContainer);
+			content.appendChild(container);
+
 			$(information).html(
 				"contentUpdateTime: " + topicBean.topicUpdateTime +
 				"<br>contentLikeNum: " + topicBean.topicLikeNum
@@ -115,7 +137,7 @@
 			// }
 			if (
 				(topicBean.topicStatus !== "deleted")
-			){
+			) {
 				content.appendChild(createReplyBtn(topicBean, "topic"));
 			}
 			card.appendChild(title);
@@ -134,8 +156,14 @@
 				"Re: " + contentBean.articleTopicCurrent.topicHeader +
 				"<dl><dt>作者</dt><dd>- " + author + "</dd><dl>"
 			);
-			let contentContent = contentBean.contentContent.replace(/\n/g, '<br/>');
-			$(content).html(contentContent);
+
+			let container = document.createElement("div");
+			let quillContainer = document.createElement("div");
+			$(container).addClass("standalone-container");
+			$(quillContainer).attr("id", "quillContent" + contentBean.id);
+			container.appendChild(quillContainer);
+			content.appendChild(container);
+
 			$(information).html(
 				"contentUpdateTime: " + contentBean.contentUpdateTime +
 				"<br>"
@@ -163,6 +191,14 @@
 			return card;
 		}
 
+		function createShowContentQuill(deltaContent, elementId) {
+			var quillContent = new Quill('#' + elementId, {
+				readOnly: true,
+				theme: 'bubble'
+			});
+			quillContent.setContents(JSON.parse(deltaContent));
+		}
+
 		function createLikeImg(bean, replyType) {
 			let span = document.createElement("span");
 			let like = document.createElement("img");
@@ -176,7 +212,7 @@
 			$(text).text(bean.contentLikeNum);
 			$(text).css("margin", "1em");
 			let uri = "/articleTopics/" + bean.articleTopicCurrent.id + "/articleContents/" + bean.id;
-			if (bean.contentLikeWho && bean.contentLikeWho[memberBean.id]) {
+			if (memberBean && bean.contentLikeWho && bean.contentLikeWho[memberBean.id]) {
 				if (bean.contentLikeWho[memberBean.id] == "like") {
 					$(disLike).css("filter", "grayscale(100%)");
 					$(like).click(function () {

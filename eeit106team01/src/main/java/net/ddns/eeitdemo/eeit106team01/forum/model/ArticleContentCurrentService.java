@@ -14,8 +14,12 @@ public class ArticleContentCurrentService {
 
 	@Autowired
 	private ArticleContentCurrentDAO articleContentCurrentDAO;
+	@Autowired 
+	private ArticleTopicCurrentDAO articleTopicCurrentDAO;
 	@Autowired
 	private MemberBeanService memberBeanService;
+	@Autowired
+	private VideoService videoService;
 
 	public ArticleContentCurrentBean findByPrimaryKey(int id) {
 		return articleContentCurrentDAO.findByPrimaryKey(id);
@@ -27,35 +31,17 @@ public class ArticleContentCurrentService {
 
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
+			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
 			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
+			bean.setArticleTopicCurrent(articleTopicCurrentBean);
 			bean.setMemberBean(memberBean);
-			if (bean.getArticleTopicCurrent().getMemberBean().getId() == bean.getMemberBean().getId()) {
-				bean.getArticleTopicCurrent().setMemberBean(memberBean);
+			if (bean.getVideoBean()!=null && bean.getVideoBean().getId()!=null) {
+				VideoBean videoBean = videoService.findByPrimaryKey(bean.getVideoBean().getId());
+				bean.setVideoBean(videoBean);
 			}
-			if ((bean.getArticleTopicCurrent().getVideoBean() != null)) {
-				if ((bean.getArticleTopicCurrent().getVideoBean().getMemberBean().getId() == bean.getMemberBean().getId())){
-					bean.getArticleTopicCurrent().getVideoBean().setMemberBean(memberBean);
-				} else {
-					bean.getArticleTopicCurrent().getVideoBean().setMemberBean(bean.getArticleTopicCurrent().getMemberBean());
-				}
-			}
-			if (
-					(bean.getVideoBean() != null) &&
-					(bean.getVideoBean().getMemberBean().getId() == bean.getMemberBean().getId())
-					) {
-				bean.getVideoBean().setMemberBean(memberBean);
-			}
-			if ((bean.getReply() != null) && (bean.getReply().getId() != null)) {
-				bean.getReply().setArticleTopicCurrent(bean.getArticleTopicCurrent());
-				if (bean.getReply().getMemberBean().getId() == bean.getMemberBean().getId()) {
-					bean.getReply().setMemberBean(memberBean);
-				}
-				if (
-						(bean.getReply().getVideoBean() != null) &&
-						(bean.getReply().getVideoBean().getMemberBean().getId() == bean.getMemberBean().getId())						
-						) {
-					bean.getReply().getVideoBean().setMemberBean(memberBean);
-				}
+			if (bean.getReply()!=null && bean.getReply().getId()!=null) {
+				ArticleContentCurrentBean reply = articleContentCurrentDAO.findByPrimaryKey(bean.getReply().getId());
+				bean.setReply(reply);
 			}
 			return articleContentCurrentDAO.insert(bean);
 		}
