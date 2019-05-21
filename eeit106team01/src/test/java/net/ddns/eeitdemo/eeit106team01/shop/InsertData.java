@@ -50,7 +50,7 @@ public class InsertData extends ShopTest {
 		System.err.println("Total insert: " + count + "products");
 	}
 	
-	@Test
+//	@Test
 	public void insertSN() {
 		List<ProductBean> productBeans = productService.findProductsByUpdatedTime(-1);
 		Iterator<ProductBean> iterator = productBeans.iterator();
