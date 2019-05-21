@@ -17,7 +17,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
-@Transactional
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired
