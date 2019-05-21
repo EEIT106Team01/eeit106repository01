@@ -26,7 +26,7 @@ public class ArticleContentCurrentBean {
 	private java.util.Date contentCreateTime;
 	private java.util.Date contentUpdateTime;
 	private String contentStatus;
-	@Column(columnDefinition = "nvarchar(255)")
+	@Column(columnDefinition = "nvarchar(max)")
 	private String contentContent;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String updateMessage;

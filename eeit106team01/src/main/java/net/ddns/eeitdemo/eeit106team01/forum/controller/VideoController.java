@@ -29,8 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoService;
+import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
 import net.ddns.eeitdemo.eeit106team01.model.StorageService;
-import net.ddns.eeitdemo.eeit106team01.utils.FFmpegUtils;
 
 @RestController
 public class VideoController {

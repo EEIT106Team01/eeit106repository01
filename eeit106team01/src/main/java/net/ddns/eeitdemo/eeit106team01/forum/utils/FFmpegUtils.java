@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.utils;
+package net.ddns.eeitdemo.eeit106team01.forum.utils;
 
 import java.io.BufferedWriter;
 import java.io.File;
