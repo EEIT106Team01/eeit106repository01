@@ -58,13 +58,17 @@ public class ProductBean implements Serializable {
 	private ArrayList<String> description;
 
 	@Column(nullable = false, columnDefinition = "varbinary(max)")
+	private HashMap<String, String> information;
+
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
 	private HashMap<String, String> imageLink;
 
 	@Override
 	public String toString() {
 		return "ProductBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", name="
 				+ name + ", type=" + type + ", brand=" + brand + ", price=" + price + ", stock=" + stock
-				+ ", totalSold=" + totalSold + ", description=" + description + ", imageLink=" + imageLink + "]";
+				+ ", totalSold=" + totalSold + ", description=" + description + ", information=" + information
+				+ ", imageLink=" + imageLink + "]";
 	}
 
 	public Long getId() {
@@ -145,6 +149,14 @@ public class ProductBean implements Serializable {
 
 	public void setDescription(ArrayList<String> description) {
 		this.description = description;
+	}
+
+	public HashMap<String, String> getInformation() {
+		return information;
+	}
+
+	public void setInformation(HashMap<String, String> information) {
+		this.information = information;
 	}
 
 	public HashMap<String, String> getImageLink() {

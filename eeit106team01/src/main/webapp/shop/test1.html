@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <script src="https://code.jquery.com/jquery-3.4.1.js" integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" crossorigin="anonymous"></script>
+    <title>Document</title>
+</head>
+
+<body>
+    <div id="div">
+        <input id="i1" type="text"></input>
+        <button id="b1">button</button>
+    </div>
+</body>
+<script>
+    $("#b1").click(function() {
+        var id = $("#i1").val();
+        $.getJSON("http://localhost:8080/product/" + id, function(data) {
+            var items = [];
+            $.each(data, function(key, val) {
+                items.push("<li id='" + key + "'>" + val + "</li>");
+            });
+
+            $("<ul/>", {
+                "class": "my-new-list",
+                html: items.join("")
+            }).appendTo("body");
+        });
+    });
+</script>
+
+</html>
