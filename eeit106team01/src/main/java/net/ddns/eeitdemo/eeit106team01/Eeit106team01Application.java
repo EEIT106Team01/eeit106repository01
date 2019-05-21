@@ -118,7 +118,7 @@ public class Eeit106team01Application {
 		return new HibernateTransactionManager(sessionFactory);
 	}
 	
-	@Bean
+//	@Bean
 	public FFmpegUtils fFmpegUtils() throws IOException {
 		FFmpegUtils ffu = null;
 		String ffmpegPath = environment.getProperty("path.ffmpeg");
