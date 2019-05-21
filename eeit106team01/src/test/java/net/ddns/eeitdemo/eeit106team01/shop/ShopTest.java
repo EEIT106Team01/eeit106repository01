@@ -17,12 +17,12 @@ public class ShopTest {
 
 	@Before
 	public void init() {
-		System.err.println("Shop Test Begin --------------------");
+		System.err.println("Shop Test Begin ____________________");
 	}
 
 	@After
 	public void after() {
-		System.err.println("Shop Test End   --------------------");
+		System.err.println("Shop Test End   ____________________");
 	}
 
 }

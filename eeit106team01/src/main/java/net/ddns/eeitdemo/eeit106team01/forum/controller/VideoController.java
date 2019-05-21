@@ -32,7 +32,7 @@ import net.ddns.eeitdemo.eeit106team01.forum.model.VideoService;
 import net.ddns.eeitdemo.eeit106team01.model.StorageService;
 import net.ddns.eeitdemo.eeit106team01.utils.FFmpegUtils;
 
-@RestController
+//@RestController
 public class VideoController {
 	@Autowired
 	private VideoService videoService;
