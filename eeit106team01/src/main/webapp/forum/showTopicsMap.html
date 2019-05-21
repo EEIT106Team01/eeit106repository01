@@ -17,12 +17,12 @@
         crossorigin="anonymous"></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
     <script type="text/javascript">
-        $(window).on('load', mapInitialize);
+        $(window).on('load', initMap);
         let map;
         let markers = [];
         let listener;
 
-        function mapInitialize() {
+        function initMap() {
             map = new google.maps.Map(document.getElementById("map_canvas"), {
                     zoom: 13    //0-21
                     , center: { lat: 25.033793, lng: 121.543427 }
@@ -58,7 +58,7 @@
                 if(( i + 1 ) % 3 == 1){
                     divCardDeck = $("<div></div>").addClass("card-deck").width("900px").appendTo($("#topicList"));
                 }
-                let divCard = $("<div></div>").addClass("card").attr('id', dataTopicList[i].id).appendTo(divCardDeck);
+                let divCard = $("<div></div>").addClass("card").attr("id", `id${dataTopicList[i].id}`).appendTo(divCardDeck);
                     let imgBloodTrial = $('<img />',
                                 { class: 'card-img-topMyid',
                                 src: '../images/bloodtrial.jpg',
@@ -94,11 +94,11 @@
                     });
 
                 markers[i].addListener('mouseover', function() {
-                    $("#" + dataTopicList[i].id).addClass("bg-info");
+                    $(`#id${dataTopicList[i].id}`).addClass("bg-info");
                 });
 
                 markers[i].addListener('mouseout', function() {
-                    $("#" + dataTopicList[i].id).removeClass("bg-info");
+                    $(`#id${dataTopicList[i].id}`).removeClass("bg-info");
                 });
             }
         }
