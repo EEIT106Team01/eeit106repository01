@@ -13,32 +13,30 @@
     <script>
 
         $(document).ready(function () {
-            $("button").click(function () {
+            $("SelectIdButton").click(function () {
                 selectProduct();
+            });
+            $("InsertButton").click(function () {
+                postProduct();
+            });
+            // $("updateButton").click(function () {
+            //     selectProduct();
+            // });
+            $("SelectTypeButton").click(function () {
+                selectProductByTpye();
+            });
+            $("SelectUpdatedTimeButton").click(function () {
+                selectProductByUpdatedTime();
             });
         });
 
         function selectProduct() {
             $.ajax({
-                url: "http:localhost:8080/product/"+$("#productId").val(),
+                url: "http://localhost:8080/product/" + $("#productId").val(),
                 method: "GET",
                 dataType: "json",
                 success: function (data) {
-                    console.log(data.id) 
-
-
-
-                    // id
-                    // name
-                    // type
-                    // brand
-                    // price
-                    // stock
-                    // totalSold
-                    // description
-                    // imageLink
-                    // createTime
-                    // updatedTime
+                    alert(data)
                 },
                 error: function (errorThrown, textStatus, jqXHR) {
                     console.log(jqXHR);
@@ -48,40 +46,154 @@
             })
         }
 
-        // function postProduct() {
-        //     $.ajax({
-        //         url: "/products/insert",
-        //         method: "POST",
-        //         dataType: "json",
-        //         data: 
-        // })
-        // }
-
-        function product(brand, description, imageLink, name, price, stock, type) {
-            this.brand = brand;
-            this.description = description;
-            this.imageLink = imageLink;
-            this.name = name;
-            this.price = price;
-            this.stock = stock;
-            this.type = type;
+        function selectProductByTpye() {
+            $.ajax({
+                url: "http://localhost:8080/products/type?" + $("#selectTypeForm").serialize(),
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    alert(data)
+                },
+                error: function (errorThrown, textStatus, jqXHR) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            })
         }
+
+        function selectProductByUpdatedTime() {
+            $.ajax({
+                url: "http://localhost:8080/products/updatedTime?" + $("#selectUpdatedTimeForm").serialize(),
+                method: "GET",
+                dataType: "json",
+                success: function (data) {
+                    alert(data)
+                },
+                error: function (errorThrown, textStatus, jqXHR) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            })
+        }
+
+        function postProduct() {
+            $.ajax({
+                url: "http://localhost:8080/products/insert",
+                method: "POST",
+                dataType: "json",
+                data: {
+                    "brand" : brand,
+                    "description" : description,
+                    "imageLink" : imageLink,
+                    "name" : name,
+                    "price" : price,
+                    "stock" : stock,
+                    "type" : type
+                } ,
+                success : function(){
+                    alert("成功");
+                },
+                error: function (jqXH,textStatus, errorThrown) {
+                    console.log(jqXHR);
+                    console.log(textStatus);
+                    console.log(errorThrown);
+                }
+            })
+        }
+
     </script>
 </head>
+
 <body>
-        <div>
-                <form>
-                    <h3>ID : </h3><input type="text" id="productId">
-                    <button id="button">submit</button>
-                </form>
-            </div>
-            
-            <table>
-                <tr>
-                    <td>ID :</td>
-                    <td></td>
-                </tr>
-            </table>
+    <div id="search"></div>
+
+
+    <div>
+        <form id="selectIdForm" method="get">
+            <h1>搜尋產品ID</h1>
+            <input type="submit" value="SelectId" id="SelectIdButton">
+            <p>ID :
+                <input type="text" name="id" id="productId">
+            </p>
+        </form>
+    </div>
+    <br>
+    <div>
+        <form id="selectTypeForm" method="get">
+            <h1>搜尋產品Type</h1>
+            <input type="submit" value="SelectType" id="SelectTypeButton">
+            <p>type :
+                <input type="text" name="type" id="productType">
+            </p>
+        </form>
+    </div>
+    <br>
+    <div>
+        <form id="selectUpdatedTimeForm" method="get">
+            <h1>搜尋產品更新時間</h1>
+            <input type="submit" value="SelectUpdatedTime" id="SelectUpdatedTimeButton">
+            <p>day :
+                <input type="text" name="day" id="productUpdatedTime">
+            </p>
+        </form>
+    </div>
+    <br>
+    <div>
+        <form id="insertForm" method="POST">
+            <h1>新增產品</h1>
+            <input type="submit" value="Insert" id="InsertButton">
+            <p>name :
+                <input type="text" name="name" id="productName">
+            </p>
+            <p>type :
+                <input type="text" name="type" id="productType">
+            </p>
+            <p>price :
+                <input type="text" name="price" id="productPrice">
+            </p>
+            <p>stock :
+                <input type="text" name="stock" id="productStock">
+            </p>
+            <p>description :
+                <input type="text" name="description" id="productDescription">
+            </p>
+            <p>imageLink :
+                <input type="text" name="imageLink" id="productImageLink">
+            </p>
+        </form>
+    </div>
+    <br>
+    <div>
+        <form>
+            <h1>更新產品資訊</h1>
+            <input type="submit" value="update" id="updateButton">
+            <p>ID :
+                <input type="text" name="id" id="productId">
+            </p>
+            <p>name :
+                <input type="text" name="name" id="productName">
+            </p>
+            <p>type :
+                <input type="text" name="type" id="productType">
+            </p>
+            <p>price :
+                <input type="text" name="price" id="productPrice">
+            </p>
+            <p>stock :
+                <input type="text" name="stock" id="productStock">
+            </p>
+            <p>description :
+                <input type="text" name="description" id="productDescription">
+            </p>
+            <p>imageLink :
+                <input type="text" name="imageLink" id="productImageLink">
+            </p>
+        </form>
+    </div>
+    <br>
+
 </body>
 
 </html>
