@@ -1,7 +1,10 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.transaction.Transactional;
 
@@ -30,23 +33,45 @@ public class OrderService {
 
 	// Create a Order, Order Details
 	public OrderBean createOrder(ArrayList<Long> productIds, Long memberId, OrderBean order) {
+
 		if (productIds != null && memberId != null) {
-			// List for productBeans, get all product details which include in this purchase
-			ArrayList<ProductBean> products = new ArrayList<ProductBean>();
-			Iterator<Long> iterator = productIds.iterator();
-			while (iterator.hasNext()) {
-				products.add(productDAO.findProductByPrimaryKey((Long) iterator.next()));
+
+			// find products which have been purchase
+			HashMap<Long, ProductBean> products = new HashMap<Long, ProductBean>();
+
+			Iterator<Long> ids = productIds.iterator();
+			while (ids.hasNext()) {
+				Long id = (Long) ids.next();
+				products.put(id, productDAO.findProductByPrimaryKey(id));
 			}
-			// Order
+
+			// Order set default value
 			order.setCreateTime();
 			order.setUpdatedTime();
+			order.setDeliverStatus("order created");
 			order.setMemberBeanTest(memberTestDAO.findByPrimaryKey(memberId));
-			// Order Details
-			OrderDetailBean orderDetail = new OrderDetailBean();
-			orderDetail.setOrderBean(order);
-			orderDetail.setSerialNumber("");
-			orderDetail.setPrice(1);
-			orderDAO.insertOrderDetail(orderDetail);
+
+			// Order Detail
+			ArrayList<OrderDetailBean> orderDetails = new ArrayList<OrderDetailBean>();
+
+			Iterator<Entry<Long, ProductBean>> product = products.entrySet().iterator();
+			while (product.hasNext()) {
+				Map.Entry<java.lang.Long, ProductBean> entry = (Map.Entry<java.lang.Long, ProductBean>) product.next();
+				Long id = entry.getKey();
+				ProductBean productBean = entry.getValue();
+
+				OrderDetailBean orderDetail = new OrderDetailBean();
+				orderDetail.setOrderBean(order);
+				orderDetail.setProductBean(productBean);
+				orderDetail.setPrice(productBean.getPrice());
+				orderDetail.setSerialNumber(productDAO.findavailableProduct(id).get(0).getSerialNumber());
+				OrderDetailBean insertResult = orderDAO.insertOrderDetail(orderDetail);
+				
+//				productDAO.updateSNStatus();
+				orderDetails.add(orderDAO.findOrderDetailByPrimaryKey(insertResult.getId()));
+			}
+
+			// Create Order
 			return orderDAO.insertOrder(order);
 		}
 		return null;

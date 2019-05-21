@@ -10,11 +10,11 @@ import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.apache.catalina.util.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
 import org.springframework.http.ResponseEntity;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,19 +26,20 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoService;
 import net.ddns.eeitdemo.eeit106team01.model.StorageService;
 import net.ddns.eeitdemo.eeit106team01.utils.FFmpegUtils;
 
-@RestController
+//@RestController
 public class VideoController {
 	@Autowired
 	private VideoService videoService;
 	@Autowired
 	private StorageService storageService;
 	@Autowired
-	private Environment env;
+	private FFmpegUtils ffu;
 
 	@GetMapping(path = { "/videos" }, produces = { "application/json" })
 	public ResponseEntity<?> getVideoList() {
@@ -62,7 +63,7 @@ public class VideoController {
 	}
 
 	@PostMapping(path = { "/videos" }, produces = { "application/json" })
-	public ResponseEntity<?> uploadVideo(@RequestParam("videoFile") MultipartFile videoFile, Model model) {
+	public ResponseEntity<?> uploadVideo(@RequestParam("videoFile") MultipartFile videoFile, HttpSession httpSession) {
 		if (videoFile == null || videoFile.getSize() == 0 || !videoFile.getContentType().startsWith("video/")) {
 			return ResponseEntity.noContent().header("errorMsg", "upload file not exist").build();
 		} else {
@@ -76,24 +77,14 @@ public class VideoController {
 						os.write(bytes, 0, len);
 					}
 				}
-				FFmpegUtils ffu = null;
-				String ffmpegPath = env.getProperty("path.ffmpeg");
-				String ffprobePath = env.getProperty("path.ffprobe");
-				if (ffmpegPath != null && ffmpegPath.length() != 0 && ffprobePath != null
-						&& ffprobePath.length() != 0) {
-					System.out.println("use specify path of ffmpeg and ffprobe");
-					ffu = new FFmpegUtils(ffmpegPath, ffprobePath);
-				} else {
-					System.out.println("use default path of ffmpeg and ffprobe");
-					ffu = new FFmpegUtils();
-				}
-
+				MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
 				VideoBean videoBean = new VideoBean();
 				videoBean.setUploadTime(new java.util.Date(uploadTime));
 				videoBean.setVideoURI(outFile.getName());
 				videoBean.setVideoStatus("processing");
 				videoBean.setVideoLength(ffu.getVideoDuration(outFile));
 				videoBean.setUpdateMessage("new insert");
+				videoBean.setMemberBean(memberBean);
 				try {
 					videoBean = videoService.insert(videoBean);
 				} catch (Exception e) {
@@ -101,16 +92,9 @@ public class VideoController {
 					return ResponseEntity.noContent().header("errorMsg", "video insert failed : " + e.getMessage())
 							.build();
 				}
-
-				File outFileJpg = storageService.createFile("jpgs/" + outFile.getName() + ".jpg");
-				File outFileGif = storageService.createFile("gifs/" + outFile.getName() + ".gif");
-				ffu.generateThumbnail(outFile, outFileJpg, -1);
-				ffu.generateDefaultGifCut(outFile, outFileGif);
-
-				videoBean.setThumbnailURI(outFileJpg.getName());
-				videoBean.setGifURI(outFileGif.getName());
-				videoBean.setUpdateMessage("new insert: Generating thumbnail and gif completed.");
-				videoService.update(videoBean);
+				ProcessVideo processVideo = new ProcessVideo(outFile, videoBean);
+				Thread thread = new Thread(processVideo);
+				thread.start();
 
 				String encodeName = new URLEncoder().encode(videoBean.getVideoURI(), Charset.forName("UTF-8"));
 				return ResponseEntity.created(URI.create("storage/videos/" + encodeName)).body(videoBean);
@@ -179,5 +163,33 @@ public class VideoController {
 			}
 		}
 		return ResponseEntity.notFound().build();
+	}
+
+	class ProcessVideo implements Runnable {
+		private File outFile;
+		private VideoBean videoBean;
+		
+		public ProcessVideo(File outFile, VideoBean videoBean) {
+			this.outFile = outFile;
+			this.videoBean = videoBean;
+		}
+		
+		@Override
+		public void run() {
+			try {
+				File outFileJpg = storageService.createFile("jpgs/" + outFile.getName() + ".jpg");
+				File outFileGif = storageService.createFile("gifs/" + outFile.getName() + ".gif");
+				ffu.generateThumbnail(outFile, outFileJpg, -1);
+				ffu.generateDefaultGifCut(outFile, outFileGif);
+
+				videoBean.setThumbnailURI(outFileJpg.getName());
+				videoBean.setGifURI(outFileGif.getName());
+				videoBean.setUpdateMessage("new insert: Generating thumbnail and gif completed.");
+				videoService.update(videoBean);
+			} catch (IOException e) {
+				System.out.println(e.getMessage());
+				e.printStackTrace();
+			}
+		}
 	}
 }

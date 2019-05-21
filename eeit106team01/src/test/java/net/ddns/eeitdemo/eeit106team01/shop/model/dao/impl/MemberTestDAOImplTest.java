@@ -19,7 +19,7 @@ public class MemberTestDAOImplTest {
 	@Autowired
 	private MemberTestDAO memberTestDAO;
 
-//	@Test
+	@Test
 	public void testInsert() {
 		MemberBeanTest member1 = new MemberBeanTest();
 		member1.setAccount("hee");
@@ -56,7 +56,7 @@ public class MemberTestDAOImplTest {
 		assertEquals(memberTestDAO.findByPrimaryKey(1L).getAccount(), actual);
 	}
 
-	@Test
+//	@Test
 	public void testFindMembers() {
 		assertNotNull(memberTestDAO.findMembers());
 		System.out.println(memberTestDAO.findMembers().toString());

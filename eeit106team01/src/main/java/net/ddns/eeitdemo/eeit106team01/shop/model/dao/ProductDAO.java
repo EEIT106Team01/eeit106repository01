@@ -11,11 +11,14 @@ public interface ProductDAO {
 
 	abstract ProductBean updateProduct(ProductBean productBean);
 
-	// find SN table by P_id and availabilityStatus
 	abstract ProductBean findProductByPrimaryKey(Long id);
 
 	abstract ProductBean findProductBySerialNumber(String serialNumber);
+	
+	abstract SerialNumberBean findSNBeanBySerialNumber (String serialNumber);
 
+	abstract SerialNumberBean updateSNStatus(SerialNumberBean serialNumberBean);
+	
 	abstract List<ProductBean> findProducts();
 
 	abstract List<ProductBean> findProductsByName(String name);
@@ -39,4 +42,6 @@ public interface ProductDAO {
 	abstract List<SerialNumberBean> findavailableProducts();
 	
 	abstract List<SerialNumberBean> findavailableProduct(Long id);
+	
+	
 }

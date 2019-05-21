@@ -3,70 +3,95 @@ package net.ddns.eeitdemo.eeit106team01.shop.util;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 
 public class AmazonCrawler {
 
-	public static void main(String[] args) {
-		AmazonCrawler crawler = new AmazonCrawler();
-		Iterator<String> iterator = crawler.findProductLinks("car recorder", 3).iterator();
-		int i = 0;
-		while (iterator.hasNext()) {
-			System.out.println("___" + (i++) + "___");
-			String string = (String) iterator.next();
-			System.out.println(string);
-		}
-	}
-
 	// Get Products
-	public ProductBean findProductInfos(String productLink, String productType) {
-		StringBuffer URL = new StringBuffer("https://www.amazon.com/dp/").append(productLink).append("?language=zh_TW");
+	public ProductBean findProductInfos(String productLink, String productType, int userAgentNo) {
+		String userAgent;
+		if (userAgentNo == 1) {
+			userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14931";
+		} else if (userAgentNo == 2) {
+			userAgent = "Chrome (AppleWebKit/537.1; Chrome50.0; Windows NT 10) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
+		} else if (userAgentNo == 3) {
+			userAgent = "Mozilla/5.0 (Windows NT 10; WOW64; Trident/7.0; AS; rv:11.0) like Gecko";
+		} else {
+			userAgent = "W3C-checklink/4.5 [4.160] libwww-perl/5.823";
+		}
+
+		StringBuffer URL = new StringBuffer("https://www.amazon.com/dp/").append(productLink).append("?language=en_US");
 
 		ProductBean productBean = new ProductBean();
 
 		try {
-			Document doc = Jsoup.connect(URL.toString()).userAgent(
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
-					.referrer("http://www.google.com").timeout(5000).get();
+			Document doc = Jsoup.connect(URL.toString()).userAgent(userAgent).referrer("http://www.google.com")
+					.timeout(60000).get();
 
 			System.out.println("Fetch From: " + URL.toString() + " ...");
 
-			Element name = doc.selectFirst("#imgTagWrapperId img");
-			productBean.setName(name.attr("alt"));
+			Elements name = doc.select("#imgTagWrapperId img");
+			if (!name.isEmpty()) {
+				System.err.println(name.get(0).attr("alt"));
+				productBean.setName(name.get(0).attr("alt"));
+			} else {
+				return null;
+			}
 
-			Element brand = doc.selectFirst("div[data-brand]");
-			productBean.setBrand(brand.attr("data-brand"));
+			Elements brand = doc.select("#bylineInfo");
+			if (!brand.isEmpty()) {
+				System.err.println(brand.get(0).text());
+				productBean.setBrand(brand.get(0).text());
+			} else {
+				return null;
+			}
 
-			Element price = doc.selectFirst("#priceblock_ourprice");
-			Integer USD = Math.round(Float.valueOf(price.text().replaceAll("USD", "").trim()));
-			Integer TWD = USD * 31;
-			productBean.setPrice(TWD);
+			Elements price = doc.select("#priceblock_ourprice");
+			Elements price2 = doc.select("#priceblock_dealprice");
+			if (!price.isEmpty()) {
+				System.err.println(price.get(0).text().replace('$', ' ').trim());
+				Integer USD = Math.round(Float.valueOf(price.get(0).text().replace('$', ' ').trim()));
+				Integer TWD = USD * 31;
+				productBean.setPrice(TWD);
+			} else if (!price2.isEmpty()) {
+				System.err.println(price2.get(0).text().replace('$', ' ').trim());
+				Integer USD = Math.round(Float.valueOf(price2.get(0).text().replace('$', ' ').trim()));
+				Integer TWD = USD * 31;
+				productBean.setPrice(TWD);
+			} else {
+				return null;
+			}
 
 			ArrayList<String> arrayList = new ArrayList<String>();
 			Elements discriptions = doc.select("#feature-bullets .a-unordered-list .a-list-item");
-			for (Element discription : discriptions) {
-				arrayList.add(discription.text());
+			if (!discriptions.isEmpty()) {
+				System.err.println("discriptions");
+				for (Element discription : discriptions) {
+					arrayList.add(discription.text());
+				}
+				productBean.setDescription(arrayList);
+			} else {
+				return null;
 			}
-			productBean.setDescription(arrayList);
 
 			HashMap<String, String> hashMap = new HashMap<String, String>();
-			Element imageLink = doc.selectFirst("img[data-old-hires]");
-			hashMap.put("alt", productBean.getName());
-			hashMap.put("src", imageLink.attr("data-old-hires"));
-			productBean.setImageLink(hashMap);
+			Elements imageLink = doc.select("img[data-old-hires]");
+			if (!imageLink.isEmpty()) {
+				System.err.println(imageLink.get(0).attr("data-old-hires"));
+				hashMap.put("alt", productBean.getName());
+				hashMap.put("src", imageLink.get(0).attr("data-old-hires"));
+				productBean.setImageLink(hashMap);
+			} else {
+				return null;
+			}
 
-			productBean.setStock(5);
+			productBean.setStock(0);
 			productBean.setType(productType);
 
 		} catch (IOException e) {
@@ -76,25 +101,51 @@ public class AmazonCrawler {
 	}
 
 	// Get Links
-	public ArrayList<String> findProductLinks(String inputQuery, Integer inputPage) {
-		StringBuffer URL = new StringBuffer("https://www.amazon.com/s?k=").append(inputQuery).append("&page=")
-				.append(inputPage).append("&language=zh_TW");
+
+	/**
+	 * @param inputQuery Product name
+	 * @param startPage  Page start, can not be null.
+	 * @param endPage    Page end , can be null, default is startPage.
+	 * @return ArrayList of links.
+	 */
+	public ArrayList<String> findProductLinks(String inputQuery, Integer startPage, Integer endPage, int userAgentNo) {
+		String userAgent;
+		if (userAgentNo == 1) {
+			userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14931";
+		} else if (userAgentNo == 2) {
+			userAgent = "Chrome (AppleWebKit/537.1; Chrome50.0; Windows NT 10) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14393";
+		} else if (userAgentNo == 3) {
+			userAgent = "Mozilla/5.0 (Windows NT 10; WOW64; Trident/7.0; AS; rv:11.0) like Gecko";
+		} else {
+			userAgent = "W3C-checklink/4.5 [4.160] libwww-perl/5.823";
+		}
+
+		if (endPage == null) {
+			endPage = startPage;
+		} else if (startPage == null || inputQuery == null) {
+			System.err.println("Please enter startPage and inputQuery!");
+			return null;
+		}
+
 		ArrayList<String> list = new ArrayList<String>();
-		try {
-			Document doc = Jsoup.connect(URL.toString()).userAgent(
-					"Mozilla/5.0 (Windows NT 10.0; Win64; x64;) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36")
-					.referrer("http://www.google.com").timeout(5000).get();
+		for (int page = startPage; page <= endPage; page++) {
+			StringBuffer URL = new StringBuffer("https://www.amazon.com/s?k=").append(inputQuery).append("&page=")
+					.append(page);
+			try {
+				Document doc = Jsoup.connect(URL.toString()).userAgent(userAgent).referrer("http://www.google.com")
+						.timeout(5000).get();
 
-			System.out.println("Fetch From: " + URL.toString() + " ...");
+				System.out.println("Fetch From: " + URL.toString() + " ...");
 
-			Elements link = doc.select("div[data-index]");
-			for (int nodeCount = 0; nodeCount < link.size(); nodeCount++) {
+				Elements link = doc.select("div[data-index]");
+				for (int nodeCount = 0; nodeCount < link.size(); nodeCount++) {
 //				System.out.println("=========================" + nodeCount + "=========================");
 //				System.out.println("LINK: " + "https://www.amazon.com/dp/" + link.get(nodeCount).attr("data-asin"));
-				list.add(link.get(nodeCount).attr("data-asin"));
+					list.add(link.get(nodeCount).attr("data-asin"));
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
 			}
-		} catch (IOException e) {
-			e.printStackTrace();
 		}
 		return list;
 	}

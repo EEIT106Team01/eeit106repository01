@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -20,12 +22,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentService;
+import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentService;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
 
 @RestController
 public class ArticleContentController {
 
 	@Autowired
 	private ArticleContentCurrentService articleContentCurrentService;
+	
+	@Autowired
+	private ArticleTopicCurrentService articleTopicCurrentService;
 
 	@GetMapping(path = { "/articleTopics/{id}/articleContents" }, produces = { "application/json" })
 	public ResponseEntity<?> getContentList(@PathVariable Integer id, @RequestParam Integer begin,
@@ -46,7 +53,7 @@ public class ArticleContentController {
 	@PostMapping(path = { "/articleTopics/{id}/articleContents" }, consumes = { "application/json" }, produces = {
 			"application/json" })
 	public ResponseEntity<?> postContent(@PathVariable Integer id,
-			@RequestBody ArticleContentCurrentBean articleContentCurrentBean, BindingResult bindingResult) {
+			@RequestBody ArticleContentCurrentBean articleContentCurrentBean, BindingResult bindingResult, HttpSession httpSession) {
 		if ((id != null && id.intValue() != 0) && (articleContentCurrentBean != null)) {
 			if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 				Map<String, String> errors = new HashMap<String, String>();
@@ -55,6 +62,16 @@ public class ArticleContentController {
 					errors.put(bindingError.getObjectName(), bindingError.toString());
 				}
 				return ResponseEntity.badRequest().body(errors);
+			}
+//			從session抓出MemberBean資訊
+			MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+			
+			if ((articleContentCurrentBean.getMemberBean() == null)
+					|| (articleContentCurrentBean.getMemberBean().getId() == null)
+//					檢查回文者ID與session中ID是否一致
+					|| (articleContentCurrentBean.getMemberBean().getId() != memberBean.getId())
+					) {
+				return ResponseEntity.noContent().build();
 			}
 
 			if ((articleContentCurrentBean.getContentContent() != null)
@@ -68,10 +85,16 @@ public class ArticleContentController {
 				articleContentCurrentBean.setContentUpdateTime(now);
 				articleContentCurrentBean.setContentStatus("normal");
 				articleContentCurrentBean.setUpdateMessage(null);
+//				將MemberBean與新回文關聯
+				articleContentCurrentBean.setMemberBean(memberBean);
 				ArticleContentCurrentBean result = articleContentCurrentService.insert(articleContentCurrentBean);
-
-				return ResponseEntity.created(URI.create("articleTopics/" + id + "/articleContents/" + result.getId()))
-						.body(result);
+				if (result != null) {
+					if (result.getReply() == null) {
+						articleTopicCurrentService.increaseContentReplyNum(result.getArticleTopicCurrent().getId());
+					}
+					return ResponseEntity.created(URI.create("articleTopics/" + id + "/articleContents/" + result.getId()))
+							.body(result);
+				}
 			}
 		}
 		return ResponseEntity.noContent().build();
@@ -83,7 +106,8 @@ public class ArticleContentController {
 			@PathVariable Integer id,
 			@PathVariable Integer contentId,
 			@RequestBody ArticleContentCurrentBean articleContentCurrentBean,
-			BindingResult bindingResult
+			BindingResult bindingResult,
+			HttpSession httpSession
 			){
 		if (
 				(id != null && id.intValue() != 0) && 
@@ -98,10 +122,22 @@ public class ArticleContentController {
 				}
 				return ResponseEntity.noContent().header("errorMsg", errors.toString()).build();
 			}
+//			從httpSession抓出MemberBean資訊
+			MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+			if ((articleContentCurrentBean.getMemberBean() == null)
+					|| (articleContentCurrentBean.getMemberBean().getId() == null)
+//					檢查修文者ID與session中ID是否一致
+					|| (articleContentCurrentBean.getMemberBean().getId() != memberBean.getId())
+					) {
+				return ResponseEntity.notFound().build();
+			}
+			
 			if (
 					(id == articleContentCurrentBean.getArticleTopicCurrent().getId()) &&
 					(contentId == articleContentCurrentBean.getId())					
 					) {
+//				將MemberBean與修文關聯
+				articleContentCurrentBean.setMemberBean(memberBean);
 				ArticleContentCurrentBean result = articleContentCurrentService.update(articleContentCurrentBean);				
 				if (result != null) {
 					return ResponseEntity.ok(result);
@@ -115,9 +151,12 @@ public class ArticleContentController {
 	public ResponseEntity<?> ContentWhoLike(
 			@PathVariable Integer id,
 			@PathVariable Integer contentId,
-			@PathVariable String likeOrDislike
+			@PathVariable String likeOrDislike,
+			HttpSession httpSession
 			) {
-		Integer memberId = 2;
+//		從httpSession抓出MemberBean資訊
+		MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+		Integer memberId = memberBean.getId();
 		Map<Integer, String> result = articleContentCurrentService.contentWhoLike(contentId, memberId, likeOrDislike.toLowerCase());
 		if (result != null) {
 			return ResponseEntity.ok(result);

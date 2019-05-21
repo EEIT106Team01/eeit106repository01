@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01;
 
+import java.io.IOException;
 import java.util.Properties;
 
 import javax.sql.DataSource;
@@ -36,6 +37,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.TopSearchBean;
+import net.ddns.eeitdemo.eeit106team01.utils.FFmpegUtils;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class,
@@ -114,6 +116,22 @@ public class Eeit106team01Application {
 	@Bean
 	public PlatformTransactionManager transactionManager(@Autowired SessionFactory sessionFactory) {
 		return new HibernateTransactionManager(sessionFactory);
+	}
+	
+//	@Bean
+	public FFmpegUtils fFmpegUtils() throws IOException {
+		FFmpegUtils ffu = null;
+		String ffmpegPath = environment.getProperty("path.ffmpeg");
+		String ffprobePath = environment.getProperty("path.ffprobe");
+		if (ffmpegPath != null && ffmpegPath.length() != 0 && ffprobePath != null
+				&& ffprobePath.length() != 0) {
+			System.out.println("use specify path of ffmpeg and ffprobe");
+			ffu = new FFmpegUtils(ffmpegPath, ffprobePath);
+		} else {
+			System.out.println("use default path of ffmpeg and ffprobe");
+			ffu = new FFmpegUtils();
+		}
+		return ffu;
 	}
 
 }
