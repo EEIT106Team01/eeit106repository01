@@ -53,7 +53,7 @@ public class OrderServiceTest extends ShopTest {
 		System.out.println(orderService.findOrdersByMemberId(2L).toString());
 	}
 
-	@Test
+//	@Test
 	public void testCreateReview() throws Exception {
 		List<ReviewBean>reviews = new ArrayList<ReviewBean>();
 		
@@ -73,6 +73,11 @@ public class OrderServiceTest extends ShopTest {
 		reviews.add(review2);
 		
 		System.out.println(orderService.createReview(reviews).size());
+	}
+
+	@Test
+	public void testUpdateOrderStatus() throws Exception {
+		orderService.updateOrderStatus(orderService.findOrdersByMemberId(2L).get(0), "recieved", "paid");
 	}
 
 }

@@ -18,7 +18,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.RefundDAO;
 
 @Repository
-@Transactional
 public class RefundDAOImpl implements RefundDAO {
 
 	@Autowired
@@ -50,6 +49,25 @@ public class RefundDAOImpl implements RefundDAO {
 	public RefundBean findRefundByPrimaryKey(Long id) {
 		if (id != null) {
 			RefundBean result = getSession().get(RefundBean.class, id);
+			if (result != null) {
+				return result;
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<RefundBean> findRefundsByMemberId(Long id) {
+		if (id != null) {
+			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
+			CriteriaQuery<RefundBean> criteriaQuery = criteriaBuilder.createQuery(RefundBean.class);
+			Root<RefundBean> refund = criteriaQuery.from(RefundBean.class);
+			criteriaQuery.select(refund).where(criteriaBuilder.equal(refund.get("memberBeanTest"), id));
+
+			Query<RefundBean> query = getSession().createQuery(criteriaQuery);
+			List<RefundBean> result = query.getResultList();
 			if (result != null) {
 				return result;
 			} else {
@@ -97,6 +115,25 @@ public class RefundDAOImpl implements RefundDAO {
 	public RefundDetailBean findRefundDetailByPrimaryKey(Long id) {
 		if (id != null) {
 			RefundDetailBean result = getSession().get(RefundDetailBean.class, id);
+			if (result != null) {
+				return result;
+			} else {
+				return null;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<RefundDetailBean> findRefundDetailsByRefundId(Long id) {
+		if (id != null) {
+			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
+			CriteriaQuery<RefundDetailBean> criteriaQuery = criteriaBuilder.createQuery(RefundDetailBean.class);
+			Root<RefundDetailBean> refundDetail = criteriaQuery.from(RefundDetailBean.class);
+			criteriaQuery.select(refundDetail).where(criteriaBuilder.equal(refundDetail.get("refundBean"), id));
+
+			Query<RefundDetailBean> query = getSession().createQuery(criteriaQuery);
+			List<RefundDetailBean> result = query.getResultList();
 			if (result != null) {
 				return result;
 			} else {
