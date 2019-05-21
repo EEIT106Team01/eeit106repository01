@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -174,6 +175,16 @@ public class OrderDAOImplTest extends ShopTest {
 	public void testFindReviews() throws Exception {
 		assertNotNull(orderDAO.findReviews());
 		System.out.println(orderDAO.findReviews());
+	}
+
+//	@Test
+	public void testFindOrderByMemberId() throws Exception {
+		System.out.println(orderDAO.findOrderByMemberId(5L).toString());
+	}
+
+	@Test
+	public void testFindOrderDetailsByOrderId() throws Exception {
+		System.out.println(orderDAO.findOrderDetailsByOrderId(12L).size());
 	}
 
 }

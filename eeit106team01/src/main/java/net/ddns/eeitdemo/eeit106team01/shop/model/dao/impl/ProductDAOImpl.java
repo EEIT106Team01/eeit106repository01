@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
+import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -213,6 +214,26 @@ public class ProductDAOImpl implements ProductDAO {
 			return findSNBeanBySerialNumber(serialNumberBean.getSerialNumber());
 		}
 		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SerialNumberBean> findProductsByStatus(String status) {
+		Query query = this.getSession().createQuery(
+				"from SerialNumberBean where availabilityStatus = :availabilityStatus", SerialNumberBean.class);
+		query.setParameter("availabilityStatus", status);
+		return query.getResultList();
+
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<SerialNumberBean> findProductByStatus(Long id, String status) {
+		Query query = this.getSession().createQuery(
+				"from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :ProductBean_Id", SerialNumberBean.class);
+		query.setParameter("availabilityStatus", status);
+		query.setParameter("ProductBean_Id", id);
+		return query.getResultList();
 	}
 
 }

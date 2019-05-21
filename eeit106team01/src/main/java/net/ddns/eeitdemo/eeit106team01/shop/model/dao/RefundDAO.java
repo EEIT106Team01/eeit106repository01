@@ -13,6 +13,8 @@ public interface RefundDAO {
 	abstract RefundBean updateRefund(RefundBean refundBean);
 
 	abstract RefundBean findRefundByPrimaryKey(Long id);
+	
+	abstract List<RefundBean>findRefundsByMemberId(Long id);
 
 	abstract List<RefundBean> findRefunds();
 
@@ -22,6 +24,8 @@ public interface RefundDAO {
 	abstract RefundDetailBean updateRefundDetail(RefundDetailBean refundDetailBean);
 
 	abstract RefundDetailBean findRefundDetailByPrimaryKey(Long id);
+	
+	abstract List<RefundDetailBean> findRefundDetailsByRefundId(Long id);
 
 	abstract List<RefundDetailBean> findRefundDetails();
 

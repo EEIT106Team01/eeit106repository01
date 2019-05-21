@@ -3,6 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberTestDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
@@ -86,12 +88,44 @@ public class OrderService {
 		return null;
 	}
 
-	// Update a Order, Order Details
+	// Update a Order Status
+	public OrderBean updateOrderStatus(OrderBean order, String deliverStatus, String payStatus) {
+		if (order != null && deliverStatus != null && payStatus != null) {
+			order.setUpdatedTime();
+			order.setDeliverStatus(deliverStatus);
+			order.setPayStatus(payStatus);
+			OrderBean result = orderDAO.updateOrder(order);
+			return result;
+		}
+		return null;
+	}
 
-	// Query a Order
-
-	// Query Orders, Order Details
+	// Find Orders by Member Account, by Order id.
+	public List<OrderBean> findOrdersByMemberId(Long memberId) {
+		if (memberId != null) {
+			List<OrderBean> result = orderDAO.findOrderByMemberId(memberId);
+			if (result != null) {
+				return result;
+			}
+		}
+		return null;
+	}
 
 	// Create Review
+	public List<ReviewBean> createReview(List<ReviewBean> reviews) {
+		if (reviews != null) {
+			List<ReviewBean> results = new ArrayList<ReviewBean>();
+			Iterator<ReviewBean> iterator = reviews.iterator();
+			while (iterator.hasNext()) {
+				ReviewBean review = (ReviewBean) iterator.next();
+				review.setCreateTime();
+				review.setUpdatedTime();
+				ReviewBean result = orderDAO.insertReview(review);
+				results.add(result);
+			}
+			return results;
+		}
+		return null;
+	}
 
 }

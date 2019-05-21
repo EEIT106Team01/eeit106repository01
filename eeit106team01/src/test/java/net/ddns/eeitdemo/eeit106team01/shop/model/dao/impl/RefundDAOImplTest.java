@@ -77,9 +77,19 @@ public class RefundDAOImplTest extends ShopTest {
 		assertEquals(refundDAO.findRefundDetailByPrimaryKey(1L).getSerialNumber(), actual);
 	}
 
-	@Test
+//	@Test
 	public void testFindRefundDetails() {
 		System.out.println(refundDAO.findRefundDetails().toString());
+	}
+
+//	@Test
+	public void testFindRefundsByMemberId() throws Exception {
+		System.out.println(refundDAO.findRefundsByMemberId(2L).size());
+	}
+
+	@Test
+	public void testFindRefundDetailsByRefundId() throws Exception {
+		System.out.println(refundDAO.findRefundDetailsByRefundId(6L).size());
 	}
 
 }

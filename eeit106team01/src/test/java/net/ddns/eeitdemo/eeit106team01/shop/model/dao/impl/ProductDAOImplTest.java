@@ -159,5 +159,17 @@ public class ProductDAOImplTest {
 		 newBean.setAvailabilityStatus("sold");
 		System.out.println(productDAO.updateSNStatus(newBean).toString());
 	}
+
+//	@Test
+	public void testFindProductByStatus() throws Exception {
+		System.out.println(productDAO.findProductByStatus(1L, "available"));
+		System.out.println("========================================");
+	}
+
+//	@Test
+	public void testFindProductsByStatus() throws Exception {
+		System.out.println(productDAO.findProductsByStatus("available"));
+		System.out.println("========================================");
+	}
 	
 }

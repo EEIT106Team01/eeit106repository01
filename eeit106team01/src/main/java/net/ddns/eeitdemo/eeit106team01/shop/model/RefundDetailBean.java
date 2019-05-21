@@ -32,7 +32,7 @@ public class RefundDetailBean implements Serializable {
 	@JoinColumn(name = "Refund_Id", columnDefinition = "bigint")
 	private RefundBean refundBean;
 
-	@Column(nullable = false)
+	@Column(nullable = false, updatable = false, unique = true)
 	private String serialNumber;
 
 	@Override
@@ -48,6 +48,22 @@ public class RefundDetailBean implements Serializable {
 		this.id = id;
 	}
 
+	public ProductBean getProductBean() {
+		return productBean;
+	}
+
+	public void setProductBean(ProductBean productBean) {
+		this.productBean = productBean;
+	}
+
+	public RefundBean getRefundBean() {
+		return refundBean;
+	}
+
+	public void setRefundBean(RefundBean refundBean) {
+		this.refundBean = refundBean;
+	}
+
 	public String getSerialNumber() {
 		return serialNumber;
 	}
@@ -55,5 +71,5 @@ public class RefundDetailBean implements Serializable {
 	public void setSerialNumber(String serialNumber) {
 		this.serialNumber = serialNumber;
 	}
-
+	
 }
