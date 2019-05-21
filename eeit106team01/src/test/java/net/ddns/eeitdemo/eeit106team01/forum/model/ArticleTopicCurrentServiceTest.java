@@ -19,6 +19,12 @@ public class ArticleTopicCurrentServiceTest {
 	@Autowired
 	private ArticleTopicCurrentService articleTopicCurrentService;
 	
+	@Autowired
+	private ArticleContentCurrentService articleContentCurrentService;
+	
+	@Autowired
+	private VideoService videoService;
+	
 	@Before
 	public void setUp() throws Exception {
 		System.out.println("test start!");
@@ -45,29 +51,48 @@ public class ArticleTopicCurrentServiceTest {
 
 	@Test
 	public void testInsert() {
-		ArticleTopicCurrentBean topic53 = new ArticleTopicCurrentBean(
-				"文章標題53", // topicHeader
-				"文章類別53", // topicType
-				"高譚市", // topicRegion
-				53, // topicLikeNum
-				null, //topicLikeWho
-				53, // contentReplyNum
-				new java.util.Date(53), // topicCreateTime
-				new java.util.Date(53), // topicUpdateTime
-				"visible53", // topicStatus
-				new java.util.Date(53), // accidentTime
-				"事發位置53", // accidentLocation
-				35.35, // accidentLocationLongitude
-				53.53, // accidentLocationLatitude
-				"主題內文53", // topicContent
-				new java.util.Date(53), // topicContentUpdateTime
-				30, //pageViews
-				"使用者修改53", // updateMessage
-				null, //MemberBean memberBean
-				null //VideoBean videoBean
-		);
-		ArticleTopicCurrentBean insertResult = articleTopicCurrentService.insert(topic53);
-		assertEquals(insertResult.getTopicRegion(), "高譚市");
+		VideoBean videoTest1 = videoService.findByPrimaryKey(1);
+//		ArticleTopicCurrentBean topicTest1 = new ArticleTopicCurrentBean();
+//		ArticleContentCurrentBean contentTest1 = new ArticleContentCurrentBean();
+		ArticleTopicCurrentBean topicTest2 = articleTopicCurrentService.findByPrimaryKey(16);
+		
+//		if(videoTest1 != null) {
+			topicTest2.setVideoBean(videoTest1);
+//			contentTest1.setVideoBean(videoTest1);
+//			contentTest1.setArticleTopicCurrent(topicTest1);
+//		}
+		
+//		ArticleContentCurrentBean result1 = articleContentCurrentService.insert(contentTest1);
+//		if(result1 != null) {
+//			System.out.println("ok");
+//		}else {
+//			System.out.println("so bad");
+//		}
+		
+//		ArticleTopicCurrentBean topic53 = new ArticleTopicCurrentBean(
+//				"文章標題53", // topicHeader
+//				"文章類別53", // topicType
+//				"高譚市", // topicRegion
+//				53, // topicLikeNum
+//				null, //topicLikeWho
+//				53, // contentReplyNum
+//				new java.util.Date(53), // topicCreateTime
+//				new java.util.Date(53), // topicUpdateTime
+//				"visible53", // topicStatus
+//				new java.util.Date(53), // accidentTime
+//				"事發位置53", // accidentLocation
+//				35.35, // accidentLocationLongitude
+//				53.53, // accidentLocationLatitude
+//				"主題內文53", // topicContent
+//				new java.util.Date(53), // topicContentUpdateTime
+//				30, //pageViews
+//				"使用者修改53", // updateMessage
+//				null, //MemberBean memberBean
+//				null //VideoBean videoBean
+//		);
+//		ArticleTopicCurrentBean insertResult = articleTopicCurrentService.insert(topic53);
+//		assertEquals(insertResult.getTopicRegion(), "高譚市");
+		
 	}
 
 	@Test

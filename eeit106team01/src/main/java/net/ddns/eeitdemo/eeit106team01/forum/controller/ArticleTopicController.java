@@ -1,12 +1,18 @@
 package net.ddns.eeitdemo.eeit106team01.forum.controller;
 
 import java.net.URI;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -81,9 +87,97 @@ public class ArticleTopicController {
 	}
 
 	@PostMapping(path = { "/articleTopics" }, consumes = { "application/json" }, produces = { "application/json" })
-	public ResponseEntity<?> postTopic(@RequestBody ArticleTopicCurrentBean requestbody) {
-		ArticleTopicCurrentBean insertResult = articleTopicCurrentService.insert(requestbody);
+	public ResponseEntity<?> postTopic(@RequestBody ArticleTopicCurrentBean requestbody, BindingResult bindingResult) {
 		System.out.println("postTopic method running");
+		System.out.println(requestbody.toString());
+		Map<String, String> errors = new HashMap<String, String>();
+		
+		if(bindingResult != null) {
+			if(bindingResult.hasFieldErrors()) {
+				System.out.println("postTopic binding error");
+				List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+				for (ObjectError bindingError : bindingErrors) {
+					errors.put(bindingError.getObjectName(), bindingError.toString());
+				}
+				return ResponseEntity.badRequest().body(errors);
+			}
+		}
+		
+		if(requestbody.getTopicHeader() != null) {
+			if(requestbody.getTopicHeader().length() == 0) {
+				errors.put("topicHeaderError", "請輸入標題");
+			}
+		}
+		
+		if("shareTopic".equals(requestbody.getTopicType())) {
+//			if(requestbody.getVideoBean() == null) {
+//				errors.put("videoBeanError", "分享文請上傳影片");
+//			}
+		} else if("requestTopic".equals(requestbody.getTopicType())) {
+//			if(requestbody.getVideoBean() != null) {
+//				errors.put("videoBeanError", "協尋文請誤上傳影片");
+//			}
+		} else {
+			errors.put("topicTypeError", "請輸入主題類型");
+		}
+		
+
+		if(!("northernRegion".equals(requestbody.getTopicRegion())
+				|| "centralRegion".equals(requestbody.getTopicRegion())
+				|| "southernRegion".equals(requestbody.getTopicRegion())
+				|| "easternRegion".equals(requestbody.getTopicRegion()))) {
+			errors.put("topicRegionError", "請輸入主題地區分類");
+		}
+		
+		if(requestbody.getAccidentTime() != null) {
+			Calendar inputCalendar = Calendar.getInstance();
+		    Calendar nowCalendar = Calendar.getInstance();
+		    inputCalendar.setTime(requestbody.getAccidentTime());
+		    nowCalendar.setTime(new java.util.Date());
+		    int n = 0;  
+		    while (!inputCalendar.after(nowCalendar)) { // 循環對比，直到相等，n就是想要的結果
+		    	n++;
+	            inputCalendar.add(Calendar.MONTH, 1);   // 比較月份，月份+1
+	        }
+		    System.out.println("相差的月份: " + n);
+		    if (n > 24) {
+		    	errors.put("accidentTimeError", "請輸入兩年內的時間");
+		    	return ResponseEntity.badRequest().body(errors);
+		    }
+		}
+		
+		if(requestbody.getAccidentLocation() != null) {
+			if(requestbody.getAccidentLocation().length() == 0) {
+				errors.put("accidentLocationError", "請輸入事故地點說明");
+			}
+		}
+		
+		if((requestbody.getAccidentLocationLatitude() == null)
+				|| (requestbody.getAccidentLocationLongitude() == null)) {
+			errors.put("accidentLocationCoordinateError", "請在地圖中選取事故地點");
+		}
+		
+		if(requestbody.getTopicContent() != null) {
+			if(requestbody.getTopicContent().length() == 0) {
+				errors.put("topicContentError", "請輸入文章內容");
+			}
+		}
+		
+		if(!errors.isEmpty()) {
+			return ResponseEntity.badRequest().body(errors);
+		}
+		
+		java.util.Date nowDate = new java.util.Date();
+		requestbody.setTopicLikeNum(0);
+		requestbody.setContentReplyNum(0);
+		requestbody.setTopicCreateTime(nowDate);
+		requestbody.setTopicUpdateTime(nowDate);
+		requestbody.setTopicStatus("normal");
+		requestbody.setTopicContentUpdateTime(nowDate);
+		requestbody.setPageViews(0);
+		requestbody.setUpdateMessage("使用者發文");
+		
+		ArticleTopicCurrentBean insertResult = articleTopicCurrentService.insert(requestbody);
 		if (insertResult != null) {
 			return ResponseEntity
 					.created(URI.create(application.getContextPath() + "/articleTopics/" + insertResult.getId()))

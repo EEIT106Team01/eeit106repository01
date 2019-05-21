@@ -86,6 +86,18 @@ public class ArticleTopicCurrentBean {
 		this.videoBean = videoBean;
 	}
 
+	@Override
+	public String toString() {
+		return "ArticleTopicCurrentBean [id=" + id + ", topicHeader=" + topicHeader + ", topicType=" + topicType
+				+ ", topicRegion=" + topicRegion + ", topicLikeNum=" + topicLikeNum + ", topicLikeWho=" + topicLikeWho
+				+ ", contentReplyNum=" + contentReplyNum + ", topicCreateTime=" + topicCreateTime + ", topicUpdateTime="
+				+ topicUpdateTime + ", topicStatus=" + topicStatus + ", accidentTime=" + accidentTime
+				+ ", accidentLocation=" + accidentLocation + ", accidentLocationLongitude=" + accidentLocationLongitude
+				+ ", accidentLocationLatitude=" + accidentLocationLatitude + ", topicContent=" + topicContent
+				+ ", topicContentUpdateTime=" + topicContentUpdateTime + ", pageViews=" + pageViews + ", updateMessage="
+				+ updateMessage + ", memberBean=" + memberBean + ", videoBean=" + videoBean + "]";
+	}
+
 	public Integer getId() {
 		return id;
 	}
