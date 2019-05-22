@@ -42,10 +42,46 @@
 		var memberBean = JSON.parse(Cookies.get("MemberBean"));
 		console.log(memberBean);
 
-		var contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
+		var contentBean = sessionStorage.getItem("contentBean");
 		var contentPage = sessionStorage.getItem("contentPage");
 		var replyType = sessionStorage.getItem("replyType");
+		if (!contentBean || !contentPage || !replyType) {
+			location.href = "/forum/index.html";
+		}
+		contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
 		console.log(contentBean.id);
+
+
+		function quotePassage(deltaPassage, postMemberBean) {
+			let ops = deltaPassage.ops
+			let result = [];
+			result.push({
+				attributes: {
+					"size": "small",
+					"color": "#bbbbbb"
+				},
+				insert: ">> 引述 :  " + postMemberBean.name + "(" + postMemberBean.id + ")\n"
+			});
+			for (let i = 0; i < ops.length; i++) {
+				ops[i].attributes = {
+					"size": "small",
+					"color": "#bbbbbb"
+				};
+				if (typeof ops[i].insert === "string") {
+					if (!(ops[i].insert.match(/\n+/gm))) {
+						ops[i].insert = "-- " + ops[i].insert;
+					}
+				}
+				result.push(ops[i]);
+			}
+			result.push({
+				attributes: {
+				},
+				insert: "\n\n"
+			});
+			console.log(result);
+			return result;
+		}
 
 		// *
 		function preInput() {
@@ -53,12 +89,12 @@
 				$("#contentId").text("Topic : " + contentBean.id);
 				$("#topicTitle").text(contentBean.topicHeader);
 				$("#contentCreateTime").text(contentBean.topicCreateTime);
-				quill.setContents(JSON.parse(contentBean.topicContent));
+				quill.setContents(quotePassage(JSON.parse(contentBean.topicContent), contentBean.memberBean));
 			} else if (replyType == "content") {
 				$("#contentId").text("Content : " + contentBean.id);
 				$("#topicTitle").text(contentBean.articleTopicCurrent.topicHeader);
 				$("#contentCreateTime").text(contentBean.contentCreateTime);
-				quill.setContents(JSON.parse(contentBean.contentContent));
+				quill.setContents(quotePassage(JSON.parse(contentBean.contentContent), contentBean.memberBean));
 			}
 		}
 

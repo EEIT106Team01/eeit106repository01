@@ -26,6 +26,11 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 	public ArticleTopicCurrentBean findByPrimaryKey(int id) {
 		return getSession().get(ArticleTopicCurrentBean.class, id);
 	}
+	
+	@Override
+	public ArticleTopicCurrentBean findByPrimaryKeyAsProxy(int id) {
+		return getSession().load(ArticleTopicCurrentBean.class, id);
+	}
 
 	@Override
 	public List<ArticleTopicCurrentBean> findAll() {

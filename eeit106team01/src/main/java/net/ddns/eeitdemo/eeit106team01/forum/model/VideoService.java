@@ -12,9 +12,15 @@ public class VideoService {
 
 	@Autowired
 	private VideoDAO videoDAO;
+	@Autowired
+	private MemberBeanService memberBeanService;
 
 	public VideoBean findByPrimaryKey(int id) {
 		return videoDAO.findByPrimaryKey(id);
+	}
+
+	public VideoBean findByPrimaryKeyAsProxy(int id) {
+		return videoDAO.findByPrimaryKeyAsProxy(id);
 	}
 
 	public List<VideoBean> findAll() {
@@ -22,6 +28,10 @@ public class VideoService {
 	}
 
 	public VideoBean insert(VideoBean videoBean) throws Exception {
+		if (videoBean != null) {
+			MemberBean memberBean = memberBeanService.findByPrimaryKey(videoBean.getMemberBean().getId());
+			videoBean.setMemberBean(memberBean);
+		}
 		VideoBean result = videoDAO.insert(videoBean);
 //		if (result != null) {
 //			System.out.println("new videoBean id = " + result.getId());
@@ -33,6 +43,8 @@ public class VideoService {
 	public VideoBean update(VideoBean videoBean) {
 		VideoBean vb = this.findByPrimaryKey(videoBean.getId());
 		if (vb != null) {
+			MemberBean memberBean = memberBeanService.findByPrimaryKey(videoBean.getMemberBean().getId());
+			vb.setMemberBean(memberBean);
 			if (videoBean.getVideoURI() != null && videoBean.getVideoURI().length() != 0) {
 				vb.setVideoURI(videoBean.getVideoURI());
 			}

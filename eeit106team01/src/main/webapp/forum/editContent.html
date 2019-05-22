@@ -33,14 +33,25 @@
 
 	<script src="js/uploadVideo.js"></script>
 	<script>
-		var memberBean = JSON.parse(Cookies.get("MemberBean"));
+		var memberBean = Cookies.get("MemberBean");
+		console.log(Cookies.get("MemberBean"));
 		if (!memberBean) {
 			sessionStorage.setItem("previousPage", location.pathname);
 			location.href = "/forum/login.html";
 		}
+		memberBean = JSON.parse(Cookies.get("MemberBean"));
+		console.log(memberBean);
 
-		var contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
+		var contentBean = sessionStorage.getItem("contentBean");
 		var contentPage = sessionStorage.getItem("contentPage");
+		if (!contentBean || !contentPage) {
+			location.href = "/forum/index.html";
+		}
+		contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
+		if (contentBean.memberBean.id != memberBean.id) {
+			location.href = "/forum/index.html";
+		}
+
 		console.log(contentBean.id);
 
 		function preInput() {
