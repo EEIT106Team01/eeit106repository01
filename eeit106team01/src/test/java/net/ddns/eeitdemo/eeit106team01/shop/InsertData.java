@@ -1,15 +1,12 @@
 package net.ddns.eeitdemo.eeit106team01.shop;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,45 +33,22 @@ public class InsertData extends ShopTest {
 	@Autowired
 	private ProductService productService;
 
-	@Test
-	public void testCrawler() {
-		try {
-			String jsonString = ShopCrawler.YahooCrawler("行車紀錄器", 1, 1);
-
-			JSONObject jsonObject = new JSONObject(jsonString);
-			String name = (String) ((JSONObject) ((JSONObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title");
-			String brand = (String) ((JSONObject) ((JSONObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("url");
-			String price = (String) ((JSONObject) ((JSONObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("currentPrice");
-			String imageLink = (String) ((JSONObject) ((JSONObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("url");
-			JSONObject information = (JSONObject) ((JSONObject) ((JSONObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("detailDescription");
-			
-			System.out.println("Name= " + name);
-//			System.out.println("Brand= " + brand);
-			System.out.println("Price= " + price);
-			System.out.println("Link= " + imageLink);
-			System.out.println("information= " + information.toString());
-
-		} catch (IOException | JSONException e) {
-			e.printStackTrace();
-		}
-	}
-
 //	@Test
-	public void insetByCrawler() {
-		ShopCrawler amazonCrawler = new ShopCrawler();
-
-		ArrayList<String> list = amazonCrawler.findProductLinks("Car Recorder", 6, 6, 3);
-
-		int count = 0;
-		for (String string : list) {
-			ProductBean productBean = amazonCrawler.findProductInfos(string, "Car Recorder", 3);
-			if (productBean != null) {
-				productService.insertProduct(productBean);
-				count++;
-			}
-		}
-		System.err.println("Total insert: " + count + "products");
-	}
+//	public void insetByCrawler() {
+//		ShopCrawler amazonCrawler = new ShopCrawler();
+//
+//		ArrayList<String> list = amazonCrawler.findProductLinks("Car Recorder", 6, 6, 3);
+//
+//		int count = 0;
+//		for (String string : list) {
+//			ProductBean productBean = amazonCrawler.findProductInfos(string, "Car Recorder", 3);
+//			if (productBean != null) {
+//				productService.insertProduct(productBean);
+//				count++;
+//			}
+//		}
+//		System.err.println("Total insert: " + count + "products");
+//	}
 
 //	@Test
 	public void insertSN() {

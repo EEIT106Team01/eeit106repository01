@@ -12,7 +12,7 @@
 <body>
     <div id="div">
         <input id="i1" type="text"></input>
-        <button id="b1">button</button>
+        <button id="b1">submit</button>
     </div>
 </body>
 <script>
@@ -28,6 +28,8 @@
                 "class": "my-new-list",
                 html: items.join("")
             }).appendTo("body");
+
+            history.pushState(null, '', '/en/step2');
         });
     });
 </script>

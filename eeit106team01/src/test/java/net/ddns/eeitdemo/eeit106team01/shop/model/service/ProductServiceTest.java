@@ -35,7 +35,7 @@ public class ProductServiceTest {
 		
 		ArrayList<String> array = new ArrayList<String>();
 		array.add("1123567");
-		productBean1.setDescription(array);
+//		productBean1.setDescription(array);
 //		productBean1.setDescription(
 //				"[1080P 全高清 & 170°廣角角度] 卓越的 1080P 全高清分辨率，170° 廣角鏡頭提供您出色的畫質，視野範圍更廣，可有效減少百葉窗點、每個駕駛流程的真實記錄。\r\n"
 //						+ "[SUPER NIGHT VISION] 配備 Advanced Sensor 和 F1.8 寬光圈，收集更多光源，消除即使在低光環境下的輔助光源需求，輕鬆獲得銳利、顏色準確的圖像，為您帶來更明亮的夜晚，而不會產生更明亮的光線。 即使是在晚上，也可以確保圖像的清晰度。\r\n"
@@ -54,7 +54,7 @@ public class ProductServiceTest {
 //		productBean1.setInformation(jsonMap1);
 //		productBean1.setImageLink("https://www.amazon.com/dp/B07GFF7NLB/ref=emc_b_5_i");
 
-		productBean1.setImageLink(jsonMap1);
+//		productBean1.setImageLink(jsonMap1);
 		
 		productService.insertProduct(productBean1);
 	}
@@ -92,7 +92,7 @@ public class ProductServiceTest {
 		System.out.println("------testFindProductByPrimaryKey--------");
 		System.out.println(ProductBean3.getId());
 		System.out.println(ProductBean3.getBrand());
-		System.out.println(ProductBean3.getDescription());
+//		System.out.println(ProductBean3.getDescription());
 		System.out.println(ProductBean3.getImageLink());
 //		System.out.println(ProductBean3.getInformation());
 		System.out.println(ProductBean3.getName());
