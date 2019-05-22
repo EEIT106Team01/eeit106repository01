@@ -15,9 +15,9 @@ public class TopSearchDAOImplTest {
 
 	@Autowired private TopSearchDAO topSearchDAO;
 
-	@Test
+//	@Test
 	public void testInsertTopSearch() {
-		topSearchDAO.insertTopSearch("行車紀錄器");
+//		topSearchDAO.insertTopSearch("行車紀錄器");
 
 	}
 
