@@ -11,12 +11,22 @@ import org.springframework.transaction.annotation.Transactional;
 public class ArticleTopicCurrentService {
 
 	@Autowired
+	private MemberBeanService memberBeanService;
+	
+	@Autowired
+	private VideoService videoService;
+	
+	@Autowired
 	private ArticleTopicCurrentDAO articleTopicCurrentDAO;
 
 	public ArticleTopicCurrentBean findByPrimaryKey(int id) {
 		return articleTopicCurrentDAO.findByPrimaryKey(id);
 	};
-
+	
+	public ArticleTopicCurrentBean findByPrimaryKeyAsProxy(int id) {
+		return articleTopicCurrentDAO.findByPrimaryKeyAsProxy(id);
+	};
+	
 	public List<ArticleTopicCurrentBean> findAll() {
 		return articleTopicCurrentDAO.findAll();
 	};
@@ -42,6 +52,25 @@ public class ArticleTopicCurrentService {
 
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {
 		if (bean != null) {
+			//要改成用MemberBean的Service?
+//			MemberBean topicMemberBean = bean.getMemberBean();
+			System.err.println("before select memberBean");
+			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId().intValue());
+			System.err.println("after select memberBean");
+			
+			System.err.println("before set memberBean in topic");
+			bean.setMemberBean(memberBean);
+			System.err.println("after set memberBean in topic");
+			
+			System.err.println("before set videoBean in topic");
+			if(bean.getVideoBean() != null && bean.getVideoBean().getId() != null) {
+				VideoBean videoBean = videoService.findByPrimaryKey(bean.getVideoBean().getId().intValue());
+				bean.setVideoBean(videoBean);
+			}
+			System.err.println("after set videoBean in topic");
+//			System.err.println("before set memberBean in video");
+//			bean.getVideoBean().setMemberBean(memberBean);
+//			System.err.println("after set memberBean in video");
 			return articleTopicCurrentDAO.insert(bean);
 		}
 		return null;
