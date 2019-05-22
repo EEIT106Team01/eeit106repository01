@@ -2,50 +2,36 @@
 <html lang="en">
 
 <head>
-	<title>PostTopic</title>
+	<title>EditTopic</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<!-- google map -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
-	<!-- datetime picker -->
-	
+
 	<script>
-		$(window).on('load', initMap);
-		let marker;
-		let accidentLocationLatitude;
-		let accidentLocationLongitude;
-		let topicBean = JSON.parse(sessionStorage.getItem("contentBean"));
-		let contentPage = sessionStorage.getItem("contentPage");
-		// console.log(contentBean.id);
+		var contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
+		var contentPage = sessionStorage.getItem("contentPage");
+		console.log(contentBean.id);
 
 		function preInput() {
-			$("#topicHeader").val(topicBean.topicHeader);
-			$("#" + topicBean.topicType).prop("checked", true);
-			$("#" + topicBean.topicRegion).prop("selected", true);
-			$("#accidentTime").val(topicBean.accidentTime);
-			$("#accidentLocation").val(topicBean.accidentLocation);
-			//marker preInput is in initMap()
-			$("#topicContent").val(topicBean.topicContent);
-
-			// $("#contentCreateTime").text(contentBean.contentCreateTime);
-			if (topicBean.videoBean) {
-				$("#videoURI").text(topicBean.videoBean.videoURI);
+			$("#contentId").text(contentBean.id);
+			$("#topicTitle").text(contentBean.articleTopicCurrent.topicHeader);
+			$("#contentCreateTime").text(contentBean.contentCreateTime);
+			$("#contentContent").val(contentBean.contentContent);
+			if (contentBean.videoBean) {
+				$("#videoURI").text(contentBean.videoBean.videoURI);
 			}
-
-			$("input[name=contentStatus][value='" + topicBean.contentStatus + "']").attr("checked", true);
-			// $("#updateMessage").val(contentBean.updateMessage);
-
+			$("input[name=contentStatus][value='" + contentBean.contentStatus + "']").attr("checked", true);
+			$("#updateMessage").val(contentBean.updateMessage);
 		}
-		
-		function updateOrDeleteContentBean(newTopicBean, httpMethod) {
+
+		function updateOrDeleteContentBean(newContentBean, httpMethod) {
 			$.ajax({
-				url: "/articleTopics/" + newTopicBean.id,
+				url: "/articleTopics/" + newContentBean.articleTopicCurrent.id + "/articleContents/" + newContentBean.id,
 				method: httpMethod,
-				data: JSON.stringify(newTopicBean),
+				data: JSON.stringify(newContentBean),
 				contentType: "application/json; charset=UTF-8",
 				dataType: "json",
 				success: function (data, textStatus, jqXHR) {
@@ -62,55 +48,49 @@
 			})
 		}
 
-		let videoUploadResult = null;
+		var videoUploadResult = null;
 
-		// *
 		function submit() {
 			$("#submit").attr('disabled', true);
 			$(".formField").attr("disabled", true);
-			let newVideoBean = null;
-			newVideoBean = $("#videoBean").val();
-			let newTopicBean = {
-				topicHeader: $("#topicHeader").val(),
-				topicType: $("input[name=topicType]:checked").val(),
-				topicRegion: $("#topicRegion option:selected" ).val(),
-				accidentTime: $("#accidentTime").val(),
-				accidentLocation: $("#accidentLocation").val(),
-				accidentLocationLatitude: accidentLocationLatitude,
-				accidentLocationLongitude: accidentLocationLongitude,
-				topicContent: $("#topicContent").val(),
-				memberBean: null,
-				videoBean: newVideoBean
-			};
-			console.log("topicHeader:" + newTopicBean.topicHeader);
-			console.log("topicType:" + newTopicBean.topicType);
-			console.log("topicRegion:" + newTopicBean.topicRegion);
-			console.log("accidentTime:" + newTopicBean.accidentTime);
-			console.log("accidentLocation:" + newTopicBean.accidentLocation);
-			console.log("accidentLocationLatitude:" + newTopicBean.accidentLocationLatitude);
-			console.log("accidentLocationLongitude:" + newTopicBean.accidentLocationLongitude);
-			console.log("topicContent:" + newTopicBean.topicContent);
-			console.log("memberBean:" + newTopicBean.memberBean);
-			console.log("videoBean:" + newTopicBean.videoBean);
-			// var httpMethod = "POST";
-			if (newVideoBean) {
-				console.log("videoBean 不為空");
-				upload();
-				let checkVideo = setInterval(function () {
-					if (videoUploadResult) {
-						clearInterval(checkVideo);
-						console.log("videoUploadResult: " + videoUploadResult);
-						newTopicBean.videoBean = videoUploadResult;
-						updateOrDeleteContentBean(newTopicBean);
-					} else {
-						console.log("videoUploadResult: " + videoUploadResult);
-					}
-				}, 1000);
+			var newContentBean = JSON.parse(JSON.stringify(contentBean));
+			var httpMethod = "";
+			var contentContent = $("#contentContent").val();
+			console.log("contentContent: " + contentContent);
+			var videoBean = $("#videoBean").val();
+			console.log("videoBean: " + videoBean);
+			var contentStatus = $("input[name=contentStatus]:checked").val();
+			console.log("contentStatus: " + contentStatus);
+			var updateMessage = $("#updateMessage").val();
+			console.log("updateMessage: " + updateMessage);
+			if ($("input[name=contentStatus]:checked").val() == "deleted") {
+				console.log($("input[name=contentStatus]:checked").val());
+				newContentBean.contentStatus = contentStatus;
+				httpMethod = "DELETE";
+				updateOrDeleteContentBean(newContentBean, httpMethod);
 			} else {
-				console.log(newTopicBean);
-				updateOrDeleteContentBean(newTopicBean);
+				newContentBean.contentContent = contentContent;
+				newContentBean.contentStatus = contentStatus;
+				newContentBean.updateMessage = updateMessage;
+				httpMethod = "PUT";
+				if (videoBean) {
+					console.log("videoBean 不為空");
+					upload();
+					let checkVideo = setInterval(function () {
+						if (videoUploadResult) {
+							clearInterval(checkVideo);
+							console.log("videoUploadResult: " + videoUploadResult);
+							newContentBean.videoBean = videoUploadResult;
+							updateOrDeleteContentBean(newContentBean, httpMethod);
+						} else {
+							console.log("videoUploadResult: " + videoUploadResult);
+						}
+					}, 1000);
+				} else {
+					console.log(newContentBean);
+					updateOrDeleteContentBean(newContentBean, httpMethod);
+				}
 			}
-
 		}
 
 		document.addEventListener("DOMContentLoaded", function () {
@@ -216,52 +196,6 @@
 		function canceledHandle(e) {
 			$('.progress-body .progress-info').html("上傳檔案取消。");
 		};
-		
-		//顯示Google Map
-		function initMap() {
-			console.log("initMap ok");
-            let map = new google.maps.Map(document.getElementById("map_canvas"), {
-                zoom: 13
-                , center: { lat: 25.033793, lng: 121.543427 }
-                , scaleControl: true
-            });
-			
-			// for preInput()
-			marker = 
-				new google.maps.Marker({
-					position: {
-						lat: topicBean.accidentLocationLatitude,
-						lng: topicBean.accidentLocationLongitude
-					}
-					, map: map
-					// , label: `${dataTopicList[i].id}`
-					, animation: google.maps.Animation.BOUNCE    //for marker remove check
-				});
-
-            google.maps.event.addListener(map, 'click', function (event) {
-            //    console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
-				// $("#accidentLocationLatitude").html(event.latLng.lat());
-				// $("#accidentLocationLongitude").html(event.latLng.lng());
-				accidentLocationLatitude = event.latLng.lat();
-				accidentLocationLongitude = event.latLng.lng();
-
-				if(marker != undefined){
-					marker.setMap(null);
-				}
-				marker = 
-                    new google.maps.Marker({
-                        position: {
-                            lat: event.latLng.lat(),
-                            lng: event.latLng.lng()
-                        }
-                        , map: map
-                        // , label: `${dataTopicList[i].id}`
-                        , animation: google.maps.Animation.BOUNCE    //for marker remove check
-                    });
-            });
-        }
-
-
 	</script>
 </head>
 
@@ -295,20 +229,36 @@
 				<form>
 					<fieldset class="formField">
 						<div class="form-group">
+							
+							<!-- <div class="card" id='"topic" + topicBean.id' style="minWidth:320px; margin:1%;">
+								<div class="card-header">
+									"[" + topicBean.topicType + "] " +
+									topicBean.topicHeader + "<br>" +
+									"<dl><dt>作者</dt><dd>- " + topicBean.memberBean.name + "</dd><dl>"
+								</div>
+								<div class="card-body">
+									topicBean.topicContent;
+								</div>
+								<div class="card-footer">
+									"contentUpdateTime: " + topicBean.topicUpdateTime +
+									"<br>contentLikeNum: " + topicBean.topicLikeNum
+								</div>
+							</div> -->
+
 							<label for="topicHeader"><h4>標題: </h4></label>
 								<input type="text" name="topicHeader" id="topicHeader"><br>
 							<label><h4>文章類型: </h4></label>
-								<input type="radio" name="topicType" id="shareTopic" value="shareTopic" checked="checked">分享文
-								<input type="radio" name="topicType" id="requestTopic" value="requestTopic">協尋文<br>
+								<input type="radio" name="topicType" value="shareTopic" checked="checked">分享文
+								<input type="radio" name="topicType" value="requestTopic">協尋文<br>
 							<label><h4>地區分類: </h4></label> 北部區域：包括臺北市、新北市、基隆市、新竹市、桃園市、新竹縣及宜蘭縣。
 													中部區域：包括臺中市、苗栗縣、彰化縣、南投縣及雲林縣。
 													南部區域：包括高雄市、臺南市、嘉義市、嘉義縣、屏東縣及澎湖縣。
 													東部區域：包括花蓮縣及臺東縣。<br>
 								<select name="topicRegion" id="topicRegion">
-									<option id="northernRegion" value="northernRegion">北部區域</option>
-									<option id="centralRegion" value="centralRegion">中部區域</option>
-									<option id="southernRegion" value="southernRegion">南部區域</option>
-									<option id="easternRegion" value="easternRegion">東部區域</option>
+									<option value="northernRegion">北部區域</option>
+									<option value="centralRegion">中部區域</option>
+									<option value="southernRegion">南部區域</option>
+									<option value="easternRegion">東部區域</option>
 								</select><br>
 							<label for="accidentTime"><h4>事故時間: </h4></label>
 								<input type="text" name="accidentTime" id="accidentTime"><br>
@@ -316,8 +266,6 @@
 								<input type="text" name="accidentLocation" id="accidentLocation"><br>
 							<label><h4>請在地圖中選取事故地點: </h4></label>
 							<div id="map_canvas" style="width:600px; height:500px;"></div>
-								<!-- 緯度:<span id="accidentLocationLatitude"></span><br>
-								經度:<span id="accidentLocationLongitude"></span><br> -->
 							<label>文章內容: </label><br>
 								<textarea name="topicContent" id="topicContent" class="form-control" rows="8" cols="80" style="resize:none;" placeholder="請輸入文章內容"></textarea><br>
 						</div>
@@ -347,26 +295,27 @@
 							class="progress-info">請選擇檔案並點擊上傳按鈕</span>
 					</div>
 				</div>
-				<hr>
 				<form>
 					<fieldset class="formField">
 						<hr>
-						<label>
+						<!-- <label>
 							<h4>狀態(管理員功能)： </h4>
 							<div class="form-check-inline">
 								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="contentStatus" value="normal">Normal
+									<input type="radio" class="form-check-input" name="contentStatus"
+										value="normal">Normal
 								</label>
 							</div>
 							<div class="form-check-inline">
 								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="contentStatus" value="deleted">Deleted
+									<input type="radio" class="form-check-input" name="contentStatus"
+										value="deleted">Deleted
 								</label>
 							</div>
 						</label><br>
 						<label>
 							<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
-						</label><br>
+						</label><br> -->
 						<hr>
 						<input type="button" class="form-control" value="submit" id="submit" />
 					</fieldset>

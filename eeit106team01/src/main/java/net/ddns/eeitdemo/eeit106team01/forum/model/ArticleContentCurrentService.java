@@ -35,7 +35,7 @@ public class ArticleContentCurrentService {
 
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
-			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
+			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKeyAsProxy(bean.getArticleTopicCurrent().getId());
 			MemberBean memberBean = memberBeanService.findByPrimaryKeyAsProxy(bean.getMemberBean().getId());
 			bean.setArticleTopicCurrent(articleTopicCurrentBean);
 			bean.setMemberBean(memberBean);
