@@ -1,20 +1,138 @@
 package net.ddns.eeitdemo.eeit106team01.shop.util;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 
-public class AmazonCrawler {
+public class ShopCrawler {
+	
+	// UserAgents
+	private static String userAgentChrome = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36";
+	private static String userAgentMozilla = "Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201";
+	private static String userAgentIe = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko";
+	private static String userAgentEdge = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.9200";
+	private static String userAgentSafari = "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25";
+
+	// Referrer
+	@SuppressWarnings("unused")
+	private static String referrerGoogle = "https://www.google.com/";
+	private static String referrerYahooTW = "https://tw.yahoo.com/";
+
+	//@formatter:off
+	public static String YahooCrawler(String fetchProductName, Integer fetchStartPage, Integer fetchEndPage) throws IOException {
+		String result = null;
+		
+		// @formatter:on
+		// Random User Agent
+		String userAgent;
+		Integer randomNum = (int) (Math.random() * 5 + 1);
+		if (randomNum == 1) {
+			userAgent = userAgentChrome;
+		} else if (randomNum == 2) {
+			userAgent = userAgentMozilla;
+		} else if (randomNum == 3) {
+			userAgent = userAgentIe;
+		} else if (randomNum == 4) {
+			userAgent = userAgentEdge;
+		} else {
+			userAgent = userAgentSafari;
+		}
+
+		Integer currentPage = 0;
+		for (currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
+		//@formatter:off
+		StringBuffer URL = new StringBuffer("https://tw.buy.yahoo.com/search/product?p=")
+							   .append(fetchProductName)
+							   .append("&pg=").append(currentPage);
+
+		Document xmlDoc = Jsoup
+						  .connect(URL.toString())
+						  .userAgent(userAgent)
+						  .referrer(referrerYahooTW)
+						  .get();
+
+			// @formatter:on
+			// Fetch product's links from query page
+			Elements productLinks = xmlDoc.select("li[data-imprsn] a[href]");
+			ArrayList<String> links = new ArrayList<String>();
+
+			if (!productLinks.isEmpty()) {
+				Integer productNum = 1;
+
+				for (Element element : productLinks) {
+					String productLink = element.attr("href");
+					System.err.printf("P.%d___No.%d___\r", currentPage, productNum++);
+					System.err.println(productLink);
+					links.add(productLink);
+				}
+
+				// Fetch product info from each links
+				//@formatter:off
+				Document productXmlDoc = Jsoup
+						.connect(links.get(0))
+						.userAgent(userAgent)
+						.referrer(referrerYahooTW)
+						.get();
+					
+				// @formatter:off
+//				Elements name = productXmlDoc.select(".HeroInfo__title___2cEgL HeroInfo__textTooLong___39Fck");
+//				Elements price = productXmlDoc.select(".HeroInfo__mainPrice___H9A5r");
+				Elements information = productXmlDoc.select("#isoredux-data");// data-state
+//				Elements imageLink = productXmlDoc.select("meta[property=og:image]");// content
+				
+//				ProductBean product = new ProductBean();				
+				
+//				if (!name.isEmpty() && !price.isEmpty() && !information.isEmpty() && !information.isEmpty()) {
+//					for (Element element : name) {
+//						product.setName(element.text());
+//					}
+//					for (Element element : price) {
+//						product.setPrice(Integer.valueOf(element.text().replace('$', ' ').trim()));
+//					}
+					for (Element element : information) {
+						result = element.attr("data-state");
+					}
+//					for (Element element : imageLink) {
+//						HashMap<String, String> hashMap = new HashMap<String, String>();
+//						hashMap.put(element.cssSelector(), element.attr("content"));
+//						product.setImageLink(hashMap);
+//					}
+//				}
+//				Elements description = productXmlDoc.select(".ShoppingProductFeatures__productFeatureWrapper___1D0EZ li");
+//				if (!description.isEmpty()) {
+//					for (Element element : description) {
+//							element.text();
+//					}
+//				}
+				
+//				System.err.printf("name= %s\r" 
+//								+ "price= %s\r" 
+//								+ "description= %s\r" 
+//								+ "information= %s\r"
+//								+ "imageLink= %s\r", name.text(), price.text(), description.text(), information.attr("data-state"), imageLink.attr("content"));
+				
+			}
+		}
+
+		return result;
+	}
 
 	// Get Products
 	public ProductBean findProductInfos(String productLink, String productType, int userAgentNo) {
+
 		String userAgent;
 		if (userAgentNo == 1) {
 			userAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/51.0.2704.79 Safari/537.36 Edge/14.14931";
@@ -139,8 +257,6 @@ public class AmazonCrawler {
 
 				Elements link = doc.select("div[data-index]");
 				for (int nodeCount = 0; nodeCount < link.size(); nodeCount++) {
-//				System.out.println("=========================" + nodeCount + "=========================");
-//				System.out.println("LINK: " + "https://www.amazon.com/dp/" + link.get(nodeCount).attr("data-asin"));
 					list.add(link.get(nodeCount).attr("data-asin"));
 				}
 			} catch (IOException e) {

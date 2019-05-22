@@ -2,7 +2,6 @@ package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
 import java.net.URI;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 
 @RestController
@@ -44,7 +42,7 @@ public class ProductController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@GetMapping(
 			path = { "/products/totalSold" }, 
 			produces = { "application/json" })
