@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentService;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
 
 @RestController
 public class ArticleTopicController {
@@ -87,7 +89,7 @@ public class ArticleTopicController {
 	}
 
 	@PostMapping(path = { "/articleTopics" }, consumes = { "application/json" }, produces = { "application/json" })
-	public ResponseEntity<?> postTopic(@RequestBody ArticleTopicCurrentBean requestbody, BindingResult bindingResult) {
+	public ResponseEntity<?> postTopic(@RequestBody ArticleTopicCurrentBean requestbody, BindingResult bindingResult, HttpSession httpSession) {
 		System.out.println("postTopic method running");
 		System.out.println(requestbody.toString());
 		Map<String, String> errors = new HashMap<String, String>();
@@ -101,6 +103,14 @@ public class ArticleTopicController {
 				}
 				return ResponseEntity.badRequest().body(errors);
 			}
+		}
+		
+		MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+		if((requestbody.getMemberBean() == null)
+				|| requestbody.getMemberBean().getId() == null
+				|| requestbody.getMemberBean().getId().intValue() != memberBean.getId().intValue()) {
+//			errors.put("loginError", "請先登入");
+			System.err.println("請先登入");
 		}
 		
 		if(requestbody.getTopicHeader() != null) {
@@ -145,7 +155,7 @@ public class ArticleTopicController {
 		    	return ResponseEntity.badRequest().body(errors);
 		    }
 		}
-		
+			
 		if(requestbody.getAccidentLocation() != null) {
 			if(requestbody.getAccidentLocation().length() == 0) {
 				errors.put("accidentLocationError", "請輸入事故地點說明");

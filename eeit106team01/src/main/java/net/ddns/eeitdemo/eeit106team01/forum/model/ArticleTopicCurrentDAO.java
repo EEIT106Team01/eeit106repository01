@@ -5,6 +5,8 @@ import java.util.List;
 public interface ArticleTopicCurrentDAO {
 	
 	public ArticleTopicCurrentBean findByPrimaryKey(int id);
+	
+	public ArticleTopicCurrentBean findByPrimaryKeyAsProxy(int id);
 
 	public List<ArticleTopicCurrentBean> findAll();
 	

@@ -2,22 +2,55 @@
 <html lang="en">
 
 <head>
-	<title>PostContent</title>
+	<title>PostTopic</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<!-- cookie -->
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<!-- google map -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
 	<!-- datetime picker -->
+
+	<!-- Main Quill library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script src="/forum/quill/quill.js"></script>
+	<script src="/forum/quill/quill.min.js"></script>
+
+	<!-- Theme included stylesheets -->
+	<link href="/forum/quill/quill.snow.css" rel="stylesheet">
+	<link href="/forum/quill/quill.bubble.css" rel="stylesheet">
 	
+	<style>
+		body>#standalone-container {
+			margin: 50px auto;
+			max-width: 720px;
+		}
+
+		#editor-container {
+			height: 350px;
+		}
+	</style>
+
+	<script src="js/uploadVideo.js"></script>
 	<script>
 		$(window).on('load', initMap);
 		let marker;
 		let accidentLocationLatitude;
 		let accidentLocationLongitude;
+		let quill;
+		let memberBean = Cookies.get("MemberBean");
+		console.log("CookieMember: " + memberBean);
+		if (!memberBean) {
+			sessionStorage.setItem("previousPage", location.pathname);
+			location.href = "/forum/login.html";
+		}
+		memberBean = JSON.parse(Cookies.get("MemberBean"));
+		console.log(memberBean);
 		// var contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
 		// var contentPage = sessionStorage.getItem("contentPage");
 		// var replyType = sessionStorage.getItem("replyType");
@@ -33,6 +66,8 @@
 				success: function (data, textStatus, jqXHR) {
 					console.log("success");
 					console.log("回傳值 : " + data);
+					// console.log("textStatus : " + textStatus);
+					// console.log("jqXHR : " + jqXHR);
 					// sessionStorage.removeItem("contentBean");
 					// sessionStorage.removeItem("contentPage");
 					// location.href = contentPage;
@@ -40,7 +75,9 @@
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log("error");
-					console.log(textStatus);
+					// console.log("jqXHRresponseText: " + jqXHR.responseText);
+					// console.log("textStatus: " + textStatus);
+					// console.log("errorThrown: " + errorThrown);
 				}
 			})
 		}
@@ -50,9 +87,12 @@
 		// *
 		function submit() {
 			$("#submit").attr('disabled', true);
+			quill.enable(false);
 			$(".formField").attr("disabled", true);
-			let newVideoBean = null;
-			newVideoBean = $("#videoBean").val();
+			let newVideoBean = $("#videoBean").val();
+			if(newVideoBean == ""){
+				newVideoBean = null;
+			}
 			let newTopicBean = {
 				topicHeader: $("#topicHeader").val(),
 				topicType: $("input[name=topicType]:checked").val(),
@@ -61,9 +101,9 @@
 				accidentLocation: $("#accidentLocation").val(),
 				accidentLocationLatitude: accidentLocationLatitude,
 				accidentLocationLongitude: accidentLocationLongitude,
-				topicContent: $("#topicContent").val(),
-				memberBean: null,
-				videoBean: null
+				topicContent: JSON.stringify(quill.getContents()),
+				memberBean: memberBean,
+				videoBean: newVideoBean
 			};
 			console.log("topicHeader:" + newTopicBean.topicHeader);
 			console.log("topicType:" + newTopicBean.topicType);
@@ -73,8 +113,9 @@
 			console.log("accidentLocationLatitude:" + newTopicBean.accidentLocationLatitude);
 			console.log("accidentLocationLongitude:" + newTopicBean.accidentLocationLongitude);
 			console.log("topicContent:" + newTopicBean.topicContent);
-			console.log("memberBean:" + newTopicBean.memberBean);
-			console.log("videoBean:" + newTopicBean.videoBean);
+			console.log("memberBean: ");
+			console.log(newTopicBean.memberBean);
+			console.log("videoBean is null? :" + newTopicBean.videoBean);
 			// var httpMethod = "POST";
 			if (newVideoBean) {
 				console.log("videoBean 不為空");
@@ -82,11 +123,14 @@
 				let checkVideo = setInterval(function () {
 					if (videoUploadResult) {
 						clearInterval(checkVideo);
-						console.log("videoUploadResult: " + videoUploadResult);
+						console.log("videoUploadResult: ");
+						console.log(videoUploadResult);
 						newTopicBean.videoBean = videoUploadResult;
+						console.log("videoBean: ok");
 						insertTopic(newTopicBean);
 					} else {
-						console.log("videoUploadResult: " + videoUploadResult);
+						console.log("videoUploadResult: ");
+						console.log(videoUploadResult);
 					}
 				}, 1000);
 			} else {
@@ -95,109 +139,20 @@
 			}
 
 		}
-
+		
+		
 		document.addEventListener("DOMContentLoaded", function () {
 			document.getElementById("submit").addEventListener("click", submit);
+			//<!-- Initialize Quill editor -->
+			quill = new Quill('#editor-container', {
+				modules: {
+					formula: true,
+					syntax: true,
+					toolbar: '#toolbar-container'
+				},
+				theme: 'snow'
+			});
 		})
-
-		function upload() {
-			$("#msg").text("");
-			var checkFile = $("#videoBean").val();
-			var msgInfo = "";
-			if (null == checkFile || "" == checkFile) {
-				$("#msg").text("檔案不存在，請檢查檔案！");
-			} else {
-				$("#videoBean").attr('disabled', true);
-				var formData = new FormData(document.getElementById("FileuploadForm"));
-				$.ajax({
-					type: "POST",
-					enctype: 'multipart/form-data',
-					url: '/videos',
-					data: formData,
-					cache: false,
-					processData: false,
-					contentType: false,
-					error: function (result) {
-						console.log("error");
-						console.log(result);
-						flag = false;
-						$("#msg").text("連接伺服器錯誤，請重試");
-					},
-					success: function (data, textStatus, jqXHR) {
-						console.log("data = " + data);
-						console.log("jqXHR.status = " + jqXHR.status);
-						console.log("jqXHR.getResponseHeader('location') = " + jqXHR.getResponseHeader('location'));
-						if (jqXHR.status === 201) {
-							console.log("success");
-							videoUploadResult = data;
-						} else if (jqXHR.status === 204) {
-							console.log("upload error, http status code = 204");
-							console.log("jqXHR.getResponseHeader('errorMsg') = " + jqXHR.getResponseHeader('location'));
-						}
-					},
-					xhr: function () {
-						var xhr = $.ajaxSettings.xhr();
-						if (xhr.upload) {
-							//監聽處理事件
-							xhr.upload.addEventListener("progress", progressHandle, false);
-							//監聽完成事件
-							xhr.addEventListener("load", completeHandle, false);
-							//監聽錯誤事件
-							xhr.addEventListener("error", failedHandle, false);
-							//監聽取消事件
-							xhr.addEventListener("abort", canceledHandle, false);
-							//開始顯示進度條
-							showProgress();
-							return xhr;
-						}
-					}
-				}, 'json');
-			}
-		}
-		var start = 0;
-		//顯示進度條
-		function showProgress() {
-			start = new Date().getTime();
-			$(".progress-body").css("display", "block");
-		}
-		//隱藏進度條
-		function hideProgress() {
-			$("#videoBean").val('');
-			$('.progress-body .progress-speed').html("0 M/S, 0/0M");
-			$('.progress-bar').css("width", "0%");
-			$('.progress-body .progress-info').html("請選擇上傳檔案，並點擊上傳檔案按鈕");
-			$("#submit").attr('disabled', false);
-			$(".progress-body").css("display", "none");
-		}
-		//進度條更新
-		function progressHandle(e) {
-			var percent = e.loaded / e.total * 100;
-			var time = ((new Date().getTime() - start) / 1000).toFixed(3);
-			if (time == 0) {
-				time = 1;
-			}
-			$('.progress-body .progress-speed').html(((e.loaded / 1024) / 1024 / time).toFixed(2) + "M/S, " + ((e.loaded / 1024) / 1024).toFixed(2) + "/" + ((e.total / 1024) / 1024).toFixed(2) + " MB. ");
-			$('.progress-bar').css("width", percent.toFixed(2) + "%");
-			$('.percentage').html(percent.toFixed(2) + "%");
-			if (percent == 100) {
-				$('.progress-body .progress-info').html("上傳完成，檔案處理中...");
-			} else {
-				$('.progress-body .progress-info').html("檔案上傳中...");
-			}
-		};
-		//上傳完成處理
-		function completeHandle(e) {
-			$('.progress-body .progress-info').html("上傳檔案完成。");
-			setTimeout(hideProgress, 2000);
-		};
-		//上傳出錯處理
-		function failedHandle(e) {
-			$('.progress-body .progress-info').html("上傳檔案出錯，檔案過大或服務不可用。");
-		};
-		//上傳取消處理
-		function canceledHandle(e) {
-			$('.progress-body .progress-info').html("上傳檔案取消。");
-		};
 		
 		//顯示Google Map
 		function initMap() {
@@ -260,18 +215,17 @@
 			<div class="card-header">
 
 			</div>
+
 			<div class="card-body">
 				<form>
 					<fieldset class="formField">
 						<div class="form-group">
-							<!-- <label>
-								<h4>文章ID： <span id="contentId" class="badge badge-light"></span></h4>
-							</label><br> -->
-							<label for="topicHeader"><h4>標題: </h4></label>
-								<input type="text" name="topicHeader" id="topicHeader"><br>
+							<label><h4>標題: </h4>
+								<input type="text" name="topicHeader" id="topicHeader">
+							</label><br>
 							<label><h4>文章類型: </h4></label>
-								<input type="radio" name="topicType" value="shareTopic" checked="checked">分享文
-								<input type="radio" name="topicType" value="requestTopic">協尋文<br>
+								<input type="radio" name="topicType" id="shareTopic" value="shareTopic" checked="checked">分享文
+								<input type="radio" name="topicType" id="requestTopic" value="requestTopic">協尋文<br>
 							<label><h4>地區分類: </h4></label> 北部區域：包括臺北市、新北市、基隆市、新竹市、桃園市、新竹縣及宜蘭縣。
 													中部區域：包括臺中市、苗栗縣、彰化縣、南投縣及雲林縣。
 													南部區域：包括高雄市、臺南市、嘉義市、嘉義縣、屏東縣及澎湖縣。
@@ -282,21 +236,71 @@
 									<option value="southernRegion">南部區域</option>
 									<option value="easternRegion">東部區域</option>
 								</select><br>
-							<label for="accidentTime"><h4>事故時間: </h4></label>
-								<input type="text" name="accidentTime" id="accidentTime"><br>
-							<label for="accidentLocation"><h4>事故地點說明: </h4></label>
-								<input type="text" name="accidentLocation" id="accidentLocation"><br>
+							<label><h4>事故時間: </h4>
+								<input type="text" name="accidentTime" id="accidentTime">
+							</label><br>
+							<label><h4>事故地點說明: </h4>
+								<input type="text" name="accidentLocation" id="accidentLocation">
+							</label><br>
 							<label><h4>請在地圖中選取事故地點: </h4></label>
 							<div id="map_canvas" style="width:600px; height:500px;"></div>
-								<!-- 緯度:<span id="accidentLocationLatitude"></span><br>
-								經度:<span id="accidentLocationLongitude"></span><br> -->
 							<label>文章內容: </label><br>
-								<textarea name="topicContent" id="topicContent" class="form-control" rows="8" cols="80" style="resize:none;" placeholder="請輸入文章內容"></textarea><br>
+							<div id="standalone-container">
+								<div id="toolbar-container">
+									<span class="ql-formats">
+										<select class="ql-font"></select>
+										<select class="ql-size"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-bold"></button>
+										<button class="ql-italic"></button>
+										<button class="ql-underline"></button>
+										<button class="ql-strike"></button>
+									</span>
+									<span class="ql-formats">
+										<select class="ql-color"></select>
+										<select class="ql-background"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-script" value="sub"></button>
+										<button class="ql-script" value="super"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-header" value="1"></button>
+										<button class="ql-header" value="2"></button>
+										<button class="ql-blockquote"></button>
+										<button class="ql-code-block"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-list" value="ordered"></button>
+										<button class="ql-list" value="bullet"></button>
+										<button class="ql-indent" value="-1"></button>
+										<button class="ql-indent" value="+1"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-direction" value="rtl"></button>
+										<select class="ql-align"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-link"></button>
+										<button class="ql-image"></button>
+										<button class="ql-video"></button>
+										<button class="ql-formula"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-clean"></button>
+									</span>
+								</div>
+								<div id="editor-container"></div>
+							</div>
+							<br>
+						</div>
 					</fieldset>
 				</form>
-				<h4>影片： <span id="videoURI" class="badge badge-light"></span></h4>
-				<form id="FileuploadForm"><input type="file" class="form-control-file border" id="videoBean"
-						name="videoFile" /></form>
+				<label>
+					<h4>影片： <span id="videoURI" class="badge badge-light"></span></h4>
+					<form id="FileuploadForm"><input type="file" class="form-control-file border" id="videoBean"
+							name="videoFile" /></form>
 				</label><br>
 
 
@@ -318,31 +322,36 @@
 					</div>
 				</div>
 				<hr>
-				<!-- <label>
-						<h4>狀態(管理員功能)： </h4>
-						<div class="form-check-inline">
-							<label class="form-check-label">
-								<input type="radio" class="form-check-input" name="contentStatus" value="normal">Normal
-							</label>
-						</div>
-						<div class="form-check-inline">
-							<label class="form-check-label">
-								<input type="radio" class="form-check-input" name="contentStatus"
-									value="deleted">Deleted
-							</label>
-						</div>
-					</label><br>
-					<label>
-						<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
-					</label><br> -->
-				<hr>
-				<input type="button" class="form-control" value="submit" id="submit" />
+				<form>
+					<fieldset class="formField">
+						<hr>
+						<!-- <label>
+								<h4>狀態(管理員功能)： </h4>
+								<div class="form-check-inline">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="contentStatus" value="normal">Normal
+									</label>
+								</div>
+								<div class="form-check-inline">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="contentStatus"
+											value="deleted">Deleted
+									</label>
+								</div>
+							</label><br>
+							<label>
+								<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
+							</label><br> -->
+						<hr>
+						<input type="button" class="form-control" value="submit" id="submit" />
+					</fieldset>
+				</form>
+			</div>
+
+			<div class="card-footer">
 			</div>
 
 		</div>
-		<div class="card-footer">
-		</div>
-	</div>
 	</div>
 
 </body>
