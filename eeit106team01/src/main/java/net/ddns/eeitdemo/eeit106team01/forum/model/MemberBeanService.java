@@ -18,5 +18,9 @@ public class MemberBeanService {
 	public MemberBean findByPrimaryKey(int id) {
 		return sessionFactory.getCurrentSession().get(MemberBean.class, id);
 	}
+	
+	public MemberBean findByPrimaryKeyAsProxy(int id) {
+		return sessionFactory.getCurrentSession().load(MemberBean.class, id);
+	}
 
 }

@@ -18,6 +18,11 @@ public class VideoDAOImpl implements VideoDAO {
 	public VideoBean findByPrimaryKey(int id) {
 		return sessionFactory.getCurrentSession().get(VideoBean.class, id);
 	}
+	
+	@Override
+	public VideoBean findByPrimaryKeyAsProxy(int id) {
+		return sessionFactory.getCurrentSession().load(VideoBean.class, id);
+	}
 
 	@Override
 	public List<VideoBean> findAll() {

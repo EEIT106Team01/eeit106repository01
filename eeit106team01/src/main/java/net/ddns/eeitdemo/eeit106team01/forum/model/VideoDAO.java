@@ -5,6 +5,8 @@ import java.util.List;
 public interface VideoDAO {
 
 	public VideoBean findByPrimaryKey(int id);
+	
+	public VideoBean findByPrimaryKeyAsProxy(int id);
 
 	public List<VideoBean> findAll();
 
