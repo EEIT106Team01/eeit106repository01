@@ -2,8 +2,6 @@ package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.util.Date;
 import java.util.HashMap;
-import java.util.Map;
-
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -38,7 +36,7 @@ public class ArticleTopicCurrentBean {
 	private String accidentLocation;
 	private Double accidentLocationLongitude;
 	private Double accidentLocationLatitude;
-	@Column(columnDefinition = "nvarchar(255)")
+	@Column(columnDefinition = "nvarchar(max)")
 	private String topicContent;
 	private java.util.Date topicContentUpdateTime;
 	private Integer pageViews;

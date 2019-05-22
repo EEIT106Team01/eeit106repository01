@@ -49,7 +49,7 @@ public class InsertData extends ShopTest {
 			JSONObject information = (JSONObject) ((JSONObject) ((JSONObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("detailDescription");
 			
 			System.out.println("Name= " + name);
-			System.out.println("Brand= " + brand);
+//			System.out.println("Brand= " + brand);
 			System.out.println("Price= " + price);
 			System.out.println("Link= " + imageLink);
 			System.out.println("information= " + information.toString());

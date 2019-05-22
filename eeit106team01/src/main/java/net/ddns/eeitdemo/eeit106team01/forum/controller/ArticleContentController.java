@@ -176,7 +176,7 @@ public class ArticleContentController {
 			ArticleContentCurrentBean result = articleContentCurrentService.findByPrimaryKey(contentId);
 			if (result != null && !result.getContentStatus().equalsIgnoreCase("deleted")) {
 				result.setContentStatus("deleted");
-				result.setContentContent("<i>此文章已被刪除</i>");
+				result.setContentContent("{\"ops\":[{\"attributes\":{\"italic\":true},\"insert\":\"此文章已被刪除\"},{\"insert\":\"\\n\"}]}");
 				
 				if ((result = articleContentCurrentService.update(result)) != null) {
 					return ResponseEntity.ok(result);

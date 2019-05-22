@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model.impl;
+package net.ddns.eeitdemo.eeit106team01.forum.model.impl;
 
 import java.io.File;
 import java.io.IOException;
