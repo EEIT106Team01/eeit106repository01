@@ -1,6 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
+import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -31,6 +32,12 @@ public class TopSearchBean implements Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private java.util.Date time;
 
+	@Override
+	public String toString() {
+		return "TopSearchBean [id=" + id + ", keyWord=" + keyWord + ", searchTimes=" + searchTimes + ", time=" + time
+				+ "]";
+	}
+	
 	public Long getId() {
 		return id;
 	}
@@ -51,8 +58,8 @@ public class TopSearchBean implements Serializable {
 		return time;
 	}
 
-	public void setTime(java.util.Date time) {
-		this.time = time;
+	public void setTime() {
+		this.time = new Date(System.currentTimeMillis());
 	}
 
 	public Integer getSearchTimes() {
