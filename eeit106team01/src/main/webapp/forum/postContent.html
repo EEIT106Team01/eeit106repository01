@@ -53,7 +53,7 @@
 
 
 		function quotePassage(deltaPassage, postMemberBean) {
-			let ops = deltaPassage.ops
+			let ops = deltaPassage.ops;
 			let result = [];
 			result.push({
 				attributes: {
@@ -71,8 +71,8 @@
 					if (!(ops[i].insert.match(/\n+/gm))) {
 						ops[i].insert = "-- " + ops[i].insert;
 					}
+					result.push(ops[i]);
 				}
-				result.push(ops[i]);
 			}
 			result.push({
 				attributes: {
