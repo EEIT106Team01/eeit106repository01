@@ -82,8 +82,14 @@ public class ShopCrawler {
 		productBean.setName(name);
 
 		String brandString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title").getAsString();
-		int firstSpace = brandString.replace('【', ' ').trim().replaceAll("】", " ").indexOf(' ');
-		String brand = brandString.replace('【', ' ').trim().replace('】', ' ').substring(0, firstSpace).trim();
+		System.out.println(brandString);
+		int firstSpace = brandString.replace('【', ' ').trim().replace('】', ' ').indexOf(" ");
+		String brand = null;
+		if (firstSpace < 1) {
+			brand = brandString.replace('【', ' ').trim().replace('】', ' ').substring(0, 2).trim();
+		} else {
+			brand = brandString.replace('【', ' ').trim().replace('】', ' ').substring(0, firstSpace).trim();
+		}
 		productBean.setBrand(brand);
 
 		String priceString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("currentPrice").getAsString();

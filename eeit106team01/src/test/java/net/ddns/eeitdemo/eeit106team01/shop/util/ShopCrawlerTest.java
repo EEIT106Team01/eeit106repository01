@@ -24,8 +24,8 @@ public class ShopCrawlerTest {
 		String fetchProductName = "行車紀錄器";
 		String productType = "行車紀錄器";
 
-		Integer fetchStartPage = 1;
-		Integer fetchEndPage = 1;
+		Integer fetchStartPage = 2;
+		Integer fetchEndPage = 10;
 
 		Integer productStock = 0;
 
