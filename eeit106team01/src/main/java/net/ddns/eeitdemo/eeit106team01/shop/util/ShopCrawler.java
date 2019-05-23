@@ -16,6 +16,7 @@ import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 
@@ -29,7 +30,6 @@ public class ShopCrawler {
 	private String userAgentSafari = "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25";
 
 	// Referrer
-	@SuppressWarnings("unused")
 	private String referrerGoogle = "https://www.google.com/";
 	private String referrerYahooTW = "https://tw.yahoo.com/";
 
@@ -121,8 +121,24 @@ public class ShopCrawler {
 				.replaceAll("(<p>|</p>)", "").replaceAll("\"", "").replace("\\", "").replaceAll("<table>", "{")
 				.replaceAll("(<tr>|</tr>|</th>)", "").replaceAll("</td>", "\",").replaceAll(",</table>", "}")
 				.replaceAll("<th>", "\"").replaceAll("<td>", "\":\"").replace(" ", "").replace(" ", "").trim();
-		System.out.println(infoJsonString);
-		JsonObject infoJson = jsonParser.parse(infoJsonString).getAsJsonObject();
+		JsonObject infoJson;
+			if (infoJsonString.contains("<ul>")) {
+				String infoJsonStringHaveUl = infoJsonString.replaceAll("<ul>", "{").replaceAll("</li>", "\",").replaceAll(",</ul>", "}").replaceAll("<li>", "\"").replaceAll("：", "\":\"").replace(" ", "").replace(" ", "").trim();
+				System.out.println(infoJsonStringHaveUl);
+				infoJson = jsonParser.parse(infoJsonStringHaveUl).getAsJsonObject();
+			}else if (infoJsonString.contains("<br/>")) {
+				String infoJsonStringHaveBr = "{\"" + infoJsonString.replaceAll("<br/>", "\",\"").replaceAll(":", "\":\"") + "\"}";
+				System.out.println(infoJsonStringHaveBr);
+				infoJson = null;
+				try {
+					infoJson = jsonParser.parse(infoJsonStringHaveBr).getAsJsonObject();
+				} catch (JsonSyntaxException e) {
+					return null;
+				}
+			} else {
+				System.out.println(infoJsonString);
+				infoJson = jsonParser.parse(infoJsonString).getAsJsonObject();
+			}
 		HashMap<String, String> infoJsonMap = new Gson().fromJson(infoJson, new TypeToken<HashMap<String, String>>() { private static final long serialVersionUID = 633439657945276680L; }.getType());
 		productBean.setInformation(infoJsonMap);
 
