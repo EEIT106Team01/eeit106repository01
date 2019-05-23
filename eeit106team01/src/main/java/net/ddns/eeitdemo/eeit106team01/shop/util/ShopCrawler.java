@@ -124,11 +124,11 @@ public class ShopCrawler {
 		JsonObject infoJson;
 			if (infoJsonString.contains("<ul>")) {
 				String infoJsonStringHaveUl = infoJsonString.replaceAll("<ul>", "{").replaceAll("</li>", "\",").replaceAll(",</ul>", "}").replaceAll("<li>", "\"").replaceAll("：", "\":\"").replace(" ", "").replace(" ", "").trim();
-				System.out.println(infoJsonStringHaveUl);
+				// System.out.println(infoJsonStringHaveUl);
 				infoJson = jsonParser.parse(infoJsonStringHaveUl).getAsJsonObject();
 			}else if (infoJsonString.contains("<br/>")) {
 				String infoJsonStringHaveBr = "{\"" + infoJsonString.replaceAll("<br/>", "\",\"").replaceAll(":", "\":\"") + "\"}";
-				System.out.println(infoJsonStringHaveBr);
+				// System.out.println(infoJsonStringHaveBr);
 				infoJson = null;
 				try {
 					infoJson = jsonParser.parse(infoJsonStringHaveBr).getAsJsonObject();
@@ -136,7 +136,7 @@ public class ShopCrawler {
 					return null;
 				}
 			} else {
-				System.out.println(infoJsonString);
+				// System.out.println(infoJsonString);
 				infoJson = jsonParser.parse(infoJsonString).getAsJsonObject();
 			}
 		HashMap<String, String> infoJsonMap = new Gson().fromJson(infoJson, new TypeToken<HashMap<String, String>>() { private static final long serialVersionUID = 633439657945276680L; }.getType());
@@ -165,7 +165,7 @@ public class ShopCrawler {
 	}
 
 	// @formatter:off
-	public List<String> YahooProductLinksCrawler(String fetchProductName, Integer fetchStartPage, Integer fetchEndPage) {
+	public List<String> YahooProductLinksCrawler(String fetchProductName, Integer fetchStartPage, Integer fetchEndPage, String fetchProductType) {
 		List<String> links = new ArrayList<String>();
 		// @formatter:on
 		// Random User Agent
@@ -192,11 +192,12 @@ public class ShopCrawler {
 		Integer currentPage = 0;
 		for (currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
 			//@formatter:off
-			StringBuffer URL = new StringBuffer("https://tw.buy.yahoo.com/search/product?p=")
-								   .append(fetchProductName)
+			StringBuffer URL = new StringBuffer("https://tw.buy.yahoo.com/search/product?")
+								   .append("flc=" + fetchProductType)
+								   .append("&p=" + fetchProductName)
 								   .append("&pg=")
 								   .append(currentPage);
-
+			System.out.println(URL.toString());
 			Document xmlDoc = null;
 			try {
 				xmlDoc = Jsoup
