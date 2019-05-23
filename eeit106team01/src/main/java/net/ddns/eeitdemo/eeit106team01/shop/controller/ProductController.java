@@ -44,6 +44,17 @@ public class ProductController {
 	}
 
 	@GetMapping(
+			path = { "/products" }, 
+			produces = { "application/json" })
+	public ResponseEntity<?> getProducts(){
+		List<ProductBean> result = productService.findProducts();
+		if(result != null) {
+			return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
+	@GetMapping(
 			path = { "/products/totalSold" }, 
 			produces = { "application/json" })
 	public ResponseEntity<?> getProductsByTotalSold(@RequestParam Integer top){
