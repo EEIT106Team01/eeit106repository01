@@ -69,6 +69,10 @@ public class ProductService {
 		return productDAO.findProductByPrimaryKey(id);
 	}
 
+	public List<ProductBean> findProducts() {
+		return productDAO.findProducts();	
+	}
+	
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public List<ProductBean> recommendProducts(String name) {
 		List<ProductBean> temp = productDAO.findProductsByName(name);
