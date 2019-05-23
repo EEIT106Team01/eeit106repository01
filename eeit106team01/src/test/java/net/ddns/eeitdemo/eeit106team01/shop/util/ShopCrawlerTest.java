@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.util;
 
+import java.util.Iterator;
 import java.util.List;
 import java.util.Scanner;
 
@@ -19,7 +20,7 @@ public class ShopCrawlerTest {
 	@Autowired
 	private ProductService productService;
 
-	@Test
+//	@Test
 	// @formatter:off
 	public void testYahooProductDetailsCrawler() {
 		String fetchProductName = null;
@@ -178,6 +179,15 @@ public class ShopCrawlerTest {
 			System.err.println("Total Fail:" + countFail);
 		} else {
 			System.err.println("Fetch Links Fail!");
+		}
+	}
+	
+	@Test
+	public void insertSN() {
+		List<ProductBean> productBeans = productService.findProductsByUpdatedTime(-1);
+		Iterator<ProductBean> iterator = productBeans.iterator();
+		while (iterator.hasNext()) {
+			productService.insertProductsSN(iterator.next().getId(), 3);
 		}
 	}
 	
