@@ -45,21 +45,29 @@ public class ShopCrawler {
 		productBean.setType(productType);
 		productBean.setTotalSold(0);
 		
-		// @formatter:on
+			// @formatter:on
 			// Random User Agent
 			String userAgent;
+			String referrer;
 			Integer randomNum = (int) (Math.random() * 5 + 1);
 			if (randomNum == 1) {
 				userAgent = userAgentChrome;
+				referrer = referrerGoogle;
 			} else if (randomNum == 2) {
 				userAgent = userAgentMozilla;
+				referrer = referrerYahooTW;
 			} else if (randomNum == 3) {
 				userAgent = userAgentIe;
+				referrer = referrerGoogle;
 			} else if (randomNum == 4) {
 				userAgent = userAgentEdge;
+				referrer = referrerYahooTW;
 			} else {
 				userAgent = userAgentSafari;
+				referrer = referrerYahooTW;
 			}
+
+			// System.out.println("UserAgent: " + userAgent + "...");
 
 		// @formatter:off
 		// Fetch product info from each links
@@ -67,7 +75,7 @@ public class ShopCrawler {
 		try {
 			productXmlDoc = Jsoup.connect(link)
 					.userAgent(userAgent)
-					.referrer(referrerYahooTW)
+					.referrer(referrer)
 					.timeout(60000)
 					.get();
 		} catch (IOException e) {
@@ -82,11 +90,10 @@ public class ShopCrawler {
 		productBean.setName(name);
 
 		String brandString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title").getAsString();
-		System.out.println(brandString);
 		int firstSpace = brandString.replace('【', ' ').trim().replace('】', ' ').indexOf(" ");
 		String brand = null;
 		if (firstSpace < 1) {
-			brand = brandString.replace('【', ' ').trim().replace('】', ' ').substring(0, 2).trim();
+			brand = brandString.replace('【', ' ').trim().replace('】', ' ').substring(0, 3).trim();
 		} else {
 			brand = brandString.replace('【', ' ').trim().replace('】', ' ').substring(0, firstSpace).trim();
 		}
@@ -110,9 +117,11 @@ public class ShopCrawler {
 
 		JsonObject information = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("detailDescription").getAsJsonObject();
 		String infoJsonString = information.get("specifics").toString()
-				.replaceAll("\"", "").replace('\\', ' ').replaceAll("<table>", "{")
-				.replaceAll("</td></tr>", "\",").replaceAll(",</table>", "}")
-				.replaceAll("<tr><th>", "\"").replaceAll("</th><td>", "\":\"").trim();
+				.replace(" ", "").replace("\\r", "").replace("\\n", "").replace("\\t", "").replaceAll("(<tbody>|</tbody>)", "")
+				.replaceAll("(<p>|</p>)", "").replaceAll("\"", "").replace("\\", "").replaceAll("<table>", "{")
+				.replaceAll("(<tr>|</tr>|</th>)", "").replaceAll("</td>", "\",").replaceAll(",</table>", "}")
+				.replaceAll("<th>", "\"").replaceAll("<td>", "\":\"").replace(" ", "").replace(" ", "").trim();
+		System.out.println(infoJsonString);
 		JsonObject infoJson = jsonParser.parse(infoJsonString).getAsJsonObject();
 		HashMap<String, String> infoJsonMap = new Gson().fromJson(infoJson, new TypeToken<HashMap<String, String>>() { private static final long serialVersionUID = 633439657945276680L; }.getType());
 		productBean.setInformation(infoJsonMap);
@@ -145,17 +154,23 @@ public class ShopCrawler {
 		// @formatter:on
 		// Random User Agent
 		String userAgent;
+		String referrer;
 		Integer randomNum = (int) (Math.random() * 5 + 1);
 		if (randomNum == 1) {
 			userAgent = userAgentChrome;
+			referrer = referrerGoogle;
 		} else if (randomNum == 2) {
 			userAgent = userAgentMozilla;
+			referrer = referrerYahooTW;
 		} else if (randomNum == 3) {
 			userAgent = userAgentIe;
+			referrer = referrerGoogle;
 		} else if (randomNum == 4) {
 			userAgent = userAgentEdge;
+			referrer = referrerYahooTW;
 		} else {
 			userAgent = userAgentSafari;
+			referrer = referrerYahooTW;
 		}
 
 		Integer currentPage = 0;
@@ -171,7 +186,7 @@ public class ShopCrawler {
 				xmlDoc = Jsoup
 						.connect(URL.toString())
 						.userAgent(userAgent)
-						.referrer(referrerYahooTW)
+						.referrer(referrer)
 						.timeout(60000)
 						.get();
 			} catch (IOException e) {
