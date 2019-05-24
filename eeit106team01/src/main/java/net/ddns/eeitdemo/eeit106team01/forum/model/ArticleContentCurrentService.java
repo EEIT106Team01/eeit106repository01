@@ -44,7 +44,7 @@ public class ArticleContentCurrentService {
 				bean.setVideoBean(videoBean);
 			}
 			if (bean.getReply()!=null && bean.getReply().getId()!=null) {
-				ArticleContentCurrentBean reply = articleContentCurrentDAO.findByPrimaryKeyAsProxy(bean.getReply().getId());
+				ArticleContentCurrentBean reply = articleContentCurrentDAO.findByPrimaryKey(bean.getReply().getId());
 				bean.setReply(reply);
 			}
 			return articleContentCurrentDAO.insert(bean);
@@ -55,7 +55,6 @@ public class ArticleContentCurrentService {
 	public ArticleContentCurrentBean update(ArticleContentCurrentBean bean) {
 		if (bean != null) {
 			ArticleContentCurrentBean findOne = this.findByPrimaryKey(bean.getId());
-			
 			if (findOne != null) {
 				if (bean.getContentLikeNum() != null) {
 					findOne.setContentLikeNum(bean.getContentLikeNum());

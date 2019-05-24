@@ -203,7 +203,6 @@
 
     function getProduct() {
         var id = $("#productId").val();
-        alert("id=" + id)
         // $.ajax({
         //     url: "http://localhost:8080/product/" + id,
         //     method: "GET",
@@ -225,14 +224,12 @@
             $("<ul/>", {
                 "class": "my-new-list",
                 html: items.join("")
-            }).appendTo("body");
-            var NumOfJData = data.length;
-            alert(NumOfJData)
+            }).appendTo("#search");
         });
     }
 
     function getProductByTpye() {
-        var type = $("#getTypeForm").serialize()
+        var type = $("#productType").serialize()
         $.ajax({
             url: "http://localhost:8080/products/type?" + type,
             method: "GET",

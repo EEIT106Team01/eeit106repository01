@@ -90,7 +90,7 @@ public class ProductDAOImplTest {
 		System.out.println("------testFindProductByPrimaryKey--------");
 		System.out.println(ProductBean3.getId());
 		System.out.println(ProductBean3.getBrand());
-		System.out.println(ProductBean3.getDescription());
+//		System.out.println(ProductBean3.getDescription());
 		System.out.println(ProductBean3.getImageLink());
 //		System.out.println(ProductBean3.getInformation());
 		System.out.println(ProductBean3.getName());

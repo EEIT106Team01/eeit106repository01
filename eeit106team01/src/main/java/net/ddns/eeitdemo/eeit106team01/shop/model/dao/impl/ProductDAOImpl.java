@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.Query;
-import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -26,19 +25,11 @@ public class ProductDAOImpl implements ProductDAO {
 		return sessionFactory.getCurrentSession();
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public ProductBean insertProduct(ProductBean productBean) {
 		if (productBean != null) {
-			Query query = this.getSession().createQuery("from ProductBean where name = :name", ProductBean.class);
-			query.setParameter("name", productBean.getName());
-			List<ProductBean> result = query.getResultList();
-			if (result.size() == 0) { // name不能重複
-				getSession().save(productBean);
-				return productBean;
-			} else {
-				return null;
-			}
+			getSession().save(productBean);
+			return this.findProductByPrimaryKey(productBean.getId());
 		}
 		return null;
 	}

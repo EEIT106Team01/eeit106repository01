@@ -1,7 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -55,20 +54,20 @@ public class ProductBean implements Serializable {
 	private Integer totalSold;
 
 	@Column(nullable = false, columnDefinition = "varbinary(max)")
-	private ArrayList<String> description;
-
-	@Column(nullable = false, columnDefinition = "varbinary(max)")
 	private HashMap<String, String> information;
 
 	@Column(nullable = false, columnDefinition = "varbinary(max)")
-	private HashMap<String, String> imageLink;
+	private HashMap<Integer, String> informationImageLink;
+
+	@Column(nullable = false, columnDefinition = "varbinary(max)")
+	private HashMap<Integer, String> imageLink;
 
 	@Override
 	public String toString() {
 		return "ProductBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", name="
 				+ name + ", type=" + type + ", brand=" + brand + ", price=" + price + ", stock=" + stock
-				+ ", totalSold=" + totalSold + ", description=" + description + ", information=" + information
-				+ ", imageLink=" + imageLink + "]";
+				+ ", totalSold=" + totalSold + ", informationImageLink=" + informationImageLink + ", information="
+				+ information + ", imageLink=" + imageLink + "]";
 	}
 
 	public Long getId() {
@@ -143,12 +142,12 @@ public class ProductBean implements Serializable {
 		this.totalSold = totalSold;
 	}
 
-	public ArrayList<String> getDescription() {
-		return description;
+	public HashMap<Integer, String> getInformationImageLink() {
+		return informationImageLink;
 	}
 
-	public void setDescription(ArrayList<String> description) {
-		this.description = description;
+	public void setInformationImageLink(HashMap<Integer, String> informationImageLink) {
+		this.informationImageLink = informationImageLink;
 	}
 
 	public HashMap<String, String> getInformation() {
@@ -159,11 +158,11 @@ public class ProductBean implements Serializable {
 		this.information = information;
 	}
 
-	public HashMap<String, String> getImageLink() {
+	public HashMap<Integer, String> getImageLink() {
 		return imageLink;
 	}
 
-	public void setImageLink(HashMap<String, String> imageLink) {
+	public void setImageLink(HashMap<Integer, String> imageLink) {
 		this.imageLink = imageLink;
 	}
 
