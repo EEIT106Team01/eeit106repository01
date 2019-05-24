@@ -2,7 +2,6 @@ package net.ddns.eeitdemo.eeit106team01.forum.controller;
 
 import java.net.URI;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,8 @@ public class ArticleTopicController {
 	@GetMapping(path = { "/articleTopics" }, produces = { "application/json" })
 	public ResponseEntity<?> getTopicList(
 			@RequestParam(required = false) Integer begin,
-			@RequestParam(required = false) Integer end, 
+			@RequestParam(required = false) Integer end,
+			@RequestParam(required = false) String topicType,	//requestTopic shareTopic
 			@RequestParam(required = false) String orderType,	//orderByTime orderByLike
 			@RequestParam(required = false) Double lowerLatitude,
 			@RequestParam(required = false) Double upperLatitude,
@@ -49,20 +49,23 @@ public class ArticleTopicController {
 		System.out.println("getTopicList method running");
 		System.out.println("begin: " + begin);
 		System.out.println("end: " + end);
+		System.out.println("topicType: " + topicType);
 		System.out.println("orderType: " + orderType);
 		System.out.println("lowerLatitude: " + lowerLatitude);
 		System.out.println("upperLatitude: " + upperLatitude);
 		System.out.println("lowerLongitude: " + lowerLongitude);
 		System.out.println("upperLongitude: " + upperLongitude);
 		
+		//orderColumn:  orderByLike: topicLikeNum    orderByTime: topicUpdateTime
+		
 		List<ArticleTopicCurrentBean> findRange = null;
-		if((begin != null) && (end != null) && 
+		if((begin != null) && (end != null) && (("shareTopic".equals(topicType)) || ("requestTopic".equals(topicType))) &&
 			(lowerLatitude == null) && (upperLatitude == null) && 
 			(lowerLongitude == null) && (upperLongitude == null)) {
 			if("orderByTime".equals(orderType)) {
-				findRange = articleTopicCurrentService.findByLastRange(begin, end, "orderByTime");
+				findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicUpdateTime");
 			}else if("orderByLike".equals(orderType)) {
-				findRange = articleTopicCurrentService.findByLastRange(begin, end, "orderByLike");
+				findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicLikeNum");
 			}
 		} else if ((begin == null) && (end == null) && (("".equals(orderType)) || (orderType == null)) &&
 				(lowerLatitude != null) && (upperLatitude != null) && 

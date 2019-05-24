@@ -31,17 +31,8 @@ public class ArticleTopicCurrentService {
 		return articleTopicCurrentDAO.findAll();
 	};
 
-	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String order) {
-		String hqlOrderByTime = "from ArticleTopicCurrentBean order by topicUpdateTime desc";
-		String hqlOrderByLike = "from ArticleTopicCurrentBean order by topicLikeNum desc";
-
-		List<ArticleTopicCurrentBean> lastRangeResult = null;
-		if ("orderByLike".equals(order)) {
-			lastRangeResult = articleTopicCurrentDAO.findByLastRange(hqlOrderByLike, startPosition, maxResult);
-		} else if ("orderByTime".equals(order)) {
-			lastRangeResult = articleTopicCurrentDAO.findByLastRange(hqlOrderByTime, startPosition, maxResult);
-		}
-		return lastRangeResult;
+	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn) {
+		return articleTopicCurrentDAO.findByLastRange(startPosition, maxResult, topicType, orderColumn);
 	}
 
 	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude,
@@ -52,25 +43,18 @@ public class ArticleTopicCurrentService {
 
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {
 		if (bean != null) {
-			//要改成用MemberBean的Service?
-//			MemberBean topicMemberBean = bean.getMemberBean();
 			System.err.println("before select memberBean");
 			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId().intValue());
 			System.err.println("after select memberBean");
 			
-			System.err.println("before set memberBean in topic");
 			bean.setMemberBean(memberBean);
-			System.err.println("after set memberBean in topic");
 			
-			System.err.println("before set videoBean in topic");
+			System.err.println("before select videoBean in topic");
 			if(bean.getVideoBean() != null && bean.getVideoBean().getId() != null) {
 				VideoBean videoBean = videoService.findByPrimaryKey(bean.getVideoBean().getId().intValue());
 				bean.setVideoBean(videoBean);
 			}
-			System.err.println("after set videoBean in topic");
-//			System.err.println("before set memberBean in video");
-//			bean.getVideoBean().setMemberBean(memberBean);
-//			System.err.println("after set memberBean in video");
+			System.err.println("after select videoBean in topic");
 			return articleTopicCurrentDAO.insert(bean);
 		}
 		return null;
