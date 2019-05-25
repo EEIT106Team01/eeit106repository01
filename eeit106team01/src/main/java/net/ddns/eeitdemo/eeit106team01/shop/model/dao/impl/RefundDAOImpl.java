@@ -5,7 +5,6 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -14,7 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.RefundDAO;
 
 @Repository
@@ -94,7 +93,7 @@ public class RefundDAOImpl implements RefundDAO {
 	}
 
 	@Override
-	public RefundDetailBean insertRefundDetail(RefundDetailBean refundDetailBean) {
+	public RefundListBean insertRefundDetail(RefundListBean refundDetailBean) {
 		if (refundDetailBean != null) {
 			getSession().save(refundDetailBean);
 			return this.findRefundDetailByPrimaryKey(refundDetailBean.getId());
@@ -103,7 +102,7 @@ public class RefundDAOImpl implements RefundDAO {
 	}
 
 	@Override
-	public RefundDetailBean updateRefundDetail(RefundDetailBean refundDetailBean) {
+	public RefundListBean updateRefundDetail(RefundListBean refundDetailBean) {
 		if (refundDetailBean != null) {
 			getSession().update(refundDetailBean);
 			return this.findRefundDetailByPrimaryKey(refundDetailBean.getId());
@@ -112,9 +111,9 @@ public class RefundDAOImpl implements RefundDAO {
 	}
 
 	@Override
-	public RefundDetailBean findRefundDetailByPrimaryKey(Long id) {
+	public RefundListBean findRefundDetailByPrimaryKey(Long id) {
 		if (id != null) {
-			RefundDetailBean result = getSession().get(RefundDetailBean.class, id);
+			RefundListBean result = getSession().get(RefundListBean.class, id);
 			if (result != null) {
 				return result;
 			} else {
@@ -125,15 +124,15 @@ public class RefundDAOImpl implements RefundDAO {
 	}
 
 	@Override
-	public List<RefundDetailBean> findRefundDetailsByRefundId(Long id) {
+	public List<RefundListBean> findRefundDetailsByRefundId(Long id) {
 		if (id != null) {
 			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-			CriteriaQuery<RefundDetailBean> criteriaQuery = criteriaBuilder.createQuery(RefundDetailBean.class);
-			Root<RefundDetailBean> refundDetail = criteriaQuery.from(RefundDetailBean.class);
+			CriteriaQuery<RefundListBean> criteriaQuery = criteriaBuilder.createQuery(RefundListBean.class);
+			Root<RefundListBean> refundDetail = criteriaQuery.from(RefundListBean.class);
 			criteriaQuery.select(refundDetail).where(criteriaBuilder.equal(refundDetail.get("refundBean"), id));
 
-			Query<RefundDetailBean> query = getSession().createQuery(criteriaQuery);
-			List<RefundDetailBean> result = query.getResultList();
+			Query<RefundListBean> query = getSession().createQuery(criteriaQuery);
+			List<RefundListBean> result = query.getResultList();
 			if (result != null) {
 				return result;
 			} else {
@@ -144,14 +143,14 @@ public class RefundDAOImpl implements RefundDAO {
 	}
 
 	@Override
-	public List<RefundDetailBean> findRefundDetails() {
+	public List<RefundListBean> findRefundDetails() {
 		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-		CriteriaQuery<RefundDetailBean> criteriaQuery = criteriaBuilder.createQuery(RefundDetailBean.class);
-		Root<RefundDetailBean> root = criteriaQuery.from(RefundDetailBean.class);
+		CriteriaQuery<RefundListBean> criteriaQuery = criteriaBuilder.createQuery(RefundListBean.class);
+		Root<RefundListBean> root = criteriaQuery.from(RefundListBean.class);
 		criteriaQuery.select(root);
 
-		Query<RefundDetailBean> query = getSession().createQuery(criteriaQuery);
-		List<RefundDetailBean> result = query.getResultList();
+		Query<RefundListBean> query = getSession().createQuery(criteriaQuery);
+		List<RefundListBean> result = query.getResultList();
 		if (result != null) {
 			return result;
 		} else {

@@ -3,7 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao;
 import java.util.List;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 
 public interface RefundDAO {
 
@@ -19,14 +19,14 @@ public interface RefundDAO {
 	abstract List<RefundBean> findRefunds();
 
 	// Refund Detail
-	abstract RefundDetailBean insertRefundDetail(RefundDetailBean refundDetailBean);
+	abstract RefundListBean insertRefundDetail(RefundListBean refundDetailBean);
 
-	abstract RefundDetailBean updateRefundDetail(RefundDetailBean refundDetailBean);
+	abstract RefundListBean updateRefundDetail(RefundListBean refundDetailBean);
 
-	abstract RefundDetailBean findRefundDetailByPrimaryKey(Long id);
+	abstract RefundListBean findRefundDetailByPrimaryKey(Long id);
 	
-	abstract List<RefundDetailBean> findRefundDetailsByRefundId(Long id);
+	abstract List<RefundListBean> findRefundDetailsByRefundId(Long id);
 
-	abstract List<RefundDetailBean> findRefundDetails();
+	abstract List<RefundListBean> findRefundDetails();
 
 }

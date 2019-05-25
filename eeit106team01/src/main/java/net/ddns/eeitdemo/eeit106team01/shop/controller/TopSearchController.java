@@ -66,7 +66,7 @@ public class TopSearchController {
 			}
 			return ResponseEntity.badRequest().body(errors);
 		}
-		TopSearchBean result = topSearchService.insertTopSearch(topSearchBean.getKeyWord());
+		TopSearchBean result = topSearchService.insertTopSearch(topSearchBean.getKeyword());
 		if(result != null) {
 			URI uri = URI.create(application.getContextPath()+"/keyWord/"+result.getId());
 			return ResponseEntity.created(uri).body(result);

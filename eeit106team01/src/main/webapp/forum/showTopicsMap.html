@@ -27,16 +27,40 @@
     <script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
     
     <script src="js/topic/createTopicView.js"></script>
-    
+
     <script type="text/javascript">
-        $(window).on('load', initMap);
         let map;
         let markers = [];
         let listener;
+        
+        $(window).on("load", function(){
+            initMap();
+            $("#taipei").on("click", function(){
+                map.setCenter(new google.maps.LatLng(25.044991025205064, 121.53621722216803));
+            });
+            $("#taoyuan").on("click", function(){
+                map.setCenter(new google.maps.LatLng(24.973514234746464, 121.26104139430254));
+            });
+            $("#taichung").on("click", function(){
+                map.setCenter(new google.maps.LatLng(24.1436761923398, 120.64985612179316));
+            });
+            $("#tainan").on("click", function(){
+                map.setCenter(new google.maps.LatLng(23.01296258224154, 120.21863764873228));
+            });
+            $("#kaohsiung").on("click", function(){
+                map.setCenter(new google.maps.LatLng(22.626350313412292, 120.34279125318312));
+            });
+            $("#yilan").on("click", function(){
+                map.setCenter(new google.maps.LatLng(24.71783993530108, 121.7467274256129));
+            });
+            $("#taitung").on("click", function(){
+                map.setCenter(new google.maps.LatLng(22.778863312914602, 121.10624217157897));
+            });
+        });
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map_canvas"), {
-                    zoom: 13    //0-21
+                    zoom: 12    //0-21
                     , center: { lat: 25.033793, lng: 121.543427 }
                     , scaleControl: true
                     // , maxZoom: 15
@@ -110,6 +134,13 @@
 
 <body>
     <div id="map_canvas" style="width:600px; height:500px; float: right;"></div>
+    <input type="button" id="taipei" value="台北市">
+    <input type="button" id="taoyuan" value="桃園市">
+    <input type="button" id="taichung" value="台中市">
+    <input type="button" id="tainan" value="台南市">
+    <input type="button" id="kaohsiung" value="高雄市">
+    <input type="button" id="yilan" value="宜蘭縣">
+    <input type="button" id="taitung" value="台東縣">
     <hr>
     <div id="topicList"></div>
 </body>

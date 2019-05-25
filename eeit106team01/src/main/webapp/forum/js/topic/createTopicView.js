@@ -15,7 +15,10 @@ function createTopicView(dataTopicList, divTopicId) {
             let divCardBody = $("<div></div>").addClass("card-body").appendTo(divCard);
                 let h4TopicHeader = $("<h4></h4>").addClass("card-title").text(dataTopicList[i].topicHeader).appendTo(divCardBody);
                 let pTopicContent = $("<p></p>").addClass("card-text").text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(divCardBody);
-                    let aLinkToContent = $("<a></a>").addClass("card-link").attr("href", "#").text("<詳細內容>").appendTo(pTopicContent);
+                    let aLinkToContent = $("<a></a>").addClass("card-link").attr("href", "http://localhost:8080/forum/showContents.html")
+                        .on("click", function(){
+                            localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
+                        }).text("<詳細內容>").appendTo(pTopicContent);
                 let pMemberName = $("<p></p>").addClass("card-text").text("Fadachai").appendTo(divCardBody);
                 let spanPageViews = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].pageViews).appendTo(divCardBody);
                 let spanTopicLikeNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].topicLikeNum).appendTo(divCardBody);
