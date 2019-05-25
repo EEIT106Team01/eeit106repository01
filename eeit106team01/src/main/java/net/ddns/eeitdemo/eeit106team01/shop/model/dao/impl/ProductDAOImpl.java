@@ -1,10 +1,10 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import javax.persistence.Query;
-
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
@@ -25,172 +26,297 @@ public class ProductDAOImpl implements ProductDAO {
 		return sessionFactory.getCurrentSession();
 	}
 
+	private List<ProductBean> productsResutlt = new ArrayList<ProductBean>();
+	private List<SerialNumberBean> serialNumbersResult = new ArrayList<SerialNumberBean>();
+
 	@Override
 	public ProductBean insertProduct(ProductBean productBean) {
-		if (productBean != null) {
-			getSession().save(productBean);
-			return this.findProductByPrimaryKey(productBean.getId());
+		if (productBean.isNotNull()) {
+			try {
+				this.getSession().save(productBean);
+				Long id = productBean.getId();
+				if (id != null && id.longValue() > 0L) {
+					return this.findProductByProductId(id);
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public ProductBean updateProduct(ProductBean productBean) {
-		if (productBean != null) {
-			getSession().update(productBean);
-			return findProductByPrimaryKey(productBean.getId());
+		if (productBean.isNotNull()) {
+			try {
+				this.getSession().update(productBean);
+				Long id = productBean.getId();
+				if (id != null && id.longValue() > 0L) {
+					return this.findProductByProductId(id);
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
 		}
 		return null;
 	}
 
 	@Override
-	public ProductBean findProductByPrimaryKey(Long id) {
-		return getSession().get(ProductBean.class, id);
-	}
-
-	@Override
-	public ProductBean findProductBySerialNumber(String serialNumber) {
-		return getSession().get(ProductBean.class, serialNumber);
+	public ProductBean findProductByProductId(Long id) {
+		if (id != null && id.longValue() > 0L) {
+			try {
+				ProductBean result = this.getSession().get(ProductBean.class, id);
+				if (result != null) {
+					return result;
+				}
+			} catch (IllegalArgumentException e) {
+				throw new IllegalArgumentException(e.getMessage());
+			}
+		}
+		return null;
 	}
 
 	@Override
 	public List<ProductBean> findProducts() {
-		return this.getSession().createQuery("from ProductBean", ProductBean.class).getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ProductBean> findProductsByName(String name) {
-		Query query = this.getSession().createQuery("from ProductBean where name like :name", ProductBean.class);
-		query.setParameter("name", "%" + name + "%");
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ProductBean> findProductsByBrand(String brand) {
-		Query query = this.getSession().createQuery("from ProductBean where brand =:brand", ProductBean.class);
-		query.setParameter("brand", brand);
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ProductBean> findProductsByStock(String stockType) {
-		if (stockType.equals("notEmpty")) {
-			Query query = this.getSession().createQuery("from ProductBean where stock > 0", ProductBean.class);
-			return query.getResultList();
+		try {
+			this.productsResutlt = this.getSession().createQuery("from ProductBean", ProductBean.class).getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+			return this.productsResutlt;
 		} else {
-			Query query = this.getSession().createQuery("from ProductBean where stock = 0", ProductBean.class);
-			return query.getResultList();
+			return null;
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<ProductBean> findProductsByType(String type) {
-		Query query = this.getSession().createQuery("from ProductBean where type =:type", ProductBean.class);
-		query.setParameter("type", type);
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice) {
-		Query query = this.getSession().createQuery("from ProductBean where price between :minPrice and :maxPrice",
-				ProductBean.class);
-		query.setParameter("minPrice", minPrice);
-		query.setParameter("maxPrice", maxPrice);
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<ProductBean> findProductsByUpdatedTime(Integer day) {
-		Query query = this.getSession().createQuery(
-				"from ProductBean where updatedTime >= DATEADD(day,:day ,GETDATE()) AND updatedTime <= DATEADD(day,:day1,GETDATE())",
-				ProductBean.class);
-		query.setParameter("day", day);
-		query.setParameter("day1", 0);
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
-		if (stock != null && id != null) {
-			List<SerialNumberBean> serialNumberBeans = new ArrayList<SerialNumberBean>();
-			loop: for (int i = 1; i <= stock; i++) {
-				SerialNumberGenerator serialNumberGenerator = new SerialNumberGenerator(20);
-				String sng = serialNumberGenerator.nextString();
-				Query query = this.getSession().createQuery("from SerialNumberBean where serialNumber = :serialNumber",
-						SerialNumberBean.class);
-				query.setParameter("serialNumber", sng);
-				List<SerialNumberBean> result = query.getResultList();
-
-				if (result.size() == 0) {
-					SerialNumberBean serialNumberBean = new SerialNumberBean();
-					serialNumberBean.setProductBean(this.findProductByPrimaryKey(id));
-					serialNumberBean.setAvailabilityStatus("available");
-					serialNumberBean.setSerialNumber(sng);
-					getSession().save(serialNumberBean);
-					serialNumberBeans.add(serialNumberBean);
-				} else {
-					break loop;
-				}
+	public List<ProductBean> findProductsByName(String name) {
+		if (NullChecker.isEmpty(name) == false) {
+			try {
+				this.productsResutlt = this.getSession()
+						.createQuery("from ProductBean where name like :name", ProductBean.class)
+						.setParameter("name", "%" + name + "%").getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
 			}
-			return serialNumberBeans;
+			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+				return this.productsResutlt;
+			}
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<SerialNumberBean> findsoldProducts() {
-		Query query = this.getSession().createQuery(
-				"from SerialNumberBean where availabilityStatus = :availabilityStatus", SerialNumberBean.class);
-		query.setParameter("availabilityStatus", "sold");
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SerialNumberBean> findsoldProduct(Long id) {
-		Query query = this.getSession().createQuery(
-				"from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :id",
-				SerialNumberBean.class);
-		query.setParameter("availabilityStatus", "sold");
-		query.setParameter("id", id);
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SerialNumberBean> findavailableProducts() {
-		Query query = this.getSession().createQuery(
-				"from SerialNumberBean where availabilityStatus = :availabilityStatus", SerialNumberBean.class);
-		query.setParameter("availabilityStatus", "available");
-		return query.getResultList();
-	}
-
-	@SuppressWarnings("unchecked")
-	@Override
-	public List<SerialNumberBean> findavailableProduct(Long id) {
-		Query query = this.getSession().createQuery(
-				"from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :id",
-				SerialNumberBean.class);
-		query.setParameter("availabilityStatus", "available");
-		query.setParameter("id", id);
-		return query.getResultList();
+	public List<ProductBean> findProductsByBrand(String brand) {
+		if (NullChecker.isEmpty(brand) == false) {
+			try {
+				this.productsResutlt = this.getSession()
+						.createQuery("from ProductBean where brand =:brand", ProductBean.class)
+						.setParameter("brand", brand).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+				return this.productsResutlt;
+			}
+		}
+		return null;
 	}
 
 	@Override
-	public SerialNumberBean findSNBeanBySerialNumber(String serialNumber) {
-		if (serialNumber != null) {
-			Query query = getSession().createQuery("from SerialNumberBean where serialNumber = :serialNumber",
-					SerialNumberBean.class);
-			query.setParameter("serialNumber", serialNumber);
-			SerialNumberBean result = (SerialNumberBean) query.getSingleResult();
+	public List<ProductBean> findProductsByStock(String emptyORnotEmpty) {
+		if (NullChecker.isEmpty(emptyORnotEmpty) == false) {
+			try {
+				if (emptyORnotEmpty.equals("notEmpty")) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where stock > 0", ProductBean.class).getResultList();
+				} else if (emptyORnotEmpty.equals("empty")) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where stock = 0", ProductBean.class).getResultList();
+				} else {
+					throw new IllegalArgumentException(
+							"Unexpected input accept empty OR notEmpty only with case sensitive");
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+				return this.productsResutlt;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<ProductBean> findProductsByType(String type) {
+		if (NullChecker.isEmpty(type) == false) {
+			try {
+				this.productsResutlt = this.getSession()
+						.createQuery("from ProductBean where type =:type", ProductBean.class).setParameter("type", type)
+						.getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+				return this.productsResutlt;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice) {
+		if (minPrice != null && minPrice >= 0 && maxPrice != null && maxPrice >= minPrice) {
+			try {
+				this.productsResutlt = this.getSession()
+						.createQuery("from ProductBean where price between :minPrice and :maxPrice", ProductBean.class)
+						.setParameter("minPrice", minPrice).setParameter("maxPrice", maxPrice).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+				return this.productsResutlt;
+			}
+		}
+		return null;
+	}
+
+	/**
+	 * @param startDay = day start
+	 * @param endDay   = day end
+	 * @return Between startDay and endDay
+	 */
+	@Override
+	public List<ProductBean> findProductsByUpdatedTimeDayBetween(Date startDay, Date endDay) {
+		if (startDay != null && endDay != null && startDay.equals(endDay) == false && startDay.compareTo(endDay) < 0) {
+			try {
+				this.productsResutlt = this.getSession()
+						.createQuery("from ProductBean where updatedTime BETWEEN :startDay AND :endDay",
+								ProductBean.class)
+						.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+				return this.productsResutlt;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<SerialNumberBean> insertProductSerialNumberByProductId(Long id, Integer stock) {
+		if (id != null && id.longValue() > 0L && stock != null && stock.intValue() > 0) {
+			List<SerialNumberBean> result = new ArrayList<SerialNumberBean>();
+			try {
+				flag: for (int count = 1; count <= stock; count++) {
+					SerialNumberGenerator serialNumberGenerator = new SerialNumberGenerator(20);
+					String serialNumber = serialNumberGenerator.nextString();
+					this.serialNumbersResult = this.getSession()
+							.createQuery("from SerialNumberBean where serialNumber = :serialNumber",
+									SerialNumberBean.class)
+							.setParameter("serialNumber", serialNumber).getResultList();
+					if (this.serialNumbersResult.size() == 0) {
+						SerialNumberBean serialNumberBean = new SerialNumberBean();
+						serialNumberBean.setProductId(this.findProductByProductId(id));
+						serialNumberBean.setAvailabilityStatus("available");
+						serialNumberBean.setSerialNumber(serialNumber);
+						this.getSession().save(serialNumberBean);
+						result.add(serialNumberBean);
+					} else {
+						break flag;
+					}
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (result != null && result.size() > 0) {
+				return result;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<SerialNumberBean> findSerialNumbersAreSold() {
+		try {
+			this.serialNumbersResult = this.getSession()
+					.createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus",
+							SerialNumberBean.class)
+					.setParameter("availabilityStatus", "sold").getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.serialNumbersResult != null && this.serialNumbersResult.size() > 0) {
+			return this.serialNumbersResult;
+		}
+		return null;
+	}
+
+	@Override
+	public List<SerialNumberBean> findSerialNumbersAreSoldByProductId(Long id) {
+		if (id != null && id.longValue() > 0L) {
+			try {
+				this.serialNumbersResult = this.getSession().createQuery(
+						"from SerialNumberBean where availabilityStatus = :availabilityStatus and productId = :id",
+						SerialNumberBean.class).setParameter("availabilityStatus", "sold").setParameter("id", id)
+						.getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.serialNumbersResult != null && this.serialNumbersResult.size() > 0) {
+				return this.serialNumbersResult;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<SerialNumberBean> findSerialNumbersAreAvailable() {
+		try {
+			this.serialNumbersResult = this.getSession()
+					.createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus",
+							SerialNumberBean.class)
+					.setParameter("availabilityStatus", "available").getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.serialNumbersResult != null && this.serialNumbersResult.size() > 0) {
+			return this.serialNumbersResult;
+		}
+		return null;
+	}
+
+	@Override
+	public List<SerialNumberBean> findSerialNumbersAreAvailableByProductId(Long id) {
+		if (id != null && id.longValue() > 0) {
+			try {
+				this.serialNumbersResult = this.getSession().createQuery(
+						"from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductID = :id",
+						SerialNumberBean.class).setParameter("availabilityStatus", "available").setParameter("id", id)
+						.getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.serialNumbersResult != null && this.serialNumbersResult.size() > 0) {
+				return this.serialNumbersResult;
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public SerialNumberBean findSerialNumber(String serialNumber) {
+		if (NullChecker.isEmpty(serialNumber) == false) {
+			SerialNumberBean result = new SerialNumberBean();
+			try {
+				result = this.getSession()
+						.createQuery("from SerialNumberBean where serialNumber = :serialNumber", SerialNumberBean.class)
+						.setParameter("serialNumber", serialNumber).getSingleResult();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
 			if (result != null) {
 				return result;
 			}
@@ -199,32 +325,56 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public SerialNumberBean updateSNStatus(SerialNumberBean serialNumberBean) {
-		if (serialNumberBean != null) {
-			getSession().update(serialNumberBean);
-			return findSNBeanBySerialNumber(serialNumberBean.getSerialNumber());
+	public SerialNumberBean updateAvailabilityStatus(SerialNumberBean serialNumberBean) {
+		SerialNumberBean result = new SerialNumberBean();
+		if (serialNumberBean.isNotNull()) {
+			try {
+				this.getSession().update(serialNumberBean);
+				result = findSerialNumber(serialNumberBean.getSerialNumber());
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (result != null) {
+				return result;
+			}
 		}
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<SerialNumberBean> findProductsByStatus(String status) {
-		Query query = this.getSession().createQuery(
-				"from SerialNumberBean where availabilityStatus = :availabilityStatus", SerialNumberBean.class);
-		query.setParameter("availabilityStatus", status);
-		return query.getResultList();
-
+	public List<SerialNumberBean> findSerialNumbersByAvailabilityStatus(String status) {
+		if (NullChecker.isEmpty(status) == false) {
+			try {
+				this.serialNumbersResult = this.getSession()
+						.createQuery("from SerialNumberBean where availabilityStatus = :availabilityStatus",
+								SerialNumberBean.class)
+						.setParameter("availabilityStatus", status).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.serialNumbersResult != null && this.serialNumbersResult.size() > 0) {
+				return this.serialNumbersResult;
+			}
+		}
+		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
-	public List<SerialNumberBean> findProductByStatus(Long id, String status) {
-		Query query = this.getSession().createQuery(
-				"from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductBean_Id = :ProductBean_Id", SerialNumberBean.class);
-		query.setParameter("availabilityStatus", status);
-		query.setParameter("ProductBean_Id", id);
-		return query.getResultList();
+	public List<SerialNumberBean> findSerialNumbersByProductIdAndAvailabilityStatus(Long id, String status) {
+		if (id != null && id.longValue() > 0L && NullChecker.isEmpty(status) == false) {
+			try {
+				this.serialNumbersResult = this.getSession().createQuery(
+						"from SerialNumberBean where availabilityStatus = :availabilityStatus and ProductID = :ProductBean_Id",
+						SerialNumberBean.class).setParameter("availabilityStatus", status)
+						.setParameter("ProductBean_Id", id).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.serialNumbersResult != null && this.serialNumbersResult.size() > 0) {
+				return this.serialNumbersResult;
+			}
+		}
+		return null;
 	}
 
 }

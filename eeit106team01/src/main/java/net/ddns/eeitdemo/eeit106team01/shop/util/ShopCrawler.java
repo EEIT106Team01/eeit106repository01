@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.util;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -33,19 +34,19 @@ public class ShopCrawler {
 	private String referrerGoogle = "https://www.google.com/";
 	private String referrerYahooTW = "https://tw.yahoo.com/";
 
-	//@formatter:off
 	public ProductBean YahooProductDetailsCrawler(String link, String productType, Integer productStock) {
-		
+
 		if (link != null && productType != null && productStock != null) {
-		
-		ProductBean productBean = new ProductBean();
-		productBean.setCreateTime();
-		productBean.setUpdatedTime();
-		productBean.setStock(productStock);
-		productBean.setType(productType);
-		productBean.setTotalSold(0);
-		
-			// @formatter:on
+
+			// Prepare new ProductBean
+			Date date = new Date(System.currentTimeMillis());
+			ProductBean productBean = new ProductBean();
+			productBean.setCreateTime(date);
+			productBean.setUpdatedTime(date);
+			productBean.setStock(productStock);
+			productBean.setType(productType);
+			productBean.setTotalSold(0);
+
 			// Random User Agent
 			String userAgent;
 			String referrer;
@@ -67,108 +68,124 @@ public class ShopCrawler {
 				referrer = referrerYahooTW;
 			}
 
-			// System.out.println("UserAgent: " + userAgent + "...");
-
 		// @formatter:off
 		// Fetch product info from each links
 		Document productXmlDoc = null;
 		try {
 			productXmlDoc = Jsoup.connect(link)
-					.userAgent(userAgent)
-					.referrer(referrer)
-					.timeout(60000)
-					.get();
+								 .userAgent(userAgent)
+								 .referrer(referrer)
+								 .timeout(60000)
+								 .get();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+			// Fetch Json form YAHOO Mall
+			Element element = productXmlDoc.selectFirst("#isoredux-data");
+			JsonParser jsonParser = new JsonParser();
+			JsonObject jsonObject = jsonParser.parse(element.attr("data-state")).getAsJsonObject();
 
-		Element element = productXmlDoc.selectFirst("#isoredux-data");// data-state
-		JsonParser jsonParser = new JsonParser();
-		JsonObject jsonObject = jsonParser.parse(element.attr("data-state")).getAsJsonObject();
+			// Get Name String
+			String name = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title").getAsString();
+			productBean.setName(name);
 
-		String name = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title").getAsString();
-		productBean.setName(name);
-
-		String brandString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title").getAsString();
-		int firstSpace = brandString.replace('【', ' ').trim().replace('】', ' ').indexOf(" ");
-		String brand = null;
-		if (firstSpace < 1) {
-			brand = brandString.replace('【', ' ').trim().replace('】', ' ').substring(0, 3).trim();
-		} else {
-			brand = brandString.replace('【', ' ').trim().replace('】', ' ').substring(0, firstSpace).trim();
-		}
-		productBean.setBrand(brand);
-
-		String priceString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("currentPrice").getAsString();
-		Integer price = new Integer(priceString);
-		productBean.setPrice(price);
-
-		JsonArray imageLink = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("images").getAsJsonArray();
-		HashMap<Integer, String> imageLinkMap = new HashMap<Integer, String>();
-		for (int i = 0; i < imageLink.size(); i++) {
-			JsonArray imageLinkInnerArray = imageLink.get(i).getAsJsonArray();
-			for (int j = 0; j < imageLinkInnerArray.size(); j++) {
-				JsonObject imageLinkJson = imageLinkInnerArray.get(j).getAsJsonObject();
-				String url = imageLinkJson.get("url").toString();
-				imageLinkMap.put(j, url);
+			// Get Brand String
+			String brandString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title").getAsString();
+			String brand = null;
+			if (brandString.contains("【") && brandString.contains("】") && brandString.indexOf('【') == 0) {
+				brand = brandString.substring(brandString.indexOf('【') + 1, brandString.indexOf('】'));
+			} else if (brandString.contains("[") && brandString.contains("]") && brandString.indexOf('[') == 0) {
+				brand = brandString.substring(brandString.indexOf("[") + 1, brandString.indexOf("]"));
+			} else if (brandString.contains("!")) {
+				String brandReplace = brandString.replace("!", " ");
+				brand = brandReplace.substring(0, brandReplace.indexOf(" "));
+			} else if (brandString.indexOf(" ") < 2) {
+				brand = brandString.substring(0, brandString.indexOf(" ") + 4);
+			} else {
+				brand = brandString.substring(0, brandString.indexOf(" "));
 			}
-		}
-		productBean.setImageLink(imageLinkMap);
+			productBean.setBrand(brand);
 
-		JsonObject information = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("detailDescription").getAsJsonObject();
-		String infoJsonString = information.get("specifics").toString()
-				.replace(" ", "").replace("\\r", "").replace("\\n", "").replace("\\t", "").replaceAll("(<tbody>|</tbody>)", "")
-				.replaceAll("(<p>|</p>)", "").replaceAll("\"", "").replace("\\", "").replaceAll("<table>", "{")
-				.replaceAll("(<tr>|</tr>|</th>)", "").replaceAll("</td>", "\",").replaceAll(",</table>", "}")
-				.replaceAll("<th>", "\"").replaceAll("<td>", "\":\"").replace(" ", "").replace(" ", "").trim();
-		JsonObject infoJson;
+			// Get Price String
+			String priceString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("currentPrice").getAsString();
+			Integer price = new Integer(priceString);
+			productBean.setPrice(price);
+
+			// Get image links Array
+			JsonArray imageLink = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("images").getAsJsonArray();
+			HashMap<Integer, String> imageLinkMap = new HashMap<Integer, String>();
+			for (int i = 0; i < imageLink.size(); i++) {
+				JsonArray imageLinkInnerArray = imageLink.get(i).getAsJsonArray();
+				for (int j = 0; j < imageLinkInnerArray.size(); j++) {
+					JsonObject imageLinkJson = imageLinkInnerArray.get(j).getAsJsonObject();
+					String url = imageLinkJson.get("url").toString();
+					imageLinkMap.put(j, url);
+				}
+			}
+			productBean.setImageLink(imageLinkMap);
+
+			// Get information String
+			JsonObject information = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("detailDescription").getAsJsonObject();
+			JsonObject infoJson;
+			String infoJsonString = information.get("specifics").toString().trim().replace('\"', ' ').replace("\\r", "").replace("\\n", "").replace("\\t", "")
+											   .replace("\\", "").replaceAll("(<tbody>|</tbody>|<p>|</p>)", "").replace(" ", "");
 			if (infoJsonString.contains("<ul>")) {
-				String infoJsonStringHaveUl = infoJsonString.replaceAll("<ul>", "{").replaceAll("</li>", "\",").replaceAll(",</ul>", "}").replaceAll("<li>", "\"").replaceAll("：", "\":\"").replace(" ", "").replace(" ", "").trim();
-				// System.out.println(infoJsonStringHaveUl);
-				infoJson = jsonParser.parse(infoJsonStringHaveUl).getAsJsonObject();
-			}else if (infoJsonString.contains("<br/>")) {
-				String infoJsonStringHaveBr = "{\"" + infoJsonString.replaceAll("<br/>", "\",\"").replaceAll(":", "\":\"") + "\"}";
-				// System.out.println(infoJsonStringHaveBr);
-				infoJson = null;
-				try {
-					infoJson = jsonParser.parse(infoJsonStringHaveBr).getAsJsonObject();
-				} catch (JsonSyntaxException e) {
-					return null;
+				infoJsonString = infoJsonString.replaceAll("<ul>", "{").replaceAll("<li>", "\"").replaceAll("：", "\":\"")
+											   .replaceAll("</li>", "\",").replaceAll(",</ul>", "}");
+				if (infoJsonString.contains("\\")) {
+					infoJsonString = infoJsonString.replace('\\', ' ').replaceAll("  ", " ").replaceAll("  ", " ").trim();
+				}
+			} else if (infoJsonString.contains("<table>")) {
+				infoJsonString = infoJsonString.replaceAll("<table>", "{").replaceAll("<tr><th>", "\"").replaceAll("</th><td>", "\":\"")
+											   .replaceAll("</td></tr>", "\",").replaceAll(",</table>", "}");
+				if (infoJsonString.contains("\\")) {
+					infoJsonString = infoJsonString.replace('\\', ' ').replaceAll("  ", " ").replaceAll("  ", " ").trim();
 				}
 			} else {
-				// System.out.println(infoJsonString);
+				System.err.println(infoJsonString);
+			}
+			
+			infoJson = null;
+			try {
 				infoJson = jsonParser.parse(infoJsonString).getAsJsonObject();
+			} catch (JsonSyntaxException e) {
+				System.err.println("Fail to parse infoJson");
+				return null;
 			}
-		HashMap<String, String> infoJsonMap = new Gson().fromJson(infoJson, new TypeToken<HashMap<String, String>>() { private static final long serialVersionUID = 633439657945276680L; }.getType());
-		productBean.setInformation(infoJsonMap);
+			HashMap<String, String> infoJsonMap = 
+			new Gson().fromJson(infoJson,new TypeToken<HashMap<String, String>>() {private static final long serialVersionUID = 633439657945276680L;}.getType());
+			productBean.setInformation(infoJsonMap);
 
-		HashMap<Integer, String> infoImagesMap = new HashMap<Integer, String>();
-		for (int count = 1; count < count + 1; count++) {
-			String infoImages = information.get("longDescription").toString();
-			int indexOfTag = StringUtils.ordinalIndexOf(infoImages, "<img src=", count);
-			if (indexOfTag > 0) {
-				String currentTagFull = infoImages.substring(indexOfTag);
-				String currentTagCut = currentTagFull.substring(currentTagFull.indexOf("<img src="), currentTagFull.indexOf(">"));
-				String infoImagesresult = currentTagCut
-						.substring(currentTagCut.indexOf("\""), StringUtils.ordinalIndexOf(currentTagCut, "\"", 2))
-						.replaceAll("\"", "").replace('\\', ' ').trim();
-				infoImagesMap.put(count, infoImagesresult);
-			} else {
-				break;
+			// Get Information images link String
+			HashMap<Integer, String> infoImagesMap = new HashMap<Integer, String>();
+			for (int count = 1; count < count + 1; count++) {
+				String infoImages = information.get("longDescription").toString();
+				int indexOfTag = StringUtils.ordinalIndexOf(infoImages, "<img src=", count);
+				if (indexOfTag > 0) {
+					String currentTagFull = infoImages.substring(indexOfTag);
+					String currentTagCut = currentTagFull.substring(currentTagFull.indexOf("<img src="),currentTagFull.indexOf(">"));
+					String infoImagesresult = currentTagCut.substring(currentTagCut.indexOf("\""), StringUtils.ordinalIndexOf(currentTagCut, "\"", 2))
+														   .replaceAll("\"", "").replace('\\', ' ').trim();
+					infoImagesMap.put(count, infoImagesresult);
+				} else {
+					break;
+				}
 			}
-		}
-		productBean.setInformationImageLink(infoImagesMap);
-		
+			productBean.setInformationImageLink(infoImagesMap);
+			//@formatter:on
+
 			return productBean;
 		}
 		return null;
 	}
 
-	// @formatter:off
+	//@formatter:off
 	public List<String> YahooProductLinksCrawler(String fetchProductName, Integer fetchStartPage, Integer fetchEndPage, String fetchProductType) {
+	//@formatter:on
+
 		List<String> links = new ArrayList<String>();
-		// @formatter:on
-		// Random User Agent
+
 		String userAgent;
 		String referrer;
 		Integer randomNum = (int) (Math.random() * 5 + 1);
@@ -189,41 +206,43 @@ public class ShopCrawler {
 			referrer = referrerYahooTW;
 		}
 
-		Integer currentPage = 0;
-		for (currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
+		Integer pageWillFetch = 0;
+		Integer totalCount = 0;
+		for (Integer currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
+
 			//@formatter:off
 			StringBuffer URL = new StringBuffer("https://tw.buy.yahoo.com/search/product?")
 								   .append("flc=" + fetchProductType)
 								   .append("&p=" + fetchProductName)
 								   .append("&pg=")
 								   .append(currentPage);
-			System.out.println(URL.toString());
 			Document xmlDoc = null;
 			try {
-				xmlDoc = Jsoup
-						.connect(URL.toString())
-						.userAgent(userAgent)
-						.referrer(referrer)
-						.timeout(60000)
-						.get();
+				xmlDoc = Jsoup.connect(URL.toString())
+							  .userAgent(userAgent)
+							  .referrer(referrer)
+							  .timeout(60000)
+							  .get();
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
-
 			// @formatter:on
+
 			// Fetch product's links from query page
 			Elements productLinks = xmlDoc.select("li[data-imprsn] a[href]");
 
 			if (!productLinks.isEmpty()) {
-				@SuppressWarnings("unused")
-				Integer productNum = 1;
+				System.out.println("Start Fetching......");
+				System.out.println("[" + URL.toString() + "]");
+				pageWillFetch++;
 				for (Element element : productLinks) {
 					String productLink = element.attr("href");
-					// System.out.printf("P.%d___No.%d___\r", currentPage, productNum++);
 					links.add(productLink);
+					++totalCount;
 				}
 			}
 		}
+		System.out.printf("Total Page:%d, Products:%d\r", pageWillFetch, totalCount);
 		return links;
 	}
 

@@ -2,15 +2,18 @@ $(document).ready(function () {
     $("#getNameButton").click(function () {
         getProductsByName();
     })
-    $("#getIdButton").click(function () {
-        getProduct();
+
+    getProduct();
+    // $("#getIdButton").click(function () {
+    //     getProduct();
         
-    })
+    // })
     // $(".infoImgClass").mouseenter(function(){
     //     imgChange();
     // })
 });
 
+// 產品名搜尋
 function getProductsByName() {
     var name = $("#getNameForm").serialize();
     $.ajax({
@@ -52,6 +55,7 @@ function getProductsByName() {
     })
 }
 
+// 單件商品
 function getProduct() {
     var id = 44;
     var i = 0;
@@ -77,22 +81,30 @@ function getProduct() {
 
             $("#searchResult").html("");
             $("#searchResult").append(
-                '<div style="float:left;">'+
+                '<div id="productImgDiv">'+
                 productImgArray.join("")+
                 imgArray.join("")+
                     
                 "</div>"+
 
-                "<div>"+
+                "<div id='productDiv'>"+'<hr>'+
                     "<table>" +
                         "<th colspan='2'>" + productData.name + "</th>" +
+                        "<tr>" +
+                            "<td style='color:#AAAAAA'>" + "價錢 :" + "</td>" +
+                            "<td  style='color:#FF0000;font-size:30px;'>$" + productData.price + "</td>" +
+                        "</tr>" +
+                        "<tr>" +
+                            "<td style='color:#AAAAAA'>" + "品牌/系列 :" + "</td>" +
+                            "<td>" + productData.brand + "</td>" +
+                        "</tr>" +
                             "<tr>" +
-                                "<td>" + "品牌 :" + "</td>" +
-                                "<td>" + productData.brand + "</td>" +
+                                "<td style='color:#AAAAAA'>" + "配送 :" + "</td>" +
+                                "<td>快速宅配到貨 / 超商取貨</td>" +                             
                             "</tr>" +
                             "<tr>" +
-                                "<td>" + "價錢 :" + "</td>" +
-                                "<td>" + productData.price + "</td>" +
+                                "<td style='color:#AAAAAA'>" + "付款 :" + "</td>" +
+                                "<td>貨到付款 / 超商付款取貨 / 信用卡</td>" +                             
                             "</tr>" +
                     "</table>"+
                 "</div>")
@@ -107,25 +119,144 @@ function getProduct() {
                             "</tbody>"+
                     "</table>"
                 )
+
+                function buy(productData){
+                    var stock = productData.stock;
+                    var txt = "";
+                    if(stock!=0){
+                        for(let i =1;i<=stock;i++){
+                            txt += "<option value='" + i + "'>"+i+"</option>";
+                        }
+                    }else{
+                        txt += "<option value='0'>0</option>";
+                    }
+                    
+                    
+                    
+                    $("#buy").html("")
+                    $("#buy").append(
+                        '<p style="color:#FF0000">$'+productData.price+'</p>'+
+                        '<p>數量 <select id="quantity">'+txt+'<select> (庫存'+stock+'件)</p>'+
+                        '<button type="button" class="btn btn-warning" id="buyNow">立即購買</button> '+
+                        '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton">加入購物車</button>')
+                    }
+
+
+                    
+                buy(productData);
                 $("#recommendTitle").text("この商品をチェックした人はこんな商品もチェックしています")
                 var name = productData.name;
                 function getRecommendProducts(){
+                    var i = 0;
+                    var y = 0;
                     var recommendName =[];
                     var recommendPrice =[];
                     var recommendImg =[];
+                    var recommendAll=[];
                     $.ajax({
                         url: "http://localhost:8080/products/recommend?name=" + name,
                         method: "GET",
                         dataType: "json",
                         success: function (recommendData) {
+
+                            $.each(recommendData,function(){
+                                recommendName.push(recommendData[i].name)
+                                recommendPrice.push(recommendData[i].price)
+                                recommendImg.push(
+                                    '<img src='+recommendData[i].imageLink[0]+
+                                    ' alt="'+recommendData[i].name+
+                                    ' title="'+recommendData[i].name+
+                                    ' width="200">')
+                                i++;
+                            })
+
+                            $.each(recommendName,function(){
+                                recommendAll.push(
+                                    '<div id="recommendDiv">'+recommendImg[y]+
+                                        '<p>'+recommendName[y]+'</p>'+
+                                        '<p style="color:#FF0000">$ '+recommendPrice[y]+'</p>'+
+                                    '</div>'
+                                )
+                                y++;
+                            })
+
+
+                            // <!--Carousel Wrapper-->
+                            '<div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">'+
+                            
+                              {/* <!--Controls--> */}
+                              '<div class="controls-top">'+
+                                '<a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>'+
+                                '<a class="btn-floating" href="#multi-item-example" data-slide="next"><i'+
+                                    'class="fas fa-chevron-right"></i></a>'+
+                              '</div>'+
+                              {/* <!--/.Controls--> */}
+                            
+                              {/* <!--Indicators--> */}
+                              '<ol class="carousel-indicators">'+
+                                '<li data-target="#multi-item-example" data-slide-to="0" class="active"></li>'+
+                                '<li data-target="#multi-item-example" data-slide-to="1"></li>'+
+                              '</ol>'+
+                              {/* <!--/.Indicators--> */}
+                            
+                              {/* <!--Slides--> */}
+                              '<div class="carousel-inner" role="listbox">'+
+                            
+                                {/* <!--First slide--> */}
+                                '<div class="carousel-item active">'+
+                                for(int k=0;k <= 4;k++){
+                                  '<div class="col-md-4">'+
+                                  '<div class="card mb-2">'+
+                                    '<img class="card-img-top"'+
+                                      'src="'+recommendImg[k]+'"'+
+                                      'alt="Card image cap">'+
+                                    '<div class="card-body">'+
+                                      '<h4 class="card-title"></h4>'+
+                                      '<p class="card-text"></p>'+
+                                      '<a class="btn btn-primary">Button</a>'+
+                                    '</div>'+
+                                  '</div>'+
+                                '</div>'+
+                                '}'+
+                              '</div>'+
+                                
+                                // <!--/.First slide-->
+                            
+                                // <!--Second slide-->
+                                '<div class="carousel-item">'+
+                                for(int q=4;q <= 8;k++){
+                                  '<div class="col-md-4">'+
+                                    '<div class="card mb-2">'+
+                                      '<img class="card-img-top"'+
+                                        'src="'+ recommendImg[q]+'"'+
+                                        'alt="Card image cap">'+
+                                      '<div class="card-body">'+
+                                        '<h4 class="card-title"></h4>'+
+                                        '<p class="card-text"></p>'+
+                                        '<a class="btn btn-primary"></a>'+
+                                      '</div>'+
+                                    '</div>'+
+                                  '</div>'+
+                                '</div>'+
+                                // <!--/.Second slide-->
+                            
+                              '</div>'+
+                            //   <!--/.Slides-->
+                            
+                            '</div>'
+                            // <!--/.Carousel Wrapper-->
+
+
+
+
+
+
+
+
+
+
                             $("#recommendResult").append(
-                                "<div class='row'>"+
-                                    $.each(recommendData,function(){
-                                        $("#recommendResult").append(
-                                            
-                                        )
-                                    })+
-                                "</div>"
+                                recommendAll.join("")
                             )
                         },error: function (jqXHR, textStatus, errorThrown) {
                             console.log(textStatus)
@@ -149,3 +280,4 @@ function getProduct() {
 //     var src = $("img").attr("src")
 //     $("#InfoImg").attr("src",src)
 // }
+

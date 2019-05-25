@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.Query;
@@ -39,21 +40,22 @@ public class TopSearchService {
 			query1.setParameter("keyWord", keyWord);
 			List<TopSearchBean> timeResult =  query1.getResultList();
 			TopSearchBean topSearchBean = new TopSearchBean();
+			Date date = new Date(System.currentTimeMillis());
 			if (keyWordResult.size() == 0) { // keyWord不能重複
-				topSearchBean.setSearchTimes(1);
-				topSearchBean.setTime();
-				topSearchBean.setKeyWord(keyWord);
+				topSearchBean.setSearchCount(1);
+				topSearchBean.setUpdatedTime(date);
+				topSearchBean.setKeyword(keyWord);
 				topSearchDAO.insertTopSearch(topSearchBean);
 				return topSearchBean;
 			}else if(keyWordResult.size() != 0 && timeResult.size() == 0 ) { //keyWord重複,但不是這個月內的
-				topSearchBean.setSearchTimes(1);
-				topSearchBean.setTime();
-				topSearchBean.setKeyWord(keyWord);
+				topSearchBean.setSearchCount(1);
+				topSearchBean.setUpdatedTime(date);
+				topSearchBean.setKeyword(keyWord);
 				topSearchDAO.insertTopSearch(topSearchBean);
 				return topSearchBean;
 			}else if(keyWordResult.size() != 0 && timeResult.size() != 0) { //keyWord重複,且這個月內的,times+1
 				TopSearchBean result = keyWordResult.get(0);
-				result.setSearchTimes( (result.getSearchTimes() + 1 ) );
+				result.setSearchCount( (result.getSearchCount() + 1 ) );
 				topSearchDAO.updateTopSearch(result);
 				return result;
 			}else {
