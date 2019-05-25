@@ -90,7 +90,7 @@ public class ProductService {
 			if (findOne != null) {
 				return this.getSession()
 						.createQuery("from ProductBean where type = :type order by totalSold desc", ProductBean.class)
-						.setParameter("type", findOne.getType()).setMaxResults(5).getResultList();
+						.setParameter("type", findOne.getType()).setMaxResults(8).getResultList();
 			}
 		}
 		return null;
