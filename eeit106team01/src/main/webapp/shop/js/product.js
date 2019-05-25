@@ -149,10 +149,13 @@ function getProduct() {
                 function getRecommendProducts(){
                     var i = 0;
                     var y = 0;
+                    
                     var recommendName =[];
                     var recommendPrice =[];
                     var recommendImg =[];
                     var recommendAll=[];
+                    var recommendC1=[];
+                    var recommendC2="";
                     $.ajax({
                         url: "http://localhost:8080/products/recommend?name=" + name,
                         method: "GET",
@@ -181,83 +184,56 @@ function getProduct() {
                             })
 
 
-                            // <!--Carousel Wrapper-->
+
+                                for(let k=0;k<=4;k++){
+                                    recommendC1.push( '<div class="col-md-4"><div class="card mb-2"><img class="card-img-top" src="'+recommendImg[k]+'"'+'alt="Card image cap"><div class="card-body"><h4 class="card-title"></h4><p class="card-text"></p><a class="btn btn-primary">Button</a></div></div></div>')
+                                }
+                                for(let q=4;k<=7;q++){
+                                    recommendC2.push( '<div class="col-md-4"><div class="card mb-2"><img class="card-img-top" src="'+recommendImg[q]+'"'+'alt="Card image cap"><div class="card-body"><h4 class="card-title"></h4><p class="card-text"></p><a class="btn btn-primary">Button</a></div></div></div>')
+                                }
+
+                            
+                            $("#recommendResult").append(
+                                // recommendAll.join("")
+                                )
+                        // <!--Carousel Wrapper-->
                             '<div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">'+
                             
-                              {/* <!--Controls--> */}
-                              '<div class="controls-top">'+
-                                '<a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>'+
-                                '<a class="btn-floating" href="#multi-item-example" data-slide="next"><i'+
-                                    'class="fas fa-chevron-right"></i></a>'+
+                        //    Controls
+                            '<div class="controls-top">'+
+                              '<a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>'+
+                              '<a class="btn-floating" href="#multi-item-example" data-slide="next"><i'+
+                                  'class="fas fa-chevron-right"></i></a>'+
+                            '</div>'+
+                        // /.Controls
+                          
+                        //    Indicators
+                            '<ol class="carousel-indicators">'+
+                              '<li data-target="#multi-item-example" data-slide-to="0" class="active"></li>'+
+                              '<li data-target="#multi-item-example" data-slide-to="1"></li>'+
+                            '</ol>'+
+                        //   /.Indicators
+                          
+                            // Slides
+                            '<div class="carousel-inner" role="listbox">'+
+                          
+                        //   First slide
+                              '<div class="carousel-item active">'+recommendC1+
+                            '</div>'+
+                              
+                        //   /.First slide
+                          
+                            //   Second slide
+                              '<div class="carousel-item">'+
+                              recommendC2+             
                               '</div>'+
-                              {/* <!--/.Controls--> */}
+                            //  /.Second slide
+                            '</div>'+
+                        //   /.Slides
+                          
+                          '</div>'
+                        //   /.Carousel Wrapper
                             
-                              {/* <!--Indicators--> */}
-                              '<ol class="carousel-indicators">'+
-                                '<li data-target="#multi-item-example" data-slide-to="0" class="active"></li>'+
-                                '<li data-target="#multi-item-example" data-slide-to="1"></li>'+
-                              '</ol>'+
-                              {/* <!--/.Indicators--> */}
-                            
-                              {/* <!--Slides--> */}
-                              '<div class="carousel-inner" role="listbox">'+
-                            
-                                {/* <!--First slide--> */}
-                                '<div class="carousel-item active">'+
-                                for(int k=0;k <= 4;k++){
-                                  '<div class="col-md-4">'+
-                                  '<div class="card mb-2">'+
-                                    '<img class="card-img-top"'+
-                                      'src="'+recommendImg[k]+'"'+
-                                      'alt="Card image cap">'+
-                                    '<div class="card-body">'+
-                                      '<h4 class="card-title"></h4>'+
-                                      '<p class="card-text"></p>'+
-                                      '<a class="btn btn-primary">Button</a>'+
-                                    '</div>'+
-                                  '</div>'+
-                                '</div>'+
-                                '}'+
-                              '</div>'+
-                                
-                                // <!--/.First slide-->
-                            
-                                // <!--Second slide-->
-                                '<div class="carousel-item">'+
-                                for(int q=4;q <= 8;k++){
-                                  '<div class="col-md-4">'+
-                                    '<div class="card mb-2">'+
-                                      '<img class="card-img-top"'+
-                                        'src="'+ recommendImg[q]+'"'+
-                                        'alt="Card image cap">'+
-                                      '<div class="card-body">'+
-                                        '<h4 class="card-title"></h4>'+
-                                        '<p class="card-text"></p>'+
-                                        '<a class="btn btn-primary"></a>'+
-                                      '</div>'+
-                                    '</div>'+
-                                  '</div>'+
-                                '</div>'+
-                                // <!--/.Second slide-->
-                            
-                              '</div>'+
-                            //   <!--/.Slides-->
-                            
-                            '</div>'
-                            // <!--/.Carousel Wrapper-->
-
-
-
-
-
-
-
-
-
-
-                            $("#recommendResult").append(
-                                recommendAll.join("")
-                            )
                         },error: function (jqXHR, textStatus, errorThrown) {
                             console.log(textStatus)
                         }
