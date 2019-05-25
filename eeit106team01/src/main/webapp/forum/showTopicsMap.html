@@ -13,18 +13,54 @@
         src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script
         src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-        crossorigin="anonymous"></script>
+    <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
+        crossorigin="anonymous"></script> -->
+    <!-- google map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
+    <!-- Main Quill library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script src="/forum/quill/quill.js"></script>
+    <script src="/forum/quill/quill.min.js"></script>
+    <!-- plyr -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.3/plyr.css" />
+    <script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
+    
+    <script src="js/topic/createTopicView.js"></script>
+
     <script type="text/javascript">
-        $(window).on('load', initMap);
         let map;
         let markers = [];
         let listener;
+        
+        $(window).on("load", function(){
+            initMap();
+            $("#taipei").on("click", function(){
+                map.setCenter(new google.maps.LatLng(25.044991025205064, 121.53621722216803));
+            });
+            $("#taoyuan").on("click", function(){
+                map.setCenter(new google.maps.LatLng(24.973514234746464, 121.26104139430254));
+            });
+            $("#taichung").on("click", function(){
+                map.setCenter(new google.maps.LatLng(24.1436761923398, 120.64985612179316));
+            });
+            $("#tainan").on("click", function(){
+                map.setCenter(new google.maps.LatLng(23.01296258224154, 120.21863764873228));
+            });
+            $("#kaohsiung").on("click", function(){
+                map.setCenter(new google.maps.LatLng(22.626350313412292, 120.34279125318312));
+            });
+            $("#yilan").on("click", function(){
+                map.setCenter(new google.maps.LatLng(24.71783993530108, 121.7467274256129));
+            });
+            $("#taitung").on("click", function(){
+                map.setCenter(new google.maps.LatLng(22.778863312914602, 121.10624217157897));
+            });
+        });
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map_canvas"), {
-                    zoom: 13    //0-21
+                    zoom: 12    //0-21
                     , center: { lat: 25.033793, lng: 121.543427 }
                     , scaleControl: true
                     // , maxZoom: 15
@@ -45,35 +81,10 @@
                 url: `http://localhost:8080/articleTopics?lowerLatitude=${lowerLatitude}&upperLatitude=${upperLatitude}&lowerLongitude=${lowerLongitude}&upperLongitude=${upperLongitude}`,
                 type: "GET",
                 success: function (dataTopicList) {
-                    createTopicView(dataTopicList);
+                    createTopicView(dataTopicList, "topicList");
                     addMarker(dataTopicList);
                 }
             })
-        }
-
-        function createTopicView(dataTopicList) {
-            $("#topicList").text("");
-            let divCardDeck;
-            for (let i = 0; i < dataTopicList.length; i++) {
-                if(( i + 1 ) % 3 == 1){
-                    divCardDeck = $("<div></div>").addClass("card-deck").width("900px").appendTo($("#topicList"));
-                }
-                let divCard = $("<div></div>").addClass("card").attr("id", `id${dataTopicList[i].id}`).appendTo(divCardDeck);
-                    let imgBloodTrial = $('<img />',
-                                { class: 'card-img-topMyid',
-                                src: '../images/bloodtrial.jpg',
-                                width: '100%'
-                                }).appendTo(divCard);
-                    let divCardBody = $("<div></div>").addClass("card-body").appendTo(divCard);
-                        let h4TopicHeader = $("<h4></h4>").addClass("card-title").text(dataTopicList[i].topicHeader).appendTo(divCardBody);
-                        let pTopicContent = $("<p></p>").addClass("card-text").text(dataTopicList[i].topicContent).appendTo(divCardBody);
-                            let aLinkToContent = $("<a></a>").addClass("card-link").attr("href", "#").text("<詳細內容>").appendTo(pTopicContent);
-                        let pMemberName = $("<p></p>").addClass("card-text").text("Fadachai").appendTo(divCardBody);
-                        let spanPageViews = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].pageViews).appendTo(divCardBody);
-                        let spanTopicLikeNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].topicLikeNum).appendTo(divCardBody);
-                        let spanContentReplyNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].contentReplyNum).appendTo(divCardBody);
-                        let spanAccidentTime = $("<span></span>").addClass("badge badge-warning").text(dataTopicList[i].accidentTime).appendTo(divCardBody);
-            }
         }
 
         function addMarker(dataTopicList) {
@@ -113,10 +124,6 @@
 
         function onBounds_changed() {
             getTopicList();
-
-            let bounds = map.getBounds();
-            document.getElementById("boundinfo").innerHTML =
-                'bounds:<br>&nbsp&nbsp西南角' + bounds.getSouthWest() + '<br>&nbsp&nbsp東北角' + bounds.getNorthEast();
         }
 
 
@@ -127,7 +134,13 @@
 
 <body>
     <div id="map_canvas" style="width:600px; height:500px; float: right;"></div>
-    <div id="boundinfo"></div>
+    <input type="button" id="taipei" value="台北市">
+    <input type="button" id="taoyuan" value="桃園市">
+    <input type="button" id="taichung" value="台中市">
+    <input type="button" id="tainan" value="台南市">
+    <input type="button" id="kaohsiung" value="高雄市">
+    <input type="button" id="yilan" value="宜蘭縣">
+    <input type="button" id="taitung" value="台東縣">
     <hr>
     <div id="topicList"></div>
 </body>

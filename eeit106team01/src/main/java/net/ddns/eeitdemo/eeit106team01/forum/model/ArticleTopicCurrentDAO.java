@@ -10,7 +10,7 @@ public interface ArticleTopicCurrentDAO {
 
 	public List<ArticleTopicCurrentBean> findAll();
 	
-	public List<ArticleTopicCurrentBean> findByLastRange(String queryString, int startPosition, int maxResult);
+	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn);
 
 	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude, Double lowerLongitude, Double upperLongitude);
 	
