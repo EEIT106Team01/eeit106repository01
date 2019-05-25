@@ -179,6 +179,82 @@ function getProduct() {
                                 )
                                 y++;
                             })
+
+
+                            // <!--Carousel Wrapper-->
+                            '<div id="multi-item-example" class="carousel slide carousel-multi-item" data-ride="carousel">'+
+                            
+                              {/* <!--Controls--> */}
+                              '<div class="controls-top">'+
+                                '<a class="btn-floating" href="#multi-item-example" data-slide="prev"><i class="fas fa-chevron-left"></i></a>'+
+                                '<a class="btn-floating" href="#multi-item-example" data-slide="next"><i'+
+                                    'class="fas fa-chevron-right"></i></a>'+
+                              '</div>'+
+                              {/* <!--/.Controls--> */}
+                            
+                              {/* <!--Indicators--> */}
+                              '<ol class="carousel-indicators">'+
+                                '<li data-target="#multi-item-example" data-slide-to="0" class="active"></li>'+
+                                '<li data-target="#multi-item-example" data-slide-to="1"></li>'+
+                              '</ol>'+
+                              {/* <!--/.Indicators--> */}
+                            
+                              {/* <!--Slides--> */}
+                              '<div class="carousel-inner" role="listbox">'+
+                            
+                                {/* <!--First slide--> */}
+                                '<div class="carousel-item active">'+
+                                for(int k=0;k <= 4;k++){
+                                  '<div class="col-md-4">'+
+                                  '<div class="card mb-2">'+
+                                    '<img class="card-img-top"'+
+                                      'src="'+recommendImg[k]+'"'+
+                                      'alt="Card image cap">'+
+                                    '<div class="card-body">'+
+                                      '<h4 class="card-title"></h4>'+
+                                      '<p class="card-text"></p>'+
+                                      '<a class="btn btn-primary">Button</a>'+
+                                    '</div>'+
+                                  '</div>'+
+                                '</div>'+
+                                '}'+
+                              '</div>'+
+                                
+                                // <!--/.First slide-->
+                            
+                                // <!--Second slide-->
+                                '<div class="carousel-item">'+
+                                for(int q=4;q <= 8;k++){
+                                  '<div class="col-md-4">'+
+                                    '<div class="card mb-2">'+
+                                      '<img class="card-img-top"'+
+                                        'src="'+ recommendImg[q]+'"'+
+                                        'alt="Card image cap">'+
+                                      '<div class="card-body">'+
+                                        '<h4 class="card-title"></h4>'+
+                                        '<p class="card-text"></p>'+
+                                        '<a class="btn btn-primary"></a>'+
+                                      '</div>'+
+                                    '</div>'+
+                                  '</div>'+
+                                '</div>'+
+                                // <!--/.Second slide-->
+                            
+                              '</div>'+
+                            //   <!--/.Slides-->
+                            
+                            '</div>'
+                            // <!--/.Carousel Wrapper-->
+
+
+
+
+
+
+
+
+
+
                             $("#recommendResult").append(
                                 recommendAll.join("")
                             )
