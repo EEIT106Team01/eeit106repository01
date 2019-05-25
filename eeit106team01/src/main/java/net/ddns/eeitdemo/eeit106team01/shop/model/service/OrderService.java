@@ -1,6 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -12,12 +13,12 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberTestDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
@@ -26,7 +27,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 public class OrderService {
 
 	@Autowired
-	private MemberTestDAO memberTestDAO;
+	private MemberDAO memberTestDAO;
 
 	@Autowired
 	private OrderDAO orderDAO;
@@ -35,7 +36,7 @@ public class OrderService {
 	private ProductDAO productDAO;
 
 	// Create a Order, Order Details
-	public OrderBean createOrder(ArrayList<Long> productIds, Long memberId, OrderBean order) {
+	public PurchaseBean createOrder(ArrayList<Long> productIds, Long memberId, PurchaseBean order) {
 
 		if (productIds != null && memberId != null) {
 
@@ -48,38 +49,42 @@ public class OrderService {
 			while (ids.hasNext()) {
 				count++;
 				Long id = (Long) ids.next();
-				ProductBean product = productDAO.findProductByPrimaryKey(id);
+				ProductBean product = productDAO.findProductByProductId(id);
 				products.put(count, product);
 				productTotalPrice += product.getPrice();
 			}
 
 			// Order set default value
-			order.setCreateTime();
-			order.setUpdatedTime();
+			Date date = new Date(System.currentTimeMillis());
+			order.setCreateTime(date);
+			order.setUpdatedTime(date);
 			order.setDeliverStatus("order created");
-			order.setMemberBeanTest(memberTestDAO.findByPrimaryKey(memberId));
-			order.setProductTotalPrice(order.getDeliverPrice() + productTotalPrice);
+			order.setMemberId(memberTestDAO.findByMemberId(memberId));
+			order.setProductTotalPrice(productTotalPrice);
 
 			// Order Detail
-			ArrayList<OrderDetailBean> orderDetails = new ArrayList<OrderDetailBean>();
+			ArrayList<PurchaseListBean> orderDetails = new ArrayList<PurchaseListBean>();
 
 			Iterator<Entry<Integer, ProductBean>> product = products.entrySet().iterator();
 			while (product.hasNext()) {
 				Map.Entry<Integer, ProductBean> entry = (Map.Entry<Integer, ProductBean>) product.next();
 				ProductBean productBean = entry.getValue();
 
-				OrderDetailBean orderDetail = new OrderDetailBean();
-				orderDetail.setOrderBean(order);
-				orderDetail.setProductBean(productBean);
+				PurchaseListBean orderDetail = new PurchaseListBean();
+				orderDetail.setPurchaseId(order);
+				orderDetail.setProductId(productBean);
 				orderDetail.setPrice(productBean.getPrice());
 
-				SerialNumberBean serialNumber = productDAO.findavailableProduct(productBean.getId()).get(0);
+				SerialNumberBean serialNumber = productDAO.findSerialNumbersAreAvailableByProductId(productBean.getId()).get(0);
 				orderDetail.setSerialNumber(serialNumber.getSerialNumber());
 				serialNumber.setAvailabilityStatus("sold");
-				productDAO.updateSNStatus(serialNumber);
+				productDAO.updateAvailabilityStatus(serialNumber);
 
-				OrderDetailBean insertResult = orderDAO.insertOrderDetail(orderDetail);
-				orderDetails.add(orderDAO.findOrderDetailByPrimaryKey(insertResult.getId()));
+				productBean.setStock(productBean.getStock() - 1);
+				productBean.setTotalSold(productBean.getTotalSold() + 1);
+
+				PurchaseListBean insertResult = orderDAO.insertOrderDetail(orderDetail);
+				orderDetails.add(orderDAO.findOrderDetailByOrderDetailId(insertResult.getId()));
 			}
 
 			// Create Order
@@ -89,23 +94,41 @@ public class OrderService {
 	}
 
 	// Update a Order Status
-	public OrderBean updateOrderStatus(OrderBean order, String deliverStatus, String payStatus) {
+	public PurchaseBean updateOrderStatus(PurchaseBean order, String deliverStatus, String payStatus) {
 		if (order != null && deliverStatus != null && payStatus != null) {
-			order.setUpdatedTime();
+			Date date = new Date(System.currentTimeMillis());
+			order.setUpdatedTime(date);
 			order.setDeliverStatus(deliverStatus);
 			order.setPayStatus(payStatus);
-			OrderBean result = orderDAO.updateOrder(order);
+			PurchaseBean result = orderDAO.updateOrder(order);
 			return result;
 		}
 		return null;
 	}
 
-	// Find Orders by Member Account, by Order id.
-	public List<OrderBean> findOrdersByMemberId(Long memberId) {
-		if (memberId != null) {
-			List<OrderBean> result = orderDAO.findOrderByMemberId(memberId);
-			if (result != null) {
-				return result;
+	// Find Orders by Member id, by Order id.
+	/**
+	 * @param id
+	 * @param searchType
+	 * @return if searchType = 1 will search by MemberId, else if searchType = 2
+	 *         will search by OrderId
+	 */
+	public List<PurchaseBean> findOrdersByMemberId(Long id, Integer searchType) {
+		if (id != null && searchType != null) {
+			if (searchType == 1) {
+				List<PurchaseBean> result = orderDAO.findOrdersByMemberId(id);
+				if (result != null) {
+					return result;
+				}
+			} else if (searchType == 2) {
+				List<PurchaseBean> result = new ArrayList<PurchaseBean>();
+				PurchaseBean order = orderDAO.findOrderByOrderId(id);
+				result.add(order);
+				if (result != null) {
+					return result;
+				}
+			} else {
+				return null;
 			}
 		}
 		return null;
@@ -118,8 +141,9 @@ public class OrderService {
 			Iterator<ReviewBean> iterator = reviews.iterator();
 			while (iterator.hasNext()) {
 				ReviewBean review = (ReviewBean) iterator.next();
-				review.setCreateTime();
-				review.setUpdatedTime();
+				Date date = new Date(System.currentTimeMillis());
+				review.setCreateTime(date);
+				review.setUpdatedTime(date);
 				ReviewBean result = orderDAO.insertReview(review);
 				results.add(result);
 			}

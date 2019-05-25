@@ -1,11 +1,10 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Iterator;
+import java.util.List;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,178 +12,95 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import com.google.common.reflect.TypeToken;
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-
-import net.ddns.eeitdemo.eeit106team01.shop.ShopTest;
-import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class OrderDAOImplTest extends ShopTest {
+public class OrderDAOImplTest {
 
 	@Autowired
 	private OrderDAO orderDAO;
 
-//	@Test
-	public void testInsertOrderOrderBean() {
+	@Autowired
+	private ProductDAO productDAO;
 
-		OrderBean orderBean = new OrderBean();
-		orderBean.setCreateTime();
-		orderBean.setUpdatedTime();
-		orderBean.setPayStatus("未付款");
-		orderBean.setDeliverStatus("訂單成立");
-		orderBean.setDeliverPrice(200);
-		orderBean.setDeliverType("超商[7-11]");
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("收件人", "Alex");
-		jsonObject.addProperty("地址", "台北市大安區");
-
-		@SuppressWarnings("serial")
-		HashMap<String, String> jsonMap = new Gson().fromJson(jsonObject.toString(),
-				new TypeToken<HashMap<String, Object>>() {
-				}.getType());
-
-		orderBean.setReceiverInformation(jsonMap);
-		orderBean.setProductTotalPrice(2000);
-
-		orderDAO.insertOrder(orderBean);
-	}
-
-//	@Test
-	public void testUpdateOrderOrderBean() {
-		OrderBean orderBean = new OrderBean();
-		orderBean.setId(1L);
-		orderBean.setCreateTime();
-		orderBean.setUpdatedTime();
-		orderBean.setPayStatus("未付款");
-		orderBean.setDeliverStatus("訂單成立");
-		orderBean.setDeliverPrice(200);
-		orderBean.setDeliverType("超商[7-11]");
-		JsonObject jsonObject = new JsonObject();
-		jsonObject.addProperty("收件人", "Alex");
-		jsonObject.addProperty("地址", "台北市大安區");
-
-		@SuppressWarnings("serial")
-		HashMap<String, String> jsonMap = new Gson().fromJson(jsonObject.toString(),
-				new TypeToken<HashMap<String, Object>>() {
-				}.getType());
-
-		orderBean.setReceiverInformation(jsonMap);
-		orderBean.setProductTotalPrice(2001);
-
-		orderDAO.updateOrder(orderBean);
-
-		Integer actual = 2001;
-		assertEquals(orderDAO.findOrderByPrimaryKey(1L).getProductTotalPrice(), actual);
-	}
-
-//	@Test
-	public void testFindOrderByPrimaryKey() {
-		Integer actual = 200;
-		assertEquals(orderDAO.findOrderByPrimaryKey(1L).getDeliverPrice(), actual);
-	}
-
-//	@Test
-	public void testFindOrders() {
-		System.out.println(orderDAO.findOrders().toString());
-		assertNotNull(orderDAO.findOrders());
-	}
-
-//	@Test
-	public void testInsertOrderDetail() throws Exception {
-		OrderDetailBean orderDetailBean = new OrderDetailBean();
-		orderDetailBean.setPrice(2000);
-		orderDetailBean.setSerialNumber("A2");
-		orderDetailBean.setOrderBean(orderDAO.findOrderByPrimaryKey(1L));
-
-		OrderDetailBean orderDetailBean1 = new OrderDetailBean();
-		orderDetailBean1.setPrice(3000);
-		orderDetailBean1.setSerialNumber("A5");
-		orderDetailBean1.setOrderBean(orderDAO.findOrderByPrimaryKey(1L));
-
-		ArrayList<OrderDetailBean> orderDetailBeans = new ArrayList<OrderDetailBean>();
-		orderDetailBeans.add(orderDetailBean);
-		orderDetailBeans.add(orderDetailBean1);
-
-		Iterator<OrderDetailBean> iterator = orderDetailBeans.iterator();
-		while (iterator.hasNext()) {
-			orderDAO.insertOrderDetail((OrderDetailBean) iterator.next());
-		}
-
-		Long actual = 1L;
-		assertEquals(orderDAO.findOrderDetailByPrimaryKey(2L).getOrderBean().getId(), actual);
-		System.out.println(orderDAO.findOrderDetails().toString());
-	}
-
-//	@Test
-	public void testUpdateOrderDetail() throws Exception {
-		OrderDetailBean orderDetailBean = orderDAO.findOrderDetailByPrimaryKey(1L);
-		orderDetailBean.setPrice(3000);
-		orderDAO.updateOrderDetail(orderDetailBean);
-
-		Integer actual = 3000;
-		assertEquals(orderDAO.findOrderDetailByPrimaryKey(1L).getPrice(), actual);
-
-	}
-
-//	@Test
-	public void testFindOrderDetailByPrimaryKey() throws Exception {
-		assertNotNull(orderDAO.findOrderDetailByPrimaryKey(1L));
-	}
-
-//	@Test
-	public void testFindOrderDetails() throws Exception {
-		assertNotNull(orderDAO.findOrderDetails());
-	}
-
-//	@Test
-	public void testInsertReview() throws Exception {
-		ReviewBean reviewBean = new ReviewBean();
-		reviewBean.setCreateTime();
-		reviewBean.setUpdatedTime();
-		reviewBean.setRating(9d);
-		reviewBean.setComment("很不錯喔! 好用。");
-		orderDAO.insertReview(reviewBean);
-
-		Double actual = 9d;
-		assertEquals(orderDAO.findReviewByPrimaryKey(1L).getRating(), actual);
-	}
-
-//	@Test
-	public void testUpdateReview() throws Exception {
-		ReviewBean reviewBean = orderDAO.findReviewByPrimaryKey(1L);
-		reviewBean.setRating(10d);
-		orderDAO.updateReview(reviewBean);
-
-		Double actual = 10d;
-		assertEquals(orderDAO.findReviewByPrimaryKey(1L).getRating(), actual);
-	}
-
-//	@Test
-	public void testFindReviewByPrimaryKey() throws Exception {
-		assertNotNull(orderDAO.findReviewByPrimaryKey(2L));
-		System.out.println(orderDAO.findReviewByPrimaryKey(2L).toString());
-	}
-
-//	@Test
-	public void testFindReviews() throws Exception {
-		assertNotNull(orderDAO.findReviews());
-		System.out.println(orderDAO.findReviews());
-	}
-
-//	@Test
-	public void testFindOrderByMemberId() throws Exception {
-		System.out.println(orderDAO.findOrderByMemberId(5L).toString());
-	}
+	@Autowired
+	private MemberDAO memberDAO;
 
 	@Test
-	public void testFindOrderDetailsByOrderId() throws Exception {
-		System.out.println(orderDAO.findOrderDetailsByOrderId(12L).size());
+	public void testInsertOrder() {
+		// Member
+//		MemberBeanShop memberBean = new MemberBeanShop();
+//		memberBean.setAccount("");
+//		memberDAO.insert(memberBean);
+
+		// Product
+//		ProductBean productBean = new ProductBean();
+//		productBean.setBrand("");
+//		productBean.setCreateTime();
+//		HashMap<Integer, String> imageLink = new HashMap<Integer, String>();
+//		imageLink.put(1, "");
+//		productBean.setImageLink(imageLink);
+//		HashMap<String, String> information = new HashMap<String, String>();
+//		information.put("", "");
+//		productBean.setInformation(information);
+//		HashMap<Integer, String> informationImageLink = new HashMap<Integer, String>();
+//		informationImageLink.put(1, "");
+//		productBean.setInformationImageLink(informationImageLink);
+//		productBean.setName("");
+//		productBean.setPrice(0);
+//		productBean.setStock(0);
+//		productBean.setTotalSold(0);
+//		productBean.setType("");
+//		productBean.setUpdatedTime();
+//		productDAO.insertProduct(productBean);
+
+		// OrderDetail
+//		List<OrderDetailBean> list = new ArrayList<OrderDetailBean>();
+//		OrderDetailBean orderDetailBean = new OrderDetailBean();
+//		orderDetailBean.setPrice(0);
+//		orderDetailBean.setProductBean(productDAO.findProductByPrimaryKey(1L));
+//		orderDetailBean.setSerialNumber("");
+//		list.add(orderDAO.findOrderDetailByOrderDetailId(1L));
+
+		// Test Equals
+//		OrderBean orderBean1 = new OrderBean();
+//		orderBean1.setCreateTime();
+//		orderBean1.setUpdatedTime();
+//		orderBean1.setDeliverPrice(0);
+//		orderBean1.setDeliverStatus("dStatus1");
+//		orderBean1.setDeliverType("type1");
+//		orderBean1.setPayStatus("pStatus1");
+//		orderBean1.setProductTotalPrice(0);
+//		orderBean1.setMemberBeanTest(memberDAO.findByMemberID(1L));
+//		HashMap<String, String> hashMap = new HashMap<String, String>();
+//		hashMap.put("map1", "map1");
+//		orderBean1.setReceiverInformation(hashMap);
+//		OrderBean test1 = orderDAO.insertOrder(orderBean1);
+//		String actual = "dStatus1";
+//		assertEquals(test1.getDeliverStatus(), actual);
+		
+		System.out.println(orderDAO.findOrderByOrderId(1L).toString());
+		
+//		// Test Null
+//		OrderBean orderBean3 = new OrderBean();
+//		orderBean3.setCreateTime();
+//		OrderBean test3 = orderDAO.insertOrder(orderBean2);
+//		assertNull(test3);
+	}
+
+//	@Test
+	public void testUpdateOrder() {
+	}
+
+//	@Test
+	public void testFindOrderByOrderId() {
 	}
 
 }

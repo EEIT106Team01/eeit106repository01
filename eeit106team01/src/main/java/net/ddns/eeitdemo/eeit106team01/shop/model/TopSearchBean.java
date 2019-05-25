@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -13,31 +14,60 @@ import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 @Entity
-@Table(name = "SHOP_TopSearch")
+@Table(schema = "Shop", name = "TopSearch")
 public class TopSearchBean implements Serializable {
 
 	private static final long serialVersionUID = 4059835639841966792L;
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@Column(columnDefinition = "bigint")
+	@Column(name = "TopSearchID", columnDefinition = "bigint")
 	private Long id;
 
-	@Column(nullable = false, columnDefinition = "nvarchar(max)")
-	private String keyWord;
+	@Column(name = "Keyword", columnDefinition = "nvarchar(max)", nullable = false, updatable = false)
+	private String keyword;
 
-	@Column(nullable = false)
-	private Integer searchTimes;
+	@Column(name = "SearchCount", nullable = false)
+	private Integer searchCount;
 
 	@Temporal(TemporalType.TIMESTAMP)
-	private java.util.Date time;
+	@Column(name = "UpdatedTime", nullable = false)
+	private java.util.Date updatedTime;
+
+	public TopSearchBean() {
+		super();
+	}
+
+	/**
+	 * @param keyword
+	 * @param searchCount
+	 * @param updatedTime
+	 */
+	public TopSearchBean(String keyword, Integer searchCount, Date updatedTime) {
+		super();
+		this.keyword = keyword;
+		this.searchCount = searchCount;
+		this.updatedTime = updatedTime;
+	}
 
 	@Override
 	public String toString() {
-		return "TopSearchBean [id=" + id + ", keyWord=" + keyWord + ", searchTimes=" + searchTimes + ", time=" + time
-				+ "]";
+		return "TopSearchBean [id=" + id + ", keyword=" + keyword + ", searchCount=" + searchCount + ", updatedTime="
+				+ updatedTime + "]";
 	}
-	
+
+	/**
+	 * Check keyword, updatedTime, searchCount null or not.
+	 * 
+	 * @return true if not null, or NullPointerException if it is.
+	 */
+	public Boolean isNotNull() {
+		this.keyword = Objects.requireNonNull(keyword, "keyword must not be null");
+		this.updatedTime = Objects.requireNonNull(updatedTime, "updatedTime must not be null");
+		this.searchCount = Objects.requireNonNull(searchCount, "searchCount must not be null");
+		return true;
+	}
+
 	public Long getId() {
 		return id;
 	}
@@ -46,27 +76,28 @@ public class TopSearchBean implements Serializable {
 		this.id = id;
 	}
 
-	public String getKeyWord() {
-		return keyWord;
+	public String getKeyword() {
+		return keyword;
 	}
 
-	public void setKeyWord(String keyWord) {
-		this.keyWord = keyWord;
+	public void setKeyword(String keyword) {
+		this.keyword = keyword;
 	}
 
-	public java.util.Date getTime() {
-		return time;
+	public Integer getSearchCount() {
+		return searchCount;
 	}
 
-	public void setTime() {
-		this.time = new Date(System.currentTimeMillis());
+	public void setSearchCount(Integer searchCount) {
+		this.searchCount = searchCount;
 	}
 
-	public Integer getSearchTimes() {
-		return searchTimes;
+	public java.util.Date getUpdatedTime() {
+		return updatedTime;
 	}
 
-	public void setSearchTimes(Integer searchTimes) {
-		this.searchTimes = searchTimes;
+	public void setUpdatedTime(java.util.Date updatedTime) {
+		this.updatedTime = updatedTime;
 	}
+
 }
