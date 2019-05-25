@@ -1,6 +1,8 @@
 package net.ddns.eeitdemo.eeit106team01.shop.util;
 
+import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -27,6 +29,8 @@ public class ShopCrawlerTest {
 
 	@Autowired
 	private ProductService productService;
+
+	final private String logPath = "C:\\Users\\Public\\";
 
 	@Test
 	public void testYahooProductDetailsCrawler() {
@@ -204,16 +208,22 @@ public class ShopCrawlerTest {
 			if (errors != null && errors.size() > 0) {
 				SimpleDateFormat format = new SimpleDateFormat("MM-dd-yy_hh.mm.ss");
 				try {
-					PrintWriter writer = new PrintWriter("D:\\final-project\\Project\\javaio\\crawler-fail-log_"
-							+ format.format(new Date(System.currentTimeMillis())) + ".txt");
+					File file = new File(logPath);
+					if (file.exists() == false) {
+						file.createNewFile();
+					}
+					String writePath = logPath + "crawler-fail-log_"
+							         + format.format(new Date(System.currentTimeMillis())) + ".txt";
+					PrintWriter writer = new PrintWriter(writePath);
 
 					Iterator<Entry<String, String>> iterator = errors.entrySet().iterator();
 					while (iterator.hasNext()) {
 						Map.Entry<String, String> entry = (Entry<String, String>) iterator.next();
 						writer.write(entry.getKey() + " " + entry.getValue() + "\r");
 					}
+					System.err.println("FailLog Created, path: " + writePath);
 					writer.close();
-				} catch (FileNotFoundException e) {
+				} catch (IOException e) {
 					e.printStackTrace();
 				}
 			}
