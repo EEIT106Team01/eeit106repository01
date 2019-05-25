@@ -19,7 +19,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
-import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
 @Service
@@ -30,7 +30,7 @@ public class OrderService {
 	private MemberDAO memberTestDAO;
 
 	@Autowired
-	private OrderDAO orderDAO;
+	private PurchaseDAO orderDAO;
 
 	@Autowired
 	private ProductDAO productDAO;

@@ -1,7 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.util;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.ParseException;
@@ -213,7 +212,7 @@ public class ShopCrawlerTest {
 						file.createNewFile();
 					}
 					String writePath = logPath + "crawler-fail-log_"
-							         + format.format(new Date(System.currentTimeMillis())) + ".txt";
+							+ format.format(new Date(System.currentTimeMillis())) + ".txt";
 					PrintWriter writer = new PrintWriter(writePath);
 
 					Iterator<Entry<String, String>> iterator = errors.entrySet().iterator();

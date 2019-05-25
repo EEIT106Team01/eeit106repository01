@@ -16,10 +16,10 @@ import org.springframework.stereotype.Repository;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.dao.OrderDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
 
 @Repository
-public class OrderDAOImpl implements OrderDAO {
+public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
@@ -30,39 +30,47 @@ public class OrderDAOImpl implements OrderDAO {
 
 	// Order
 	@Override
-	public PurchaseBean insertOrder(PurchaseBean orderBean) {
-		if (orderBean != null) {
-			getSession().save(orderBean);
-			return this.findOrderByOrderId(orderBean.getId());
+	public PurchaseBean insertOrder(PurchaseBean purchaseBean) {
+		if (purchaseBean.isNotNull()) {
+			try {
+				this.getSession().save(purchaseBean);
+				Long id = purchaseBean.getId();
+				if (id != null && id.longValue() > 0) {
+					return this.findOrderByOrderId(id);
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
 		}
 		return null;
 	}
 
 	@Override
-	public PurchaseBean updateOrder(PurchaseBean orderBean) {
-		if (orderBean != null) {
+	public PurchaseBean updateOrder(PurchaseBean purchaseBean) {
+		if (purchaseBean.isNotNull()) {
 			try {
-				getSession().update(orderBean);
+				this.getSession().update(purchaseBean);
+				Long id = purchaseBean.getId();
+				if (id != null && id.longValue() > 0) {
+					return this.findOrderByOrderId(id);
+				}
 			} catch (HibernateException e) {
-				e.printStackTrace();
-				return null;
+				throw new HibernateException(e.getMessage());
 			}
-			return this.findOrderByOrderId(orderBean.getId());
 		}
 		return null;
 	}
 
 	@Override
 	public PurchaseBean findOrderByOrderId(Long id) {
-		if (id != null) {
+		if (id != null && id.longValue() > 0) {
 			try {
-				PurchaseBean result = getSession().get(PurchaseBean.class, id);
+				PurchaseBean result = this.getSession().get(PurchaseBean.class, id);
 				if (result != null) {
 					return result;
 				}
 			} catch (HibernateException e) {
-				e.printStackTrace();
-				return null;
+				throw new HibernateException(e.getMessage());
 			}
 		}
 		return null;
@@ -153,19 +161,19 @@ public class OrderDAOImpl implements OrderDAO {
 
 	// OrderDetail
 	@Override
-	public PurchaseListBean insertOrderDetail(PurchaseListBean orderDetailBeans) {
-		if (orderDetailBeans != null) {
-			getSession().save(orderDetailBeans);
-			return findOrderDetailByOrderDetailId(orderDetailBeans.getId());
+	public PurchaseListBean insertOrderDetail(PurchaseListBean purchaseListBean) {
+		if (purchaseListBean != null) {
+			getSession().save(purchaseListBean);
+			return findOrderDetailByOrderDetailId(purchaseListBean.getId());
 		}
 		return null;
 	}
 
 	@Override
-	public PurchaseListBean updateOrderDetail(PurchaseListBean orderDetailBean) {
-		if (orderDetailBean != null) {
-			getSession().update(orderDetailBean);
-			return findOrderDetailByOrderDetailId(orderDetailBean.getId());
+	public PurchaseListBean updateOrderDetail(PurchaseListBean purchaseListBean) {
+		if (purchaseListBean != null) {
+			getSession().update(purchaseListBean);
+			return findOrderDetailByOrderDetailId(purchaseListBean.getId());
 		}
 		return null;
 	}

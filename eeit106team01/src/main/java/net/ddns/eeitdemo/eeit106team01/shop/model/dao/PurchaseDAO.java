@@ -6,12 +6,12 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 
-public interface OrderDAO {
+public interface PurchaseDAO {
 
 	// Order
-	abstract PurchaseBean insertOrder(PurchaseBean orderBean);
+	abstract PurchaseBean insertOrder(PurchaseBean purchaseBean);
 
-	abstract PurchaseBean updateOrder(PurchaseBean orderBean);
+	abstract PurchaseBean updateOrder(PurchaseBean purchaseBean);
 
 	abstract PurchaseBean findOrderByOrderId(Long id);
 
@@ -36,9 +36,9 @@ public interface OrderDAO {
 	abstract List<PurchaseBean> findOrders();
 
 	// Order Detail
-	abstract PurchaseListBean insertOrderDetail(PurchaseListBean orderDetailBeans);
+	abstract PurchaseListBean insertOrderDetail(PurchaseListBean purchaseListBean);
 
-	abstract PurchaseListBean updateOrderDetail(PurchaseListBean orderDetailBean);
+	abstract PurchaseListBean updateOrderDetail(PurchaseListBean purchaseListBean);
 
 	abstract PurchaseListBean findOrderDetailByOrderDetailId(Long id);
 
