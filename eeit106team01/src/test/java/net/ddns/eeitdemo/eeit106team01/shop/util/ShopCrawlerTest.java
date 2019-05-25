@@ -20,7 +20,7 @@ public class ShopCrawlerTest {
 	@Autowired
 	private ProductService productService;
 
-//	@Test
+	@Test
 	// @formatter:off
 	public void testYahooProductDetailsCrawler() {
 		String fetchProductName = null;
