@@ -24,6 +24,7 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
@@ -101,6 +102,9 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(ArticleTopicCurrentBean.class);
 		builder.addAnnotatedClass(VideoBean.class);
 		builder.addAnnotatedClass(MemberBean.class);
+		
+		// Chat
+		builder.addAnnotatedClass(RegionMessageBean.class);
 
 		Properties props = new Properties();
 		props.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));

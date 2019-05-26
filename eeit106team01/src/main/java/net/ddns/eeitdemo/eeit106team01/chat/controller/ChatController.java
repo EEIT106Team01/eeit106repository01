@@ -15,6 +15,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import net.ddns.eeitdemo.eeit106team01.chat.model.MessageBean;
+import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
+import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageService;
 import net.ddns.eeitdemo.eeit106team01.chat.model.TransferMessageBean;
 
 @EnableScheduling
@@ -24,15 +26,27 @@ public class ChatController {
 
 	@Autowired
 	private SimpUserRegistry simpUserRegistry;
+	
+	@Autowired
+	private RegionMessageService regionMessageService;
 
 	@Autowired
 	public ChatController(SimpMessagingTemplate messagingTemplate) {
 		this.messagingTemplate = messagingTemplate;
 	}
 
+	
+	private RegionMessageBean northMessageBean = null;
+	
 	@MessageMapping("/northChat")
 	@SendTo("/topic/northChat")
 	public MessageBean northChat(MessageBean message) {
+		synchronized (this) {
+			if (northMessageBean == null) {
+				northMessageBean = regionMessageService.findNewestByRegion("north");
+			}
+			northMessageBean = regionMessageService.insertMessage(northMessageBean, message);
+		}
 		return message;
 	}
 
@@ -46,7 +60,7 @@ public class ChatController {
 		messagingTemplate.convertAndSend("/topic/callback", "定時發送訊息時間: " + df.format(new Date()));
 	}
 
-	@MessageMapping("/user")
+	@MessageMapping("/msg")
 //	@SendTo("/topic/user")
 	public void sendToSpecificUser(TransferMessageBean transferMessageBean) {
 		SimpUser toUser = simpUserRegistry.getUser(transferMessageBean.getToUser());
