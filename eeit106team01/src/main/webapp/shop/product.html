@@ -10,7 +10,11 @@
   <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+
   <link rel="stylesheet" href="css/product.css">
   <script async src="js/product.js"></script>
 </head>
@@ -24,21 +28,55 @@
           <input type="button" value="搜尋產品" id="getNameButton" class="btn btn-outline-secondary">
         </form>
       </div>
+      <div  id="ClassificationDiv">
+        <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-placement="bottom" data-trigger="focus" id="Classification"
+            data-content=
+            "<ul>
+              <li>
+                <span><a href=''>行車紀錄器</a></span>
+                <span><a href=''>行車導航週邊配件</a></span>
+                <span><a href=''>導航</a></span>
+              </li>
+              <li>
+                  <span><a href=''>車內用品</a></span>
+                  <span><a href=''>固定座</a></span>
+                  <span><a href=''>測速器</a></span>
+              </li>
+              <li>
+                <span><a href=''>汽車隔熱/遮陽</a></span>
+                <span><a href=''>改裝汽車用品</a></span>
+                <span><a href=''>推車週邊/汽座週邊</a></span>
+              </li>
+              <li>
+                  <span><a href=''>安全帽</a></span>
+                  <span><a href=''>機車部品及人身配件</a></span>
+                  <span><a href=''>行車智慧穿戴</a></span>
+                </li>
+            </ul>"
+            >分類總覽
+        </a>
+      </div>
     </header>
     <div class="content">
       <article>
-
-        <div id="searchResult"></div>
-        <div id="productInformation"></div>
-
-        <div id="recommendResult">
-          <p class="bg-secondary text-white" id="recommendTitle"></p>
-        </div>
-
-        <div id="reviewResult">
-          <p class="bg-secondary text-white" id="reviewTitle"></p>
+        <div id="productItemPage">
+            <div id="productRightInfo"></div>
+            <div id="productLeftInfo"></div>
         </div>
         
+        
+        <div class="btn-group" role="group" aria-label="Basic example">
+          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#productInformation" aria-expanded="false" aria-controls="productInformation" id="productInformationButton">詳細資訊</button>
+          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#productImgDiv" aria-expanded="false" aria-controls="productImgDiv" id="productImgDivButton">產品圖片</button>
+          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#reviewResult" aria-expanded="false" aria-controls="reviewResult" id="reviewResultButton">顧客評論</button>
+        </div>
+        
+        <div id="productInformation"></div>
+        <div id="productImgDiv"></div>
+        <div id="reviewResult"><p class="bg-secondary text-white" id="reviewTitle"></p></div>
+
+        <div id="recommendResult"><p class="bg-secondary text-white" id="recommendTitle"></p></div>
+
       </article>
       <aside>
         <div id="buy"></div>
@@ -78,7 +116,7 @@
             <ul class="social-icons">
               <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
               <li><a class="github" href="#"><i class="fa fa-github"></i></a></li>
-              <li><a class="youtube" href="#"><i class="	fa fa-youtube"></i></a></li>
+              <li><a class="youtube" href="#"><i class="fa fa-youtube"></i></a></li>
               <li><a class="google" href="#"><i class="fa fa-google"></i></a></li>
             </ul>
           </div>

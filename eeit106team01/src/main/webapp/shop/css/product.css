@@ -12,6 +12,10 @@ aside{
   margin: 2px;
 }
 
+#smallImg{
+  vertical-align:baseline;
+}
+
 #informationTable{
   width: 530px !important;
 }
