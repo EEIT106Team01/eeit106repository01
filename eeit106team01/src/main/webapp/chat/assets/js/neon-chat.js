@@ -11,14 +11,15 @@ var neonChat = neonChat || {
 	isOpen: false,
 	chat_history: [],
 	statuses: {
-		online: { class: 'is-online', order: 1, label: 'Online' },
-		offline: { class: 'is-offline', order: 4, label: 'Offline' },
-		idle: { class: 'is-idle', order: 3, label: 'Idle' },
-		busy: { class: 'is-busy', order: 2, label: 'Busy' }
+		online: {class: 'is-online', order: 1, label: 'Online'},
+		offline: {class: 'is-offline', order: 4, label: 'Offline'},
+		idle: {class: 'is-idle', order: 3, label: 'Idle'},
+		busy: {class: 'is-busy', order: 2, label: 'Busy'}
 	}
 };
 
-; (function ($, window, undefined) {
+;(function($, window, undefined)
+{
 	"use strict";
 
 	var $chat = $("#chat"),
@@ -29,35 +30,37 @@ var neonChat = neonChat || {
 		$conversation_body = $conversation_window.find('.conversation-body'),
 		$textarea = $conversation_window.find('.chat-textarea textarea'),
 
-		sidebar_default_is_open = !$(".page-container").hasClass('sidebar-collapsed');
+		sidebar_default_is_open = ! $(".page-container").hasClass('sidebar-collapsed');
 
 
 	$.extend(neonChat, {
 
-		init: function () {
+		init: function()
+		{
 			// Implement Unique ID in case it doesn't exists
-			if ($.isFunction($.fn.uniqueId) == false) {
-
+			if( $.isFunction( $.fn.uniqueId ) == false ) {
+									
 				jQuery.fn.extend({
-
-					uniqueId: (function () {
+				
+					uniqueId: (function() {
 						var uuid = 0;
-
-						return function () {
-							return this.each(function () {
-								if (!this.id) {
-									this.id = "ui-id-" + (++uuid);
+				
+						return function() {
+							return this.each(function() {
+								if ( !this.id ) {
+									this.id = "ui-id-" + ( ++uuid );
 								}
 							});
 						};
 					})(),
 				});
 			}
-
+			
 			// Conversation Close
 			$conversation_window.on('click', '.conversation-close', neonChat.close);
 
-			$("body").on('click', '.chat-close', function (ev) {
+			$("body").on('click', '.chat-close', function(ev)
+			{
 				ev.preventDefault();
 
 				var animate = $(this).is('[data-animate]');
@@ -65,42 +68,51 @@ var neonChat = neonChat || {
 				neonChat.hideChat(animate);
 			});
 
-			$("body").on('click', '.chat-open', function (ev) {
+			$("body").on('click', '.chat-open', function(ev)
+			{
 				ev.preventDefault();
 
 				var animate = $(this).is('[data-animate]');
+
 				neonChat.showChat(animate);
 			});
 
 
 			// Texarea
-			$textarea.keydown(function (e) {
-				if (e.keyCode == 13 && !e.shiftKey) {
+			$textarea.keydown(function(e)
+			{
+				if(e.keyCode == 13 && !e.shiftKey)
+				{
 					e.preventDefault();
 					neonChat.submitMessage();
 					return false;
 				}
 				else
-					if (e.keyCode == 27) {
-						neonChat.close();
-					}
+				if(e.keyCode == 27)
+				{
+					neonChat.close();
+				}
 			});
 
 
-			$chat.on('click', '.chat-group a', function (ev) {
+			$chat.on('click', '.chat-group a', function(ev)
+			{
 				ev.preventDefault();
 
 				var $chat_user = $(this);
 
-				if ($chat_user.hasClass('active')) {
+				if($chat_user.hasClass('active'))
+				{
 					neonChat.close();
 				}
-				else {
+				else
+				{
 					neonChat.open($chat_user);
 				}
 			});
 
-			$chat.find('.chat-group a').each(function (i, el) {
+			$chat.find('.chat-group a').each(function(i, el)
+			{
 				var $this = $(el);
 
 				$this.append('<span class="badge badge-info is-hidden">0</span>');
@@ -113,18 +125,20 @@ var neonChat = neonChat || {
 			neonChat.puffUnreads();
 
 			// Chat
-			if ($chat.hasClass('fixed') && $chat_inner.length && $.isFunction($.fn.niceScroll)) {
+			if($chat.hasClass('fixed') && $chat_inner.length && $.isFunction($.fn.niceScroll))
+			{
 				$chat.find('.chat-inner').niceScroll({
 					cursorcolor: '#454a54',
 					cursorborder: '1px solid #454a54',
-					railpadding: { right: 3 },
+					railpadding: {right: 3},
 					railalign: 'right',
 					cursorborderradius: 1
 				});
 			}
 
 			// Chat Toggle
-			$("body").on('click', '[data-toggle="chat"]', function (ev) {
+			$("body").on('click', '[data-toggle="chat"]', function(ev)
+			{
 				ev.preventDefault();
 
 				var $this = $(this),
@@ -135,10 +149,12 @@ var neonChat = neonChat || {
 			});
 		},
 
-		open: function ($user_link) {
+		open: function($user_link)
+		{
 			this.refreshUserIds();
 
-			if (typeof $user_link == 'string') {
+			if(typeof $user_link == 'string')
+			{
 				$user_link = $($user_link);
 			}
 
@@ -147,12 +163,13 @@ var neonChat = neonChat || {
 			$user_link.addClass('active');
 
 			// Chat Header
-			var user_status = this.statuses[this.chat_history[$user_link.attr('id')].status];
+			var user_status = this.statuses[ this.chat_history[$user_link.attr('id')].status ];
 
 
 			$conversation_header.find('.display-name').html($user_link.find('em').text());
 
-			if (user_status) {
+			if(user_status)
+			{
 				$conversation_header.find('.user-status').attr('class', 'user-status ' + user_status.class);
 				$conversation_header.find('small').html(user_status.label);
 			}
@@ -174,10 +191,11 @@ var neonChat = neonChat || {
 			this.puffUnreadsAll();
 		},
 
-		close: function () {
+		close: function()
+		{
 			$chat.find('.chat-group a').removeClass('active');
 
-			$conversation_window.hide().css({ top: 0, opacity: 0 });
+			$conversation_window.hide().css({top: 0, opacity: 0});
 
 			$conversation_body.find('li.unread').removeClass('unread');
 
@@ -187,11 +205,13 @@ var neonChat = neonChat || {
 			return false;
 		},
 
-		updateScrollbars: function () {
+		updateScrollbars: function()
+		{
 			scrollToBottom('#chat .chat-conversation .conversation-body');
 		},
 
-		updateConversationOffset: function ($el) {
+		updateConversationOffset: function($el)
+		{
 			var top_h = $conversation_window.find('.conversation-body').position().top + 1,
 				offset = $el.position().top - top_h,
 				minus = 0,
@@ -199,11 +219,13 @@ var neonChat = neonChat || {
 				con_h = $conversation_window.height(),
 				win_h = $(window).height();
 
-			if ($chat.hasClass('fixed') && offset + con_h > win_h) {
+			if($chat.hasClass('fixed') && offset + con_h > win_h)
+			{
 				minus = offset + con_h - win_h;
 			}
 
-			if ($(".page-container.horizontal-menu").length) {
+			if($(".page-container.horizontal-menu").length)
+			{
 				minus += $(".page-container.horizontal-menu .navbar").height();
 			}
 
@@ -216,10 +238,12 @@ var neonChat = neonChat || {
 
 		},
 
-		getChatHistoryLength: function () {
+		getChatHistoryLength: function()
+		{
 			var max_chat_history = parseInt($chat.data('max-chat-history'), 10);
 
-			if (!max_chat_history || max_chat_history < 1) {
+			if( ! max_chat_history || max_chat_history < 1)
+			{
 				max_chat_history = 25;
 			}
 
@@ -227,26 +251,25 @@ var neonChat = neonChat || {
 
 		},
 
-		submitMessage: function () // Submit whats on textarea
+		submitMessage: function() // Submit whats on textarea
 		{
 			var msg = $.trim($textarea.val());
 
 			$textarea.val('');
 
-			if (this.isOpen && this.$current_user) {
+			if(this.isOpen && this.$current_user)
+			{
 				var id = this.$current_user.uniqueId().attr('id');
-				if (id && msg.replace(/<.*?>/g, '')) {
-					if (onSubmitMessage) {
-						onSubmitMessage(id, msg.replace(/<.*?>/g, ''), $chat.data('current-user'));
-					}
-				}
-				this.pushMessage(id, msg.replace(/<.*?>/g, ''), $chat.data('current-user'), new Date());
+
+				this.pushMessage(id, msg.replace( /<.*?>/g, '' ), $chat.data('current-user'), new Date());
 				this.renderMessages(id);
 			}
 		},
 
-		refreshUserIds: function () {
-			$('#chat .chat-group a').each(function (i, el) {
+		refreshUserIds: function()
+		{
+			$('#chat .chat-group a').each(function(i, el)
+			{
 				var $this = $(el),
 					$status = $this.find('.user-status');
 
@@ -254,12 +277,16 @@ var neonChat = neonChat || {
 
 				var id = $this.attr('id');
 
-				if (typeof neonChat.chat_history[id] == 'undefined') {
+				if(typeof neonChat.chat_history[id] == 'undefined')
+				{
 					var status = $this.data('status');
 
-					if (!status) {
-						for (var i in neonChat.statuses) {
-							if ($status.hasClass(neonChat.statuses[i].class)) {
+					if( ! status)
+					{
+						for(var i in neonChat.statuses)
+						{
+							if($status.hasClass(neonChat.statuses[i].class))
+							{
 								status = i;
 								break;
 							}
@@ -277,14 +304,17 @@ var neonChat = neonChat || {
 
 		},
 
-		pushMessage: function (id, msg, from, time, fromOpponent, unread) {
-			if (id && msg) {
+		pushMessage: function(id, msg, from, time, fromOpponent, unread)
+		{
+			if(id && msg)
+			{
 				this.refreshUserIds();
 
 				var max_chat_history = this.getChatHistoryLength();
 
 
-				if (this.chat_history[id].messages.length >= max_chat_history) {
+				if(this.chat_history[id].messages.length >= max_chat_history)
+				{
 					this.chat_history[id].messages = this.chat_history[id].messages.reverse().slice(0, max_chat_history - 1).reverse();
 				}
 
@@ -296,7 +326,8 @@ var neonChat = neonChat || {
 					unread: unread
 				});
 
-				if (unread) {
+				if(unread)
+				{
 					this.puffUnreadsAll();
 				}
 
@@ -304,25 +335,29 @@ var neonChat = neonChat || {
 			}
 		},
 
-		renderMessages: function (id, slient) {
-			if (typeof this.chat_history[id] != 'undefined') {
+		renderMessages: function(id, slient)
+		{
+			if(typeof this.chat_history[id] != 'undefined')
+			{
 				$conversation_body.html('');
 
-				for (var i in this.chat_history[id].messages) {
+				for(var i in this.chat_history[id].messages)
+				{
 					var entry = this.chat_history[id].messages[i],
 						$entry = $('<li><span class="user"></span><p></p><span class="time"></span></li>'),
 						date = entry.time,
 						date_formated = date;
 
-					if (typeof date == 'object') {
-						var hour = date.getHours(),
+					if(typeof date == 'object')
+					{
+						var	hour = date.getHours(),
 							hour = (hour < 10 ? "0" : "") + hour,
 
-							min = date.getMinutes(),
+							min  = date.getMinutes(),
 							min = (min < 10 ? "0" : "") + min,
 
-							sec = date.getSeconds();
-						sec = (sec < 10 ? "0" : "") + sec;
+							sec  = date.getSeconds();
+							sec = (sec < 10 ? "0" : "") + sec;
 
 						date_formated = hour + ':' + min;
 					}
@@ -333,11 +368,13 @@ var neonChat = neonChat || {
 					$entry.find('p').html(entry.message.replace(/\n/g, '<br>'));
 					$entry.find('.time').html(date_formated);
 
-					if (entry.fromOpponent) {
+					if(entry.fromOpponent)
+					{
 						$entry.addClass('odd');
 					}
 
-					if (entry.unread && typeof slient == 'undefined') {
+					if(entry.unread && typeof slient == 'undefined')
+					{
 						$entry.addClass('unread');
 						entry.unread = false;
 					}
@@ -349,73 +386,87 @@ var neonChat = neonChat || {
 			}
 		},
 
-		getStatus: function (id) {
-			if (typeof id == 'object') {
+		getStatus: function(id)
+		{
+			if(typeof id == 'object')
+			{
 				id = id.attr('id');
 			}
 
 			var user = neonChat.chat_history[id];
 
-			if (user) {
+			if(user)
+			{
 				return user.status;
 			}
 
 			return null;
 		},
 
-		setStatus: function (id, status) {
-			var $user = typeof id == 'string' ? $('.chat-group a#' + id.replace('#', '')) : id;
+		setStatus: function(id, status)
+		{
+			var $user = typeof id == 'string' ? $('.chat-group a#'+id.replace('#', '')) : id;
 
-			if ($user.$el) {
+			if($user.$el)
+			{
 				$user = $user.$el;
 			}
 
-			if ($user.length && this.statuses[status].class) {
+			if($user.length && this.statuses[status].class)
+			{
 				var $status = $user.find('.user-status');
 
-				for (var i in this.statuses) {
+				for(var i in this.statuses)
+				{
 					$status.removeClass(this.statuses[i].class);
 				}
 
 				$status.addClass(this.statuses[status].class);
 				$user.data('status', status);
 
-				neonChat.chat_history[$user.attr('id')].status = status;
+				neonChat.chat_history[ $user.attr('id') ].status = status;
 				this.orderGroups();
 			}
 		},
 
-		orderGroups: function () {
+		orderGroups: function()
+		{
 			var $groups = $chat.find('.chat-group');
 
-			if (!$chat.data('order-by-status')) {
+			if( ! $chat.data('order-by-status'))
+			{
 				return false;
 			}
 
-			$groups.each(function (i, el) {
+			$groups.each(function(i, el)
+			{
 				var $group = $(el),
 					$contacts = $group.find('> a');
 
-				$contacts.each(function (i, el) {
+				$contacts.each(function(i, el)
+				{
 					var $contact = $(el),
 						$status = $contact.find('.user-status');
 
-					for (var i in neonChat.statuses) {
+					for(var i in neonChat.statuses)
+					{
 						var status = neonChat.statuses[i];
 
-						if (i == $contact.data('status')) {
+						if(i == $contact.data('status'))
+						{
 							$contact.data('order-id', status.order);
 							return true;
 						}
 						else
-							if ($status.hasClass(status.class)) {
-								$contact.data('order-id', status.order);
-								return true;
-							}
+						if($status.hasClass(status.class))
+						{
+							$contact.data('order-id', status.order);
+							return true;
+						}
 					}
 				});
 
-				var $new_order = $contacts.sort(function (a, b) {
+				var $new_order = $contacts.sort(function(a,b){
 					return parseInt($(a).data('order-id'), 10) > parseInt($(b).data('order-id'), 10);
 				}).appendTo($group);
 			});
@@ -423,14 +474,18 @@ var neonChat = neonChat || {
 			return true;
 		},
 
-		prefetchMessages: function () {
-			$chat.find('.chat-group a').each(function (i, el) {
+		prefetchMessages: function()
+		{
+			$chat.find('.chat-group a').each(function(i, el)
+			{
 				var $contact = $(el),
 					id = $contact.attr('id'),
 					history_container = $contact.data('conversation-history');
 
-				if (history_container && history_container.length) {
-					$($(history_container)).find('> li').each(function (j, el2) {
+				if(history_container && history_container.length)
+				{
+					$($(history_container)).find('> li').each(function(j, el2)
+					{
 						var $entry = $(el2),
 							from = $entry.find('.user').html(),
 							message = $entry.find('p').html(),
@@ -445,16 +500,21 @@ var neonChat = neonChat || {
 			});
 		},
 
-		countUnreadMessages: function (id) {
+		countUnreadMessages: function(id)
+		{
 			var counter = 0;
 
-			if (!id) {
-				for (var id in neonChat.chat_history) {
+			if( ! id)
+			{
+				for(var id in neonChat.chat_history)
+				{
 					var user = neonChat.chat_history[id],
 						current_user_count = 0;
 
-					for (var i in user.messages) {
-						if (user.messages[i].unread) {
+					for(var i in user.messages)
+					{
+						if(user.messages[i].unread)
+						{
 							counter++;
 							current_user_count++;
 						}
@@ -463,14 +523,17 @@ var neonChat = neonChat || {
 					user.unreads = current_user_count;
 				}
 			}
-			else {
-				if (typeof id == 'object') {
+			else
+			{
+				if(typeof id == 'object')
+				{
 					id = id.attr('id');
 				}
 
 				var user = neonChat.chat_history[id];
 
-				if (user) {
+				if(user)
+				{
 					return user.unreads;
 				}
 			}
@@ -478,48 +541,59 @@ var neonChat = neonChat || {
 			return counter;
 		},
 
-		puffUnreads: function () {
-			for (var i in this.chat_history) {
+		puffUnreads: function()
+		{
+			for(var i in this.chat_history)
+			{
 				var entry = neonChat.chat_history[i],
 					$badge = entry.$el.find('.badge');
 
-				if (entry.unreads > 0) {
+				if(entry.unreads > 0)
+				{
 					$badge.html(entry.unreads).removeClass('is-hidden');
 				}
-				else {
+				else
+				{
 					$badge.html(entry.unreads).addClass('is-hidden');
 				}
 			}
 		},
 
-		puffUnreadsAll: function () {
+		puffUnreadsAll: function()
+		{
 			var total_unreads = this.countUnreadMessages();
 
 			$chat_badge.html(total_unreads);
 			$chat_badge[total_unreads > 0 ? 'removeClass' : 'addClass']('is-hidden');
 		},
 
-		resetUnreads: function (id) {
-			if (typeof id == 'object') {
+		resetUnreads: function(id)
+		{
+			if(typeof id == 'object')
+			{
 				id = id.attr('id');
 			}
 
 			var user = neonChat.chat_history[id];
 
-			if (user) {
+			if(user)
+			{
 				user.unreads = 0;
 				user.$el.find('.badge').html('0').addClass('is-hidden');
 			}
 		},
 
 		// Groups
-		createGroup: function (name, prepend) {
-			var $group = $('<div class="chat-group"><strong>' + name + '</strong></div>');
+		createGroup: function(name, prepend)
+		{
+			var $group = $('<div class="chat-group"><strong>'+name+'</strong></div>');
 
-			if (prepend) {
-				$group.insertBefore($chat.find('.chat-group:first'));
+			if(prepend)
+			{
+				$group.insertBefore( $chat.find('.chat-group:first') );
 			}
-			else {
+			else
+			{
 				$group['appendTo']($chat);
 			}
 
@@ -530,15 +604,20 @@ var neonChat = neonChat || {
 			return $group.attr('id');
 		},
 
-		removeGroup: function (group_id, move_users_to_group) {
+		removeGroup: function(group_id, move_users_to_group)
+		{
 			var $group = $chat.find("#" + group_id.replace('#', '') + '.chat-group');
 
-			if ($group.length) {
-				if (move_users_to_group) {
+			if($group.length)
+			{
+				if(move_users_to_group)
+				{
 					var $group_2 = $chat.find("#" + move_users_to_group.replace('#', '') + '.chat-group');
 
-					if ($group_2.length) {
-						$group.find('a').each(function (i, el) {
+					if($group_2.length)
+					{
+						$group.find('a').each(function(i, el)
+						{
 							var $user = $(el);
 
 							$group_2.append($user);
@@ -550,31 +629,38 @@ var neonChat = neonChat || {
 					this.orderGroups();
 				}
 
-				$group.slideUp(function () {
+				$group.slideUp(function()
+				{
 					$group.remove();
 				});
 			}
 		},
 
-		addUser: function (group_id, display_name, status, prepend, user_id) {
+		addUser: function(group_id, display_name, status, prepend, user_id)
+		{
 			var $group = group_id;
 
-			if (typeof group_id == 'string') {
+			if(typeof group_id == 'string')
+			{
 				$group = $chat.find("#" + group_id.replace('#', '') + '.chat-group');
 			}
 
-			if ($group && $group.length) {
+			if($group && $group.length)
+			{
 				var status = this.statuses[status],
-					$user = $('<a href="#"><span class="user-status ' + status.class + '"></span> <em>' + display_name + '</em> <span class="badge badge-info is-hidden>0</span></a>');
+					$user = $('<a href="#"><span class="user-status '+ status.class +'"></span> <em>'+ display_name +'</em> <span class="badge badge-info is-hidden>0</span></a>');
 
-				if (user_id) {
+				if(user_id)
+				{
 					$user.attr('id', user_id);
 				}
 
-				if (prepend) {
-					$user.insertAfter($group.find('> strong'));
+				if(prepend)
+				{
+					$user.insertAfter( $group.find('> strong') );
 				}
-				else {
+				else
+				{
 					$user['appendTo']($group);
 				}
 
@@ -589,24 +675,30 @@ var neonChat = neonChat || {
 			return null;
 		},
 
-		addUserId: function (group_id, user_id, display_name, status, prepend) {
+		addUserId: function(group_id, user_id, display_name, status, prepend)
+		{
 			return this.addUser(group_id, display_name, status, prepend, user_id);
 		},
 
-		getUser: function (id) {
+		getUser: function(id)
+		{
 			return this.chat_history[id] ? this.chat_history[id] : null;
 		},
 
-		moveUser: function (user_id, new_group_id, prepend) {
+		moveUser: function(user_id, new_group_id, prepend)
+		{
 			var $new_group = $chat.find("#" + new_group_id.replace('#', '') + '.chat-group'),
 				user = this.chat_history[user_id];
 
 
-			if ($new_group.length && user) {
-				if (prepend) {
+			if($new_group.length && user)
+			{
+				if(prepend)
+				{
 					user.$el.insertAfter($new_group.find('> strong'));
 				}
-				else {
+				else
+				{
 					user.$el['appendTo']($new_group);
 				}
 
@@ -619,29 +711,31 @@ var neonChat = neonChat || {
 		},
 
 		// Chat Container
-		showChat: function (animated) {
+		showChat: function(animated)
+		{
 			var visible_class = 'chat-visible';
 
-			if (isxs()) {
+			if(isxs())
+			{
 				visible_class += ' toggle-click';
 			}
 
-			if (animated) {
-				if ($chat.data('is-busy') || public_vars.$pageContainer.hasClass(visible_class)) {
+			if(animated)
+			{
+				if ( $chat.data( 'is-busy' ) || public_vars.$pageContainer.hasClass( visible_class ) ) {
 					return false;
 				}
 
-				$chat.data('is-busy', true);
-
-				var isLeft = public_vars.$pageContainer.hasClass('right-sidebar') ? -1 : 1;
-
-				public_vars.$pageContainer.addClass(visible_class);
-
-				TweenMax.from($chat, 0.3, {
-					opacity: 0, x: isLeft * 100, ease: Sine.easeInOut, onComplete: function () {
-						$chat.data('is-busy', false).removeAttr('style');
-					}
-				});
+				$chat.data( 'is-busy', true );
+				
+				var isLeft = public_vars.$pageContainer.hasClass( 'right-sidebar' ) ? -1 : 1;
+				
+				public_vars.$pageContainer.addClass( visible_class );
+				
+				TweenMax.from( $chat, 0.3, { opacity: 0, x: isLeft * 100, ease: Sine.easeInOut, onComplete: function() {
+					$chat.data('is-busy', false).removeAttr( 'style' );
+				} } );
+				
 				/*
 
 				public_vars.$pageContainer.addClass(visible_class);
@@ -680,35 +774,37 @@ var neonChat = neonChat || {
 				}});
 				*/
 			}
-			else {
+			else
+			{
 				public_vars.$pageContainer.addClass(visible_class);
 			}
 		},
 
-		hideChat: function (animated) {
+		hideChat: function(animated)
+		{
 			var visible_class = 'chat-visible';
 
 
-			if (isxs()) {
+			if(isxs())
+			{
 				visible_class += ' toggle-click';
 			}
 
-			if (animated) {
-				if ($chat.data('is-busy') || public_vars.$pageContainer.hasClass(visible_class) == false) {
+			if(animated)
+			{
+				if ( $chat.data( 'is-busy' ) || public_vars.$pageContainer.hasClass( visible_class ) == false ) {
 					return false;
 				}
 
-				$chat.data('is-busy', true);
-
-				var isLeft = public_vars.$pageContainer.hasClass('right-sidebar') ? -1 : 1;
-
-				TweenMax.to($chat, 0.3, {
-					opacity: 0, x: isLeft * 100, ease: Sine.easeInOut, onComplete: function () {
-						$chat.data('is-busy', false).removeAttr('style');
-						public_vars.$pageContainer.removeClass(visible_class);
-					}
-				});
-
+				$chat.data( 'is-busy', true );
+				
+				var isLeft = public_vars.$pageContainer.hasClass( 'right-sidebar' ) ? -1 : 1;
+				
+				TweenMax.to( $chat, 0.3, { opacity: 0, x: isLeft * 100, ease: Sine.easeInOut, onComplete: function() {
+					$chat.data('is-busy', false).removeAttr( 'style' );
+					public_vars.$pageContainer.removeClass( visible_class );
+				} } );
+				
 				/*
 
 				$chat.data('is-busy', true);
@@ -752,27 +848,33 @@ var neonChat = neonChat || {
 				public_vars.$mainContent.transition(opts);
 				*/
 			}
-			else {
+			else
+			{
 				public_vars.$pageContainer.removeClass(visible_class);
 			}
 		},
 
-		toggleChat: function (animated, collapse_sidebar) {
+		toggleChat: function(animated, collapse_sidebar)
+		{
 			var _func = public_vars.$pageContainer.hasClass('chat-visible') ? 'hideChat' : 'showChat';
 
-			if (isxs()) {
+			if(isxs())
+			{
 				_func = public_vars.$pageContainer.hasClass('toggle-click') ? 'hideChat' : 'showChat';
 			}
 
 			neonChat[_func](animated);
 
-			if (collapse_sidebar) {
-				if (sidebar_default_is_open) {
-					if (_func == 'hideChat') // Hide Sidebar
+			if(collapse_sidebar)
+			{
+				if(sidebar_default_is_open)
+				{
+					if(_func == 'hideChat') // Hide Sidebar
 					{
 						show_sidebar_menu(animated);
 					}
-					else {
+					else
+					{
 						hide_sidebar_menu(animated);
 					}
 				}
@@ -782,7 +884,8 @@ var neonChat = neonChat || {
 
 
 	// Set Cursor
-	$conversation_body.on('click', function () {
+	$conversation_body.on('click', function()
+	{
 		$textarea.focus();
 	});
 
