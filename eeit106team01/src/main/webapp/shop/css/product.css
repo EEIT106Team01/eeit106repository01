@@ -75,16 +75,16 @@ figure img{width:300px;}
   padding-bottom: 100px;
 }
 
-.blog .carousel-indicators {
+/* .blog .carousel-indicators {
   left: 0;
-  top: -50px;
+  top: 125%;
   height: 50%;
-}
+} */
 
 
 /* The colour of the indicators */
 
-.blog .carousel-indicators li {
+/* .blog .carousel-indicators li {
   background: #708198;
   border-radius: 50%;
   width: 20px;
@@ -93,10 +93,7 @@ figure img{width:300px;}
 
 .blog .carousel-indicators .active {
   background: #0fc9af;
-}
-
-
-
+} */
 
 .item-carousel-blog-block {
   outline: medium none;
@@ -108,6 +105,8 @@ figure img{width:300px;}
   text-align: center;
   z-index: 4;
   padding: 20px;
+  width: 200px;
+  height: 400px;
 }
 
 .item-box-blog-image {

@@ -132,7 +132,18 @@ public class ProductController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-
+	
+	@GetMapping(path = { "/search/type" }, produces = { "application/json" })
+	public ResponseEntity<?> getProductType() {
+			List<String> result = productService.findProductTypes();
+			System.out.println(result.toString());
+			if (result != null) {
+				System.err.println(result.toString());
+				return new ResponseEntity<List<String>>(result, HttpStatus.OK);
+			}
+			return ResponseEntity.notFound().build();
+		}
+	
 	@GetMapping(path = { "/products/recommend" }, produces = { "application/json" })
 	public ResponseEntity<?> getRecommendProducts(@RequestParam String name) {
 		if (name != null) {
