@@ -12,7 +12,8 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
   <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.0/css/all.css" integrity="sha384-lZN37f5QGtY3VHgisS14W3ExzMWZxybE1SJSEsQp9S+oqd12jhcu+A56Ebc1zFSJ"
+    crossorigin="anonymous">
   <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
 
   <link rel="stylesheet" href="css/product.css">
@@ -21,17 +22,10 @@
 
 <body>
   <div class="container">
-    <header>
-      <div id="searchProductName">
-        <form id="getNameForm">
-          <input type="text" name="productName" placeholder="請輸入產品名稱">
-          <input type="button" value="搜尋產品" id="getNameButton" class="btn btn-outline-secondary">
-        </form>
-      </div>
-      <div  id="ClassificationDiv">
-        <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-placement="bottom" data-trigger="focus" id="Classification"
-            data-content=
-            "<ul>
+    <header id="headerDiv">
+      <div id="ClassificationDiv">
+        <a tabindex="0" class="btn btn-lg btn-danger" role="button" data-toggle="popover" data-placement="bottom" data-trigger="focus"
+          id="Classification" data-content="<ul>
               <li>
                 <span><a href=''>行車紀錄器</a></span>
                 <span><a href=''>行車導航週邊配件</a></span>
@@ -52,34 +46,67 @@
                   <span><a href=''>機車部品及人身配件</a></span>
                   <span><a href=''>行車智慧穿戴</a></span>
                 </li>
-            </ul>"
-            >分類總覽
+            </ul>">分類總覽
         </a>
+      </div>
+      <div id="searchProductName">
+        <form id="getNameForm">
+          <input type="text" name="productName" placeholder="請輸入產品名稱">
+          <input type="button" value="搜尋產品" id="getNameButton" class="btn btn-outline-secondary">
+        </form>
       </div>
     </header>
     <div class="content">
       <article>
         <div id="productItemPage">
-            <div id="productRightInfo"></div>
-            <div id="productLeftInfo"></div>
+          <div id="productRightInfo">
+              <div id="buy"></div>
+          </div>
+          <div id="productLeftInfo"></div>
         </div>
-        
-        
+
+
         <div class="btn-group" role="group" aria-label="Basic example">
-          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#productInformation" aria-expanded="false" aria-controls="productInformation" id="productInformationButton">詳細資訊</button>
-          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#productImgDiv" aria-expanded="false" aria-controls="productImgDiv" id="productImgDivButton">產品圖片</button>
-          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#reviewResult" aria-expanded="false" aria-controls="reviewResult" id="reviewResultButton">顧客評論</button>
+          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#productInformation" aria-expanded="false"
+            aria-controls="productInformation" id="productInformationButton">詳細資訊</button>
+          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#productImgDiv" aria-expanded="false"
+            aria-controls="productImgDiv" id="productImgDivButton">產品圖片</button>
+          <button type="button" class="btn btn-secondary" data-toggle="collapse" data-target="#reviewResult" aria-expanded="false"
+            aria-controls="reviewResult" id="reviewResultButton">顧客評論</button>
         </div>
-        
+
         <div id="productInformation"></div>
         <div id="productImgDiv"></div>
-        <div id="reviewResult"><p class="bg-secondary text-white" id="reviewTitle"></p></div>
+        <div id="reviewResult">
+          <p class="bg-secondary text-white" id="reviewTitle"></p>
+        </div>
 
-        <div id="recommendResult"><p class="bg-secondary text-white" id="recommendTitle"></p></div>
+        <div id="recommendResult">
+          <p class="bg-secondary text-white" id="recommendTitle"></p>
+          <div class="row blog">
+            <div class="col-md-12">
+              <div id="blogCarousel" class="carousel slide container-blog" data-ride="carousel">
+                <ol class="carousel-indicators">
+                  <li data-target="#blogCarousel" data-slide-to="0" class="active"></li>
+                  <li data-target="#blogCarousel" data-slide-to="1"></li>
+                </ol>
+                <div class="carousel-inner">
+                  <div class="carousel-item active">
+                    <div class="row" id="item1"></div>
+                  </div>
+                  <div class="carousel-item">
+                    <div class="row" id="item2"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+        </div>
 
       </article>
       <aside>
-        <div id="buy"></div>
+        
       </aside>
     </div>
 
@@ -94,11 +121,21 @@
           <div class="col-xs-6 col-md-3">
             <h6>Quick Links</h6>
             <ul class="footer-links">
-              <li><a href="">關於我們</a></li>
-              <li><a href="">搜影片</a></li>
-              <li><a href="">論壇</a></li>
-              <li><a href=""></a></li>
-              <li><a href=""></a></li>
+              <li>
+                <a href="">關於我們</a>
+              </li>
+              <li>
+                <a href="">搜影片</a>
+              </li>
+              <li>
+                <a href="">論壇</a>
+              </li>
+              <li>
+                <a href=""></a>
+              </li>
+              <li>
+                <a href=""></a>
+              </li>
             </ul>
           </div>
         </div>
@@ -114,10 +151,26 @@
 
           <div class="col-md-4 col-sm-6 col-xs-12">
             <ul class="social-icons">
-              <li><a class="facebook" href="#"><i class="fa fa-facebook"></i></a></li>
-              <li><a class="github" href="#"><i class="fa fa-github"></i></a></li>
-              <li><a class="youtube" href="#"><i class="fa fa-youtube"></i></a></li>
-              <li><a class="google" href="#"><i class="fa fa-google"></i></a></li>
+              <li>
+                <a class="facebook" href="#">
+                  <i class="fa fa-facebook"></i>
+                </a>
+              </li>
+              <li>
+                <a class="github" href="#">
+                  <i class="fa fa-github"></i>
+                </a>
+              </li>
+              <li>
+                <a class="youtube" href="#">
+                  <i class="fa fa-youtube"></i>
+                </a>
+              </li>
+              <li>
+                <a class="google" href="#">
+                  <i class="fa fa-google"></i>
+                </a>
+              </li>
             </ul>
           </div>
         </div>
