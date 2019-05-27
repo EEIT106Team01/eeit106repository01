@@ -35,12 +35,12 @@ public class ArticleContentCurrentService {
 
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
-			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKeyAsProxy(bean.getArticleTopicCurrent().getId());
-			MemberBean memberBean = memberBeanService.findByPrimaryKeyAsProxy(bean.getMemberBean().getId());
+			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
+			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
 			bean.setArticleTopicCurrent(articleTopicCurrentBean);
 			bean.setMemberBean(memberBean);
 			if (bean.getVideoBean()!=null && bean.getVideoBean().getId()!=null) {
-				VideoBean videoBean = videoService.findByPrimaryKeyAsProxy(bean.getVideoBean().getId());
+				VideoBean videoBean = videoService.findByPrimaryKey(bean.getVideoBean().getId());
 				bean.setVideoBean(videoBean);
 			}
 			if (bean.getReply()!=null && bean.getReply().getId()!=null) {

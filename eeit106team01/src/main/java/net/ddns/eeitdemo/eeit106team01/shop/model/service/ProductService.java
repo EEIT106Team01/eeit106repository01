@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
+import java.util.Date;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -29,8 +30,9 @@ public class ProductService {
 
 	public ProductBean insertProduct(ProductBean productBean) {
 		if (productBean != null) {
-			productBean.setUpdatedTime();
-			productBean.setCreateTime();
+			Date date = new Date(System.currentTimeMillis());
+			productBean.setUpdatedTime(date);
+			productBean.setCreateTime(date);
 			productBean.setTotalSold(0);
 			Query<ProductBean> query = this.getSession().createQuery("from ProductBean where name = :name",
 					ProductBean.class);
@@ -39,8 +41,8 @@ public class ProductService {
 			if (products.size() == 0) { // name不能重複
 				ProductBean result = productDAO.insertProduct(productBean);
 				if (result != null) {
-					productDAO.insertProductsSN(result.getId(), result.getStock());
-					return productDAO.findProductByPrimaryKey(result.getId());
+					productDAO.insertProductSerialNumberByProductId(result.getId(), result.getStock());
+					return productDAO.findProductByProductId(result.getId());
 				}
 			}
 		}
@@ -51,7 +53,8 @@ public class ProductService {
 		ProductBean findOne = findProductByPrimaryKey(productBean.getId());
 		if (findOne != null) {
 			findOne.setBrand(productBean.getBrand());
-			findOne.setUpdatedTime();
+			Date date = new Date(System.currentTimeMillis());
+			findOne.setUpdatedTime(date);
 			findOne.setStock(productBean.getStock());
 			findOne.setImageLink(productBean.getImageLink());
 			findOne.setName(productBean.getName());
@@ -66,14 +69,13 @@ public class ProductService {
 	}
 
 	public ProductBean findProductByPrimaryKey(Long id) {
-		return productDAO.findProductByPrimaryKey(id);
+		return productDAO.findProductByProductId(id);
 	}
 
 	public List<ProductBean> findProducts() {
-		return productDAO.findProducts();	
+		return productDAO.findProducts();
 	}
-	
-	@SuppressWarnings({ "unchecked", "rawtypes" })
+
 	public List<ProductBean> recommendProducts(String name) {
 		List<ProductBean> temp = productDAO.findProductsByName(name);
 		ProductBean thisOne = null;
@@ -86,11 +88,9 @@ public class ProductService {
 		if (thisOne.getName().equalsIgnoreCase(name)) {
 			ProductBean findOne = thisOne;
 			if (findOne != null) {
-				Query query = this.getSession()
-						.createQuery("from ProductBean where type = :type order by totalSold desc", ProductBean.class);
-				query.setParameter("type", findOne.getType());
-				query.setMaxResults(5);
-				return query.getResultList();
+				return this.getSession()
+						.createQuery("from ProductBean where type = :type order by totalSold desc", ProductBean.class)
+						.setParameter("type", findOne.getType()).setMaxResults(6).getResultList();
 			}
 		}
 		return null;
@@ -104,8 +104,8 @@ public class ProductService {
 		return productDAO.findProductsByPrice(minPrice, maxPrice);
 	}
 
-	public List<ProductBean> findProductsByUpdatedTime(Integer day) {
-		return productDAO.findProductsByUpdatedTime(day);
+	public List<ProductBean> findProductsByUpdatedTime(Date startDay, Date endDay) {
+		return productDAO.findProductsByUpdatedTimeDayBetween(startDay, endDay);
 	}
 
 	public List<ProductBean> findProductsByName(String name) {
@@ -123,11 +123,11 @@ public class ProductService {
 	}
 
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
-		ProductBean temp = productDAO.findProductByPrimaryKey(id);
+		ProductBean temp = productDAO.findProductByProductId(id);
 		if (temp != null) {
 			temp.setStock(stock);
 			productDAO.updateProduct(temp);
-			return productDAO.insertProductsSN(id, stock);
+			return productDAO.insertProductSerialNumberByProductId(id, stock);
 		} else {
 			return null;
 		}
@@ -136,22 +136,22 @@ public class ProductService {
 	public List<SerialNumberBean> findProductStatus(Long id, String status) {
 		if (id == null) {
 			if (status.equalsIgnoreCase("sold")) {
-				return productDAO.findsoldProducts();
+				return productDAO.findSerialNumbersAreSold();
 			} else {
-				return productDAO.findavailableProducts();
+				return productDAO.findSerialNumbersAreAvailable();
 			}
 		} else {
 			if (status.equalsIgnoreCase("sold")) {
-				return productDAO.findsoldProduct(id);
+				return productDAO.findSerialNumbersAreSoldByProductId(id);
 			} else {
-				return productDAO.findavailableProduct(id);
+				return productDAO.findSerialNumbersAreAvailableByProductId(id);
 			}
 		}
 	}
 
 	public SerialNumberBean updateSNStatus(SerialNumberBean serialNumberBean) {
 		if (serialNumberBean != null) {
-			return productDAO.updateSNStatus(serialNumberBean);
+			return productDAO.updateAvailabilityStatus(serialNumberBean);
 		}
 		return null;
 	}

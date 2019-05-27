@@ -1,3 +1,41 @@
+article{
+  width: 79%;
+  height: 100%;
+  float: left;
+}
+aside{
+  width: 20%;
+  float: right;
+}
+
+#productDiv{
+  margin: 2px;
+}
+
+#smallImg{
+  vertical-align:baseline;
+}
+
+#informationTable{
+  width: 530px !important;
+}
+
+#productImgDiv{
+  float:left;
+  margin:15px; 
+}
+
+#recommendDiv{
+  width: 205px;
+  height: 350px;
+  float:left;
+  border: 1px solid;
+  margin: 5px;
+}
+
+#reviewTitle{
+  clear: both;
+}
 *{
   margin: 0px;
   padding: 0px;
@@ -6,6 +44,7 @@
 /* footer */
 .site-footer
 {
+  clear: left;
   background-color:#26272b;
   padding:45px 0 20px;
   font-size:15px;

@@ -24,17 +24,18 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
-import net.ddns.eeitdemo.eeit106team01.shop.model.MemberBeanTest;
-import net.ddns.eeitdemo.eeit106team01.shop.model.OrderBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.OrderDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.RefundDetailBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.TopSearchBean;
@@ -86,13 +87,13 @@ public class Eeit106team01Application {
 	public SessionFactory sessionFactory(@Autowired DataSource dataSource) {
 		LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(dataSource);
 		// Shop
-		builder.addAnnotatedClass(MemberBeanTest.class);
+		builder.addAnnotatedClass(Member.class);
 		builder.addAnnotatedClass(ProductBean.class);
 		builder.addAnnotatedClass(ReviewBean.class);
-		builder.addAnnotatedClass(OrderBean.class);
-		builder.addAnnotatedClass(OrderDetailBean.class);
+		builder.addAnnotatedClass(PurchaseBean.class);
+		builder.addAnnotatedClass(PurchaseListBean.class);
 		builder.addAnnotatedClass(RefundBean.class);
-		builder.addAnnotatedClass(RefundDetailBean.class);
+		builder.addAnnotatedClass(RefundListBean.class);
 		builder.addAnnotatedClass(SerialNumberBean.class);
 		builder.addAnnotatedClass(TopSearchBean.class);
 
@@ -101,6 +102,9 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(ArticleTopicCurrentBean.class);
 		builder.addAnnotatedClass(VideoBean.class);
 		builder.addAnnotatedClass(MemberBean.class);
+		
+		// Chat
+		builder.addAnnotatedClass(RegionMessageBean.class);
 
 		Properties props = new Properties();
 		props.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
@@ -117,14 +121,13 @@ public class Eeit106team01Application {
 	public PlatformTransactionManager transactionManager(@Autowired SessionFactory sessionFactory) {
 		return new HibernateTransactionManager(sessionFactory);
 	}
-	
+
 	@Bean
 	public FFmpegUtils fFmpegUtils() throws IOException {
 		FFmpegUtils ffu = null;
 		String ffmpegPath = environment.getProperty("path.ffmpeg");
 		String ffprobePath = environment.getProperty("path.ffprobe");
-		if (ffmpegPath != null && ffmpegPath.length() != 0 && ffprobePath != null
-				&& ffprobePath.length() != 0) {
+		if (ffmpegPath != null && ffmpegPath.length() != 0 && ffprobePath != null && ffprobePath.length() != 0) {
 			System.out.println("use specify path of ffmpeg and ffprobe");
 			ffu = new FFmpegUtils(ffmpegPath, ffprobePath);
 		} else {
