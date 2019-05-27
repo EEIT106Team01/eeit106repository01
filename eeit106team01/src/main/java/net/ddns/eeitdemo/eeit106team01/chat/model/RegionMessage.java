@@ -2,7 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.chat.model;
 
 import java.io.Serializable;
 
-public class MessageBean implements Serializable {
+public class RegionMessage implements Serializable {
 	/**
 	 * 
 	 */
@@ -10,6 +10,7 @@ public class MessageBean implements Serializable {
 	private Integer id;
 	private String name;
 	private String message;
+	private java.util.Date sendTime;
 
 	public String getMessage() {
 		return message;
@@ -33,5 +34,13 @@ public class MessageBean implements Serializable {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public java.util.Date getSendTime() {
+		return sendTime;
+	}
+
+	public void setSendTime(java.util.Date sendTime) {
+		this.sendTime = sendTime;
 	}
 }

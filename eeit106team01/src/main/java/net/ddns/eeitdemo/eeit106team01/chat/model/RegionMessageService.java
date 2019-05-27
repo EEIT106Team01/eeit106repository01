@@ -18,7 +18,7 @@ public class RegionMessageService {
 		RegionMessageBean regionMessageBean = new RegionMessageBean();
 		regionMessageBean.setRegion(region);
 		regionMessageBean.setIndex(1);
-		regionMessageBean.setMessage(new ArrayList<MessageBean>());
+		regionMessageBean.setMessage(new ArrayList<RegionMessage>());
 		return regionMessageDAO.insert(regionMessageBean);
 	}
 
@@ -57,10 +57,10 @@ public class RegionMessageService {
 		return result;
 	}
 
-	public RegionMessageBean insertMessage(RegionMessageBean regionMessageBean, MessageBean message) {
+	public RegionMessageBean insertMessage(RegionMessageBean regionMessageBean, RegionMessage message) {
 		RegionMessageBean result = null;
 		if (regionMessageBean != null) {
-			ArrayList<MessageBean> messages = regionMessageBean.getMessage();
+			ArrayList<RegionMessage> messages = regionMessageBean.getMessage();
 			if (messages != null) {
 				if (messages.size() < 30) {
 					messages.add(message);
@@ -72,10 +72,6 @@ public class RegionMessageService {
 					result = regionMessageDAO.insert(newRecord);
 					System.out.println(result.getMessage().get(0).getMessage());
 				}
-				for (MessageBean mb : result.getMessage()) {
-					System.out.println(mb.getMessage());
-				}
-				System.err.println("---------------------------------------");
 			}
 		}
 		return result;
