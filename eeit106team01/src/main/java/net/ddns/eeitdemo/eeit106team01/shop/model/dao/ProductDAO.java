@@ -24,10 +24,10 @@ public interface ProductDAO {
 
 	abstract List<ProductBean> findProductsByType(String type);
 
-	abstract List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice);
+	abstract List<ProductBean> findProductsByPriceBetween(Integer minPrice, Integer maxPrice);
 
 	abstract List<ProductBean> findProductsByUpdatedTimeDayBetween(Date startDay, Date endDay);
-
+	
 	abstract SerialNumberBean findSerialNumber(String serialNumber);
 
 	abstract SerialNumberBean updateAvailabilityStatus(SerialNumberBean serialNumberBean);
@@ -44,7 +44,7 @@ public interface ProductDAO {
 
 	abstract List<SerialNumberBean> findSerialNumbersByAvailabilityStatus(String availabilityStatus);
 
-	abstract List<SerialNumberBean> findSerialNumbersByProductIdAndAvailabilityStatus(Long id,
-			String availabilityStatus);
-
+	abstract List<SerialNumberBean> findSerialNumbersByProductIdAndAvailabilityStatus(Long id, String availabilityStatus);
+	
+	abstract List<String> findProductTypes();
 }

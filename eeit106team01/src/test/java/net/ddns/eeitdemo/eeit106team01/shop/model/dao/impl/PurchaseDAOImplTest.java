@@ -1,7 +1,9 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -17,6 +19,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -42,20 +45,62 @@ public class PurchaseDAOImplTest {
 		hashMap.put("", "");
 	}
 
-	@Test
 	public void testInsertPurchase() {
-		member = new Member();
+		this.member = new Member();
 		memberDAO.insertMember(member);
-		purchaseBean = purchaseDAO.insertPurchase(new PurchaseBean("", date, date, 0, "", "", 0, hashMap, member));
+		this.purchaseBean = purchaseDAO
+				.insertPurchase(new PurchaseBean("", date, date, 100, "", "test", 0, hashMap, member));
+		this.purchaseBean = purchaseDAO
+				.insertPurchase(new PurchaseBean("", date, date, 200, "", "test", 0, hashMap, member));
+		this.purchaseBean = purchaseDAO
+				.insertPurchase(new PurchaseBean("", date, date, 1000, "", "test", 0, hashMap, member));
 		assertNotNull(purchaseBean);
 	}
 
-	@Test
 	public void testUpdatePurchase() {
+		this.purchaseBean = purchaseDAO.findPurchaseByPurchaseId(1L);
+		this.purchaseBean.setDeliverStatus("test");
+		this.purchaseBean.setDeliverType("test");
+		this.purchaseBean.setPayStatus("test");
+		assertNotNull(purchaseDAO.updatePurchase(this.purchaseBean));
+	}
+
+	public void testFindAllPurchaseByPurchaseId() {
+		assertNotNull(purchaseDAO.findPurchaseByPurchaseId(1L));
+	}
+
+	public void testFindPurchaseByTimeDayBetween() throws Exception {
+		assertNotNull(purchaseDAO.findPurchaseByTimeDayBetween(NewDate.newDate("yyyy-MM-dd", "2019-05-27"),
+				NewDate.newDate("yyyy-MM-dd", "2019-05-28")));
+	}
+
+	public void testFindPurchaseByDeliverStatus() throws Exception {
+		assertNotNull(purchaseDAO.findPurchaseByDeliverStatus("test"));
+	}
+
+	public void testFindPurchaseByDeliverType() throws Exception {
+		assertNotNull(purchaseDAO.findPurchaseByDeliverType("Test"));
+	}
+
+	public void testFindPurchaseByPayStatus() throws Exception {
+		assertNotNull(purchaseDAO.findPurchaseByPayStatus("test"));
+	}
+
+	public void testFindPurchaseByProductTotalPrice() throws Exception {
+		assertNotNull(purchaseDAO.findPurchaseByProductTotalPrice(0));
+	}
+
+	public void testFindPurchaseByProductTotalPriceLower() throws Exception {
+		assertEquals(new Integer(purchaseDAO.findPurchaseByProductTotalPriceLower(200).size()), new Integer(9));
+	}
+
+	public void testFindPurchaseByProductTotalPriceHigher() throws Exception {
+		assertEquals(new Integer(purchaseDAO.findPurchaseByProductTotalPriceHigher(200).size()), new Integer(6));
 	}
 
 	@Test
-	public void testFindAllPurchaseByPurchaseId() {
+	public void testFindPurchaseByMemberId() throws Exception {
+		assertEquals(new Integer(purchaseDAO.findPurchaseByMemberId(1L).size()), new Integer(1));
 	}
 
 }
