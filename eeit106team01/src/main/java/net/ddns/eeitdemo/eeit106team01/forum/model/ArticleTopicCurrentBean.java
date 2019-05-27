@@ -13,6 +13,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "ArticleTopicCurrent")
 public class ArticleTopicCurrentBean {
@@ -31,6 +33,7 @@ public class ArticleTopicCurrentBean {
 	private java.util.Date topicCreateTime;
 	private java.util.Date topicUpdateTime;
 	private String topicStatus;
+	@JsonFormat(shape=JsonFormat.Shape.STRING, pattern="yyyy-MM-dd'T'HH:mm:ss.SSS'Z'", timezone=JsonFormat.DEFAULT_TIMEZONE)
 	private java.util.Date accidentTime;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String accidentLocation;
