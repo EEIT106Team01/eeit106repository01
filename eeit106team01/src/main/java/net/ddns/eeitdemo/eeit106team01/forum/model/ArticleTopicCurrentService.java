@@ -73,13 +73,16 @@ public class ArticleTopicCurrentService {
 				findOne.setTopicRegion(bean.getTopicRegion());
 			}
 			if (bean.getTopicLikeNum() != null) {
-				findOne.setTopicLikeNum(bean.getTopicLikeNum());
+				//不應該在這修改
+//				findOne.setTopicLikeNum(bean.getTopicLikeNum());
 			}
 			if (bean.getTopicLikeWho() != null) {
-				findOne.setTopicLikeWho(bean.getTopicLikeWho());
+				//不應該在這修改
+//				findOne.setTopicLikeWho(bean.getTopicLikeWho());
 			}
 			if (bean.getContentReplyNum() != null) {
-				findOne.setContentReplyNum(bean.getContentReplyNum());
+				//不應該在這修改
+//				findOne.setContentReplyNum(bean.getContentReplyNum());
 			}
 			if (bean.getTopicUpdateTime() != null) {
 				findOne.setTopicUpdateTime(bean.getTopicUpdateTime());
@@ -103,19 +106,24 @@ public class ArticleTopicCurrentService {
 				findOne.setTopicContent(bean.getTopicContent());
 			}
 			if (bean.getTopicContentUpdateTime() != null) {
-				findOne.setTopicContentUpdateTime(bean.getTopicContentUpdateTime());
+				//不應該在這修改
+//				findOne.setTopicContentUpdateTime(bean.getTopicContentUpdateTime());
 			}
 			if (bean.getPageViews() != null) {
-				findOne.setPageViews(bean.getPageViews());
+				//不應該在這修改
+//				findOne.setPageViews(bean.getPageViews());
 			}
 			if (bean.getUpdateMessage() != null) {
 				findOne.setUpdateMessage(bean.getUpdateMessage());
 			}
-			if (bean.getMemberBean() != null) {
-				findOne.setMemberBean(bean.getMemberBean());
+			if (bean.getMemberBean() != null && bean.getMemberBean().getId() != null) {
+				// memberBean不應該被修改
+//				MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId().intValue());
+//				findOne.setMemberBean(memberBean);
 			}
-			if (bean.getVideoBean() != null) {
-				findOne.setVideoBean(bean.getVideoBean());
+			if (bean.getVideoBean() != null && bean.getVideoBean().getId() != null) {
+				VideoBean videoBean = videoService.findByPrimaryKey(bean.getVideoBean().getId().intValue());
+				findOne.setVideoBean(videoBean);
 			}
 			return articleTopicCurrentDAO.update(findOne);
 		}
