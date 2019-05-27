@@ -5,6 +5,7 @@ import java.util.List;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -19,6 +20,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
 
 @Repository
+@Transactional
 public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Autowired
@@ -30,13 +32,13 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	// Order
 	@Override
-	public PurchaseBean insertOrder(PurchaseBean purchaseBean) {
+	public PurchaseBean insertPurchase(PurchaseBean purchaseBean) {
 		if (purchaseBean.isNotNull()) {
 			try {
 				this.getSession().save(purchaseBean);
 				Long id = purchaseBean.getId();
 				if (id != null && id.longValue() > 0) {
-					return this.findOrderByOrderId(id);
+					return this.findPurchaseByPurchaseId(id);
 				}
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
@@ -46,13 +48,13 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public PurchaseBean updateOrder(PurchaseBean purchaseBean) {
+	public PurchaseBean updatePurchase(PurchaseBean purchaseBean) {
 		if (purchaseBean.isNotNull()) {
 			try {
 				this.getSession().update(purchaseBean);
 				Long id = purchaseBean.getId();
 				if (id != null && id.longValue() > 0) {
-					return this.findOrderByOrderId(id);
+					return this.findPurchaseByPurchaseId(id);
 				}
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
@@ -62,7 +64,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public PurchaseBean findOrderByOrderId(Long id) {
+	public PurchaseBean findPurchaseByPurchaseId(Long id) {
 		if (id != null && id.longValue() > 0) {
 			try {
 				PurchaseBean result = this.getSession().get(PurchaseBean.class, id);
@@ -77,55 +79,55 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public List<PurchaseBean> findOrdersByCreateTime(Integer day) {
+	public List<PurchaseBean> findPurchaseByCreateTime(Integer day) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findOrdersByUpdateTime(Integer day) {
+	public List<PurchaseBean> findPurchaseByUpdateTime(Integer day) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findOrdersByDeliverStatus(String deliverStatus) {
+	public List<PurchaseBean> findPurchaseByDeliverStatus(String deliverStatus) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findOrdersByDeliverType(String deliverType) {
+	public List<PurchaseBean> findPurchaseByDeliverType(String deliverType) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findOrdersByPayStatus(String payStatus) {
+	public List<PurchaseBean> findPurchaseByPayStatus(String payStatus) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public PurchaseBean findOrdersByProductTotalPrice(Integer price) {
+	public PurchaseBean findPurchaseByProductTotalPrice(Integer price) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findOrdersByProductTotalPriceLower(Integer price) {
+	public List<PurchaseBean> findPurchaseByProductTotalPriceLower(Integer price) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findOrdersByProductTotalPriceHigher(Integer price) {
+	public List<PurchaseBean> findPurchaseByProductTotalPriceHigher(Integer price) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findOrdersByMemberId(Long id) {
+	public List<PurchaseBean> findPurchaseByMemberId(Long id) {
 		if (id != null) {
 			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
 			CriteriaQuery<PurchaseBean> criteriaQuery = criteriaBuilder.createQuery(PurchaseBean.class);
@@ -144,7 +146,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public List<PurchaseBean> findOrders() {
+	public List<PurchaseBean> findAllPurchase() {
 		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
 		CriteriaQuery<PurchaseBean> criteriaQuery = criteriaBuilder.createQuery(PurchaseBean.class);
 		Root<PurchaseBean> root = criteriaQuery.from(PurchaseBean.class);
@@ -161,25 +163,25 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	// OrderDetail
 	@Override
-	public PurchaseListBean insertOrderDetail(PurchaseListBean purchaseListBean) {
+	public PurchaseListBean insertPurchaseList(PurchaseListBean purchaseListBean) {
 		if (purchaseListBean != null) {
 			getSession().save(purchaseListBean);
-			return findOrderDetailByOrderDetailId(purchaseListBean.getId());
+			return findPurchaseListByPurchaseListId(purchaseListBean.getId());
 		}
 		return null;
 	}
 
 	@Override
-	public PurchaseListBean updateOrderDetail(PurchaseListBean purchaseListBean) {
+	public PurchaseListBean updatePurchaseList(PurchaseListBean purchaseListBean) {
 		if (purchaseListBean != null) {
 			getSession().update(purchaseListBean);
-			return findOrderDetailByOrderDetailId(purchaseListBean.getId());
+			return findPurchaseListByPurchaseListId(purchaseListBean.getId());
 		}
 		return null;
 	}
 
 	@Override
-	public PurchaseListBean findOrderDetailByOrderDetailId(Long id) {
+	public PurchaseListBean findPurchaseListByPurchaseListId(Long id) {
 		if (id != null) {
 			PurchaseListBean result = getSession().get(PurchaseListBean.class, id);
 			if (result != null) {
@@ -192,7 +194,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public List<PurchaseListBean> findOrderDetailsByOrderId(Long id) {
+	public List<PurchaseListBean> findPurchaseListByOrderId(Long id) {
 		if (id != null) {
 			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
 			CriteriaQuery<PurchaseListBean> criteriaQuery = criteriaBuilder.createQuery(PurchaseListBean.class);
@@ -211,7 +213,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public List<PurchaseListBean> findOrderDetails() {
+	public List<PurchaseListBean> findAllPurchaseList() {
 		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
 		CriteriaQuery<PurchaseListBean> criteriaQuery = criteriaBuilder.createQuery(PurchaseListBean.class);
 		Root<PurchaseListBean> root = criteriaQuery.from(PurchaseListBean.class);
@@ -227,31 +229,31 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public PurchaseListBean findOrderDetailBySerialNumber(String serialNumber) {
+	public PurchaseListBean findPurchaseListBySerialNumber(String serialNumber) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public PurchaseListBean findOrderDetailByPrice(Integer price) {
+	public PurchaseListBean findPurchaseListByPrice(Integer price) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseListBean> findOrderDetailsByPriceLower(Integer price) {
+	public List<PurchaseListBean> findPurchaseListByPriceLower(Integer price) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseListBean> findOrderDetailsByPriceHigher(Integer price) {
+	public List<PurchaseListBean> findPurchaseListByPriceHigher(Integer price) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<PurchaseListBean> findOrderDetailsByProductId(Long id) {
+	public List<PurchaseListBean> findPurchaseListByProductId(Long id) {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -1,5 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -10,6 +12,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 
 @Repository
+@Transactional
 public class MemberDAOImpl implements MemberDAO {
 
 	@Autowired

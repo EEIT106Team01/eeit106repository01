@@ -9,52 +9,52 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 public interface PurchaseDAO {
 
 	// Order
-	abstract PurchaseBean insertOrder(PurchaseBean purchaseBean);
+	abstract PurchaseBean insertPurchase(PurchaseBean purchaseBean);
 
-	abstract PurchaseBean updateOrder(PurchaseBean purchaseBean);
+	abstract PurchaseBean updatePurchase(PurchaseBean purchaseBean);
 
-	abstract PurchaseBean findOrderByOrderId(Long id);
+	abstract PurchaseBean findPurchaseByPurchaseId(Long id);
 
-	abstract List<PurchaseBean> findOrdersByCreateTime(Integer day);
+	abstract List<PurchaseBean> findPurchaseByCreateTime(Integer day);
 
-	abstract List<PurchaseBean> findOrdersByUpdateTime(Integer day);
+	abstract List<PurchaseBean> findPurchaseByUpdateTime(Integer day);
 
-	abstract List<PurchaseBean> findOrdersByDeliverStatus(String deliverStatus);
+	abstract List<PurchaseBean> findPurchaseByDeliverStatus(String deliverStatus);
 
-	abstract List<PurchaseBean> findOrdersByDeliverType(String deliverType);
+	abstract List<PurchaseBean> findPurchaseByDeliverType(String deliverType);
 
-	abstract List<PurchaseBean> findOrdersByPayStatus(String payStatus);
+	abstract List<PurchaseBean> findPurchaseByPayStatus(String payStatus);
 
-	abstract PurchaseBean findOrdersByProductTotalPrice(Integer price);
+	abstract PurchaseBean findPurchaseByProductTotalPrice(Integer price);
 
-	abstract List<PurchaseBean> findOrdersByProductTotalPriceLower(Integer price);
+	abstract List<PurchaseBean> findPurchaseByProductTotalPriceLower(Integer price);
 
-	abstract List<PurchaseBean> findOrdersByProductTotalPriceHigher(Integer price);
+	abstract List<PurchaseBean> findPurchaseByProductTotalPriceHigher(Integer price);
 
-	abstract List<PurchaseBean> findOrdersByMemberId(Long id);
+	abstract List<PurchaseBean> findPurchaseByMemberId(Long id);
 
-	abstract List<PurchaseBean> findOrders();
+	abstract List<PurchaseBean> findAllPurchase();
 
 	// Order Detail
-	abstract PurchaseListBean insertOrderDetail(PurchaseListBean purchaseListBean);
+	abstract PurchaseListBean insertPurchaseList(PurchaseListBean purchaseListBean);
 
-	abstract PurchaseListBean updateOrderDetail(PurchaseListBean purchaseListBean);
+	abstract PurchaseListBean updatePurchaseList(PurchaseListBean purchaseListBean);
 
-	abstract PurchaseListBean findOrderDetailByOrderDetailId(Long id);
+	abstract PurchaseListBean findPurchaseListByPurchaseListId(Long id);
 
-	abstract PurchaseListBean findOrderDetailBySerialNumber(String serialNumber);
+	abstract PurchaseListBean findPurchaseListBySerialNumber(String serialNumber);
 
-	abstract PurchaseListBean findOrderDetailByPrice(Integer price);
+	abstract PurchaseListBean findPurchaseListByPrice(Integer price);
 
-	abstract List<PurchaseListBean> findOrderDetailsByPriceLower(Integer price);
+	abstract List<PurchaseListBean> findPurchaseListByPriceLower(Integer price);
 
-	abstract List<PurchaseListBean> findOrderDetailsByPriceHigher(Integer price);
+	abstract List<PurchaseListBean> findPurchaseListByPriceHigher(Integer price);
 
-	abstract List<PurchaseListBean> findOrderDetailsByOrderId(Long id);
+	abstract List<PurchaseListBean> findPurchaseListByOrderId(Long id);
 
-	abstract List<PurchaseListBean> findOrderDetailsByProductId(Long id);
+	abstract List<PurchaseListBean> findPurchaseListByProductId(Long id);
 
-	abstract List<PurchaseListBean> findOrderDetails();
+	abstract List<PurchaseListBean> findAllPurchaseList();
 
 	// Review
 	abstract ReviewBean insertReview(ReviewBean reviewBean);

@@ -87,15 +87,15 @@ public class Eeit106team01Application {
 	public SessionFactory sessionFactory(@Autowired DataSource dataSource) {
 		LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(dataSource);
 		// Shop
-//		builder.addAnnotatedClass(Member.class);
-//		builder.addAnnotatedClass(ProductBean.class);
-//		builder.addAnnotatedClass(ReviewBean.class);
-//		builder.addAnnotatedClass(PurchaseBean.class);
-//		builder.addAnnotatedClass(PurchaseListBean.class);
-//		builder.addAnnotatedClass(RefundBean.class);
-//		builder.addAnnotatedClass(RefundListBean.class);
-//		builder.addAnnotatedClass(SerialNumberBean.class);
-//		builder.addAnnotatedClass(TopSearchBean.class);
+		builder.addAnnotatedClass(Member.class);
+		builder.addAnnotatedClass(ProductBean.class);
+		builder.addAnnotatedClass(ReviewBean.class);
+		builder.addAnnotatedClass(PurchaseBean.class);
+		builder.addAnnotatedClass(PurchaseListBean.class);
+		builder.addAnnotatedClass(RefundBean.class);
+		builder.addAnnotatedClass(RefundListBean.class);
+		builder.addAnnotatedClass(SerialNumberBean.class);
+		builder.addAnnotatedClass(TopSearchBean.class);
 
 		// Forum
 		builder.addAnnotatedClass(ArticleContentCurrentBean.class);

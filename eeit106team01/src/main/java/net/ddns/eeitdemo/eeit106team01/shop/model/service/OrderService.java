@@ -83,12 +83,12 @@ public class OrderService {
 				productBean.setStock(productBean.getStock() - 1);
 				productBean.setTotalSold(productBean.getTotalSold() + 1);
 
-				PurchaseListBean insertResult = orderDAO.insertOrderDetail(orderDetail);
-				orderDetails.add(orderDAO.findOrderDetailByOrderDetailId(insertResult.getId()));
+				PurchaseListBean insertResult = orderDAO.insertPurchaseList(orderDetail);
+				orderDetails.add(orderDAO.findPurchaseListByPurchaseListId(insertResult.getId()));
 			}
 
 			// Create Order
-			return orderDAO.insertOrder(order);
+			return orderDAO.insertPurchase(order);
 		}
 		return null;
 	}
@@ -100,7 +100,7 @@ public class OrderService {
 			order.setUpdatedTime(date);
 			order.setDeliverStatus(deliverStatus);
 			order.setPayStatus(payStatus);
-			PurchaseBean result = orderDAO.updateOrder(order);
+			PurchaseBean result = orderDAO.updatePurchase(order);
 			return result;
 		}
 		return null;
@@ -116,13 +116,13 @@ public class OrderService {
 	public List<PurchaseBean> findOrdersByMemberId(Long id, Integer searchType) {
 		if (id != null && searchType != null) {
 			if (searchType == 1) {
-				List<PurchaseBean> result = orderDAO.findOrdersByMemberId(id);
+				List<PurchaseBean> result = orderDAO.findPurchaseByMemberId(id);
 				if (result != null) {
 					return result;
 				}
 			} else if (searchType == 2) {
 				List<PurchaseBean> result = new ArrayList<PurchaseBean>();
-				PurchaseBean order = orderDAO.findOrderByOrderId(id);
+				PurchaseBean order = orderDAO.findPurchaseByPurchaseId(id);
 				result.add(order);
 				if (result != null) {
 					return result;
