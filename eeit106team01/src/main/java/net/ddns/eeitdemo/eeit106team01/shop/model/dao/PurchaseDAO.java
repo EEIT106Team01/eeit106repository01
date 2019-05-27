@@ -37,19 +37,17 @@ public interface PurchaseDAO {
 	// Purchase List
 	abstract PurchaseListBean insertPurchaseList(PurchaseListBean purchaseListBean);
 
-	abstract PurchaseListBean updatePurchaseList(PurchaseListBean purchaseListBean);
-
 	abstract PurchaseListBean findPurchaseListByPurchaseListId(Long id);
 
 	abstract PurchaseListBean findPurchaseListBySerialNumber(String serialNumber);
 
-	abstract PurchaseListBean findPurchaseListByPrice(Integer price);
+	abstract List<PurchaseListBean> findPurchaseListByPrice(Integer price);
 
 	abstract List<PurchaseListBean> findPurchaseListByPriceLower(Integer price);
 
 	abstract List<PurchaseListBean> findPurchaseListByPriceHigher(Integer price);
 
-	abstract List<PurchaseListBean> findPurchaseListByOrderId(Long id);
+	abstract List<PurchaseListBean> findPurchaseListByPurchaseId(Long id);
 
 	abstract List<PurchaseListBean> findPurchaseListByProductId(Long id);
 

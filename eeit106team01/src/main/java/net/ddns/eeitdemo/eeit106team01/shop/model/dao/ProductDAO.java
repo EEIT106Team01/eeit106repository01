@@ -3,6 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao;
 import java.util.Date;
 import java.util.List;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 
@@ -46,5 +47,5 @@ public interface ProductDAO {
 
 	abstract List<SerialNumberBean> findSerialNumbersByProductIdAndAvailabilityStatus(Long id, String availabilityStatus);
 	
-	abstract List<String> findProductTypes();
+	abstract List<DataBean> findProductTypes();
 }

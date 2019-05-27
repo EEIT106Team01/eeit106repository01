@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
@@ -156,7 +157,11 @@ public class ProductService {
 		return null;
 	}
 
-	public List<String> findProductTypes() {
-		return productDAO.findProductTypes();
+	public List<DataBean> findProductTypes() {
+		List<DataBean> result = productDAO.findProductTypes();
+		if (result != null) {
+			return result;
+		}
+		return null;
 	}
 }
