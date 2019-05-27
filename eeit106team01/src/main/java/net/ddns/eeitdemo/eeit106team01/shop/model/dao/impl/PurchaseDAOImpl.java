@@ -1,5 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
@@ -14,10 +16,12 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @Repository
 @Transactional
@@ -30,7 +34,11 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 		return sessionFactory.getCurrentSession();
 	}
 
-	// Order
+	private List<PurchaseBean> purchase = new ArrayList<PurchaseBean>();
+	private List<PurchaseListBean> purchaseList = new ArrayList<PurchaseListBean>();
+	private List<ReviewBean> review = new ArrayList<ReviewBean>();
+
+	// Purchase
 	@Override
 	public PurchaseBean insertPurchase(PurchaseBean purchaseBean) {
 		if (purchaseBean.isNotNull()) {
@@ -78,68 +86,146 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 		return null;
 	}
 
+	/**
+	 * @param startDay = day start
+	 * @param endDay   = day end
+	 * @return Between startDay and endDay
+	 */
 	@Override
-	public List<PurchaseBean> findPurchaseByCreateTime(Integer day) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<PurchaseBean> findPurchaseByUpdateTime(Integer day) {
-		// TODO Auto-generated method stub
+	public List<PurchaseBean> findPurchaseByTimeDayBetween(Date startDay, Date endDay) {
+		if (startDay != null && endDay != null && startDay.equals(endDay) == false && startDay.compareTo(endDay) < 0) {
+			try {
+				this.purchase = this.getSession()
+						.createQuery("from PurchaseBean where updatedTime BETWEEN :startDay AND :endDay",
+								PurchaseBean.class)
+						.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchase != null && this.purchase.size() > 0) {
+				return this.purchase;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<PurchaseBean> findPurchaseByDeliverStatus(String deliverStatus) {
-		// TODO Auto-generated method stub
+		if (NullChecker.isEmpty(deliverStatus) == false) {
+			try {
+				this.purchase = this.getSession()
+						.createQuery("from PurchaseBean where deliverStatus= :deliverStatus", PurchaseBean.class)
+						.setParameter("deliverStatus", deliverStatus).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchase != null && this.purchase.size() > 0) {
+				return this.purchase;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<PurchaseBean> findPurchaseByDeliverType(String deliverType) {
-		// TODO Auto-generated method stub
+		if (NullChecker.isEmpty(deliverType) == false) {
+			try {
+				this.purchase = this.getSession()
+						.createQuery("from PurchaseBean where deliverType= :deliverType", PurchaseBean.class)
+						.setParameter("deliverType", deliverType).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchase != null && this.purchase.size() > 0) {
+				return this.purchase;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<PurchaseBean> findPurchaseByPayStatus(String payStatus) {
-		// TODO Auto-generated method stub
+		if (NullChecker.isEmpty(payStatus) == false) {
+			try {
+				this.purchase = this.getSession()
+						.createQuery("from PurchaseBean where payStatus= :payStatus", PurchaseBean.class)
+						.setParameter("payStatus", payStatus).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchase != null && this.purchase.size() > 0) {
+				return this.purchase;
+			}
+		}
 		return null;
 	}
 
 	@Override
-	public PurchaseBean findPurchaseByProductTotalPrice(Integer price) {
-		// TODO Auto-generated method stub
+	public List<PurchaseBean> findPurchaseByProductTotalPrice(Integer productTotalPrice) {
+		if (productTotalPrice != null && productTotalPrice.intValue() >= 0) {
+			try {
+				this.purchase = this.getSession()
+						.createQuery("from PurchaseBean where productTotalPrice= :productTotalPrice",
+								PurchaseBean.class)
+						.setParameter("productTotalPrice", productTotalPrice).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchase != null && this.purchase.size() > 0) {
+				return this.purchase;
+			}
+		}
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findPurchaseByProductTotalPriceLower(Integer price) {
-		// TODO Auto-generated method stub
+	public List<PurchaseBean> findPurchaseByProductTotalPriceLower(Integer productTotalPrice) {
+		if (productTotalPrice != null && productTotalPrice.intValue() >= 0) {
+			try {
+				this.purchase = this.getSession()
+						.createQuery("from PurchaseBean where productTotalPrice<= :productTotalPrice",
+								PurchaseBean.class)
+						.setParameter("productTotalPrice", productTotalPrice).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchase != null && this.purchase.size() > 0) {
+				return this.purchase;
+			}
+		}
 		return null;
 	}
 
 	@Override
-	public List<PurchaseBean> findPurchaseByProductTotalPriceHigher(Integer price) {
-		// TODO Auto-generated method stub
+	public List<PurchaseBean> findPurchaseByProductTotalPriceHigher(Integer productTotalPrice) {
+		if (productTotalPrice != null && productTotalPrice.intValue() >= 0) {
+			try {
+				this.purchase = this.getSession()
+						.createQuery("from PurchaseBean where productTotalPrice>= :productTotalPrice",
+								PurchaseBean.class)
+						.setParameter("productTotalPrice", productTotalPrice).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchase != null && this.purchase.size() > 0) {
+				return this.purchase;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<PurchaseBean> findPurchaseByMemberId(Long id) {
-		if (id != null) {
-			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-			CriteriaQuery<PurchaseBean> criteriaQuery = criteriaBuilder.createQuery(PurchaseBean.class);
-			Root<PurchaseBean> order = criteriaQuery.from(PurchaseBean.class);
-			criteriaQuery.select(order).where(criteriaBuilder.equal(order.get("memberBeanTest"), id));
-
-			Query<PurchaseBean> query = getSession().createQuery(criteriaQuery);
-			List<PurchaseBean> result = query.getResultList();
-			if (result != null) {
-				return result;
-			} else {
-				return null;
+		if (id != null && id.longValue() > 0) {
+			try {
+				this.purchase = this.getSession()
+						.createQuery("from PurchaseBean where MemberID= :MemberID", PurchaseBean.class)
+						.setParameter("MemberID", id).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchase != null && this.purchase.size() > 0) {
+				return this.purchase;
 			}
 		}
 		return null;
@@ -161,7 +247,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 		}
 	}
 
-	// OrderDetail
+	// Purchase List
 	@Override
 	public PurchaseListBean insertPurchaseList(PurchaseListBean purchaseListBean) {
 		if (purchaseListBean != null) {
@@ -307,13 +393,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public List<ReviewBean> findReviewsByCreateTime(Integer day) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<ReviewBean> findReviewsByUpdateTime(Integer day) {
+	public List<ReviewBean> findReviewsByTimeDayBetween(Date startDay, Date endDay) {
 		// TODO Auto-generated method stub
 		return null;
 	}

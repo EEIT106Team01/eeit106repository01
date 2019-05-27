@@ -101,7 +101,7 @@ public class ProductService {
 	}
 
 	public List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice) {
-		return productDAO.findProductsByPrice(minPrice, maxPrice);
+		return productDAO.findProductsByPriceBetween(minPrice, maxPrice);
 	}
 
 	public List<ProductBean> findProductsByUpdatedTime(Date startDay, Date endDay) {
@@ -154,5 +154,9 @@ public class ProductService {
 			return productDAO.updateAvailabilityStatus(serialNumberBean);
 		}
 		return null;
+	}
+
+	public List<String> findProductTypes() {
+		return productDAO.findProductTypes();
 	}
 }

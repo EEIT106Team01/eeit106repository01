@@ -2,7 +2,10 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -17,6 +20,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
+@Transactional
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired
@@ -28,6 +32,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	private List<ProductBean> productsResutlt = new ArrayList<ProductBean>();
 	private List<SerialNumberBean> serialNumbersResult = new ArrayList<SerialNumberBean>();
+	private List<String> stringList = new ArrayList<String>();
 
 	@Override
 	public ProductBean insertProduct(ProductBean productBean) {
@@ -166,7 +171,7 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice) {
+	public List<ProductBean> findProductsByPriceBetween(Integer minPrice, Integer maxPrice) {
 		if (minPrice != null && minPrice >= 0 && maxPrice != null && maxPrice >= minPrice) {
 			try {
 				this.productsResutlt = this.getSession()
@@ -373,6 +378,23 @@ public class ProductDAOImpl implements ProductDAO {
 			if (this.serialNumbersResult != null && this.serialNumbersResult.size() > 0) {
 				return this.serialNumbersResult;
 			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<String> findProductTypes() {
+		try {
+			List<?> result = this.getSession().createQuery("select distinct type from ProductBean").getResultList();
+			Iterator<?> iterator = result.iterator();
+			while (iterator.hasNext()) {
+				this.stringList.add((String) iterator.next());
+			}
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.stringList != null && this.stringList.size() > 0) {
+			return this.stringList;
 		}
 		return null;
 	}

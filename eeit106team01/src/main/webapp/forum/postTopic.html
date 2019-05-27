@@ -14,6 +14,11 @@
 	<!-- google map -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
 	<!-- datetime picker -->
+	<link href="/forum/dateTimePicker/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/forum/dateTimePicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	<!-- <script type="text/javascript" src="/forum/dateTimePicker/jquery-1.8.3.min.js" charset="UTF-8"></script> -->
+	<script type="text/javascript" src="/forum/dateTimePicker/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/forum/dateTimePicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 
 	<!-- Main Quill library -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
@@ -37,6 +42,7 @@
 	</style>
 
 	<script src="js/uploadVideo.js"></script>
+
 	<script>
 		$(window).on('load', initMap);
 		let marker;
@@ -44,17 +50,13 @@
 		let accidentLocationLongitude;
 		let quill;
 		let memberBean = Cookies.get("MemberBean");
-		console.log("CookieMember: " + memberBean);
+		// console.log("CookieMember: " + memberBean);
 		if (!memberBean) {
 			sessionStorage.setItem("previousPage", location.pathname);
 			location.href = "/forum/login.html";
 		}
 		memberBean = JSON.parse(Cookies.get("MemberBean"));
-		console.log(memberBean);
-		// var contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
-		// var contentPage = sessionStorage.getItem("contentPage");
-		// var replyType = sessionStorage.getItem("replyType");
-		// console.log(contentBean.id);
+		// console.log(memberBean);
 
 		function insertTopic(newTopicBean) {
 			$.ajax({
@@ -97,7 +99,7 @@
 				topicHeader: $("#topicHeader").val(),
 				topicType: $("input[name=topicType]:checked").val(),
 				topicRegion: $("#topicRegion option:selected" ).val(),
-				accidentTime: $("#accidentTime").val(),
+				accidentTime: new Date($("#accidentTime").val()),
 				accidentLocation: $("#accidentLocation").val(),
 				accidentLocationLatitude: accidentLocationLatitude,
 				accidentLocationLongitude: accidentLocationLongitude,
@@ -140,9 +142,39 @@
 
 		}
 		
+		Date.prototype.yyyymmddhhii = function() {
+			let mm = this.getMonth() + 1; // getMonth() is zero-based
+			let dd = this.getDate();
+			let hh = this.getHours();
+			let ii = this.getMinutes();
+
+			return [this.getFullYear() + "-",
+					(mm>9 ? '' : '0') + mm + "-",
+					(dd>9 ? '' : '0') + dd + " ",
+					(hh>9 ? '' : '0') + hh + ":",
+					(ii>9 ? '' : '0') + ii
+					].join('');
+		};
 		
 		document.addEventListener("DOMContentLoaded", function () {
 			document.getElementById("submit").addEventListener("click", submit);
+			// datetimepicker
+			let twoYearsAgo = new Date();
+			twoYearsAgo.setMonth(twoYearsAgo.getMonth() - 24);
+			console.log(twoYearsAgo.yyyymmddhhii());
+			console.log(new Date().yyyymmddhhii());
+			$('.form_datetime').datetimepicker({
+				format: "yyyy-mm-dd hh:ii",
+				startDate: twoYearsAgo.yyyymmddhhii(),
+				endDate: new Date().yyyymmddhhii(),
+				weekStart: 1,	//week start from Mon
+				todayBtn:  1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				forceParse: 0,
+				showMeridian: 1
+			});
 			//<!-- Initialize Quill editor -->
 			quill = new Quill('#editor-container', {
 				modules: {
@@ -156,7 +188,7 @@
 		
 		//顯示Google Map
 		function initMap() {
-			console.log("initMap ok");
+			// console.log("initMap ok");
             let map = new google.maps.Map(document.getElementById("map_canvas"), {
                 zoom: 12
                 , center: { lat: 25.033793, lng: 121.543427 }
@@ -236,9 +268,18 @@
 									<option value="southernRegion">南部區域</option>
 									<option value="easternRegion">東部區域</option>
 								</select><br>
-							<label><h4>事故時間: </h4>
-								<input type="text" name="accidentTime" id="accidentTime">
-							</label><br>
+								<div class="form-group">
+										<label for="accidentTime" class="col-md-2 control-label"><h4>事故時間: </h4></label>
+										<!-- <div class="input-group date form_datetime col-md-5" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="accidentTime"> -->
+										<div class="input-group date form_datetime col-md-5" data-link-field="accidentTime"> 
+												<!-- data-date="2012-05-15 21:05"   data-date-format="yyyy-mm-dd hh:ii"   -->
+											<input class="form-control" size="16" type="text" value="" readonly>
+											<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+											<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+										</div>
+										<input type="hidden" id="accidentTime" value="" /><br/>
+									</div>
+									<br>
 							<label><h4>事故地點說明: </h4>
 								<input type="text" name="accidentLocation" id="accidentLocation">
 							</label><br>
