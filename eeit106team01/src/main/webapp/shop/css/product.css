@@ -8,14 +8,6 @@ aside{
   float: right;
 }
 
-#productDiv{
-  margin: 2px;
-}
-
-#smallImg{
-  vertical-align:baseline;
-}
-
 #informationTable{
   width: 530px !important;
 }
@@ -27,9 +19,11 @@ aside{
 
 #productRightInfo{
   float: right;
+  width: 40%;
 }
 
 #productLeftInfo{
+  width: 39%;
  float: left;
 }
 
@@ -37,13 +31,11 @@ aside{
   /* display: block; */
   width: 100%;
 }
-#recommendDiv{
-  width: 205px;
-  height: 350px;
-  float:left;
-  border: 1px solid;
-  margin: 5px;
+
+.col-md-4{
+  margin:0px auto;
 }
+
 
 #reviewTitle{
   clear: both;
@@ -121,9 +113,9 @@ figure img{width:300px;}
 .item-box-blog-date {
   position: absolute;
   z-index: 5;
-  padding: 4px 20px;
+  padding: 4px 4px;
   top: -20px;
-  right: 8px;
+  right: -13px;
   background-color: #41cb52;
 }
 

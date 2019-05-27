@@ -4,8 +4,10 @@ $(document).ready(function () {
     }),
     $("[data-toggle=popover]")
         .popover({html:true}),
-        
-    getAllType();
+    $("#ClassificationDiv").one('click',function(){
+        getAllType();
+    })
+  
     getProduct();
 });
 
@@ -195,7 +197,6 @@ function buy(productData){
     //下訂
     $("#buy").html("")
     $("#buy").append(
-        '<p style="color:#FF0000">$'+productData.price+'</p>'+
         '<p>數量 <select id="quantity">'+txt+'<select> (庫存'+stock+'件)</p>'+
         '<button type="button" class="btn btn-warning" id="buyNow">立即購買</button> '+
         '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton">加入購物車</button>')
@@ -216,7 +217,7 @@ function recommendTop(recommendData){
         i++;
     })   
 
-    for(let k=0;k<4;k++){
+    for(let k=0;k<3;k++){
         recommendC1.push(
             '<div class="col-md-4"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-blue-ui white"><span class="rec">推薦商品</span></div>'+
                 '<figure><img alt="" src='+recommendImg[k]+'></figure>'+
@@ -226,7 +227,7 @@ function recommendTop(recommendData){
                 '</div></div></div>'        
         )
     }
-    for(let q=4;q<8;q++){
+    for(let q=3;q<6;q++){
         recommendC2.push('<div class="col-md-4"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-blue-ui white"><span class="rec">推薦商品</span></div>'+
         '<figure><img alt="" src='+recommendImg[q]+'></figure>'+
         '</div><div class="item-box-blog-body">'+
@@ -240,8 +241,8 @@ function recommendTop(recommendData){
     $("#item2").append(recommendC2.join(""))
 }
 
-
 function getAllType(){
+    
     var productTypeArray =[];
     $.ajax({
         url: "http://localhost:8080/search/type",
