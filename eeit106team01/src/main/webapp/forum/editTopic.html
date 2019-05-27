@@ -9,10 +9,38 @@
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<!-- cookie -->
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 	<!-- google map -->
 	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
 	<!-- datetime picker -->
+	<link href="/forum/dateTimePicker/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/forum/dateTimePicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	<!-- <script type="text/javascript" src="/forum/dateTimePicker/jquery-1.8.3.min.js" charset="UTF-8"></script> -->
+	<script type="text/javascript" src="/forum/dateTimePicker/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/forum/dateTimePicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
 	
+	<!-- Main Quill library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script src="/forum/quill/quill.js"></script>
+	<script src="/forum/quill/quill.min.js"></script>
+
+	<!-- Theme included stylesheets -->
+	<link href="/forum/quill/quill.snow.css" rel="stylesheet">
+	<link href="/forum/quill/quill.bubble.css" rel="stylesheet">
+
+	<style>
+		body>#standalone-container {
+			margin: 50px auto;
+			max-width: 720px;
+		}
+
+		#editor-container {
+			height: 350px;
+		}
+	</style>
+
 	<script src="js/uploadVideo.js"></script>
 
 	<script>
@@ -20,33 +48,55 @@
 		let marker;
 		let accidentLocationLatitude;
 		let accidentLocationLongitude;
+		let quill;
 		let topicBean = JSON.parse(sessionStorage.getItem("contentBean"));
 		let contentPage = sessionStorage.getItem("contentPage");
-		// console.log(contentBean.id);
+		let memberBean = Cookies.get("MemberBean");
+		// console.log("CookieMember: " + memberBean);
+		if (!memberBean) {
+			sessionStorage.setItem("previousPage", location.pathname);
+			location.href = "/forum/login.html";
+		}
+		memberBean = JSON.parse(Cookies.get("MemberBean"));
+		// console.log(memberBean);
 
 		function preInput() {
 			$("#topicHeader").val(topicBean.topicHeader);
 			$("#" + topicBean.topicType).prop("checked", true);
 			$("#" + topicBean.topicRegion).prop("selected", true);
-			$("#accidentTime").val(topicBean.accidentTime);
+			//topicBean.accidentTime preInput is after dateTimepicker()
 			$("#accidentLocation").val(topicBean.accidentLocation);
 			//marker preInput is in initMap()
-			$("#topicContent").val(topicBean.topicContent);
+			accidentLocationLatitude = topicBean.accidentLocationLatitude;
+			accidentLocationLongitude = topicBean.accidentLocationLongitude;
+			showQuillContent(topicBean.topicContent);
 
 			// $("#contentCreateTime").text(contentBean.contentCreateTime);
 			if (topicBean.videoBean) {
-				$("#videoURI").text(topicBean.videoBean.videoURI);
+				$("#videoURI").text(topicBean.videoBean.videoURI.substr(13));
 			}
 
-			$("input[name=contentStatus][value='" + topicBean.contentStatus + "']").attr("checked", true);
+			$(`input[name=topicStatus][value=${topicBean.topicStatus}]`).attr("checked", true);
 			// $("#updateMessage").val(contentBean.updateMessage);
 
 		}
+
+		function showQuillContent(quillContent) {
+			quill = new Quill("#editor-container", {
+				modules: {
+					formula: true,
+					syntax: true,
+					toolbar: '#toolbar-container'
+				},
+				theme: 'snow'
+			});
+			quill.setContents(JSON.parse(quillContent));
+		}
 		
-		function updateOrDeleteContentBean(newTopicBean, httpMethod) {
+		function updateTopicBean(newTopicBean) {
 			$.ajax({
 				url: "/articleTopics/" + newTopicBean.id,
-				method: httpMethod,
+				type: "PUT",
 				data: JSON.stringify(newTopicBean),
 				contentType: "application/json; charset=UTF-8",
 				dataType: "json",
@@ -55,7 +105,25 @@
 					console.log("回傳值 : " + data);
 					sessionStorage.removeItem("contentBean");
 					sessionStorage.removeItem("contentPage");
-					location.href = contentPage;
+					location.href = "/forum/index.html";
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+					console.log(textStatus);
+				}
+			})
+		}
+
+		function deleteTopicBean(id) {
+			$.ajax({
+				url: "/articleTopics/" + id,
+				type: "DELETE",
+				success: function (data, textStatus, jqXHR) {
+					console.log("success");
+					console.log("回傳值 : " + data);
+					sessionStorage.removeItem("contentBean");
+					sessionStorage.removeItem("contentPage");
+					location.href = "/forum/index.html";
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log("error");
@@ -69,63 +137,114 @@
 		// *
 		function submit() {
 			$("#submit").attr('disabled', true);
+			quill.enable(false);
 			$(".formField").attr("disabled", true);
-			let newVideoBean = null;
-			newVideoBean = $("#videoBean").val();
-			let newTopicBean = {
-				topicHeader: $("#topicHeader").val(),
-				topicType: $("input[name=topicType]:checked").val(),
-				topicRegion: $("#topicRegion option:selected" ).val(),
-				accidentTime: $("#accidentTime").val(),
-				accidentLocation: $("#accidentLocation").val(),
-				accidentLocationLatitude: accidentLocationLatitude,
-				accidentLocationLongitude: accidentLocationLongitude,
-				topicContent: $("#topicContent").val(),
-				memberBean: null,
-				videoBean: newVideoBean
-			};
-			console.log("topicHeader:" + newTopicBean.topicHeader);
-			console.log("topicType:" + newTopicBean.topicType);
-			console.log("topicRegion:" + newTopicBean.topicRegion);
-			console.log("accidentTime:" + newTopicBean.accidentTime);
-			console.log("accidentLocation:" + newTopicBean.accidentLocation);
-			console.log("accidentLocationLatitude:" + newTopicBean.accidentLocationLatitude);
-			console.log("accidentLocationLongitude:" + newTopicBean.accidentLocationLongitude);
-			console.log("topicContent:" + newTopicBean.topicContent);
-			console.log("memberBean:" + newTopicBean.memberBean);
-			console.log("videoBean:" + newTopicBean.videoBean);
-			// var httpMethod = "POST";
-			if (newVideoBean) {
-				console.log("videoBean 不為空");
-				upload();
-				let checkVideo = setInterval(function () {
-					if (videoUploadResult) {
-						clearInterval(checkVideo);
-						console.log("videoUploadResult: " + videoUploadResult);
-						newTopicBean.videoBean = videoUploadResult;
-						updateOrDeleteContentBean(newTopicBean);
-					} else {
-						console.log("videoUploadResult: " + videoUploadResult);
-					}
-				}, 1000);
-			} else {
-				console.log(newTopicBean);
-				updateOrDeleteContentBean(newTopicBean);
+			
+			if ($("input[name=topicStatus]:checked").val() == "deleted") {
+				deleteTopicBean(topicBean.id);
+			}else if($("input[name=topicStatus]:checked").val() == "normal") {
+				let newVideoBean = $("#videoBean").val();
+				if(newVideoBean == ""){
+					newVideoBean = null;
+				}
+				let newTopicBean = {
+					id: topicBean.id,
+					topicHeader: $("#topicHeader").val(),
+					topicType: $("input[name=topicType]:checked").val(),
+					topicRegion: $("#topicRegion option:selected" ).val(),
+					accidentTime: new Date($("#accidentTime").val()),
+					accidentLocation: $("#accidentLocation").val(),
+					accidentLocationLatitude: accidentLocationLatitude,
+					accidentLocationLongitude: accidentLocationLongitude,
+					topicContent: JSON.stringify(quill.getContents()),
+					memberBean: memberBean,
+					videoBean: newVideoBean
+				};
+				console.log("id:" + newTopicBean.id);
+				console.log("topicHeader:" + newTopicBean.topicHeader);
+				console.log("topicType:" + newTopicBean.topicType);
+				console.log("topicRegion:" + newTopicBean.topicRegion);
+				console.log("accidentTime:" + newTopicBean.accidentTime);
+				console.log("accidentLocation:" + newTopicBean.accidentLocation);
+				console.log("accidentLocationLatitude:" + newTopicBean.accidentLocationLatitude);
+				console.log("accidentLocationLongitude:" + newTopicBean.accidentLocationLongitude);
+				console.log("topicContent:" + newTopicBean.topicContent);
+				console.log("memberBean: ");
+				console.log(newTopicBean.memberBean);
+				console.log("videoBean is null? :" + newTopicBean.videoBean);
+				if (newVideoBean) {
+					console.log("videoBean 不為空");
+					upload();
+					let checkVideo = setInterval(function () {
+						if (videoUploadResult) {
+							clearInterval(checkVideo);
+							console.log("videoUploadResult: ");
+							console.log(videoUploadResult);
+							newTopicBean.videoBean = videoUploadResult;
+							console.log("videoBean: ok");
+							updateTopicBean(newTopicBean);
+						} else {
+							console.log("videoUploadResult: ");
+							console.log(videoUploadResult);
+						}
+					}, 1000);
+				} else {
+					console.log(newTopicBean);
+					updateTopicBean(newTopicBean);
+				}
+			}else{
+				console.log("topicStatus Error");
 			}
-
 		}
+		
+		Date.prototype.yyyymmddhhii = function() {
+			let mm = this.getMonth() + 1; // getMonth() is zero-based
+			let dd = this.getDate();
+			let hh = this.getHours();
+			let ii = this.getMinutes();
+
+			return [this.getFullYear() + "-",
+					(mm>9 ? '' : '0') + mm + "-",
+					(dd>9 ? '' : '0') + dd + " ",
+					(hh>9 ? '' : '0') + hh + ":",
+					(ii>9 ? '' : '0') + ii
+					].join('');
+		};
 
 		document.addEventListener("DOMContentLoaded", function () {
 			document.getElementById("submit").addEventListener("click", submit);
 			preInput();
+			// datetimepicker
+			let twoYearsAgo = new Date();
+			twoYearsAgo.setMonth(twoYearsAgo.getMonth() - 24);
+			// console.log(twoYearsAgo.yyyymmddhhii());
+			// console.log(new Date().yyyymmddhhii());
+			$('.form_datetime').datetimepicker({
+				format: "yyyy-mm-dd hh:ii",
+				startDate: twoYearsAgo.yyyymmddhhii(),
+				endDate: new Date().yyyymmddhhii(),
+				weekStart: 1,	//week start from Mon
+				todayBtn:  1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				forceParse: 0,
+				showMeridian: 1
+			});
+			let preInputAccidentTime = new Date(topicBean.accidentTime);
+			$("#accidentTimeInFormControl").val(preInputAccidentTime.yyyymmddhhii());	//view
+			$("#accidentTime").val(preInputAccidentTime);	//real value
+
+			
 		})
-		
+		// $(function () {});
+
 		//顯示Google Map
 		function initMap() {
-			console.log("initMap ok");
+			// console.log("initMap ok");
             let map = new google.maps.Map(document.getElementById("map_canvas"), {
                 zoom: 13
-                , center: { lat: 25.033793, lng: 121.543427 }
+                , center: { lat: topicBean.accidentLocationLatitude, lng: topicBean.accidentLocationLongitude }
                 , scaleControl: true
             });
 			
@@ -147,7 +266,7 @@
 				// $("#accidentLocationLongitude").html(event.latLng.lng());
 				accidentLocationLatitude = event.latLng.lat();
 				accidentLocationLongitude = event.latLng.lng();
-
+				
 				if(marker != undefined){
 					marker.setMap(null);
 				}
@@ -197,6 +316,19 @@
 			<div class="card-body">
 				<form>
 					<fieldset class="formField">
+						<label>
+							<h4>編輯類型： </h4>
+							<div class="form-check-inline">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" name="topicStatus" value="normal">修改文章
+								</label>
+							</div>
+							<div class="form-check-inline">
+								<label class="form-check-label">
+									<input type="radio" class="form-check-input" name="topicStatus" value="deleted">刪除文章
+								</label>
+							</div>
+						</label>
 						<div class="form-group">
 							<label for="topicHeader"><h4>標題: </h4></label>
 								<input type="text" name="topicHeader" id="topicHeader"><br>
@@ -213,8 +345,19 @@
 									<option id="southernRegion" value="southernRegion">南部區域</option>
 									<option id="easternRegion" value="easternRegion">東部區域</option>
 								</select><br>
-							<label for="accidentTime"><h4>事故時間: </h4></label>
-								<input type="text" name="accidentTime" id="accidentTime"><br>
+
+							<div class="form-group">
+								<label for="accidentTime" class="col-md-2 control-label"><h4>事故時間: </h4></label>
+								<!-- <div class="input-group date form_datetime col-md-5" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="accidentTime"> -->
+								<div class="input-group date form_datetime col-md-5" data-link-field="accidentTime"> 
+										<!-- data-date="2012-05-15 21:05"   data-date-format="yyyy-mm-dd hh:ii"   -->
+									<input class="form-control" id="accidentTimeInFormControl" size="16" type="text" value="" readonly>
+									<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+									<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+								</div>
+								<input type="hidden" id="accidentTime" value="" /><br/>
+							</div>
+
 							<label for="accidentLocation"><h4>事故地點說明: </h4></label>
 								<input type="text" name="accidentLocation" id="accidentLocation"><br>
 							<label><h4>請在地圖中選取事故地點: </h4></label>
@@ -222,7 +365,55 @@
 								<!-- 緯度:<span id="accidentLocationLatitude"></span><br>
 								經度:<span id="accidentLocationLongitude"></span><br> -->
 							<label>文章內容: </label><br>
-								<textarea name="topicContent" id="topicContent" class="form-control" rows="8" cols="80" style="resize:none;" placeholder="請輸入文章內容"></textarea><br>
+							<div id="standalone-container">
+								<div id="toolbar-container">
+									<span class="ql-formats">
+										<select class="ql-font"></select>
+										<select class="ql-size"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-bold"></button>
+										<button class="ql-italic"></button>
+										<button class="ql-underline"></button>
+										<button class="ql-strike"></button>
+									</span>
+									<span class="ql-formats">
+										<select class="ql-color"></select>
+										<select class="ql-background"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-script" value="sub"></button>
+										<button class="ql-script" value="super"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-header" value="1"></button>
+										<button class="ql-header" value="2"></button>
+										<button class="ql-blockquote"></button>
+										<button class="ql-code-block"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-list" value="ordered"></button>
+										<button class="ql-list" value="bullet"></button>
+										<button class="ql-indent" value="-1"></button>
+										<button class="ql-indent" value="+1"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-direction" value="rtl"></button>
+										<select class="ql-align"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-link"></button>
+										<button class="ql-image"></button>
+										<button class="ql-video"></button>
+										<button class="ql-formula"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-clean"></button>
+									</span>
+								</div>
+								<div id="editor-container"></div>
+							</div>
+							<br>
 						</div>
 					</fieldset>
 				</form>
@@ -254,19 +445,7 @@
 				<form>
 					<fieldset class="formField">
 						<hr>
-						<label>
-							<h4>狀態(管理員功能)： </h4>
-							<div class="form-check-inline">
-								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="contentStatus" value="normal">Normal
-								</label>
-							</div>
-							<div class="form-check-inline">
-								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="contentStatus" value="deleted">Deleted
-								</label>
-							</div>
-						</label><br>
+						<br>
 						<label>
 							<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
 						</label><br>

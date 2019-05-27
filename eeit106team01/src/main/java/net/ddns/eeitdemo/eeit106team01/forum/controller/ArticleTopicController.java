@@ -74,6 +74,7 @@ public class ArticleTopicController {
 		}
 		
 		if (findRange != null) {
+//			System.err.println(findRange.get(0).toString());
 			return ResponseEntity.ok(findRange);
 		} else {
 			return ResponseEntity.notFound().build();
@@ -205,6 +206,8 @@ public class ArticleTopicController {
 			@RequestBody ArticleTopicCurrentBean requestbody) {
 		System.out.println("updateTopic method running");
 		if (id == requestbody.getId().intValue()) {
+			requestbody.setTopicUpdateTime(new java.util.Date());
+			requestbody.setUpdateMessage("使用者修改");
 			ArticleTopicCurrentBean updateResult = articleTopicCurrentService.updateIgnoreNullColumn(requestbody);
 			if (updateResult != null) {
 				return ResponseEntity.ok(updateResult);
@@ -218,9 +221,16 @@ public class ArticleTopicController {
 	@DeleteMapping(path = { "/articleTopics/{id}" })
 	public ResponseEntity<?> deleteTopic(@PathVariable(name = "id") int id) {
 		System.out.println("deleteTopic method running");
-		boolean deleteResult = articleTopicCurrentService.delete(id);
-		if (deleteResult) {
-			return ResponseEntity.noContent().build();
+//		boolean deleteResult = articleTopicCurrentService.delete(id);
+		ArticleTopicCurrentBean findOne = articleTopicCurrentService.findByPrimaryKey(id);
+		ArticleTopicCurrentBean deleteResult = null;
+		if(findOne != null && !"deleted".equals(findOne.getTopicStatus()) ) {
+			findOne.setTopicStatus("deleted");
+			deleteResult = articleTopicCurrentService.updateIgnoreNullColumn(findOne);
+		}
+		
+		if (deleteResult != null) {
+			return ResponseEntity.ok().build();
 		} else {
 			return ResponseEntity.notFound().build();
 		}

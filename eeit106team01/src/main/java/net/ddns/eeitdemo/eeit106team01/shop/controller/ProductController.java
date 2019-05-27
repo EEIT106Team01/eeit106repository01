@@ -21,6 +21,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
@@ -129,6 +130,15 @@ public class ProductController {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
 			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
+
+	@GetMapping(path = { "/search/type" }, produces = { "application/json" })
+	public ResponseEntity<?> getProductType() {
+		List<DataBean> result = productService.findProductTypes();
+		if (result != null) {
+			return new ResponseEntity<List<DataBean>>(result, HttpStatus.OK);
 		}
 		return ResponseEntity.notFound().build();
 	}

@@ -131,14 +131,14 @@
 			card.id = "topic" + topicBean.id;
 			card.style.minWidth = "320px";
 			card.style.margin = "1%";
-			// if (
-			// 	(topicBean.topicStatus !== "deleted")
-			// 	(contentBean.memberBean) &&
-			// 	(memberBean) &&
-			// 	(contentBean.memberBean.id == memberBean.id)
-			// ) {
-			// 	content.appendChild(createEditBtn(topicBean));
-			// }
+			if (
+				(topicBean.topicStatus !== "deleted") &&
+				(topicBean.memberBean) &&
+				(memberBean) &&
+				(topicBean.memberBean.id == memberBean.id)
+			) {
+				content.appendChild(createEditBtn(topicBean, "topic"));
+			}
 			if (
 				(topicBean.topicStatus !== "deleted")
 			) {
@@ -186,7 +186,7 @@
 				(memberBean) &&
 				(contentBean.memberBean.id == memberBean.id)
 			) {
-				content.appendChild(createEditBtn(contentBean));
+				content.appendChild(createEditBtn(contentBean, "content"));
 			}
 			information.appendChild(createLikeImg(contentBean));
 			card.appendChild(title);
@@ -290,15 +290,19 @@
 			return replyBtn;
 		}
 
-		function createEditBtn(contentBean) {
+		function createEditBtn(bean, beanType) {
 			let editBtn = document.createElement("button");
 			editBtn.className = "btn btn-outline-secondary btn-sm";
 			editBtn.textContent = "Edit";
 			editBtn.style.float = "right";
 			editBtn.addEventListener("click", function () {
-				sessionStorage.setItem("contentBean", JSON.stringify(contentBean));
+				sessionStorage.setItem("contentBean", JSON.stringify(bean));
 				sessionStorage.setItem("contentPage", location.pathname);
-				location.href = "/forum/editContent.html";
+				if(beanType === "topic"){
+					location.href = "/forum/editTopic.html";
+				}else if(beanType === "content"){
+					location.href = "/forum/editContent.html";
+				}
 			})
 			return editBtn;
 		}

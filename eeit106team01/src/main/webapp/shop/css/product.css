@@ -8,14 +8,6 @@ aside{
   float: right;
 }
 
-#productDiv{
-  margin: 2px;
-}
-
-#smallImg{
-  vertical-align:baseline;
-}
-
 #informationTable{
   width: 530px !important;
 }
@@ -25,13 +17,25 @@ aside{
   margin:15px; 
 }
 
-#recommendDiv{
-  width: 205px;
-  height: 350px;
-  float:left;
-  border: 1px solid;
-  margin: 5px;
+#productRightInfo{
+  float: right;
+  width: 40%;
 }
+
+#productLeftInfo{
+  width: 39%;
+ float: left;
+}
+
+.btn-group{
+  /* display: block; */
+  width: 100%;
+}
+
+.col-md-4{
+  margin:0px auto;
+}
+
 
 #reviewTitle{
   clear: both;
@@ -40,6 +44,122 @@ aside{
   margin: 0px;
   padding: 0px;
 }
+/* 輪播 */
+.cta-100 {
+  margin-top: 100px;
+  padding-left: 8%;
+  padding-top: 7%;
+}
+.col-md-4{
+    padding-bottom:20px;
+}
+
+.white {
+  color: #fff !important;
+}
+.mt{float: left;margin-top: -20px;padding-top: 20px;}
+.bg-blue-ui {
+  background-color: #708198 !important;
+}
+figure img{width:300px;}
+
+#blogCarousel {
+  padding-bottom: 100px;
+}
+
+/* .blog .carousel-indicators {
+  left: 0;
+  top: 125%;
+  height: 50%;
+} */
+
+
+/* The colour of the indicators */
+
+/* .blog .carousel-indicators li {
+  background: #708198;
+  border-radius: 50%;
+  width: 20px;
+  height: 1px;
+}
+
+.blog .carousel-indicators .active {
+  background: #0fc9af;
+} */
+
+.item-carousel-blog-block {
+  outline: medium none;
+  padding: 15px;
+}
+
+.item-box-blog {
+  border: 1px solid #dadada;
+  text-align: center;
+  z-index: 4;
+  padding: 20px;
+  width: 200px;
+  height: 400px;
+}
+
+.item-box-blog-image {
+  position: relative;
+}
+
+.item-box-blog-image figure img {
+  width: 100%;
+  height: auto;
+}
+
+.item-box-blog-date {
+  position: absolute;
+  z-index: 5;
+  padding: 4px 4px;
+  top: -20px;
+  right: -13px;
+  background-color: #41cb52;
+}
+
+.item-box-blog-date span {
+  color: #fff;
+  display: block;
+  text-align: center;
+  line-height: 1.2;
+}
+
+.item-box-blog-date span.mon {
+  font-size: 18px;
+}
+
+.item-box-blog-date span.day {
+  font-size: 16px;
+}
+
+.item-box-blog-body {
+  padding: 10px;
+}
+
+.item-heading-blog a h5 {
+  margin: 0;
+  line-height: 1;
+  text-decoration:none;
+  transition: color 0.3s;
+}
+
+.item-box-blog-heading a {
+    text-decoration: none;
+}
+
+.item-box-blog-text {
+  max-height: 100px;
+  overflow: hidden;
+}
+
+.mt-10 {
+  float: left;
+  margin-top: -10px;
+  padding-top: 10px;
+}
+
 
 /* footer */
 .site-footer

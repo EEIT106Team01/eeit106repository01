@@ -2,7 +2,10 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
+
+import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
@@ -10,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
@@ -17,6 +21,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
+@Transactional
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired
@@ -166,7 +171,7 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice) {
+	public List<ProductBean> findProductsByPriceBetween(Integer minPrice, Integer maxPrice) {
 		if (minPrice != null && minPrice >= 0 && maxPrice != null && maxPrice >= minPrice) {
 			try {
 				this.productsResutlt = this.getSession()
@@ -373,6 +378,29 @@ public class ProductDAOImpl implements ProductDAO {
 			if (this.serialNumbersResult != null && this.serialNumbersResult.size() > 0) {
 				return this.serialNumbersResult;
 			}
+		}
+		return null;
+	}
+
+	@Override
+	public List<DataBean> findProductTypes() {
+		List<DataBean> result = new ArrayList<DataBean>();
+		try {
+			List<?> list = this.getSession().createQuery("select distinct type from ProductBean")
+					.getResultList();
+			if (list != null) {
+				Iterator<?> iterator = list.iterator();
+				while (iterator.hasNext()) {
+					DataBean dataBean = new DataBean();
+					dataBean.setType((String) iterator.next());
+					result.add(dataBean);
+				}
+			}
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (result != null && result.size() > 0) {
+			return result;
 		}
 		return null;
 	}

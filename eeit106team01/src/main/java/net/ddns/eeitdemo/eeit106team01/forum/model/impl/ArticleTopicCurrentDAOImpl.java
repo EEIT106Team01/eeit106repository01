@@ -42,9 +42,9 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn) {
 		String queryString = "";
 		if("topicUpdateTime".equals(orderColumn)) {
-			queryString = "from ArticleTopicCurrentBean where topicType = :topicType order by topicUpdateTime desc";
+			queryString = "from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') order by topicUpdateTime desc";
 		}else if("topicLikeNum".equals(orderColumn)) {
-			queryString = "from ArticleTopicCurrentBean where topicType = :topicType order by topicLikeNum desc";
+			queryString = "from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') order by topicLikeNum desc";
 		}else {
 			System.out.println("OrderColumn Error!");
 		}
@@ -59,7 +59,7 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 	@Override
 	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude,
 			Double lowerLongitude, Double upperLongitude) {
-		String queryString = "from ArticleTopicCurrentBean where (accidentLocationLatitude between :lowerLat and :upperLat) and (accidentLocationLongitude between :lowerLong and :upperLong) and topicType = 'shareTopic'";
+		String queryString = "from ArticleTopicCurrentBean where (accidentLocationLatitude between :lowerLat and :upperLat) and (accidentLocationLongitude between :lowerLong and :upperLong) and (topicType = 'shareTopic') and (topicStatus = 'normal')";
 		Query query = getSession().createQuery(queryString, ArticleTopicCurrentBean.class);
 		query.setParameter("lowerLat", lowerLatitude);
 		query.setParameter("upperLat", upperLatitude);

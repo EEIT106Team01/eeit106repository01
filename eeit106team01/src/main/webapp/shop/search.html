@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>三寶購物中心</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css">
+</head>
+
+<body class="page-body">
+    <div class="page-container horizontal-menu with-sidebar">
+        <!-- <header class="navbar navbar-fixed-top"></header> -->
+        <div class="sidebar-menu">
+            <header class="logo-env">
+
+                <!-- logo -->
+                <div class="logo">
+                    <a href="index.html">
+                        <img src="assets/images/logo.png" alt="" />
+                    </a>
+                </div>
+
+                <!-- logo collapse icon -->
+                <div class="sidebar-collapse">
+                    <a href="#" class="sidebar-collapse-icon with-animation">
+                        <!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
+                        <i class="entypo-menu"></i>
+                    </a>
+                </div>
+
+
+                <!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
+                <div class="sidebar-mobile-menu visible-xs">
+                    <a href="#" class="with-animation">
+                        <!-- add class "with-animation" to support animation -->
+                        <i class="entypo-menu"></i>
+                    </a>
+                </div>
+
+            </header>
+
+            <ul id="main-menu" class="">
+
+                <li id="search">
+                    <form method="get" action="">
+                        <input type="text" name="q" class="search-input" placeholder="Search something..." />
+                        <button type="submit">
+                            <i class="entypo-search"></i>
+                        </button>
+                    </form>
+                </li>
+                <li>
+                    <a href="index.html">
+                        <i class="entypo-gauge"></i>
+                        <span>Dashboard</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="index.html">
+                                <span>Dashboard 1</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="dashboard-2.html">
+                                <span>Dashboard 2</span>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <a href="layout-api.html">
+                        <i class="entypo-layout"></i>
+                        <span>Layouts</span>
+                    </a>
+                    <ul>
+                        <li>
+                            <a href="layout-api.html">
+                                <span>Layout API</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="layout-collapsed-sidebar.html">
+                                <span>Collapsed Sidebar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="layout-fixed-sidebar.html">
+                                <span>Fixed Sidebar</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="layout-chat-open.html">
+                                <span>Chat Open</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="layout-horizontal-menu-boxed.html">
+                                <span>Horizontal Menu Boxed</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="layout-horizontal-menu-fluid.html">
+                                <span>Horizontal Menu Fluid</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="layout-mixed-menus.html">
+                                <span>Mixed Menus</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="layout-page-transition-fade.html">
+                                <span>Page Enter Transitions</span>
+                            </a>
+                            <ul>
+                                <li>
+                                    <a href="layout-page-transition-fade.html">
+                                        <span>Fade Come</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="layout-page-transition-left-in.html">
+                                        <span>Left In</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="layout-page-transition-right-in.html">
+                                        <span>Right In</span>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a href="layout-page-transition-fade-only.html">
+                                        <span>Fade Only</span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+        </div>
+        <div class="main-content"></div>
+    </div>
+
+</body>
+
+</html>
