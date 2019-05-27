@@ -13,6 +13,7 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
@@ -32,7 +33,6 @@ public class ProductDAOImpl implements ProductDAO {
 
 	private List<ProductBean> productsResutlt = new ArrayList<ProductBean>();
 	private List<SerialNumberBean> serialNumbersResult = new ArrayList<SerialNumberBean>();
-	private List<String> stringList = new ArrayList<String>();
 
 	@Override
 	public ProductBean insertProduct(ProductBean productBean) {
@@ -383,18 +383,24 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<String> findProductTypes() {
+	public List<DataBean> findProductTypes() {
+		List<DataBean> result = new ArrayList<DataBean>();
 		try {
-			List<?> result = this.getSession().createQuery("select distinct type from ProductBean").getResultList();
-			Iterator<?> iterator = result.iterator();
-			while (iterator.hasNext()) {
-				this.stringList.add((String) iterator.next());
+			List<?> list = this.getSession().createQuery("select distinct type from ProductBean")
+					.getResultList();
+			if (list != null) {
+				Iterator<?> iterator = list.iterator();
+				while (iterator.hasNext()) {
+					DataBean dataBean = new DataBean();
+					dataBean.setType((String) iterator.next());
+					result.add(dataBean);
+				}
 			}
 		} catch (HibernateException e) {
 			throw new HibernateException(e.getMessage());
 		}
-		if (this.stringList != null && this.stringList.size() > 0) {
-			return this.stringList;
+		if (result != null && result.size() > 0) {
+			return result;
 		}
 		return null;
 	}

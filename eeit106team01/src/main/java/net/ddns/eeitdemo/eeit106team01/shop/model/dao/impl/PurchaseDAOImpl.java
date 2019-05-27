@@ -16,7 +16,6 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
@@ -233,15 +232,13 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Override
 	public List<PurchaseBean> findAllPurchase() {
-		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-		CriteriaQuery<PurchaseBean> criteriaQuery = criteriaBuilder.createQuery(PurchaseBean.class);
-		Root<PurchaseBean> root = criteriaQuery.from(PurchaseBean.class);
-		criteriaQuery.select(root);
-
-		Query<PurchaseBean> query = getSession().createQuery(criteriaQuery);
-		List<PurchaseBean> result = query.getResultList();
-		if (result != null) {
-			return result;
+		try {
+			this.purchase = this.getSession().createQuery("from PurchaseBean", PurchaseBean.class).getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.purchase != null && this.purchase.size() > 0) {
+			return this.purchase;
 		} else {
 			return null;
 		}
@@ -250,49 +247,44 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	// Purchase List
 	@Override
 	public PurchaseListBean insertPurchaseList(PurchaseListBean purchaseListBean) {
-		if (purchaseListBean != null) {
-			getSession().save(purchaseListBean);
-			return findPurchaseListByPurchaseListId(purchaseListBean.getId());
-		}
-		return null;
-	}
-
-	@Override
-	public PurchaseListBean updatePurchaseList(PurchaseListBean purchaseListBean) {
-		if (purchaseListBean != null) {
-			getSession().update(purchaseListBean);
-			return findPurchaseListByPurchaseListId(purchaseListBean.getId());
-		}
-		return null;
-	}
-
-	@Override
-	public PurchaseListBean findPurchaseListByPurchaseListId(Long id) {
-		if (id != null) {
-			PurchaseListBean result = getSession().get(PurchaseListBean.class, id);
-			if (result != null) {
-				return result;
-			} else {
-				return null;
+		if (purchaseListBean.isNotNull()) {
+			try {
+				this.getSession().save(purchaseListBean);
+				Long id = purchaseListBean.getId();
+				if (id != null && id.longValue() > 0L) {
+					return findPurchaseListByPurchaseListId(purchaseListBean.getId());
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public List<PurchaseListBean> findPurchaseListByOrderId(Long id) {
-		if (id != null) {
-			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-			CriteriaQuery<PurchaseListBean> criteriaQuery = criteriaBuilder.createQuery(PurchaseListBean.class);
-			Root<PurchaseListBean> oderDetail = criteriaQuery.from(PurchaseListBean.class);
-			criteriaQuery.select(oderDetail).where(criteriaBuilder.equal(oderDetail.get("orderBean"), id));
+	public PurchaseListBean findPurchaseListByPurchaseListId(Long id) {
+		if (id != null && id.longValue() > 0L) {
+			try {
+				return this.getSession().get(PurchaseListBean.class, id);
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+		}
+		return null;
+	}
 
-			Query<PurchaseListBean> query = getSession().createQuery(criteriaQuery);
-			List<PurchaseListBean> result = query.getResultList();
-			if (result != null) {
-				return result;
-			} else {
-				return null;
+	@Override
+	public List<PurchaseListBean> findPurchaseListByPurchaseId(Long id) {
+		if (id != null && id.longValue() > 0L) {
+			try {
+				this.purchaseList = this.getSession()
+						.createQuery("from PurchaseListBean where PurchaseID= :PurchaseID", PurchaseListBean.class)
+						.setParameter("PurchaseID", id).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchaseList != null && this.purchaseList.size() > 0) {
+				return this.purchaseList;
 			}
 		}
 		return null;
@@ -300,15 +292,14 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Override
 	public List<PurchaseListBean> findAllPurchaseList() {
-		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-		CriteriaQuery<PurchaseListBean> criteriaQuery = criteriaBuilder.createQuery(PurchaseListBean.class);
-		Root<PurchaseListBean> root = criteriaQuery.from(PurchaseListBean.class);
-		criteriaQuery.select(root);
-
-		Query<PurchaseListBean> query = getSession().createQuery(criteriaQuery);
-		List<PurchaseListBean> result = query.getResultList();
-		if (result != null) {
-			return result;
+		try {
+			this.purchaseList = this.getSession().createQuery("from PurchaseListBean", PurchaseListBean.class)
+					.getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.purchaseList != null && this.purchaseList.size() > 0) {
+			return this.purchaseList;
 		} else {
 			return null;
 		}
@@ -316,31 +307,87 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Override
 	public PurchaseListBean findPurchaseListBySerialNumber(String serialNumber) {
-		// TODO Auto-generated method stub
+		if (NullChecker.isEmpty(serialNumber) == false) {
+			PurchaseListBean result = new PurchaseListBean();
+			try {
+				result = this.getSession()
+						.createQuery("from PurchaseListBean where serialNumber= :serialNumber", PurchaseListBean.class)
+						.setParameter("serialNumber", serialNumber).getSingleResult();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (result != null) {
+				return result;
+			}
+		}
 		return null;
 	}
 
 	@Override
-	public PurchaseListBean findPurchaseListByPrice(Integer price) {
-		// TODO Auto-generated method stub
+	public List<PurchaseListBean> findPurchaseListByPrice(Integer price) {
+		if (price != null && price.intValue() >= 0) {
+			try {
+				this.purchaseList = this.getSession()
+						.createQuery("from PurchaseListBean where price= :price", PurchaseListBean.class)
+						.setParameter("price", price).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchaseList != null && this.purchaseList.size() > 0) {
+				return this.purchaseList;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<PurchaseListBean> findPurchaseListByPriceLower(Integer price) {
-		// TODO Auto-generated method stub
+		if (price != null && price.intValue() >= 0) {
+			try {
+				this.purchaseList = this.getSession()
+						.createQuery("from PurchaseListBean where price<= :price", PurchaseListBean.class)
+						.setParameter("price", price).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchaseList != null && this.purchaseList.size() > 0) {
+				return this.purchaseList;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<PurchaseListBean> findPurchaseListByPriceHigher(Integer price) {
-		// TODO Auto-generated method stub
+		if (price != null && price.intValue() >= 0) {
+			try {
+				this.purchaseList = this.getSession()
+						.createQuery("from PurchaseListBean where price>= :price", PurchaseListBean.class)
+						.setParameter("price", price).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchaseList != null && this.purchaseList.size() > 0) {
+				return this.purchaseList;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<PurchaseListBean> findPurchaseListByProductId(Long id) {
-		// TODO Auto-generated method stub
+		if (id != null && id.longValue() > 0) {
+			try {
+				this.purchaseList = this.getSession()
+						.createQuery("from PurchaseListBean where ProductID>= :ProductID", PurchaseListBean.class)
+						.setParameter("ProductID", id).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.purchaseList != null && this.purchaseList.size() > 0) {
+				return this.purchaseList;
+			}
+		}
 		return null;
 	}
 
