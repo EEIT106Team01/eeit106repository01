@@ -394,30 +394,46 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	// Review
 	@Override
 	public ReviewBean insertReview(ReviewBean reviewBean) {
-		if (reviewBean != null) {
-			getSession().save(reviewBean);
-			return this.findReviewByReviewId(reviewBean.getId());
+		if (reviewBean.isNotNull()) {
+			try {
+				this.getSession().save(reviewBean);
+				Long id = reviewBean.getId();
+				if (id != null && id.longValue() > 0L) {
+					return this.findReviewByReviewId(id);
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public ReviewBean updateReview(ReviewBean reviewBean) {
-		if (reviewBean != null) {
-			getSession().update(reviewBean);
-			return findReviewByReviewId(reviewBean.getId());
+		if (reviewBean.isNotNull()) {
+			try {
+				this.getSession().update(reviewBean);
+				Long id = reviewBean.getId();
+				if (id != null && id.longValue() > 0L) {
+					return this.findReviewByReviewId(id);
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public ReviewBean findReviewByReviewId(Long id) {
-		if (id != null) {
-			ReviewBean result = getSession().get(ReviewBean.class, id);
-			if (result != null) {
-				return result;
-			} else {
-				return null;
+		if (id != null && id.longValue() > 0L) {
+			try {
+				ReviewBean result = this.getSession().get(ReviewBean.class, id);
+				if (result != null) {
+					return result;
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
 			}
 		}
 		return null;
@@ -425,29 +441,50 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Override
 	public List<ReviewBean> findReviews() {
-		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-		CriteriaQuery<ReviewBean> criteriaQuery = criteriaBuilder.createQuery(ReviewBean.class);
-		Root<ReviewBean> root = criteriaQuery.from(ReviewBean.class);
-		criteriaQuery.select(root);
-
-		Query<ReviewBean> query = getSession().createQuery(criteriaQuery);
-		List<ReviewBean> result = query.getResultList();
-		if (result != null) {
-			return result;
-		} else {
-			return null;
+		try {
+			this.review = this.getSession().createQuery("from ReviewBean", ReviewBean.class).getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
 		}
+		if (this.review != null && this.review.size() > 0) {
+			return this.review;
+		}
+		return null;
 	}
 
 	@Override
 	public List<ReviewBean> findReviewsByTimeDayBetween(Date startDay, Date endDay) {
-		// TODO Auto-generated method stub
+		try {
+			this.review = this.getSession()
+					.createQuery("from ReviewBean where updatedTime BETWEEN :startDay AND :endDay", ReviewBean.class)
+					.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.review != null && this.review.size() > 0) {
+			return this.review;
+		}
 		return null;
 	}
 
 	@Override
 	public List<ReviewBean> findReviewsByImageExistence(Boolean truefalse) {
-		// TODO Auto-generated method stub
+		if (truefalse != null) {
+			try {
+				if (truefalse == true) {
+					this.review = this.getSession()
+							.createQuery("from ReviewBean where image is not null", ReviewBean.class).getResultList();
+				} else {
+					this.review = this.getSession().createQuery("from ReviewBean where image is null", ReviewBean.class)
+							.getResultList();
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.review != null && this.review.size() > 0) {
+				return this.review;
+			}
+		}
 		return null;
 	}
 
