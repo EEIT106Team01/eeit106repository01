@@ -19,11 +19,11 @@ aside{
 
 #productRightInfo{
   float: right;
-  width: 40%;
+  /* width: 40%; */
 }
 
 #productLeftInfo{
-  width: 39%;
+  /* width: 39%; */
  float: left;
 }
 

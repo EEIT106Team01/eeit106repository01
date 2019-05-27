@@ -242,23 +242,17 @@ function recommendTop(recommendData){
 }
 
 function getAllType(){
-    
+    var i=0;
     var productTypeArray =[];
     $.ajax({
         url: "http://localhost:8080/search/type",
         method: "GET",
         dataType: "json",
         success: function (typeData) {
-            var i = 0;
-            
 
-            // productTypeArray.length = 0;
-            productTypeArray = [];
             $.each(typeData,function(){
-                    productTypeArray.push('<li><span><a href="">'+typeData[i]+'</a></span></li>')
-                    i++
-            })
-            console.log(productTypeArray)
+                    productTypeArray.push('<li><span><a href="">'+typeData[i].type+'</a></span></li>')
+            })   
             $("#Classification").attr("data-content","<ul>"+productTypeArray.join("")+"</ul>");
         },error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus)

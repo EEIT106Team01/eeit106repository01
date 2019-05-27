@@ -135,7 +135,7 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/search/type" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductType() {
+	public ResponseEntity<?> getProductTypes() {
 		List<DataBean> result = productService.findProductTypes();
 		if (result != null) {
 			return new ResponseEntity<List<DataBean>>(result, HttpStatus.OK);
