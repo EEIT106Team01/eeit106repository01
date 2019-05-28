@@ -2,8 +2,12 @@ $(document).ready(function () {
     $("#searchPrice").click(function () {
         getProductsByPrice();
     });
-    getAllType();getAllBrand();
+    getAllType();
+    // getAllBrand();
+    $("#starDay").datepicker();
+    $("#endDay").datepicker();
 })
+
 
 function getProductsByPrice(){
     var price = $("#priceForm").serialize();
@@ -22,7 +26,7 @@ function getProductsByPrice(){
 function getAllBrand(){
     
     $.ajax({
-        url: "http://localhost:8080/search/type",
+        url: "http://localhost:8080/search/brand",
         method: "GET",
         dataType: "json",
         success: function (brandData) {   
@@ -42,7 +46,7 @@ function getAllBrand(){
 function getAllType(){
     
     $.ajax({
-        url: "http://localhost:8080/search/brand",
+        url: "http://localhost:8080/search/type",
         method: "GET",
         dataType: "json",
         success: function (typeData) {   

@@ -115,9 +115,13 @@
                                 <ul class="visible">
                                     <li>
                                         <form id="priceForm">
-                                            <input type="text" name="minPrice" placeholder="最低價錢">
-                                            <input type="text" name="maxPrice" placeholder="最高價錢">
-                                            <input type="button" value="搜尋" id="searchPrice">
+                                            <p>最低：
+                                                <input type="text" name="minPrice" placeholder="最低價錢">
+                                            </p>
+                                            <p>最高：
+                                                <input type="text" name="maxPrice" placeholder="最高價錢">
+                                                <input type="button" value="搜尋" id="searchPrice">
+                                            </p>
                                         </form>
                                     </li>
                                 </ul>
@@ -144,7 +148,15 @@
                                 </a>
                                 <ul class="visible">
                                     <li>
-
+                                        <form id="searchTimeForm">
+                                            <p>開始：
+                                                <input type="text" id="starDay" name="starDay" placeholder="開始時間">
+                                            </p>
+                                            <p>結束：
+                                                <input type="text" id="endDay" name="endDay" placeholder="結束時間">
+                                                <input type="button" value="搜尋" id="searchTime">
+                                            </p>
+                                        </form>
                                     </li>
                                 </ul>
                             </li>
@@ -159,19 +171,45 @@
         </div>
     </div>
 
-    <!-- Bottom scripts (common) -->
-    <script src="assets/js/gsap/TweenMax.min.js"></script>
-    <!-- <script src="assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script> -->
-    <!-- <script src="assets/js/bootstrap.js"></script> -->
-    <script src="assets/js/joinable.js"></script>
-    <script src="assets/js/resizeable.js"></script>
-    <script src="assets/js/neon-api.js"></script>
-    <!-- Imported scripts on this page -->
-    <script src="assets/js/neon-chat.js"></script>
-    <!-- JavaScripts initializations and stuff -->
-    <script src="assets/js/neon-custom.js"></script>
-    <!-- Demo Settings -->
-    <script src="assets/js/neon-demo.js"></script>
+<!-- Imported styles on this page -->
+<link rel="stylesheet" href="assets/js/select2/select2-bootstrap.css">
+<link rel="stylesheet" href="assets/js/select2/select2.css">
+<link rel="stylesheet" href="assets/js/selectboxit/jquery.selectBoxIt.css">
+<link rel="stylesheet" href="assets/js/daterangepicker/daterangepicker-bs3.css">
+<link rel="stylesheet" href="assets/js/icheck/skins/minimal/_all.css">
+<link rel="stylesheet" href="assets/js/icheck/skins/square/_all.css">
+<link rel="stylesheet" href="assets/js/icheck/skins/flat/_all.css">
+<link rel="stylesheet" href="assets/js/icheck/skins/futurico/futurico.css">
+<link rel="stylesheet" href="assets/js/icheck/skins/polaris/polaris.css">
+
+<!-- Bottom scripts (common) -->
+<script src="assets/js/gsap/TweenMax.min.js"></script>
+<script src="assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+<script src="assets/js/bootstrap.js"></script>
+<script src="assets/js/joinable.js"></script>
+<script src="assets/js/resizeable.js"></script>
+<script src="assets/js/neon-api.js"></script>
+
+
+<!-- Imported scripts on this page -->
+<script src="assets/js/select2/select2.min.js"></script>
+<script src="assets/js/bootstrap-tagsinput.min.js"></script>
+<script src="assets/js/typeahead.min.js"></script>
+<script src="assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+<script src="assets/js/bootstrap-datepicker.js"></script>
+<script src="assets/js/bootstrap-timepicker.min.js"></script>
+<script src="assets/js/bootstrap-colorpicker.min.js"></script>
+<script src="assets/js/moment.min.js"></script>
+<script src="assets/js/daterangepicker/daterangepicker.js"></script>
+<script src="assets/js/jquery.multi-select.js"></script>
+<script src="assets/js/icheck/icheck.min.js"></script>
+<script src="assets/js/neon-chat.js"></script>
+
+<!-- JavaScripts initializations and stuff -->
+<script src="assets/js/neon-custom.js"></script>
+
+<!-- Demo Settings -->
+<script src="assets/js/neon-demo.js"></script>
 
 </body>
 
