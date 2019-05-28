@@ -13,7 +13,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
-import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.RefundDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 
@@ -22,16 +22,17 @@ public class RefundDAOImplTest extends ShopTest {
 	@Autowired
 	private RefundDAO refundDAO;
 	@Autowired
-	private ProductDAO productDAO;
-	@Autowired
 	private MemberDAO memberDAO;
+	@Autowired
+	private PurchaseDAO purchaseDAO;
 
 	private RefundBean refundBean;
 	private RefundListBean refundListBean;
 	private Date date = NewDate.newCurrentTime();
 
 	public void testInsertRefund() throws Exception {
-		refundBean = new RefundBean(date, date, "test", "test", memberDAO.findByMemberId(1L));
+		memberDAO.insertMember(new Member());
+		refundBean = new RefundBean(date, date, "test", "test", memberDAO.findByMemberId(60L));
 		assertNotNull(refundDAO.insertRefund(refundBean));
 	}
 
@@ -47,6 +48,37 @@ public class RefundDAOImplTest extends ShopTest {
 
 	public void testFindRefundByMemberId() throws Exception {
 		assertNotNull(refundDAO.findRefundByMemberId(1L));
+	}
+
+	public void testFindRefundByProcessStatus() throws Exception {
+		assertNotNull(refundDAO.findRefundByProcessStatus("test"));
+	}
+
+	public void testFindAllRefund() throws Exception {
+		assertNotNull(refundDAO.findAllRefund());
+	}
+
+	public void testInsertRefundList() throws Exception {
+		refundListBean = new RefundListBean(purchaseDAO.findPurchaseListByPurchaseListId(64L),
+				refundDAO.findRefundByRefundId(67L));
+		assertNotNull(refundDAO.insertRefundList(refundListBean));
+	}
+
+	public void testFindRefundListByRefundListId() throws Exception {
+		refundDAO.findRefundListByPurchaseListId(1L);
+	}
+
+	@Test
+	public void testFindRefundListByPurchaseListId() throws Exception {
+		assertNotNull(refundDAO.findRefundListByPurchaseListId(64L));
+	}
+
+	public void testFindRefundListByRefundId() throws Exception {
+		assertNotNull(refundDAO.findRefundListByRefundId(67L));
+	}
+
+	public void testFindAllRefundList() throws Exception {
+		assertNotNull(refundDAO.findAllRefundList());
 	}
 
 }

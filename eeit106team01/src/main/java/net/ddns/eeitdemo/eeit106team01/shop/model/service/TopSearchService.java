@@ -66,10 +66,10 @@ public class TopSearchService {
 	}
 	
 	public TopSearchBean findTopSearchByPrimaryKey(Long id) {
-		return topSearchDAO.findTopSearchByPrimaryKey(id);
+		return topSearchDAO.findTopSearchByTopSearchId(id);
 	}
 	
 	public List<TopSearchBean> findTopSearchs(){
-		return topSearchDAO.findTopSearchs();
+		return topSearchDAO.findAllTopSearch();
 	}
 }

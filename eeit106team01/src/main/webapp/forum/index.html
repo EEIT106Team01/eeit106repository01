@@ -11,17 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            $("#searchInput").on("keyup", searchAutoComplete);
-        });
-
-        function searchAutoComplete() {
-            if ($("#searchInput").val() !== "") {
-                console.log(new Date());
-            }
-        }
-    </script>
+    
 </head>
 
 <body>
@@ -29,15 +19,11 @@
     <a href="/forum/showTopicsIndex.html">主題列表</a>
     <a href="/forum/showTopicsMap.html">探索</a>
     <a href="/forum/editTopic.html">修改主題</a>
+    <a href="/forum/searchMap.html">地圖搜尋</a>
+    <a href="/forum/searchTopic.html">主題搜尋</a>
     <br>
     <br>
-    <label>搜索：
-        <input type="text" id="searchInput" placeholder="請輸入關鍵字">
-    </label>
-    <input type="button" value="搜尋">
-
-    <div id="context1" style="background-color:white; border: 1px solid red;width:128px;position: absolute;top: 133px;left:944px;display:none"></div>
-
+    
 
 
 

@@ -1,27 +1,20 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
 
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.RefundDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @Repository
-@Transactional
 public class RefundDAOImpl implements RefundDAO {
 
 	@Autowired
@@ -99,45 +92,113 @@ public class RefundDAOImpl implements RefundDAO {
 	}
 
 	@Override
-	public List<RefundBean> findRefundByProcessStatus(Date startDay, Date endDay) {
-		// TODO Auto-generated method stub
+	public List<RefundBean> findRefundByProcessStatus(String processStatus) {
+		if (NullChecker.isEmpty(processStatus) == false) {
+			try {
+				this.refundBean = this.getSession()
+						.createQuery("from RefundBean where processStatus= :processStatus", RefundBean.class)
+						.setParameter("processStatus", processStatus).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.refundBean != null && this.refundBean.size() > 0) {
+				return this.refundBean;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<RefundBean> findAllRefund() {
-		// TODO Auto-generated method stub
+		try {
+			this.refundBean = this.getSession().createQuery("from RefundBean", RefundBean.class).getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.refundBean != null && this.refundBean.size() > 0) {
+			return this.refundBean;
+		}
 		return null;
 	}
 
 	@Override
-	public RefundListBean insertRefundList(RefundListBean refundDetailBean) {
-		// TODO Auto-generated method stub
+	public RefundListBean insertRefundList(RefundListBean refundListBean) {
+		if (refundListBean.isNotNull()) {
+			try {
+				this.getSession().save(refundListBean);
+				Long id = refundListBean.getId();
+				if (id != null && id.longValue() > 0L) {
+					return this.findRefundListByRefundListId(id);
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public RefundListBean findRefundListByRefundListId(Long refundListId) {
-		// TODO Auto-generated method stub
+		if (refundListId != null && refundListId.longValue() > 0L) {
+			try {
+				RefundListBean result = this.getSession().get(RefundListBean.class, refundListId);
+				if (result != null) {
+					return result;
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+		}
+		return null;
+	}
+
+	@Override
+	public RefundListBean findRefundListByPurchaseListId(Long purchaseListId) {
+		if (purchaseListId != null && purchaseListId.longValue() > 0L) {
+			try {
+				RefundListBean result = this.getSession()
+						.createQuery("from RefundListBean where PurchaseListID= :PurchaseListID", RefundListBean.class)
+						.setParameter("PurchaseListID", purchaseListId).getSingleResult();
+				if (result != null) {
+					return result;
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<RefundListBean> findRefundListByRefundId(Long refundId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<RefundListBean> findRefundListByPurchaseId(Long purchaseId) {
-		// TODO Auto-generated method stub
+		if (refundId != null && refundId.longValue() > 0L) {
+			try {
+				this.refundListBean = this.getSession()
+						.createQuery("from RefundListBean where RefundID = :RefundID", RefundListBean.class)
+						.setParameter("RefundID", refundId).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.refundListBean != null && this.refundListBean.size() > 0) {
+				return this.refundListBean;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<RefundListBean> findAllRefundList() {
-		// TODO Auto-generated method stub
-		return null;
+		try {
+			this.refundListBean = this.getSession().createQuery("from RefundListBean", RefundListBean.class)
+					.getResultList();
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (this.refundListBean != null && this.refundListBean.size() > 0) {
+			return this.refundListBean;
+		} else {
+			return null;
+		}
 	}
 
 }

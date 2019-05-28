@@ -49,6 +49,7 @@ public class PurchaseDAOImplTest {
 	}
 
 	// Purchase
+
 	public void testInsertPurchase() {
 		this.member = new Member();
 		memberDAO.insertMember(member);
@@ -111,9 +112,11 @@ public class PurchaseDAOImplTest {
 	}
 
 	// Purchase List
+	@Test
 	public void testInsertPurchaseList() throws Exception {
-		this.purchaseListBean = new PurchaseListBean(200, "test123", purchaseDAO.findPurchaseByPurchaseId(1L),
-				productDAO.findProductByProductId(1L));
+		this.purchaseListBean = new PurchaseListBean(200, "test123", purchaseDAO.findPurchaseByPurchaseId(61L),productDAO.findProductByProductId(1L));
+		assertNotNull(purchaseDAO.insertPurchaseList(purchaseListBean));
+		this.purchaseListBean = new PurchaseListBean(200, "test321", purchaseDAO.findPurchaseByPurchaseId(62L),productDAO.findProductByProductId(1L));
 		assertNotNull(purchaseDAO.insertPurchaseList(purchaseListBean));
 	}
 
@@ -198,7 +201,6 @@ public class PurchaseDAOImplTest {
 		assertNotNull(purchaseDAO.findReviewsByMemberId(1L));
 	}
 
-	@Test
 	public void testFindReviewsByProductId() throws Exception {
 		assertNotNull(purchaseDAO.findReviewsByProductId(1L));
 	}

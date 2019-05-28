@@ -81,17 +81,39 @@ public class ArticleTopicController {
 		}
 	}
 
-	@GetMapping(path = { "/articleTopics/{id}" }, produces = { "application/json" })
-	public ResponseEntity<?> getTopic(@PathVariable(name = "id") int id) {
-		System.out.println("getTopic method running");
-		ArticleTopicCurrentBean findOne = articleTopicCurrentService.findByPrimaryKey(id);
-		if (findOne != null) {
-			return ResponseEntity.ok(findOne);
+//	@GetMapping(path = { "/articleTopics/{id}" }, produces = { "application/json" })
+//	public ResponseEntity<?> getTopic(@PathVariable(name = "id") int id) {
+//		System.out.println("getTopic method running");
+//		ArticleTopicCurrentBean findOne = articleTopicCurrentService.findByPrimaryKey(id);
+//		if (findOne != null) {
+//			return ResponseEntity.ok(findOne);
+//		} else {
+//			return ResponseEntity.notFound().build();
+//		}
+//	}
+	
+	@GetMapping(path = { "/articleTopics/{likeTopicHeader}" }, produces = { "application/json" })
+	public ResponseEntity<?> getTopicByTopicHeader(@PathVariable String likeTopicHeader) {
+		System.out.println("getTopicByTopicHeader method running");
+		List<ArticleTopicCurrentBean> findResult = articleTopicCurrentService.findLikeTopicHeader(likeTopicHeader);
+		if (findResult != null) {
+			return ResponseEntity.ok(findResult);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
 	}
-
+	
+	@GetMapping(path = { "/autocomplete/{inputString}" }, produces = { "application/json" })
+	public ResponseEntity<?> searchAutocompleteTopicHeader(@PathVariable String inputString) {
+		System.out.println("searchAutocompleteTopicHeader method running");
+		List<String> findResult = articleTopicCurrentService.findAutocompleteByTopicHeader(inputString);
+		if (findResult != null && findResult.size() != 0) {
+			return ResponseEntity.ok(findResult);
+		} else {
+			return ResponseEntity.ok().build();
+		}
+	}
+	
 	@PostMapping(path = { "/articleTopics" }, consumes = { "application/json" }, produces = { "application/json" })
 	public ResponseEntity<?> postTopic(@RequestBody ArticleTopicCurrentBean requestbody, BindingResult bindingResult, HttpSession httpSession) {
 		System.out.println("postTopic method running");
