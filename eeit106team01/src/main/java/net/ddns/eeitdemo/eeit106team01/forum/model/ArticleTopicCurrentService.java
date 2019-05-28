@@ -27,6 +27,10 @@ public class ArticleTopicCurrentService {
 		return articleTopicCurrentDAO.findByPrimaryKeyAsProxy(id);
 	};
 	
+	public List<ArticleTopicCurrentBean> findLikeTopicHeader(String likeTopicHeader) {
+		return articleTopicCurrentDAO.findLikeTopicHeader(likeTopicHeader);
+	}
+	
 	public List<ArticleTopicCurrentBean> findAll() {
 		return articleTopicCurrentDAO.findAll();
 	};
@@ -41,6 +45,10 @@ public class ArticleTopicCurrentService {
 				upperLongitude);
 	}
 
+	public List<String> findAutocompleteByTopicHeader(String inputString) {
+		return articleTopicCurrentDAO.findAutocompleteByTopicHeader(inputString);
+	}
+	
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {
 		if (bean != null) {
 			System.err.println("before select memberBean");

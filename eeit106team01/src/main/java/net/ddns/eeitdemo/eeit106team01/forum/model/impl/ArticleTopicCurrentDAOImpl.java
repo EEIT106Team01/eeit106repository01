@@ -68,6 +68,22 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 		return query.getResultList();
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ArticleTopicCurrentBean> findLikeTopicHeader(String likeTopicHeader) {
+		String queryString = "from ArticleTopicCurrentBean where topicHeader like '%"+ likeTopicHeader +"%'";
+		Query query = getSession().createQuery(queryString, ArticleTopicCurrentBean.class);
+		return query.getResultList();
+	}
+	
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<String> findAutocompleteByTopicHeader(String inputString) {
+		String queryString = "select topicHeader from ArticleTopicCurrentBean where topicHeader like '%"+ inputString +"%'";
+		Query query = getSession().createQuery(queryString);
+		return query.getResultList();
+	}
+
 	@Override
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {
 		if (bean != null) {
