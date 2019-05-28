@@ -6,21 +6,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>主題</title>
-    <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script
-        src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
     <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script> -->
     <!-- Main Quill library -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-	<script src="/forum/quill/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="/forum/quill/quill.js"></script>
     <script src="/forum/quill/quill.min.js"></script>
     <!-- plyr -->
     <link rel="stylesheet" href="https://cdn.plyr.io/3.5.3/plyr.css" />
@@ -30,14 +26,45 @@
 
     <script>
         $(function () {
-            getTopicList();
+            let searchInput = getUrlParameters().q;
+            if(searchInput){
+                getSearchResults(searchInput);
+            }else{
+                getTopicList();
+            }
         })
+
+        function getUrlParameters() {
+            let parameters = [];
+            let hash;
+            let hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
+            for (let i = 0; i < hashes.length; i++) {
+                hash = hashes[i].split('=');
+                parameters.push(hash[0]);
+                parameters[hash[0]] = hash[1];
+            }
+            return parameters;
+        }
+
+        function getSearchResults(searchInput) {
+            $.ajax({
+                url: "http://localhost:8080/articleTopics/" + searchInput,
+                type: "GET",
+                success: function (data, textStatus, jqXHR) {
+                    if(data.length > 0){
+                        createTopicView(data, "searchTopic");
+                    } else {
+                        $("#searchTopic").text("查無資料");
+                    }
+                }
+            });
+        }
 
         function getTopicList() {
             let begin = 1;
             let end = 9;
             let orderType = "orderByTime"; //orderByTime orderByLike
-            $.each(["requestTopic", "shareTopic"], function(index, value){
+            $.each(["requestTopic", "shareTopic"], function (index, value) {
                 let topicType = value;
                 $.ajax({
                     url: `http://localhost:8080/articleTopics?begin=${begin}&end=${end}&topicType=${topicType}&orderType=${orderType}`,
@@ -48,7 +75,7 @@
                 });
             });
         }
-        
+
     </script>
 </head>
 
@@ -58,59 +85,13 @@
     <div id="requestTopic"></div>
     <hr>
     <h1>分享文</h1>
-    <div id="shareTopic">
-        <div class="card-deck" style="width:900px;">
-            <div class="card">
-                <img class="card-img-top" src="../images/bloodtrial.jpg" alt="Card image" style="width:100%">
-                <div class="card-body">
-                    <h4 class="card-title">三寶上路囉 碰碰碰</h4>
-                    <p class="card-text">發大財高雄發大財大發財發大財高雄發大財大發財......
-                        <a href="#" class="card-link">&lt;詳細內容&gt;</a>
-                    </p>
-                    <p class="card-text">Fadachai</p>
-                    <span class="badge badge-dark">153</span>
-                    <span class="badge badge-dark">1</span>
-                    <span class="badge badge-dark">5</span>
-                    <span class="badge badge-warning">2019-05-16</span>
-                </div>
-            </div>
-            
-            <div class="card">
-                <img class="card-img-top" src="../images/bloodtrial.jpg" alt="Card image" style="width:100%">
-                <div class="card-body">
-                    <h4 class="card-title">三寶上路囉 碰碰碰</h4>
-                    <p class="card-text">發大財高雄發大財大發財發大財高雄發大財大發財......
-                        <a href="#" class="card-link">&lt;詳細內容&gt;</a>
-                    </p>
-                    <p class="card-text">Fadachai</p>
-                    <span class="badge badge-dark">153</span>
-                    <span class="badge badge-dark">1</span>
-                    <span class="badge badge-dark">5</span>
-                    <span class="badge badge-warning">2019-05-16</span>
-                </div>
-            </div>
-
-            <div class="card">
-                <img class="card-img-top" src="../images/bloodtrial.jpg" alt="Card image" style="width:100%">
-                <div class="card-body">
-                    <h4 class="card-title">三寶上路囉 碰碰碰</h4>
-                    <p class="card-text">發大財高雄發大財大發財發大財高雄發大財大發財......
-                        <a href="#" class="card-link">&lt;詳細內容&gt;</a>
-                    </p>
-                    <p class="card-text">Fadachai</p>
-                    <span class="badge badge-dark">153</span>
-                    <span class="badge badge-dark">1</span>
-                    <span class="badge badge-dark">5</span>
-                    <span class="badge badge-warning">2019-05-16</span>
-                </div>
-            </div>
-
-        </div>
-
-    </div>
+    <div id="shareTopic"></div>
+    <hr>
+    <h1>搜尋結果</h1>
+    <div id="searchTopic"></div>
 
 
-    
+
 </body>
 
 </html>

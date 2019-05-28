@@ -14,6 +14,10 @@ public interface ArticleTopicCurrentDAO {
 
 	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude, Double lowerLongitude, Double upperLongitude);
 	
+	public List<ArticleTopicCurrentBean> findLikeTopicHeader(String likeTopicHeader);
+	
+	public List<String> findAutocompleteByTopicHeader(String inputString);
+	
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean);
 
 	public ArticleTopicCurrentBean update(ArticleTopicCurrentBean bean);

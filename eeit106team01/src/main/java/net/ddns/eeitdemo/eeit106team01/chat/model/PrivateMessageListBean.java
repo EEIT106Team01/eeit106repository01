@@ -18,6 +18,10 @@ public class PrivateMessageListBean {
 	private String name;
 	@Column(columnDefinition = "varbinary(max)")
 	private ArrayList<String> contactList;
+	
+	public PrivateMessageListBean() {
+		this.contactList = new ArrayList<String>();
+	}
 
 	public Integer getId() {
 		return id;

@@ -17,9 +17,13 @@ public class RegionMessageBean {
 	private Integer id;
 	private String region;
 	@Column(columnDefinition = "varbinary(max)")
-	private ArrayList<RegionMessage> messages;
+	private ArrayList<RegionMsg> messages;
 	@Column(name = "indexs")
 	private Integer index;
+	
+	public RegionMessageBean() {
+		this.messages = new ArrayList<RegionMsg>();
+	}
 
 	public RegionMessageBean generateNewRecord() {
 		RegionMessageBean newRecord = null;
@@ -27,7 +31,7 @@ public class RegionMessageBean {
 		if (this.getIndex() != null) {
 			newRecord.setIndex(this.getIndex() + 1);
 		}
-		newRecord.setMessage(new ArrayList<RegionMessage>());
+		newRecord.setMessage(new ArrayList<RegionMsg>());
 		newRecord.setRegion(this.getRegion());
 		return newRecord;
 	}
@@ -48,11 +52,11 @@ public class RegionMessageBean {
 		this.region = region;
 	}
 
-	public ArrayList<RegionMessage> getMessage() {
+	public ArrayList<RegionMsg> getMessage() {
 		return messages;
 	}
 
-	public void setMessage(ArrayList<RegionMessage> message) {
+	public void setMessage(ArrayList<RegionMsg> message) {
 		this.messages = message;
 	}
 
