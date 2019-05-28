@@ -98,7 +98,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/brand" }, produces = { "application/json" })
+	@GetMapping(path = { "/search/brand" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand) {
 		if (brand != null) {
 			List<ProductBean> result = productService.findProductsByBrand(brand);
