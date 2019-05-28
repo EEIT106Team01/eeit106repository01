@@ -6,7 +6,6 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -20,7 +19,7 @@ public class RefundListBean implements Serializable {
 	private static final long serialVersionUID = -2001180171846295649L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	@Column(name = "RefundListID", columnDefinition = "bigint")
 	private Long id;
 
@@ -50,7 +49,7 @@ public class RefundListBean implements Serializable {
 	public String toString() {
 		return "RefundListBean [id=" + id + ", purchaseListId=" + purchaseListId + ", refundId=" + refundId + "]";
 	}
-	
+
 	/**
 	 * Check purchaseListId, refundId null or not.
 	 * 

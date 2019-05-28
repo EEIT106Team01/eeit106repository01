@@ -6,7 +6,6 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -19,14 +18,14 @@ public class PurchaseListBean implements Serializable {
 	private static final long serialVersionUID = 7412479144382182019L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	@Column(name = "PurchaseListID", columnDefinition = "bigint")
 	private Long id;
 
 	@Column(name = "Price", nullable = false, updatable = false)
 	private Integer price;
 
-	@Column(name = "SerialNumber", nullable = false, updatable = false)
+	@Column(name = "SerialNumber", nullable = false, updatable = false, unique = true)
 	private String serialNumber;
 
 	@ManyToOne

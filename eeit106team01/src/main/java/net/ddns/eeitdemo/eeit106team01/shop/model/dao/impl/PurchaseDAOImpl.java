@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,6 +19,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @Repository
+@Transactional
 public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Autowired

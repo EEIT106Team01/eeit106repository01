@@ -1,6 +1,5 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao;
 
-import java.util.Date;
 import java.util.List;
 
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
@@ -17,18 +16,18 @@ public interface RefundDAO {
 	
 	abstract List<RefundBean>findRefundByMemberId(Long memberId);
 
-	abstract List<RefundBean>findRefundByProcessStatus(Date startDay, Date endDay);
+	abstract List<RefundBean>findRefundByProcessStatus(String processStatus);
 	
 	abstract List<RefundBean> findAllRefund();
 
 	// Refund List
-	abstract RefundListBean insertRefundList(RefundListBean refundDetailBean);
+	abstract RefundListBean insertRefundList(RefundListBean refundListBean);
 
 	abstract RefundListBean findRefundListByRefundListId(Long refundListId);
 	
-	abstract List<RefundListBean> findRefundListByRefundId(Long refundId);
+	abstract RefundListBean findRefundListByPurchaseListId(Long purchaseListId);
 	
-	abstract List<RefundListBean> findRefundListByPurchaseId(Long purchaseId);
+	abstract List<RefundListBean> findRefundListByRefundId(Long refundId);
 
 	abstract List<RefundListBean> findAllRefundList();
 
