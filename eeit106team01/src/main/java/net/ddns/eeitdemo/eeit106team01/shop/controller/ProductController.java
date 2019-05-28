@@ -97,7 +97,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/brand" }, produces = { "application/json" })
+	@GetMapping(path = { "/search/brand" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand) {
 		if (brand != null) {
 			List<ProductBean> result = productService.findProductsByBrand(brand);
@@ -109,7 +109,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/price" }, produces = { "application/json" })
+	@GetMapping(path = { "/search/price" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByPrice(@RequestParam(defaultValue = "0") Integer minPrice,
 			@RequestParam Integer maxPrice) {
 		if ((minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null) && (maxPrice.intValue() > 0)) {
