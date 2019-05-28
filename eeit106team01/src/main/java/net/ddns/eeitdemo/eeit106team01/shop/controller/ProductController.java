@@ -65,7 +65,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/type" }, produces = { "application/json" })
+	@GetMapping(path = { "/search/type" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByType(@RequestParam String type) {
 		if (type != null) {
 			List<ProductBean> result = productService.findProductsByType(type);
@@ -110,9 +110,10 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/price" }, produces = { "application/json" })
+	@GetMapping(path = { "/search/price" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByPrice(@RequestParam String byNameBrandType, @RequestParam String queryString,
-			@RequestParam(defaultValue = "0") Integer minPrice, @RequestParam Integer maxPrice) {
+			@RequestParam(defaultValue = "0",required = false) Integer minPrice, 
+			@RequestParam(defaultValue = "999999",required = false) Integer maxPrice) {
 		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(byNameBrandType) == false
 				&& (minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null)
 				&& (maxPrice.intValue() > 0)) {
@@ -138,10 +139,10 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/search/type" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductTypes(@RequestParam String dataName, @RequestParam String type) {
-		if (NullChecker.isEmpty(dataName)) {
-			List<DataBean> result = productService.findProductTypes(dataName, type);
+	@GetMapping(path = { "/search/data" }, produces = { "application/json" })
+	public ResponseEntity<?> getProductTypes(@RequestParam String dataName, @RequestParam(required = false) String type) {
+		if (NullChecker.isEmpty(dataName)==false) {
+			List<DataBean> result = productService.findProductData(dataName, type);
 			if (result != null) {
 				return new ResponseEntity<List<DataBean>>(result, HttpStatus.OK);
 			}
