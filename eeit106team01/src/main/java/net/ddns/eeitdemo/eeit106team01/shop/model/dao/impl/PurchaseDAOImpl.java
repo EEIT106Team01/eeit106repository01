@@ -4,15 +4,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Root;
-import javax.transaction.Transactional;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -23,7 +17,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @Repository
-@Transactional
 public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Autowired
@@ -71,10 +64,10 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public PurchaseBean findPurchaseByPurchaseId(Long id) {
-		if (id != null && id.longValue() > 0) {
+	public PurchaseBean findPurchaseByPurchaseId(Long purchaseId) {
+		if (purchaseId != null && purchaseId.longValue() > 0) {
 			try {
-				PurchaseBean result = this.getSession().get(PurchaseBean.class, id);
+				PurchaseBean result = this.getSession().get(PurchaseBean.class, purchaseId);
 				if (result != null) {
 					return result;
 				}
@@ -214,12 +207,12 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public List<PurchaseBean> findPurchaseByMemberId(Long id) {
-		if (id != null && id.longValue() > 0) {
+	public List<PurchaseBean> findPurchaseByMemberId(Long memberId) {
+		if (memberId != null && memberId.longValue() > 0) {
 			try {
 				this.purchase = this.getSession()
 						.createQuery("from PurchaseBean where MemberID= :MemberID", PurchaseBean.class)
-						.setParameter("MemberID", id).getResultList();
+						.setParameter("MemberID", memberId).getResultList();
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
 			}
@@ -262,10 +255,10 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public PurchaseListBean findPurchaseListByPurchaseListId(Long id) {
-		if (id != null && id.longValue() > 0L) {
+	public PurchaseListBean findPurchaseListByPurchaseListId(Long purchaseListId) {
+		if (purchaseListId != null && purchaseListId.longValue() > 0L) {
 			try {
-				return this.getSession().get(PurchaseListBean.class, id);
+				return this.getSession().get(PurchaseListBean.class, purchaseListId);
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
 			}
@@ -274,12 +267,12 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public List<PurchaseListBean> findPurchaseListByPurchaseId(Long id) {
-		if (id != null && id.longValue() > 0L) {
+	public List<PurchaseListBean> findPurchaseListByPurchaseId(Long purchaseId) {
+		if (purchaseId != null && purchaseId.longValue() > 0L) {
 			try {
 				this.purchaseList = this.getSession()
 						.createQuery("from PurchaseListBean where PurchaseID= :PurchaseID", PurchaseListBean.class)
-						.setParameter("PurchaseID", id).getResultList();
+						.setParameter("PurchaseID", purchaseId).getResultList();
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
 			}
@@ -375,12 +368,12 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public List<PurchaseListBean> findPurchaseListByProductId(Long id) {
-		if (id != null && id.longValue() > 0) {
+	public List<PurchaseListBean> findPurchaseListByProductId(Long productId) {
+		if (productId != null && productId.longValue() > 0) {
 			try {
 				this.purchaseList = this.getSession()
 						.createQuery("from PurchaseListBean where ProductID>= :ProductID", PurchaseListBean.class)
-						.setParameter("ProductID", id).getResultList();
+						.setParameter("ProductID", productId).getResultList();
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
 			}
@@ -425,10 +418,10 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 	}
 
 	@Override
-	public ReviewBean findReviewByReviewId(Long id) {
-		if (id != null && id.longValue() > 0L) {
+	public ReviewBean findReviewByReviewId(Long reviewId) {
+		if (reviewId != null && reviewId.longValue() > 0L) {
 			try {
-				ReviewBean result = this.getSession().get(ReviewBean.class, id);
+				ReviewBean result = this.getSession().get(ReviewBean.class, reviewId);
 				if (result != null) {
 					return result;
 				}
@@ -490,31 +483,83 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Override
 	public List<ReviewBean> findReviewsByRating(Double rating) {
-		// TODO Auto-generated method stub
+		if (rating != null && rating.doubleValue() <= 10d && rating.doubleValue() >= 0d) {
+			try {
+				this.review = this.getSession().createQuery("from ReviewBean where rating= :rating", ReviewBean.class)
+						.setParameter("rating", rating).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.review != null && this.review.size() > 0) {
+				return this.review;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<ReviewBean> findReviewsByRatingLower(Double rating) {
-		// TODO Auto-generated method stub
+		if (rating != null && rating.doubleValue() <= 10d && rating.doubleValue() >= 0d) {
+			try {
+				this.review = this.getSession().createQuery("from ReviewBean where rating<= :rating", ReviewBean.class)
+						.setParameter("rating", rating).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.review != null && this.review.size() > 0) {
+				return this.review;
+			}
+		}
 		return null;
 	}
 
 	@Override
 	public List<ReviewBean> findReviewsByRatingHigher(Double rating) {
-		// TODO Auto-generated method stub
+		if (rating != null && rating.doubleValue() <= 10d && rating.doubleValue() >= 0d) {
+			try {
+				this.review = this.getSession().createQuery("from ReviewBean where rating>= :rating", ReviewBean.class)
+						.setParameter("rating", rating).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.review != null && this.review.size() > 0) {
+				return this.review;
+			}
+		}
 		return null;
 	}
 
 	@Override
-	public List<ReviewBean> findReviewsByMemberId(Long id) {
-		// TODO Auto-generated method stub
+	public List<ReviewBean> findReviewsByMemberId(Long memberId) {
+		if (memberId != null && memberId.longValue() > 0L) {
+			try {
+				this.review = this.getSession()
+						.createQuery("from ReviewBean where MemberID= :MemberID", ReviewBean.class)
+						.setParameter("MemberID", memberId).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.review != null && this.review.size() > 0) {
+				return this.review;
+			}
+		}
 		return null;
 	}
 
 	@Override
-	public List<ReviewBean> findReviewsByProductId(Long id) {
-		// TODO Auto-generated method stub
+	public List<ReviewBean> findReviewsByProductId(Long productId) {
+		if (productId != null && productId.longValue() > 0L) {
+			try {
+				this.review = this.getSession()
+						.createQuery("from ReviewBean where ProductID= :ProductID", ReviewBean.class)
+						.setParameter("ProductID", productId).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.review != null && this.review.size() > 0) {
+				return this.review;
+			}
+		}
 		return null;
 	}
 

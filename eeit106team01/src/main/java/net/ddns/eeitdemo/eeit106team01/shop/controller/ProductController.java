@@ -25,6 +25,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @RestController
 public class ProductController {
@@ -109,11 +110,14 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/search/price" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductsByPrice(@RequestParam(defaultValue = "0") Integer minPrice,
-			@RequestParam Integer maxPrice) {
-		if ((minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null) && (maxPrice.intValue() > 0)) {
-			List<ProductBean> result = productService.findProductsByPrice(minPrice, maxPrice);
+	@GetMapping(path = { "/products/price" }, produces = { "application/json" })
+	public ResponseEntity<?> getProductsByPrice(@RequestParam String byNameBrandType, @RequestParam String queryString,
+			@RequestParam(defaultValue = "0") Integer minPrice, @RequestParam Integer maxPrice) {
+		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(byNameBrandType) == false
+				&& (minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null)
+				&& (maxPrice.intValue() > 0)) {
+			List<ProductBean> result = productService.findProductsByNameBrandTypeAndOrderByPriceBetween(byNameBrandType,
+					queryString, minPrice, maxPrice);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
