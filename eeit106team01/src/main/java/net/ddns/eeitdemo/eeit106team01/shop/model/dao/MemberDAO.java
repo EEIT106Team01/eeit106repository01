@@ -6,6 +6,6 @@ public interface MemberDAO {
 
 	abstract Member insertMember(Member member);
 
-	abstract Member findByMemberId(Long id);
+	abstract Member findByMemberId(Long memberId);
 
 }

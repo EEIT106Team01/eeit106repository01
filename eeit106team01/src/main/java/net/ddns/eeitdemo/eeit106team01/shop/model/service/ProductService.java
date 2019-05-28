@@ -101,8 +101,10 @@ public class ProductService {
 		return productDAO.findProductsByBrand(brand);
 	}
 
-	public List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice) {
-		return productDAO.findProductsByPriceBetween(minPrice, maxPrice);
+	public List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
+			String queryString, Integer minPrice, Integer maxPrice) {
+		return productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween(byNameBrandType, queryString, minPrice,
+				maxPrice);
 	}
 
 	public List<ProductBean> findProductsByUpdatedTime(Date startDay, Date endDay) {

@@ -31,7 +31,7 @@ public class RefundService {
 			while (iterator.hasNext()) {
 				RefundListBean refundDetail = (RefundListBean) iterator.next();
 				refundDetail.setRefundId(refund);
-				refundDAO.insertRefundDetail(refundDetail);
+				refundDAO.insertRefundList(refundDetail);
 			}
 
 			RefundBean result = refundDAO.insertRefund(refund);
@@ -54,13 +54,13 @@ public class RefundService {
 
 	public List<RefundBean> findRefundsByMemberId(Long memberId) {
 		if (memberId != null) {
-			return refundDAO.findRefundsByMemberId(memberId);
+			return refundDAO.findRefundByMemberId(memberId);
 		}
 		return null;
 	}
 
 	public List<RefundBean> findRefunds() {
-		return refundDAO.findRefunds();
+		return refundDAO.findAllRefund();
 	}
 
 }

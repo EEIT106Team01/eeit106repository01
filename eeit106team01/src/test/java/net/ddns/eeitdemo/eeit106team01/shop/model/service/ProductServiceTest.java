@@ -102,7 +102,7 @@ public class ProductServiceTest {
 
 //	@Test
 	public void testFindProductsByPrice() {
-		System.out.println(productService.findProductsByPrice(0, 1000));
+//		System.out.println(productService.findProductsByPrice(0, 1000));
 		System.out.println("========================================");
 	}
 

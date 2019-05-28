@@ -1,11 +1,15 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import javax.transaction.Transactional;
 
+import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.query.Query;
@@ -17,10 +21,14 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.RefundDAO;
 
 @Repository
+@Transactional
 public class RefundDAOImpl implements RefundDAO {
 
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	private List<RefundBean> refundBean = new ArrayList<RefundBean>();
+	private List<RefundListBean> refundListBean = new ArrayList<RefundListBean>();
 
 	private Session getSession() {
 		return sessionFactory.getCurrentSession();
@@ -28,134 +36,108 @@ public class RefundDAOImpl implements RefundDAO {
 
 	@Override
 	public RefundBean insertRefund(RefundBean refundBean) {
-		if (refundBean != null) {
-			getSession().save(refundBean);
-			return this.findRefundByPrimaryKey(refundBean.getId());
+		if (refundBean.isNotNull()) {
+			try {
+				this.getSession().save(refundBean);
+				Long id = refundBean.getId();
+				if (id != null && id.longValue() > 0L) {
+					return this.findRefundByRefundId(id);
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
 		}
 		return null;
 	}
 
 	@Override
 	public RefundBean updateRefund(RefundBean refundBean) {
-		if (refundBean != null) {
-			getSession().update(refundBean);
-			return findRefundByPrimaryKey(refundBean.getId());
-		}
-		return null;
-	}
-
-	@Override
-	public RefundBean findRefundByPrimaryKey(Long id) {
-		if (id != null) {
-			RefundBean result = getSession().get(RefundBean.class, id);
-			if (result != null) {
-				return result;
-			} else {
-				return null;
+		if (refundBean.isNotNull()) {
+			try {
+				this.getSession().update(refundBean);
+				Long id = refundBean.getId();
+				if (id != null && id.longValue() > 0L) {
+					return this.findRefundByRefundId(id);
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public List<RefundBean> findRefundsByMemberId(Long id) {
-		if (id != null) {
-			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-			CriteriaQuery<RefundBean> criteriaQuery = criteriaBuilder.createQuery(RefundBean.class);
-			Root<RefundBean> refund = criteriaQuery.from(RefundBean.class);
-			criteriaQuery.select(refund).where(criteriaBuilder.equal(refund.get("memberBeanTest"), id));
-
-			Query<RefundBean> query = getSession().createQuery(criteriaQuery);
-			List<RefundBean> result = query.getResultList();
-			if (result != null) {
-				return result;
-			} else {
-				return null;
+	public RefundBean findRefundByRefundId(Long refundId) {
+		if (refundId != null && refundId.longValue() > 0L) {
+			try {
+				RefundBean result = this.getSession().get(RefundBean.class, refundId);
+				if (result != null) {
+					return result;
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public List<RefundBean> findRefunds() {
-		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-		CriteriaQuery<RefundBean> criteriaQuery = criteriaBuilder.createQuery(RefundBean.class);
-		Root<RefundBean> root = criteriaQuery.from(RefundBean.class);
-		criteriaQuery.select(root);
-
-		Query<RefundBean> query = getSession().createQuery(criteriaQuery);
-		List<RefundBean> result = query.getResultList();
-		if (result != null) {
-			return result;
-		} else {
-			return null;
-		}
-	}
-
-	@Override
-	public RefundListBean insertRefundDetail(RefundListBean refundDetailBean) {
-		if (refundDetailBean != null) {
-			getSession().save(refundDetailBean);
-			return this.findRefundDetailByPrimaryKey(refundDetailBean.getId());
-		}
-		return null;
-	}
-
-	@Override
-	public RefundListBean updateRefundDetail(RefundListBean refundDetailBean) {
-		if (refundDetailBean != null) {
-			getSession().update(refundDetailBean);
-			return this.findRefundDetailByPrimaryKey(refundDetailBean.getId());
-		}
-		return null;
-	}
-
-	@Override
-	public RefundListBean findRefundDetailByPrimaryKey(Long id) {
-		if (id != null) {
-			RefundListBean result = getSession().get(RefundListBean.class, id);
-			if (result != null) {
-				return result;
-			} else {
-				return null;
+	public List<RefundBean> findRefundByMemberId(Long memberId) {
+		if (memberId != null && memberId.longValue() > 0L) {
+			try {
+				this.refundBean = this.getSession()
+						.createQuery("from RefundBean where MemberID= :MemberID", RefundBean.class)
+						.setParameter("MemberID", memberId).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.refundBean != null && this.refundBean.size() > 0) {
+				return this.refundBean;
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public List<RefundListBean> findRefundDetailsByRefundId(Long id) {
-		if (id != null) {
-			CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-			CriteriaQuery<RefundListBean> criteriaQuery = criteriaBuilder.createQuery(RefundListBean.class);
-			Root<RefundListBean> refundDetail = criteriaQuery.from(RefundListBean.class);
-			criteriaQuery.select(refundDetail).where(criteriaBuilder.equal(refundDetail.get("refundBean"), id));
-
-			Query<RefundListBean> query = getSession().createQuery(criteriaQuery);
-			List<RefundListBean> result = query.getResultList();
-			if (result != null) {
-				return result;
-			} else {
-				return null;
-			}
-		}
+	public List<RefundBean> findRefundByProcessStatus(Date startDay, Date endDay) {
+		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<RefundListBean> findRefundDetails() {
-		CriteriaBuilder criteriaBuilder = getSession().getCriteriaBuilder();
-		CriteriaQuery<RefundListBean> criteriaQuery = criteriaBuilder.createQuery(RefundListBean.class);
-		Root<RefundListBean> root = criteriaQuery.from(RefundListBean.class);
-		criteriaQuery.select(root);
+	public List<RefundBean> findAllRefund() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 
-		Query<RefundListBean> query = getSession().createQuery(criteriaQuery);
-		List<RefundListBean> result = query.getResultList();
-		if (result != null) {
-			return result;
-		} else {
-			return null;
-		}
+	@Override
+	public RefundListBean insertRefundList(RefundListBean refundDetailBean) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RefundListBean findRefundListByRefundListId(Long refundListId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RefundListBean> findRefundListByRefundId(Long refundId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RefundListBean> findRefundListByPurchaseId(Long purchaseId) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RefundListBean> findAllRefundList() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
