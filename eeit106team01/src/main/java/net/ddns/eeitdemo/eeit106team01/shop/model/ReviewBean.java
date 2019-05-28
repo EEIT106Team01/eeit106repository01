@@ -50,7 +50,7 @@ public class ReviewBean implements Serializable {
 	private Member memberId;
 
 	@OneToOne
-	@JoinColumn(name = "PurchaseListId", columnDefinition = "bigint", nullable = false, updatable = false)
+	@JoinColumn(name = "PurchaseListId", columnDefinition = "bigint", nullable = false, updatable = false, unique = true)
 	private PurchaseListBean purchaseListId;
 
 	@ManyToOne
