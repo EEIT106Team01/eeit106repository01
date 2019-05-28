@@ -36,7 +36,7 @@ public class ShopCrawler {
 
 	public ProductBean YahooProductDetailsCrawler(String link, String productType, Integer productStock) {
 
-		if (link != null && productType != null && productStock != null) {
+		flag:if (link != null && productType != null && productStock != null) {
 
 			// Prepare new ProductBean
 			Date date = new Date(System.currentTimeMillis());
@@ -78,7 +78,8 @@ public class ShopCrawler {
 								 .timeout(60000)
 								 .get();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage() + " Try again!");
+			break flag;
 		}
 		
 			// Fetch Json form YAHOO Mall
@@ -90,22 +91,6 @@ public class ShopCrawler {
 			String name = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title").getAsString();
 			productBean.setName(name);
 
-			// Get Brand String
-			String brandString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("title").getAsString();
-			String brand = null;
-			if (brandString.contains("【") && brandString.contains("】") && brandString.indexOf('【') == 0) {
-				brand = brandString.substring(brandString.indexOf('【') + 1, brandString.indexOf('】'));
-			} else if (brandString.contains("[") && brandString.contains("]") && brandString.indexOf('[') == 0) {
-				brand = brandString.substring(brandString.indexOf("[") + 1, brandString.indexOf("]"));
-			} else if (brandString.contains("!")) {
-				String brandReplace = brandString.replace("!", " ");
-				brand = brandReplace.substring(0, brandReplace.indexOf(" "));
-			} else if (brandString.indexOf(" ") < 2) {
-				brand = brandString.substring(0, brandString.indexOf(" ") + 4);
-			} else {
-				brand = brandString.substring(0, brandString.indexOf(" "));
-			}
-			productBean.setBrand(brand);
 
 			// Get Price String
 			String priceString = ((JsonObject) ((JsonObject) jsonObject.get("ecgql")).get("gqlItemPage")).get("currentPrice").getAsString();
@@ -157,6 +142,11 @@ public class ShopCrawler {
 			new Gson().fromJson(infoJson,new TypeToken<HashMap<String, String>>() {private static final long serialVersionUID = 633439657945276680L;}.getType());
 			productBean.setInformation(infoJsonMap);
 
+			// Get Brand String
+			String brand = null;
+			brand = infoJson.get("品牌").getAsString().trim().replace(" ","");
+			productBean.setBrand(brand);
+			
 			// Get Information images link String
 			HashMap<Integer, String> infoImagesMap = new HashMap<Integer, String>();
 			for (int count = 1; count < count + 1; count++) {
@@ -208,7 +198,7 @@ public class ShopCrawler {
 
 		Integer pageWillFetch = 0;
 		Integer totalCount = 0;
-		for (Integer currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
+		flag:for (Integer currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
 
 			//@formatter:off
 			StringBuffer URL = new StringBuffer("https://tw.buy.yahoo.com/search/product?")
@@ -224,7 +214,8 @@ public class ShopCrawler {
 							  .timeout(60000)
 							  .get();
 			} catch (IOException e) {
-				e.printStackTrace();
+				System.err.println(e.getMessage() + " Try again!");
+				break flag;
 			}
 			// @formatter:on
 
