@@ -62,3 +62,7 @@ function getAllType(){
         }
     })
 }
+
+function getUpdateTime(){
+    
+}
