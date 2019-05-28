@@ -2,11 +2,8 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.transaction.Transactional;
 
@@ -20,7 +17,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
-import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @Service
 @Transactional
@@ -33,15 +29,37 @@ public class PurchaseService {
 	private ProductDAO productDAO;
 
 	// Create a Purchase and Purchase List
-	public PurchaseBean newPurchase(ArrayList<Integer> productIdList, Long memberId, PurchaseBean purchaseBean) {
-		if (productIdList != null && productIdList.size() > 0L && memberId != null && memberId.longValue() > 0L && purchaseBean.isNotNull()) {
+	public PurchaseBean newPurchase(ArrayList<Long> productIdList, Long memberId, PurchaseBean purchaseBean) {
+		if (productIdList != null && productIdList.size() > 0L && memberId != null && memberId.longValue() > 0L
+				&& purchaseBean.isNotNull()) {
 
 			// insert purchase
+			PurchaseBean purchase = purchaseDAO.insertPurchase(purchaseBean);
 
-			// insert purchase lists
-			// get available SN, change SN status
-			// change stock, total sold
+			// Get products
+			ArrayList<ProductBean> productBeans = new ArrayList<ProductBean>();
+			for (Long productId : productIdList) {
+				productBeans.add(productDAO.findProductByProductId(productId));
+			}
 
+			for (ProductBean productBean : productBeans) {
+				// insert purchase lists
+				SerialNumberBean serialNumberBean = productDAO
+						.findSerialNumbersAreAvailableByProductId(productBean.getId()).get(0);
+				String serialNumber = serialNumberBean.getSerialNumber();
+				PurchaseListBean purchaseListBean = new PurchaseListBean(productBean.getPrice(), serialNumber, purchase,
+						productBean);
+				purchaseDAO.insertPurchaseList(purchaseListBean);
+				// get available SN, change SN status
+				serialNumberBean.setAvailabilityStatus("sold");
+				productDAO.updateAvailabilityStatus(serialNumberBean);
+				// change stock, total sold
+				productBean.setStock(productBean.getStock() - 1);
+				productBean.setTotalSold(productBean.getTotalSold() + 1);
+				productDAO.updateProduct(productBean);
+			}
+
+			return purchase;
 		}
 		return null;
 	}
