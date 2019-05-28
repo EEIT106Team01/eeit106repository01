@@ -11,6 +11,7 @@ import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
@@ -90,7 +91,7 @@ public class ProductService {
 			if (findOne != null) {
 				return this.getSession()
 						.createQuery("from ProductBean where type = :type order by totalSold desc", ProductBean.class)
-						.setParameter("type", findOne.getType()).setMaxResults(6).getResultList();
+						.setParameter("type", findOne.getType()).setMaxResults(8).getResultList();
 			}
 		}
 		return null;
@@ -100,8 +101,10 @@ public class ProductService {
 		return productDAO.findProductsByBrand(brand);
 	}
 
-	public List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice) {
-		return productDAO.findProductsByPrice(minPrice, maxPrice);
+	public List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
+			String queryString, Integer minPrice, Integer maxPrice) {
+		return productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween(byNameBrandType, queryString, minPrice,
+				maxPrice);
 	}
 
 	public List<ProductBean> findProductsByUpdatedTime(Date startDay, Date endDay) {
@@ -152,6 +155,14 @@ public class ProductService {
 	public SerialNumberBean updateSNStatus(SerialNumberBean serialNumberBean) {
 		if (serialNumberBean != null) {
 			return productDAO.updateAvailabilityStatus(serialNumberBean);
+		}
+		return null;
+	}
+
+	public List<DataBean> findProductTypes(String dataName, String type) {
+		List<DataBean> result = productDAO.findProductData(dataName, type);
+		if (result != null) {
+			return result;
 		}
 		return null;
 	}

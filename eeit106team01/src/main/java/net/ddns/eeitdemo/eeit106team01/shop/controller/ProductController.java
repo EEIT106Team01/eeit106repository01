@@ -21,9 +21,11 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @RestController
 public class ProductController {
@@ -96,7 +98,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/brand" }, produces = { "application/json" })
+	@GetMapping(path = { "/search/brand" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand) {
 		if (brand != null) {
 			List<ProductBean> result = productService.findProductsByBrand(brand);
@@ -109,10 +111,13 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/products/price" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductsByPrice(@RequestParam(defaultValue = "0") Integer minPrice,
-			@RequestParam Integer maxPrice) {
-		if ((minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null) && (maxPrice.intValue() > 0)) {
-			List<ProductBean> result = productService.findProductsByPrice(minPrice, maxPrice);
+	public ResponseEntity<?> getProductsByPrice(@RequestParam String byNameBrandType, @RequestParam String queryString,
+			@RequestParam(defaultValue = "0") Integer minPrice, @RequestParam Integer maxPrice) {
+		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(byNameBrandType) == false
+				&& (minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null)
+				&& (maxPrice.intValue() > 0)) {
+			List<ProductBean> result = productService.findProductsByNameBrandTypeAndOrderByPriceBetween(byNameBrandType,
+					queryString, minPrice, maxPrice);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -129,6 +134,17 @@ public class ProductController {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
 			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
+
+	@GetMapping(path = { "/search/type" }, produces = { "application/json" })
+	public ResponseEntity<?> getProductTypes(@RequestParam String dataName, @RequestParam String type) {
+		if (NullChecker.isEmpty(dataName)) {
+			List<DataBean> result = productService.findProductTypes(dataName, type);
+			if (result != null) {
+				return new ResponseEntity<List<DataBean>>(result, HttpStatus.OK);
+			}
 		}
 		return ResponseEntity.notFound().build();
 	}

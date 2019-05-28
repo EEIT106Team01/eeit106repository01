@@ -7,7 +7,6 @@ import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -20,7 +19,7 @@ public class TopSearchBean implements Serializable {
 	private static final long serialVersionUID = 4059835639841966792L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	@Column(name = "TopSearchID", columnDefinition = "bigint")
 	private Long id;
 

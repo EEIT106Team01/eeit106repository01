@@ -6,7 +6,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
@@ -18,7 +17,7 @@ public class Member implements Serializable {
 	private static final long serialVersionUID = 6440126604397615997L;
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@GeneratedValue
 	@Column(name = "MemberID", columnDefinition = "bigint")
 	private Long id;
 
@@ -30,7 +29,7 @@ public class Member implements Serializable {
 
 	@OneToMany(mappedBy = "memberId")
 	private List<ReviewBean> reviewId;
-	
+
 	@Override
 	public String toString() {
 		return "Member [id=" + id + "]";

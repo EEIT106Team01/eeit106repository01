@@ -1,6 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 import java.util.Date;
 
@@ -8,83 +9,76 @@ import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import net.ddns.eeitdemo.eeit106team01.shop.ShopTest;
+import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.RefundDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 
 public class RefundDAOImplTest extends ShopTest {
 
 	@Autowired
 	private RefundDAO refundDAO;
+	@Autowired
+	private MemberDAO memberDAO;
+	@Autowired
+	private PurchaseDAO purchaseDAO;
 
-	Date date = new Date(System.currentTimeMillis());
+	private RefundBean refundBean;
+	private RefundListBean refundListBean;
+	private Date date = NewDate.newCurrentTime();
 
-//	@Test
-	public void testInsertRefund() {
-		RefundBean refundBean = new RefundBean();
-		refundBean.setCreateTime(date);
-		refundBean.setUpdatedTime(date);
-		refundBean.setComment("這個東西用兩天就故障，我要退貨!");
-		refundBean.setProcessStatus("退費申請審核中");
-
-		refundDAO.insertRefund(refundBean);
-		String actual = "退費申請審核中";
-		assertEquals(refundDAO.findRefundByPrimaryKey(1L).getProcessStatus(), actual);
+	public void testInsertRefund() throws Exception {
+		memberDAO.insertMember(new Member());
+		refundBean = new RefundBean(date, date, "test", "test", memberDAO.findByMemberId(60L));
+		assertNotNull(refundDAO.insertRefund(refundBean));
 	}
 
-//	@Test
-	public void testUpdateRefund() {
-		RefundBean refundBean = refundDAO.findRefundByPrimaryKey(1L);
-		refundBean.setUpdatedTime(date);
-		refundBean.setProcessStatus("退費已完成");
-		refundDAO.updateRefund(refundBean);
-		String actual = "退費已完成";
-		assertEquals(refundDAO.findRefundByPrimaryKey(1L).getProcessStatus(), actual);
+	public void testUpdateRefund() throws Exception {
+		refundBean = refundDAO.findRefundByRefundId(1L);
+		refundBean.setProcessStatus("update");
+		assertEquals(refundDAO.updateRefund(refundBean).getProcessStatus(), new String("update"));
 	}
 
-//	@Test
-	public void testFindRefundByPrimaryKey() {
-		refundDAO.findRefundByPrimaryKey(2L);
-		String actual = "退費申請審核中";
-		assertEquals(refundDAO.findRefundByPrimaryKey(2L).getProcessStatus(), actual);
+	public void testFindRefundByRefundId() throws Exception {
+		assertNotNull(refundDAO.findRefundByRefundId(1L));
 	}
 
-//	@Test
-	public void testFindRefunds() {
-		System.out.println(refundDAO.findRefunds());
+	public void testFindRefundByMemberId() throws Exception {
+		assertNotNull(refundDAO.findRefundByMemberId(1L));
 	}
 
-//	@Test
-	public void testInsertRefundDetail() {
-		RefundListBean refundDetailBean = new RefundListBean();
-
-		refundDAO.insertRefundDetail(refundDetailBean);
+	public void testFindRefundByProcessStatus() throws Exception {
+		assertNotNull(refundDAO.findRefundByProcessStatus("test"));
 	}
 
-//	@Test
-	public void testUpdateRefundDetail() {
-		RefundListBean refundDetailBean = refundDAO.findRefundDetailByPrimaryKey(1L);
-		refundDAO.updateRefundDetail(refundDetailBean);
-
+	public void testFindAllRefund() throws Exception {
+		assertNotNull(refundDAO.findAllRefund());
 	}
 
-//	@Tests
-	public void testFindRefundDetailByPrimaryKey() {
+	public void testInsertRefundList() throws Exception {
+		refundListBean = new RefundListBean(purchaseDAO.findPurchaseListByPurchaseListId(64L),
+				refundDAO.findRefundByRefundId(67L));
+		assertNotNull(refundDAO.insertRefundList(refundListBean));
 	}
 
-//	@Test
-	public void testFindRefundDetails() {
-		System.out.println(refundDAO.findRefundDetails().toString());
-	}
-
-//	@Test
-	public void testFindRefundsByMemberId() throws Exception {
-		System.out.println(refundDAO.findRefundsByMemberId(2L).size());
+	public void testFindRefundListByRefundListId() throws Exception {
+		refundDAO.findRefundListByPurchaseListId(1L);
 	}
 
 	@Test
-	public void testFindRefundDetailsByRefundId() throws Exception {
-		System.out.println(refundDAO.findRefundDetailsByRefundId(6L).size());
+	public void testFindRefundListByPurchaseListId() throws Exception {
+		assertNotNull(refundDAO.findRefundListByPurchaseListId(64L));
+	}
+
+	public void testFindRefundListByRefundId() throws Exception {
+		assertNotNull(refundDAO.findRefundListByRefundId(67L));
+	}
+
+	public void testFindAllRefundList() throws Exception {
+		assertNotNull(refundDAO.findAllRefundList());
 	}
 
 }

@@ -30,20 +30,37 @@
 				stompClient.send("/northChat", {}, JSON.stringify({ 'name': name, 'message': msg }));
 
 			} else {
-				stompClient.send("/msg", {}, JSON.stringify({ 'toUser':id, 'fromUser': name, 'message': msg }));
+				stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': name, 'message': msg }));
 			}
 
 
 		}
 
-		function onReceiveMessage(id, msg, chatData) {
-			if (chatData && chatData !== name) {
-				console.log(id);
-				console.log(msg);
-				console.log(chatData);
-				neonChat.pushMessage(id, msg, chatData, new Date(), true, true);
+		function onReceiveMessage(id, msgBean) {
+			if (msgBean && msgBean.name !== name) {
+				neonChat.pushMessage(id, msgBean.message, msgBean.name, new Date(msgBean.sendTime), true, true);
 				neonChat.renderMessages(id);
 			}
+		}
+
+		function onReceivePrivateMessage(id, msgBean) {
+			if (msgBean && msgBean.name !== name) {
+				neonChat.pushMessage(id, msgBean.message, msgBean.fromUser, new Date(msgBean.sendTime), true, true);
+				neonChat.renderMessages(id);
+			}
+		}
+
+		function showOldMessage(id, msgBeans) {
+			let fromOpponent;
+			for (let i = 0; i < msgBeans.length; i++) {
+				if (msgBeans[i].name !== name) {
+					fromOpponent = true;
+				} else {
+					fromOpponent = false;
+				}
+				neonChat.pushMessage(id, msgBeans[i].message, msgBeans[i].name, new Date(msgBeans[i].sendTime), fromOpponent, false);
+			}
+			neonChat.renderMessages(id);
 		}
 
 		var stompClient = null;
@@ -83,17 +100,8 @@
 		function sendName() {
 			stompClient.subscribe('/user/topic/msg', function (response) {
 				var msgBean = JSON.parse(response.body);
-				showResponse(JSON.parse(response.body).responseMessage);
-				console.log(response);
-				onReceiveMessage(msgBean.fromUser, msgBean.message, msgBean.fromUser);
+				onReceivePrivateMessage(msgBean.fromUser, msgBean);
 			});
-		}
-
-		function showResponse(message) {
-			$("#response").html(message);
-		}
-		function showCallback(message) {
-			$("#callback").html(message);
 		}
 
 
@@ -102,8 +110,12 @@
 				if (stompClient != null) {
 					stompClient.subscribe('/topic/northChat', function (response) {
 						var msgBean = JSON.parse(response.body);
-						showResponse(JSON.parse(response.body).responseMessage);
-						onReceiveMessage("northChat", msgBean.message, msgBean.name);
+						console.log(msgBean);
+						if (Array.isArray(msgBean)) {
+							showOldMessage("northChat", msgBean);
+						} else {
+							onReceiveMessage("northChat", msgBean);
+						}
 					});
 				}
 				neonChat.setStatus($(this).attr("id"), "online");

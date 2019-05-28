@@ -30,6 +30,7 @@ import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
@@ -96,6 +97,7 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(RefundListBean.class);
 		builder.addAnnotatedClass(SerialNumberBean.class);
 		builder.addAnnotatedClass(TopSearchBean.class);
+		builder.addAnnotatedClass(DataBean.class);
 
 		// Forum
 		builder.addAnnotatedClass(ArticleContentCurrentBean.class);

@@ -1,7 +1,5 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -12,7 +10,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 
 @Repository
-@Transactional
 public class MemberDAOImpl implements MemberDAO {
 
 	@Autowired
@@ -24,27 +21,29 @@ public class MemberDAOImpl implements MemberDAO {
 
 	@Override
 	public Member insertMember(Member member) {
-		if (member != null) {
-			try {
-				getSession().save(member);
+		try {
+			this.getSession().save(member);
+			Long id = member.getId();
+			if (id != null && id.longValue() > 0L) {
 				return this.findByMemberId(member.getId());
-			} catch (HibernateException e) {
-				e.printStackTrace();
+			} else {
 				return null;
 			}
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
 		}
-		return null;
 	}
 
 	@Override
-	public Member findByMemberId(Long id) {
-		if (id != null) {
+	public Member findByMemberId(Long memberId) {
+		if (memberId != null && memberId.longValue() > 0L) {
 			try {
-				Member result = getSession().find(Member.class, id);
-				return result;
-			} catch (IllegalArgumentException e) {
-				e.printStackTrace();
-				return null;
+				Member result = this.getSession().find(Member.class, memberId);
+				if (result != null) {
+					return result;
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
 			}
 		}
 		return null;

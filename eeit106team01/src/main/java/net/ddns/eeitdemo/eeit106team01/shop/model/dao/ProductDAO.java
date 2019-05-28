@@ -3,6 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao;
 import java.util.Date;
 import java.util.List;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 
@@ -24,7 +25,8 @@ public interface ProductDAO {
 
 	abstract List<ProductBean> findProductsByType(String type);
 
-	abstract List<ProductBean> findProductsByPrice(Integer minPrice, Integer maxPrice);
+	abstract List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
+			String queryString, Integer minPrice, Integer maxPrice);
 
 	abstract List<ProductBean> findProductsByUpdatedTimeDayBetween(Date startDay, Date endDay);
 
@@ -47,4 +49,5 @@ public interface ProductDAO {
 	abstract List<SerialNumberBean> findSerialNumbersByProductIdAndAvailabilityStatus(Long id,
 			String availabilityStatus);
 
+	abstract List<DataBean> findProductData(String dataName, String type);
 }

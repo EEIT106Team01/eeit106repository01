@@ -37,7 +37,7 @@ public class ProductDAOImplTest {
 		isHashMap.put(0, "");
 		ssHashMap.put("", "");
 	}
-	@Test
+
 	public void testInsertProduct() {
 		productBean.setName("test1");
 		productBean.setBrand("brand1");
@@ -83,11 +83,18 @@ public class ProductDAOImplTest {
 		assertNull(productDAO.findProductsByType("1"));
 	}
 
-	public void testFindProductsByPrice() {
-		assertNotNull(productDAO.findProductsByPrice(0, 100));
-		assertNull(productDAO.findProductsByPrice(null, 100));
-		assertNull(productDAO.findProductsByPrice(100, 10));
-		assertNull(productDAO.findProductsByPrice(-1, 100));
+	public void testFindProductsByNameBrandTypeAndOrderByPriceBetween() {
+		assertEquals(
+				new Integer(
+						productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween("name", "行車王", 1000, 2000).size()),
+				new Integer(29));
+		assertEquals(
+				new Integer(productDAO
+						.findProductsByNameBrandTypeAndOrderByPriceBetween("brand", "CARSCAM行車王", 1000, 2000).size()),
+				new Integer(28));
+		assertEquals(new Integer(
+				productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween("type", "行車紀錄器", 1000, 2000).size()),
+				new Integer(178));
 	}
 
 	public void testFindProductsByTime() throws ParseException {
@@ -142,6 +149,12 @@ public class ProductDAOImplTest {
 	public void testFindSerialNumbersByProductIdAndAvailabilityStatus() throws Exception {
 		assertNotNull(productDAO.findSerialNumbersByProductIdAndAvailabilityStatus(1L, "sold"));
 		assertNull(productDAO.findSerialNumbersByProductIdAndAvailabilityStatus(2L, "sold"));
+	}
+
+	@Test
+	public void testFindProductData() throws Exception {
+		assertEquals(new Integer(productDAO.findProductData("type", null).size()), new Integer(6));
+		assertEquals(new Integer(productDAO.findProductData("brand", "行車紀錄器").size()), new Integer(162));
 	}
 
 }
