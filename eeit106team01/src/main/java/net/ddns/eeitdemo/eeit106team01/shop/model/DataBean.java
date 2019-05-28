@@ -16,20 +16,20 @@ public class DataBean implements Serializable {
 	@Column(name = "DataID", columnDefinition = "bigint")
 	private Long id;
 
-	@Column(name = "Types")
-	private String type;
+	@Column(name = "Data")
+	private String data;
 
 	@Override
 	public String toString() {
-		return "DataBean [type=" + type + "]";
+		return "DataBean [data=" + data + "]";
 	}
 
-	public String getType() {
-		return type;
+	public String getData() {
+		return data;
 	}
 
-	public void setType(String type) {
-		this.type = type;
+	public void setData(String data) {
+		this.data = data;
 	}
 
 }

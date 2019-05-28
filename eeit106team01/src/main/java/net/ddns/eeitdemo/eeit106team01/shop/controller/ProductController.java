@@ -139,10 +139,12 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/search/type" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductTypes() {
-		List<DataBean> result = productService.findProductTypes();
-		if (result != null) {
-			return new ResponseEntity<List<DataBean>>(result, HttpStatus.OK);
+	public ResponseEntity<?> getProductTypes(@RequestParam String dataName, @RequestParam String type) {
+		if (NullChecker.isEmpty(dataName)) {
+			List<DataBean> result = productService.findProductTypes(dataName, type);
+			if (result != null) {
+				return new ResponseEntity<List<DataBean>>(result, HttpStatus.OK);
+			}
 		}
 		return ResponseEntity.notFound().build();
 	}

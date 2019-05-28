@@ -49,5 +49,5 @@ public interface ProductDAO {
 	abstract List<SerialNumberBean> findSerialNumbersByProductIdAndAvailabilityStatus(Long id,
 			String availabilityStatus);
 
-	abstract List<DataBean> findProductTypes();
+	abstract List<DataBean> findProductData(String dataName, String type);
 }
