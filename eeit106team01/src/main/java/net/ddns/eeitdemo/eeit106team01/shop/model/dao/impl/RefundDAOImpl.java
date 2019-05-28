@@ -3,8 +3,6 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.dao.impl;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -17,7 +15,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.RefundDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @Repository
-@Transactional
 public class RefundDAOImpl implements RefundDAO {
 
 	@Autowired

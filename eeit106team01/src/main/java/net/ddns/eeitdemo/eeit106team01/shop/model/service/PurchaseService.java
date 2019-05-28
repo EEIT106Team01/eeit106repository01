@@ -24,7 +24,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 
 @Service
 @Transactional
-public class OrderService {
+public class PurchaseService {
 
 	@Autowired
 	private MemberDAO memberTestDAO;

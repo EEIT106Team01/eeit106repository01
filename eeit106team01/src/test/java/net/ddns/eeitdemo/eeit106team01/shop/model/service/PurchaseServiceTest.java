@@ -20,10 +20,10 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class OrderServiceTest extends ShopTest {
+public class PurchaseServiceTest extends ShopTest {
 
 	@Autowired
-	OrderService orderService;
+	PurchaseService orderService;
 
 //	@Test
 	public void testCreateOrder() {
