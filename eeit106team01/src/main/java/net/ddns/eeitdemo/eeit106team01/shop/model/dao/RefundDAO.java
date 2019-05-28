@@ -12,21 +12,23 @@ public interface RefundDAO {
 
 	abstract RefundBean updateRefund(RefundBean refundBean);
 
-	abstract RefundBean findRefundByPrimaryKey(Long id);
+	abstract RefundBean findRefundByRefundId(Long refundId);
 	
-	abstract List<RefundBean>findRefundsByMemberId(Long id);
+	abstract List<RefundBean>findRefundByMemberId(Long memberId);
 
-	abstract List<RefundBean> findRefunds();
-
-	// Refund Detail
-	abstract RefundListBean insertRefundDetail(RefundListBean refundDetailBean);
-
-	abstract RefundListBean updateRefundDetail(RefundListBean refundDetailBean);
-
-	abstract RefundListBean findRefundDetailByPrimaryKey(Long id);
+	abstract List<RefundBean>findRefundByProcessStatus(String processStatus);
 	
-	abstract List<RefundListBean> findRefundDetailsByRefundId(Long id);
+	abstract List<RefundBean> findAllRefund();
 
-	abstract List<RefundListBean> findRefundDetails();
+	// Refund List
+	abstract RefundListBean insertRefundList(RefundListBean refundListBean);
+
+	abstract RefundListBean findRefundListByRefundListId(Long refundListId);
+	
+	abstract RefundListBean findRefundListByPurchaseListId(Long purchaseListId);
+	
+	abstract List<RefundListBean> findRefundListByRefundId(Long refundId);
+
+	abstract List<RefundListBean> findAllRefundList();
 
 }

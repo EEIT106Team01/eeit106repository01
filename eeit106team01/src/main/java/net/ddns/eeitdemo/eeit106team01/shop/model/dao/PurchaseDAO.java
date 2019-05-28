@@ -14,7 +14,7 @@ public interface PurchaseDAO {
 
 	abstract PurchaseBean updatePurchase(PurchaseBean purchaseBean);
 
-	abstract PurchaseBean findPurchaseByPurchaseId(Long id);
+	abstract PurchaseBean findPurchaseByPurchaseId(Long purchaseId);
 
 	abstract List<PurchaseBean> findPurchaseByTimeDayBetween(Date startDay, Date endDay);
 
@@ -30,14 +30,14 @@ public interface PurchaseDAO {
 
 	abstract List<PurchaseBean> findPurchaseByProductTotalPriceHigher(Integer productTotalPrice);
 
-	abstract List<PurchaseBean> findPurchaseByMemberId(Long id);
+	abstract List<PurchaseBean> findPurchaseByMemberId(Long memberId);
 
 	abstract List<PurchaseBean> findAllPurchase();
 
 	// Purchase List
 	abstract PurchaseListBean insertPurchaseList(PurchaseListBean purchaseListBean);
 
-	abstract PurchaseListBean findPurchaseListByPurchaseListId(Long id);
+	abstract PurchaseListBean findPurchaseListByPurchaseListId(Long purchaseListId);
 
 	abstract PurchaseListBean findPurchaseListBySerialNumber(String serialNumber);
 
@@ -47,9 +47,9 @@ public interface PurchaseDAO {
 
 	abstract List<PurchaseListBean> findPurchaseListByPriceHigher(Integer price);
 
-	abstract List<PurchaseListBean> findPurchaseListByPurchaseId(Long id);
+	abstract List<PurchaseListBean> findPurchaseListByPurchaseId(Long purchaseId);
 
-	abstract List<PurchaseListBean> findPurchaseListByProductId(Long id);
+	abstract List<PurchaseListBean> findPurchaseListByProductId(Long productId);
 
 	abstract List<PurchaseListBean> findAllPurchaseList();
 
@@ -58,7 +58,7 @@ public interface PurchaseDAO {
 
 	abstract ReviewBean updateReview(ReviewBean reviewBean);
 
-	abstract ReviewBean findReviewByReviewId(Long id);
+	abstract ReviewBean findReviewByReviewId(Long reviewId);
 
 	abstract List<ReviewBean> findReviewsByTimeDayBetween(Date startDay, Date endDay);
 
@@ -70,9 +70,9 @@ public interface PurchaseDAO {
 
 	abstract List<ReviewBean> findReviewsByRatingHigher(Double rating);
 
-	abstract List<ReviewBean> findReviewsByMemberId(Long id);
+	abstract List<ReviewBean> findReviewsByMemberId(Long memberId);
 
-	abstract List<ReviewBean> findReviewsByProductId(Long id);
+	abstract List<ReviewBean> findReviewsByProductId(Long productId);
 
 	abstract List<ReviewBean> findReviews();
 

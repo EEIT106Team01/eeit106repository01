@@ -102,7 +102,7 @@ public class ProductServiceTest {
 
 //	@Test
 	public void testFindProductsByPrice() {
-		System.out.println(productService.findProductsByPrice(0, 1000));
+//		System.out.println(productService.findProductsByPrice(0, 1000));
 		System.out.println("========================================");
 	}
 
@@ -130,7 +130,7 @@ public class ProductServiceTest {
 	public void testFindProductStatus() throws Exception {
 //		System.out.println(productService.findProductStatus(null, "sold"));
 		
-		System.out.println(productService.findProductTypes().toString());
+//		System.out.println(productService.findProductTypes().toString());
 		System.out.println("========================================");
 		
 		

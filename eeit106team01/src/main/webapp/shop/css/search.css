@@ -1,0 +1,8 @@
+#Products ul li{
+    display:inline;
+}
+
+.productsLi{
+    /* float: left; */
+    /* width: auto; */
+}

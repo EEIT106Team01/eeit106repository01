@@ -10,7 +10,7 @@ public interface TopSearchDAO {
 
 	abstract TopSearchBean updateTopSearch(TopSearchBean topSearchBean);
 
-	abstract TopSearchBean findTopSearchByPrimaryKey(Long id);
+	abstract TopSearchBean findTopSearchByTopSearchId(Long topSearchId);
 
-	abstract List<TopSearchBean> findTopSearchs();
+	abstract List<TopSearchBean> findAllTopSearch();
 }

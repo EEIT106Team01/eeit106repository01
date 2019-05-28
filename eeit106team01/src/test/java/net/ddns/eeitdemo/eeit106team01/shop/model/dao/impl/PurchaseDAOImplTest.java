@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -50,6 +49,7 @@ public class PurchaseDAOImplTest {
 	}
 
 	// Purchase
+
 	public void testInsertPurchase() {
 		this.member = new Member();
 		memberDAO.insertMember(member);
@@ -112,9 +112,11 @@ public class PurchaseDAOImplTest {
 	}
 
 	// Purchase List
+	@Test
 	public void testInsertPurchaseList() throws Exception {
-		this.purchaseListBean = new PurchaseListBean(200, "test123", purchaseDAO.findPurchaseByPurchaseId(1L),
-				productDAO.findProductByProductId(1L));
+		this.purchaseListBean = new PurchaseListBean(200, "test123", purchaseDAO.findPurchaseByPurchaseId(61L),productDAO.findProductByProductId(1L));
+		assertNotNull(purchaseDAO.insertPurchaseList(purchaseListBean));
+		this.purchaseListBean = new PurchaseListBean(200, "test321", purchaseDAO.findPurchaseByPurchaseId(62L),productDAO.findProductByProductId(1L));
 		assertNotNull(purchaseDAO.insertPurchaseList(purchaseListBean));
 	}
 
@@ -181,7 +183,26 @@ public class PurchaseDAOImplTest {
 		assertNotNull(purchaseDAO.findReviewsByImageExistence(false));
 		assertNull(purchaseDAO.findReviewsByImageExistence(true));
 	}
-	
-	
+
+	public void testFindReviewsByRating() throws Exception {
+		assertNotNull(purchaseDAO.findReviewsByRating(5d));
+		assertNull(purchaseDAO.findReviewsByRating(4d));
+	}
+
+	public void testFindReviewsByRatingLower() throws Exception {
+		assertNotNull(purchaseDAO.findReviewsByRatingLower(6d));
+	}
+
+	public void testFindReviewsByRatingHigher() throws Exception {
+		assertNotNull(purchaseDAO.findReviewsByRatingHigher(5d));
+	}
+
+	public void testFindReviewsByMemberId() throws Exception {
+		assertNotNull(purchaseDAO.findReviewsByMemberId(1L));
+	}
+
+	public void testFindReviewsByProductId() throws Exception {
+		assertNotNull(purchaseDAO.findReviewsByProductId(1L));
+	}
 
 }

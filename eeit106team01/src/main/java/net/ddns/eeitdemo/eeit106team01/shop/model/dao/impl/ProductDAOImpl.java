@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,7 +19,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
-@Transactional
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired
@@ -171,12 +168,34 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<ProductBean> findProductsByPriceBetween(Integer minPrice, Integer maxPrice) {
-		if (minPrice != null && minPrice >= 0 && maxPrice != null && maxPrice >= minPrice) {
+	public List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
+			String queryString, Integer minPrice, Integer maxPrice) {
+		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(queryString) == false
+				&& minPrice != null && minPrice >= 0 && maxPrice != null && maxPrice >= minPrice) {
 			try {
-				this.productsResutlt = this.getSession()
-						.createQuery("from ProductBean where price between :minPrice and :maxPrice", ProductBean.class)
-						.setParameter("minPrice", minPrice).setParameter("maxPrice", maxPrice).getResultList();
+				if (byNameBrandType.equalsIgnoreCase("name")) {
+					this.productsResutlt = this.getSession()
+							.createQuery(
+									"from ProductBean where name like :name and price between :minPrice and :maxPrice",
+									ProductBean.class)
+							.setParameter("name", "%" + queryString + "%").setParameter("minPrice", minPrice)
+							.setParameter("maxPrice", maxPrice).getResultList();
+				} else if (byNameBrandType.equalsIgnoreCase("brand")) {
+					this.productsResutlt = this.getSession()
+							.createQuery(
+									"from ProductBean where brand= :brand and price between :minPrice and :maxPrice",
+									ProductBean.class)
+							.setParameter("brand", queryString).setParameter("minPrice", minPrice)
+							.setParameter("maxPrice", maxPrice).getResultList();
+				} else if (byNameBrandType.equalsIgnoreCase("type")) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where type= :type and price between :minPrice and :maxPrice",
+									ProductBean.class)
+							.setParameter("type", queryString).setParameter("minPrice", minPrice)
+							.setParameter("maxPrice", maxPrice).getResultList();
+				} else {
+					throw new IllegalArgumentException("enter name, brand or type");
+				}
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
 			}
@@ -383,24 +402,33 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<DataBean> findProductTypes() {
-		List<DataBean> result = new ArrayList<DataBean>();
-		try {
-			List<?> list = this.getSession().createQuery("select distinct type from ProductBean")
-					.getResultList();
-			if (list != null) {
-				Iterator<?> iterator = list.iterator();
-				while (iterator.hasNext()) {
-					DataBean dataBean = new DataBean();
-					dataBean.setType((String) iterator.next());
-					result.add(dataBean);
+	public List<DataBean> findProductData(String dataName, String type) {
+		if (NullChecker.isEmpty(dataName) == false) {
+			List<DataBean> result = new ArrayList<DataBean>();
+			List<?> list;
+			try {
+				if (dataName.equalsIgnoreCase("type")) {
+					list = this.getSession().createQuery("select distinct type from ProductBean").getResultList();
+				} else if (dataName.equalsIgnoreCase("brand") && NullChecker.isEmpty(type) == false) {
+					list = this.getSession().createQuery("select distinct brand from ProductBean where type= :type")
+							.setParameter("type", type).getResultList();
+				} else {
+					throw new IllegalArgumentException("enter type or brand, and type is a must in brand search");
 				}
+				if (list != null && list.size() > 0) {
+					Iterator<?> iterator = list.iterator();
+					while (iterator.hasNext()) {
+						DataBean dataBean = new DataBean();
+						dataBean.setData((String) iterator.next());
+						result.add(dataBean);
+					}
+				}
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
 			}
-		} catch (HibernateException e) {
-			throw new HibernateException(e.getMessage());
-		}
-		if (result != null && result.size() > 0) {
-			return result;
+			if (result != null && result.size() > 0) {
+				return result;
+			}
 		}
 		return null;
 	}
