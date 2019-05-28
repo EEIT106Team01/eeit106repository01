@@ -18,8 +18,14 @@ public class RegionMessageService {
 		RegionMessageBean regionMessageBean = new RegionMessageBean();
 		regionMessageBean.setRegion(region);
 		regionMessageBean.setIndex(1);
-		regionMessageBean.setMessage(new ArrayList<RegionMessage>());
 		return regionMessageDAO.insert(regionMessageBean);
+	}
+	
+	public RegionMessageBean createNewRecord(RegionMessageBean regionMessageBean) {
+		RegionMessageBean newRecord = new RegionMessageBean();
+		newRecord.setRegion(regionMessageBean.getRegion());
+		newRecord.setIndex(regionMessageBean.getIndex() + 1);
+		return regionMessageDAO.insert(newRecord);
 	}
 
 	public List<RegionMessageBean> findAllByRegion(String region) {
@@ -57,17 +63,17 @@ public class RegionMessageService {
 		return result;
 	}
 
-	public RegionMessageBean insertMessage(RegionMessageBean regionMessageBean, RegionMessage message) {
+	public RegionMessageBean insertMessage(RegionMessageBean regionMessageBean, RegionMsg message) {
 		RegionMessageBean result = null;
 		if (regionMessageBean != null) {
-			ArrayList<RegionMessage> messages = regionMessageBean.getMessage();
+			ArrayList<RegionMsg> messages = regionMessageBean.getMessage();
 			if (messages != null) {
 				if (messages.size() < 30) {
 					messages.add(message);
 					regionMessageBean.setMessage(messages);
 					result = regionMessageDAO.update(regionMessageBean);
 				} else {
-					RegionMessageBean newRecord = regionMessageBean.generateNewRecord();
+					RegionMessageBean newRecord = this.createNewRecord(regionMessageBean);
 					newRecord.getMessage().add(message);
 					result = regionMessageDAO.insert(newRecord);
 					System.out.println(result.getMessage().get(0).getMessage());

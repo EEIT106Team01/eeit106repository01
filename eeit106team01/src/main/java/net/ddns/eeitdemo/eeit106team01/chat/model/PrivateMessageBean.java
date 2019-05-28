@@ -18,11 +18,21 @@ public class PrivateMessageBean {
 	private String userOne;
 	private String userTwo;
 	@Column(columnDefinition = "varbinary(max)")
-	private ArrayList<PrivateMessage> messages;
+	private ArrayList<PrivateMsg> messages;
 	@Column(columnDefinition = "varbinary(max)")
-	private ArrayList<PrivateMessage> userOneOfflineMessages;
+	private ArrayList<PrivateMsg> userOneOfflineMessages;
 	@Column(columnDefinition = "varbinary(max)")
-	private ArrayList<PrivateMessage> userTwoOfflineMessages;
+	private ArrayList<PrivateMsg> userTwoOfflineMessages;
+	@Column(name = "indexs")
+	private Integer index;
+	private String status;
+	
+	public PrivateMessageBean() {
+		this.messages = new ArrayList<PrivateMsg>();
+		this.userOneOfflineMessages = new ArrayList<PrivateMsg>();
+		this.userTwoOfflineMessages = new ArrayList<PrivateMsg>();
+		this.status = "active";
+	}
 
 	public Integer getId() {
 		return id;
@@ -48,28 +58,50 @@ public class PrivateMessageBean {
 		this.userTwo = userTwo;
 	}
 
-	public ArrayList<PrivateMessage> getMessages() {
+	public ArrayList<PrivateMsg> getMessages() {
 		return messages;
 	}
 
-	public void setMessages(ArrayList<PrivateMessage> messages) {
+	public void setMessages(ArrayList<PrivateMsg> messages) {
 		this.messages = messages;
 	}
 
-	public ArrayList<PrivateMessage> getUserOneUnreadMessages() {
+	public ArrayList<PrivateMsg> getUserOneOfflineMessages() {
 		return userOneOfflineMessages;
 	}
 
-	public void setUserOneUnreadMessages(ArrayList<PrivateMessage> userOneUnreadMessages) {
-		this.userOneOfflineMessages = userOneUnreadMessages;
+	public void setUserOneOfflineMessages(ArrayList<PrivateMsg> userOneOfflineMessages) {
+		this.userOneOfflineMessages = userOneOfflineMessages;
 	}
 
-	public ArrayList<PrivateMessage> getUserTwoUnreadMessages() {
+	public ArrayList<PrivateMsg> getUserTwoOfflineMessages() {
 		return userTwoOfflineMessages;
 	}
 
-	public void setUserTwoUnreadMessages(ArrayList<PrivateMessage> userTwoUnreadMessages) {
-		this.userTwoOfflineMessages = userTwoUnreadMessages;
+	public void setUserTwoOfflineMessages(ArrayList<PrivateMsg> userTwoOfflineMessages) {
+		this.userTwoOfflineMessages = userTwoOfflineMessages;
+	}
+
+	public Integer getIndex() {
+		return index;
+	}
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }

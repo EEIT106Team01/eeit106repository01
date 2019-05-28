@@ -26,8 +26,8 @@
 			console.log(msg);
 			console.log(chatData);
 
-			if (id === "northChat") {
-				stompClient.send("/northChat", {}, JSON.stringify({ 'name': name, 'message': msg }));
+			if (id === "north") {
+				stompClient.send("/north", {}, JSON.stringify({ 'name': name, 'message': msg }));
 
 			} else {
 				stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': name, 'message': msg }));
@@ -61,6 +61,43 @@
 				neonChat.pushMessage(id, msgBeans[i].message, msgBeans[i].name, new Date(msgBeans[i].sendTime), fromOpponent, false);
 			}
 			neonChat.renderMessages(id);
+		}
+
+		function showOldPrivateMessage(msgBeans) {
+			let fromOpponent;
+			for (let i = 0; i < msgBeans.length; i++) {
+				let id;
+				if (msgBeans[i].userOne !== name) {
+					id = msgBeans[i].userOne;
+				} else {
+					id = msgBeans[i].userTwo;
+				}
+				for (let j = 0; j < msgBeans[i].messages.length; j++) {
+					if (msgBeans[i].messages[j].fromUser !== name) {
+						fromOpponent = true;
+					} else {
+						fromOpponent = false;
+					}
+					neonChat.pushMessage(id, msgBeans[i].messages[j].message, msgBeans[i].messages[j].fromUser, new Date(msgBeans[i].messages[j].sendTime), fromOpponent, false);
+				}
+				for (let j = 0; j < msgBeans[i].userOneOfflineMessages.length; j++) {
+					if (msgBeans[i].userOneOfflineMessages[j].fromUser !== name) {
+						fromOpponent = true;
+					} else {
+						fromOpponent = false;
+					}
+					neonChat.pushMessage(id, msgBeans[i].userOneOfflineMessages[j].message, msgBeans[i].userOneOfflineMessages[j].fromUser, new Date(msgBeans[i].userOneOfflineMessages[j].sendTime), fromOpponent, fromOpponent);
+				}
+				for (let j = 0; j < msgBeans[i].userTwoOfflineMessages.length; j++) {
+					if (msgBeans[i].userTwoOfflineMessages[j].fromUser !== name) {
+						fromOpponent = true;
+					} else {
+						fromOpponent = false;
+					}
+					neonChat.pushMessage(id, msgBeans[i].userTwoOfflineMessages[j].message, msgBeans[i].userTwoOfflineMessages[j].fromUser, new Date(msgBeans[i].userTwoOfflineMessages[j].sendTime), fromOpponent, fromOpponent);
+				}
+				neonChat.renderMessages(id);
+			}
 		}
 
 		var stompClient = null;
@@ -100,21 +137,26 @@
 		function sendName() {
 			stompClient.subscribe('/user/topic/msg', function (response) {
 				var msgBean = JSON.parse(response.body);
-				onReceivePrivateMessage(msgBean.fromUser, msgBean);
+				console.log(msgBean);
+				if (Array.isArray(msgBean)) {
+					showOldPrivateMessage(msgBean);
+				} else {
+					onReceivePrivateMessage(msgBean.fromUser, msgBean);
+				}
 			});
 		}
 
 
 		document.addEventListener("DOMContentLoaded", function () {
-			$("#northChat").click(function () {
+			$("#north").click(function () {
 				if (stompClient != null) {
-					stompClient.subscribe('/topic/northChat', function (response) {
+					stompClient.subscribe('/topic/north', function (response) {
 						var msgBean = JSON.parse(response.body);
 						console.log(msgBean);
 						if (Array.isArray(msgBean)) {
-							showOldMessage("northChat", msgBean);
+							showOldMessage("north", msgBean);
 						} else {
-							onReceiveMessage("northChat", msgBean);
+							onReceiveMessage("north", msgBean);
 						}
 					});
 				}
@@ -191,7 +233,7 @@
 					<strong>區域</strong>
 
 
-					<a href="#" id="northChat"><span class="user-status is-offline"></span> <em>北部聊天室</em></a>
+					<a href="#" id="north"><span class="user-status is-offline"></span> <em>北部聊天室</em></a>
 					<a href="#" id="midChat"><span class="user-status is-offline"></span> <em>中部聊天室</em></a>
 					<a href="#" id="southChat"><span class="user-status is-offline"></span> <em>南部聊天室</em></a>
 					<a href="#" id="eastChat"><span class="user-status is-offline"></span> <em>東部聊天室</em></a>

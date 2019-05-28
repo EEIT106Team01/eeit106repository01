@@ -17,10 +17,12 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Controller;
 
 import net.ddns.eeitdemo.eeit106team01.chat.model.ConnectionsHandler;
-import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessage;
-import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMessage;
+import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMessageBean;
+import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMessageService;
+import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMsg;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageService;
+import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMsg;
 
 @EnableScheduling
 @Controller
@@ -36,25 +38,30 @@ public class ChatController {
 	private RegionMessageService regionMessageService;
 
 	@Autowired
+	private PrivateMessageService privateMessageService;
+
+	@Autowired
 	public ChatController(SimpMessagingTemplate messagingTemplate) {
 		this.messagingTemplate = messagingTemplate;
 	}
 
-	public List<RegionMessage> getOldRegionMessage(String region) {
+	public List<RegionMsg> getOldRegionMessage(String region) {
 		List<RegionMessageBean> results = regionMessageService.findAllByRegion(region);
-		List<RegionMessage> messageBeans = new ArrayList<RegionMessage>();
-		if (results.size() >= 2) {
-			messageBeans.addAll(results.get(results.size() - 2).getMessage());
+		List<RegionMsg> messageBeans = new ArrayList<RegionMsg>();
+		if (results.size() != 0) {
+			if (results.size() >= 2) {
+				messageBeans.addAll(results.get(results.size() - 2).getMessage());
+			}
+			messageBeans.addAll(results.get(results.size() - 1).getMessage());
 		}
-		messageBeans.addAll(results.get(results.size() - 1).getMessage());
 		return messageBeans;
 	}
 
 	private RegionMessageBean northMessageBean = null;
 
-	@MessageMapping("/northChat")
-	@SendTo("/topic/northChat")
-	public RegionMessage northChat(RegionMessage regionMessage) {
+	@MessageMapping("/north")
+	@SendTo("/topic/north")
+	public RegionMsg northChat(RegionMsg regionMessage) {
 		regionMessage.setSendTime(new java.util.Date(System.currentTimeMillis()));
 		synchronized (this) {
 			if (northMessageBean == null) {
@@ -65,10 +72,10 @@ public class ChatController {
 		return regionMessage;
 	}
 
-	@SubscribeMapping("/topic/northChat")
-	public List<RegionMessage> northChatOld() {
-		System.out.println("SubscribeMapping(\"/northChatOld\")");
-		return this.getOldRegionMessage("north");
+	@SubscribeMapping("/topic/north")
+	public List<RegionMsg> northChatOld() {
+			System.out.println("SubscribeMapping(north)");
+			return this.getOldRegionMessage("north");
 	}
 
 	/**
@@ -83,17 +90,31 @@ public class ChatController {
 
 	@MessageMapping("/msg")
 //	@SendTo("/topic/user")
-	public void sendToSpecificUser(PrivateMessage privateMessage) {
+	public void sendPrivateMessage(PrivateMsg privateMsg, Principal fromUser) {
 //		SimpUser toUser = simpUserRegistry.getUser(transferMessageBean.getToUser());
-		Principal toUser = connectionsHandler.getOnlineUsers().get(privateMessage.getToUser());
-		if (toUser != null) {
-			System.out.println(toUser.getName());
-			privateMessage.setSendTime(new java.util.Date(System.currentTimeMillis()));
-			messagingTemplate.convertAndSendToUser(toUser.getName(), "/topic/msg", privateMessage);
-		} else {
-			System.out.println("Can not find user of name : " + privateMessage.getToUser());
+		if (fromUser != null && fromUser.getName() != null && fromUser.getName().trim().length() != 0) {
+			// if toUser exist in MemberBean check
+			Principal toUser = connectionsHandler.getOnlineUsers().get(privateMsg.getToUser());
+			privateMsg.setSendTime(new java.util.Date(System.currentTimeMillis()));
+			if (toUser != null) {
+				System.out.println(toUser.getName());
+				privateMessageService.addMessage(fromUser.getName(), toUser.getName(), privateMsg);
+				messagingTemplate.convertAndSendToUser(toUser.getName(), "/topic/msg", privateMsg);
+			} else {
+				System.out.println("Can not find or not online user : " + privateMsg.getToUser());
+				privateMessageService.addOfflineMessage(fromUser.getName(), privateMsg.getToUser(),
+						privateMsg.getToUser(), privateMsg);
+			}
 		}
+	}
 
+	@SubscribeMapping("/user/topic/msg")
+	public List<PrivateMessageBean> sendAllActivePrivateMessage(Principal user) {
+		if (user != null && user.getName() != null && user.getName().trim().length() != 0) {
+			System.err.println(user.getName() + " subcribed private message.");
+			return privateMessageService.getAllActiveByUser(user.getName());
+		}
+		return null;
 	}
 
 }
