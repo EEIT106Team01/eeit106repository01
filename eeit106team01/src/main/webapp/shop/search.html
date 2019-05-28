@@ -24,6 +24,9 @@
     <link rel="stylesheet" href="assets/css/neon-forms.css">
     <link rel="stylesheet" href="assets/css/custom.css">
 
+    <!-- Isotope排序用 -->
+    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
+
     <script async src="js/search.js"></script>
     <link rel="stylesheet" href="css/search.css">
 
@@ -176,12 +179,12 @@
 
         <div class="main-content">
             <div class="row" id="searchTitle">
-                <h1></h1>
+                <h1 id="productQuantity"></h1>
                 <div>
-                    <a href="">價格低到高</a>
-                    <a href="">價格高到低</a>
-                    <a href="">上架時間</a>
-                    <a href="">銷量</a>
+                    <a href="" id="ByPriceAsc">價格低到高</a>
+                    <a href="" id="ByPriceDesc">價格高到低</a>
+                    <a href="" id="ByTime">上架時間</a>
+                    <a href="" id="totleSelled">銷量</a>
                 </div>
             </div>
 
@@ -191,8 +194,7 @@
             <div class="row" id="topProducts">
 
             </div>
-            <div class="row" id="Products">
-                <ul id="ProductsUl" ></ul>
+            <div id="Products">
             </div>
         </div>
     </div>

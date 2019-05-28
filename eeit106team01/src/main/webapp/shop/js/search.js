@@ -2,6 +2,20 @@ $(document).ready(function () {
     $("#searchPrice").click(function () {
         getProductsByPrice();
     }),
+    $("#ByPriceAsc").click(function () {
+        $('#Products').isotope({
+            sortBy: 'price'
+         });
+    }),
+    // $("#ByPriceDesc").click(function () {
+    //     $Products.isotope({ sortBy: 'number' })
+    // }),
+    // $("#ByTime").click(function () {
+    //     $Products.isotope({ sortBy: 'number' })
+    // }),
+    // $("#totleSelled").click(function () {
+    //     $Products.isotope({ sortBy: 'number' })
+    // }),
     getAllType(),
     getAllBrand(),
     $("#starDay").datepicker(),
@@ -9,6 +23,12 @@ $(document).ready(function () {
 
     getProductsByType();
 
+    $("#Products").isotope({filter: '.productsDiv'})
+    $("#Products").isotope({ 
+        masonry: {
+            columnWidth: 200
+        }
+    })
 })
 
 function getProductsByType(){
@@ -17,7 +37,10 @@ function getProductsByType(){
         url: "http://localhost:8080/search/type?type=行車紀錄器",
         method: "GET",
         dataType: "json",
-        success: function (typeData) {   
+        success: function (typeData) {
+
+            getProductQuantity(typeData)
+             
             var productsName =[];
             var productsPrice =[];
             var productsImg =[];
@@ -33,19 +56,25 @@ function getProductsByType(){
             var products=[];
             $.each(typeData,function(){
                 products.push(
-                    '<li class="productsLi><a class="col-md-auto"><div><img src='+productsImg[k]+' width="300"></div>'+
-                    '<span><span>'+productsName[k]+'</span><em>$'+productsPrice[k]+'</em><span></a>'+
+                    '<div class="productsDiv"><a><div><img src='+productsImg[k]+' width="300"></div>'+
+                    '<span>'+productsName[k]+'</span><p class="price"><em>'+productsPrice[k]+'</em><p></span></a>'+
                     '<button type="button" class="btn btn-orange"><i class="entypo-note"></i></button>'+
-                    '</li>'
+                    '</div>'
                 )
                 k++;
             }) 
-            $("#ProductsUl").html("");
-            $("#ProductsUl").append(products.join(""))
+            $("#Products").html("");
+            $("#Products").append(products.join(""))
         },error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
         }
     })
+}
+
+//顯示此次搜尋的產品數量
+function getProductQuantity(data){
+    var productQuantity = data.length;
+    $("#productQuantity").text("總共有"+productQuantity+"件商品")  
 }
 
 // 側邊menu用↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
@@ -114,6 +143,8 @@ function getProductsByPrice(){
         dataType: "json",
         success: function (priceData) {
 
+            getProductQuantity(priceData)
+
             var productsName =[];
             var productsPrice =[];
             var productsImg =[];
@@ -129,9 +160,9 @@ function getProductsByPrice(){
             var products=[];
             $.each(priceData,function(){
                 products.push(
-                    '<li class="productsLi><a class="col-md-auto"><div><img src='+productsImg[k]+' width="300"></div>'+
+                    '<li class="col-md-auto"><a><div><img src='+productsImg[k]+' width="300"></div>'+
                     '<span><span>'+productsName[k]+'</span><em>$'+productsPrice[k]+'</em><span></a>'+
-                    '<button type="button" class="btn btn-orange"><i class="entypo-note"></i></button>'+
+                    '<button type="button" class="btn btn-gold"> <i class="entypo-heart"></i> </button>'+
                     '</li>'
                 )
                 k++;
