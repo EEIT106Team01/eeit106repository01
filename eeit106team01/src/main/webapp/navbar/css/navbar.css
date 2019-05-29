@@ -1,0 +1,31 @@
+body {
+    font-size: 20px;
+    color: #545454;
+}
+
+.myNavBarGroup {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    width: 100%;
+}
+
+.page-container {
+    margin-top: 52px;
+}
+
+.myImg-center{
+    position: absolute;
+    top: 3px;
+    left: 3px;
+}     
+
+.myImg-left{
+    position: absolute;
+    top: 3px;
+    left: -40px;
+}    
+
+.myNoticiations{
+    top: 3px;
+}
