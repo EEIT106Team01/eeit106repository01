@@ -136,7 +136,7 @@ public class PurchaseServiceTest extends ShopTest {
 		reviewBean.setUpdatedTime(NewDate.newCurrentTime());
 
 		// get path object pointing to file
-		Path filePath = Paths.get("C:\\Users\\User\\Pictures\\img_lights.jpg");
+		Path filePath = Paths.get("D:\\Pictures\\photo.png");
 		// get byte array with file contents
 		byte[] fileContent = Files.readAllBytes(filePath);
 
