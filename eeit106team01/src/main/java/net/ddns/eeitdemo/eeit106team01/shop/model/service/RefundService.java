@@ -160,7 +160,7 @@ public class RefundService {
 					return result;
 				}
 			} else {
-				throw new IllegalArgumentException("idType must be refundList, purchaseList,refund");
+				throw new IllegalArgumentException("idType must be refundList, purchaseList, refund");
 			}
 		}
 		return null;

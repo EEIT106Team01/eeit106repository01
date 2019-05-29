@@ -24,6 +24,9 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.SerializationFeature;
+
 import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMessageBean;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
@@ -76,6 +79,11 @@ public class Eeit106team01Application {
 		return tomcatServletWebServerFactory;
 	}
 
+	@Bean("objectMapper")
+	public ObjectMapper myMapper() {
+		return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
+	}
+
 	private Connector initiateHttpConnector() {
 		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 		connector.setScheme("http");
@@ -105,7 +113,7 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(ArticleTopicCurrentBean.class);
 		builder.addAnnotatedClass(VideoBean.class);
 		builder.addAnnotatedClass(MemberBean.class);
-		
+
 		// Chat
 		builder.addAnnotatedClass(RegionMessageBean.class);
 		builder.addAnnotatedClass(PrivateMessageBean.class);

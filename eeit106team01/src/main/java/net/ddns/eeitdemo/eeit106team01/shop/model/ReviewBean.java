@@ -1,7 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model;
 
 import java.io.Serializable;
-import java.sql.Blob;
 import java.util.Date;
 import java.util.Objects;
 
@@ -16,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.sql.rowset.serial.SerialBlob;
 
 @Entity
 @Table(schema = "Shop", name = "Review")
@@ -42,8 +42,8 @@ public class ReviewBean implements Serializable {
 	@Column(name = "Comment", columnDefinition = "nvarchar(max)", nullable = false)
 	private String comment;
 
-	@Column(name = "Image")
-	private Blob image;
+	@Column(name = "Image", columnDefinition = "varbinary(max)")
+	private SerialBlob image;
 
 	@ManyToOne
 	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
@@ -146,11 +146,11 @@ public class ReviewBean implements Serializable {
 		this.comment = comment;
 	}
 
-	public Blob getImage() {
+	public SerialBlob getImage() {
 		return image;
 	}
 
-	public void setImage(Blob image) {
+	public void setImage(SerialBlob image) {
 		this.image = image;
 	}
 

@@ -3,11 +3,15 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
-import java.sql.Blob;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -66,7 +70,6 @@ public class PurchaseServiceTest extends ShopTest {
 		purchaseService.newPurchase(productIdList, purchaseBean);
 	}
 
-	@Test
 	public void testUpdatePurchase() throws Exception {
 		List<PurchaseBean> purchaseBeans = purchaseService.findPurchaseById(1L, "purchase");
 		PurchaseBean purchaseBean = purchaseBeans.get(0);
@@ -127,13 +130,18 @@ public class PurchaseServiceTest extends ShopTest {
 		purchaseService.newReviews(reviewBeans);
 	}
 
+	@Test
 	public void testUpdateReview() throws Exception {
 		ReviewBean reviewBean = purchaseService.findReviewById("review", 1L).get(0);
 		reviewBean.setUpdatedTime(NewDate.newCurrentTime());
-		byte[] bytes = "A byte array".getBytes();
-		Blob blob = new javax.sql.rowset.serial.SerialBlob(bytes);
-		assertNotNull(purchaseService.updateReview(reviewBean, 8d, "update", null));
-		assertNotNull(purchaseService.updateReview(reviewBean, null, null, blob));
+
+		// get path object pointing to file
+		Path filePath = Paths.get("C:\\Users\\User\\Pictures\\img_lights.jpg");
+		// get byte array with file contents
+		byte[] fileContent = Files.readAllBytes(filePath);
+
+		SerialBlob serialBlob = new javax.sql.rowset.serial.SerialBlob(fileContent);
+		assertNotNull(purchaseService.updateReview(reviewBean, null, null, serialBlob));
 	}
 
 	public void testFindReviewById() throws Exception {

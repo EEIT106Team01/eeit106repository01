@@ -1,10 +1,10 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
-import java.sql.Blob;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -117,9 +117,9 @@ public class PurchaseService {
 				result = purchaseDAO.findPurchaseByMemberId(id);
 				if (result != null && result.size() > 0) {
 					return result;
-				} else {
-					throw new IllegalArgumentException("idType must be purchaseList, purchase, product");
 				}
+			} else {
+				throw new IllegalArgumentException("idType must be purchase, member");
 			}
 		}
 		return null;
@@ -129,12 +129,16 @@ public class PurchaseService {
 			Integer intValue) {
 		if (NullChecker.isEmpty(type) == false) {
 			List<PurchaseBean> result = new ArrayList<PurchaseBean>();
-			if (type.equalsIgnoreCase("time") && startDay != null && endDay != null && startDay.equals(endDay) == false
-					&& startDay.compareTo(endDay) < 0) {
-				result = purchaseDAO.findPurchaseByTimeDayBetween(startDay, endDay);
-				if (result != null && result.size() > 0) {
-					return result;
+			if (type.equalsIgnoreCase("time") && startDay != null && endDay != null) {
+				if (startDay.equals(endDay) == false && endDay.compareTo(startDay) > 0) {
+					result = purchaseDAO.findPurchaseByTimeDayBetween(startDay, endDay);
+					if (result != null && result.size() > 0) {
+						return result;
+					} else {
+						return null;
+					}
 				}
+				throw new IllegalArgumentException("startDay can't greater than endDay or same");
 			} else if (type.equalsIgnoreCase("deliverStatus") && NullChecker.isEmpty(stringValue) == false) {
 				result = purchaseDAO.findPurchaseByDeliverStatus(stringValue);
 				if (result != null && result.size() > 0) {
@@ -254,7 +258,7 @@ public class PurchaseService {
 
 	// Update Review
 	// @formatter:on
-	public ReviewBean updateReview(ReviewBean reviewBean, Double rating, String comment, Blob image) {
+	public ReviewBean updateReview(ReviewBean reviewBean, Double rating, String comment, SerialBlob image) {
 		if (reviewBean.isNotNull() && ((rating != null && rating.doubleValue() >= 0d)
 				|| NullChecker.isEmpty(comment) == false || NullChecker.isEmpty(image) == false)) {
 			Boolean flag = false;
@@ -321,12 +325,16 @@ public class PurchaseService {
 			Double doubleValue, Boolean truefalse) {
 		if (NullChecker.isEmpty(type) == false) {
 			List<ReviewBean> result = new ArrayList<ReviewBean>();
-			if (type.equalsIgnoreCase("time") && startDay != null && endDay != null && startDay.equals(endDay) == false
-					&& startDay.compareTo(endDay) < 0) {
-				result = purchaseDAO.findReviewsByTimeDayBetween(startDay, endDay);
-				if (result != null && result.size() > 0) {
-					return result;
+			if (type.equalsIgnoreCase("time") && startDay != null && endDay != null) {
+				if (startDay.equals(endDay) == false && endDay.compareTo(startDay) > 0) {
+					result = purchaseDAO.findReviewsByTimeDayBetween(startDay, endDay);
+					if (result != null && result.size() > 0) {
+						return result;
+					} else {
+						return null;
+					}
 				}
+				throw new IllegalArgumentException("startDay can't greater than endDay or same");
 			} else if (type.equalsIgnoreCase("image") && truefalse != null) {
 				result = purchaseDAO.findReviewsByImageExistence(truefalse);
 				if (result != null && result.size() > 0) {
