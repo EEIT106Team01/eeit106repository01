@@ -25,7 +25,7 @@ public class RefundListBean implements Serializable {
 	private Long id;
 
 	@OneToOne
-	@JoinColumn(name = "PurchaseListID", columnDefinition = "bigint", nullable = false, updatable = false)
+	@JoinColumn(name = "PurchaseListID", columnDefinition = "bigint", nullable = false, updatable = false, unique = true)
 	private PurchaseListBean purchaseListId;
 
 	@ManyToOne
