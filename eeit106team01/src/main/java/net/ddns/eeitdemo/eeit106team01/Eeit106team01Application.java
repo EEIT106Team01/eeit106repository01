@@ -79,11 +79,6 @@ public class Eeit106team01Application {
 		return tomcatServletWebServerFactory;
 	}
 
-	@Bean("objectMapper")
-	public ObjectMapper myMapper() {
-		return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
-	}
-
 	private Connector initiateHttpConnector() {
 		Connector connector = new Connector("org.apache.coyote.http11.Http11NioProtocol");
 		connector.setScheme("http");
@@ -147,6 +142,11 @@ public class Eeit106team01Application {
 			ffu = new FFmpegUtils();
 		}
 		return ffu;
+	}
+
+	@Bean("objectMapper")
+	public ObjectMapper myMapper() {
+		return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 	}
 
 }
