@@ -6,6 +6,8 @@
  *	www.laborator.co
  */
 
+var neonChatNowOpenId;
+
 var neonChat = neonChat || {
 	$current_user: null,
 	isOpen: false,
@@ -137,11 +139,32 @@ var neonChat = neonChat || {
 		},
 
 		open: function ($user_link) {
+			this.close();
 			this.refreshUserIds();
 
 			if (typeof $user_link == 'string') {
 				$user_link = $($user_link);
 			}
+
+			// Save Now Open Chat Room ID
+
+			neonChatNowOpenId = $user_link.attr('id');
+
+			// Set Conversation Body Scroll Event
+
+			$conversation_body.on('scroll', function () {
+				if ($(this).scrollTop() == 0) {
+					let id = $user_link.attr('id');
+					let index = $user_link.attr('index');
+					if (id && index > 0) {
+						console.log("$(this).scrollTop()");
+						console.log(id);
+						console.log("index: " + index);
+						getOld(id, --index);
+					}
+				}
+			});
+
 
 			// Set Active Class
 			$chat.find('.chat-group a').not($user_link).removeClass('active');
@@ -181,6 +204,9 @@ var neonChat = neonChat || {
 			$conversation_window.hide().css({ top: 0, opacity: 0 });
 
 			$conversation_body.find('li.unread').removeClass('unread');
+
+			// Unbind Conversation Body Scroll Event
+			$conversation_body.unbind('scroll');
 
 			this.$current_user = null;
 			this.isOpen = false;
@@ -303,6 +329,33 @@ var neonChat = neonChat || {
 			}
 		},
 
+		unshiftMessage: function (id, msg, from, time, fromOpponent, unread) {
+			if (id && msg) {
+				this.refreshUserIds();
+
+				var max_chat_history = this.getChatHistoryLength();
+
+
+				if (this.chat_history[id].messages.length >= max_chat_history) {
+					this.chat_history[id].messages = this.chat_history[id].messages.reverse().slice(0, max_chat_history - 1).reverse();
+				}
+
+				this.chat_history[id].messages.unshift({
+					message: msg,
+					from: from,
+					time: time,
+					fromOpponent: fromOpponent,
+					unread: unread
+				});
+
+				if (unread) {
+					this.puffUnreadsAll();
+				}
+
+				this.puffUnreads();
+			}
+		},
+
 		renderMessages: function (id, slient) {
 			if (typeof this.chat_history[id] != 'undefined') {
 				$conversation_body.html('');
@@ -345,6 +398,52 @@ var neonChat = neonChat || {
 				}
 
 				this.updateScrollbars();
+			}
+		},
+
+		renderMessagesWithKeepScrollPosition: function (id, slient) {
+			if (typeof this.chat_history[id] != 'undefined') {
+				$conversation_body.html('');
+				let oldScrollHeight = $('#chat .chat-conversation .conversation-body').get(0).scrollHeight;
+				for (var i in this.chat_history[id].messages) {
+					var entry = this.chat_history[id].messages[i],
+						$entry = $('<li><span class="user"></span><p></p><span class="time"></span></li>'),
+						date = entry.time,
+						date_formated = date;
+
+					if (typeof date == 'object') {
+						var hour = date.getHours(),
+							hour = (hour < 10 ? "0" : "") + hour,
+
+							min = date.getMinutes(),
+							min = (min < 10 ? "0" : "") + min,
+
+							sec = date.getSeconds();
+						sec = (sec < 10 ? "0" : "") + sec;
+
+						date_formated = hour + ':' + min;
+					}
+
+
+					// Populate message DOM
+					$entry.find('.user').html(entry.from);
+					$entry.find('p').html(entry.message.replace(/\n/g, '<br>'));
+					$entry.find('.time').html(date_formated);
+
+					if (entry.fromOpponent) {
+						$entry.addClass('odd');
+					}
+
+					if (entry.unread && typeof slient == 'undefined') {
+						$entry.addClass('unread');
+						entry.unread = false;
+					}
+
+					$conversation_body.append($entry);
+				}
+
+				//this.updateScrollbars();
+				keepScrollPosition('#chat .chat-conversation .conversation-body', oldScrollHeight);
 			}
 		},
 
@@ -555,7 +654,7 @@ var neonChat = neonChat || {
 			}
 		},
 
-		addUser: function (group_id, display_name, status, prepend, user_id) {
+		addUser: function (group_id, display_name, status, prepend, user_id, index) {
 			var $group = group_id;
 
 			if (typeof group_id == 'string') {
@@ -575,6 +674,10 @@ var neonChat = neonChat || {
 				}
 				else {
 					$user['appendTo']($group);
+				}
+
+				if (index) {
+					$user.attr('index', index);
 				}
 
 				$user.hide().slideDown();

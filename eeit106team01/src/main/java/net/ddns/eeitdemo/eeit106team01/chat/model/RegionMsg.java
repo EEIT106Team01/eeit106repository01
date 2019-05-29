@@ -7,10 +7,10 @@ public class RegionMsg implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = -4916822208524075783L;
-	private Integer id;
 	private String name;
 	private String message;
 	private java.util.Date sendTime;
+	private String command;
 
 	public String getMessage() {
 		return message;
@@ -28,19 +28,25 @@ public class RegionMsg implements Serializable {
 		this.name = name;
 	}
 
-	public Integer getId() {
-		return id;
-	}
-
-	public void setId(Integer id) {
-		this.id = id;
-	}
-
 	public java.util.Date getSendTime() {
 		return sendTime;
 	}
 
 	public void setSendTime(java.util.Date sendTime) {
 		this.sendTime = sendTime;
+	}
+
+	/**
+	 * @return the command
+	 */
+	public String getCommand() {
+		return command;
+	}
+
+	/**
+	 * @param command the command to set
+	 */
+	public void setCommand(String command) {
+		this.command = command;
 	}
 }

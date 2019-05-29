@@ -26,20 +26,26 @@
 			console.log(msg);
 			console.log(chatData);
 
-			if (id === "north") {
-				stompClient.send("/north", {}, JSON.stringify({ 'name': name, 'message': msg }));
+			if (
+				id === "north"
+				|| id === "middle"
+				|| id === "south"
+				|| id === "east"
+			) {
+				stompClient.send("/" + id, {}, JSON.stringify({ 'name': name, 'message': msg, 'command': 'normal' }));
 
 			} else {
-				stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': name, 'message': msg }));
+				stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': name, 'message': msg, 'command': 'normal' }));
 			}
-
 
 		}
 
 		function onReceiveMessage(id, msgBean) {
 			if (msgBean && msgBean.name !== name) {
 				neonChat.pushMessage(id, msgBean.message, msgBean.name, new Date(msgBean.sendTime), true, true);
-				neonChat.renderMessages(id);
+				if (neonChatNowOpenId && neonChatNowOpenId == id) {
+					neonChat.renderMessages(id);
+				}
 			}
 		}
 
@@ -50,54 +56,68 @@
 			}
 		}
 
-		function showOldMessage(id, msgBeans) {
+		function showOldMessage(msgBeans) {
 			let fromOpponent;
-			for (let i = 0; i < msgBeans.length; i++) {
-				if (msgBeans[i].name !== name) {
-					fromOpponent = true;
-				} else {
-					fromOpponent = false;
+			for (let i = msgBeans.length - 1; i >= 0; i--) {
+				let id = msgBeans[i].region;
+				$("#" + id).attr("index", msgBeans[i].index);
+				console.log($("#" + id).attr("index"));
+				for (let j = msgBeans[i].messages.length - 1; j >= 0; j--) {
+					if (msgBeans[i].messages[j].name !== name) {
+						fromOpponent = true;
+					} else {
+						fromOpponent = false;
+					}
+					neonChat.unshiftMessage(id, msgBeans[i].messages[j].message, msgBeans[i].messages[j].name, new Date(msgBeans[i].messages[j].sendTime), fromOpponent, false);
 				}
-				neonChat.pushMessage(id, msgBeans[i].message, msgBeans[i].name, new Date(msgBeans[i].sendTime), fromOpponent, false);
+				neonChat.renderMessagesWithKeepScrollPosition(id);
 			}
-			neonChat.renderMessages(id);
 		}
 
 		function showOldPrivateMessage(msgBeans) {
 			let fromOpponent;
-			for (let i = 0; i < msgBeans.length; i++) {
+			for (let i = msgBeans.length - 1; i >= 0; i--) {
 				let id;
 				if (msgBeans[i].userOne !== name) {
 					id = msgBeans[i].userOne;
 				} else {
 					id = msgBeans[i].userTwo;
 				}
-				for (let j = 0; j < msgBeans[i].messages.length; j++) {
+				$("#" + id).attr("index", msgBeans[i].index);
+				for (let j = msgBeans[i].messages.length - 1; j >= 0; j--) {
 					if (msgBeans[i].messages[j].fromUser !== name) {
 						fromOpponent = true;
 					} else {
 						fromOpponent = false;
 					}
-					neonChat.pushMessage(id, msgBeans[i].messages[j].message, msgBeans[i].messages[j].fromUser, new Date(msgBeans[i].messages[j].sendTime), fromOpponent, false);
+					neonChat.unshiftMessage(id, msgBeans[i].messages[j].message, msgBeans[i].messages[j].fromUser, new Date(msgBeans[i].messages[j].sendTime), fromOpponent, false);
 				}
-				for (let j = 0; j < msgBeans[i].userOneOfflineMessages.length; j++) {
+				for (let j = msgBeans[i].userOneOfflineMessages.length - 1; j >= 0; j--) {
 					if (msgBeans[i].userOneOfflineMessages[j].fromUser !== name) {
 						fromOpponent = true;
 					} else {
 						fromOpponent = false;
 					}
-					neonChat.pushMessage(id, msgBeans[i].userOneOfflineMessages[j].message, msgBeans[i].userOneOfflineMessages[j].fromUser, new Date(msgBeans[i].userOneOfflineMessages[j].sendTime), fromOpponent, fromOpponent);
+					neonChat.unshiftMessage(id, msgBeans[i].userOneOfflineMessages[j].message, msgBeans[i].userOneOfflineMessages[j].fromUser, new Date(msgBeans[i].userOneOfflineMessages[j].sendTime), fromOpponent, fromOpponent);
 				}
-				for (let j = 0; j < msgBeans[i].userTwoOfflineMessages.length; j++) {
+				for (let j = msgBeans[i].userTwoOfflineMessages.length - 1; j >= 0; j--) {
 					if (msgBeans[i].userTwoOfflineMessages[j].fromUser !== name) {
 						fromOpponent = true;
 					} else {
 						fromOpponent = false;
 					}
-					neonChat.pushMessage(id, msgBeans[i].userTwoOfflineMessages[j].message, msgBeans[i].userTwoOfflineMessages[j].fromUser, new Date(msgBeans[i].userTwoOfflineMessages[j].sendTime), fromOpponent, fromOpponent);
+					neonChat.unshiftMessage(id, msgBeans[i].userTwoOfflineMessages[j].message, msgBeans[i].userTwoOfflineMessages[j].fromUser, new Date(msgBeans[i].userTwoOfflineMessages[j].sendTime), fromOpponent, fromOpponent);
 				}
-				neonChat.renderMessages(id);
+				neonChat.renderMessagesWithKeepScrollPosition(id);
 			}
+		}
+
+		function keepScrollPosition($el, oldScrollHeight) {
+			var $ = jQuery;
+
+			if (typeof $el == 'string')
+				$el = $($el);
+			$el.get(0).scrollTop = $el.get(0).scrollHeight - oldScrollHeight * 3;
 		}
 
 		var stompClient = null;
@@ -135,6 +155,7 @@
 		}
 
 		function sendName() {
+			neonChat.close();
 			stompClient.subscribe('/user/topic/msg', function (response) {
 				var msgBean = JSON.parse(response.body);
 				console.log(msgBean);
@@ -146,23 +167,46 @@
 			});
 		}
 
+		function getOld(id, index) {
+			console.log("getOld index: " + index);
+			if (id && index && index > 0) {
+				if (
+					id === "north"
+					|| id === "middle"
+					|| id === "south"
+					|| id === "east"
+				) {
+					stompClient.send("/" + id, {}, JSON.stringify({ 'name': name, 'message': index, 'command': 'getOldByIndex' }));
+				} else {
+					stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': name, 'message': index, 'command': 'getOldByIndex' }));
+				}
+			}
+		}
 
-		document.addEventListener("DOMContentLoaded", function () {
-			$("#north").click(function () {
+		function initRegionChat(region) {
+			$("#" + region).click(function () {
 				if (stompClient != null) {
-					stompClient.subscribe('/topic/north', function (response) {
+					stompClient.subscribe('/topic/' + region, function (response) {
 						var msgBean = JSON.parse(response.body);
 						console.log(msgBean);
 						if (Array.isArray(msgBean)) {
-							showOldMessage("north", msgBean);
+							showOldMessage(msgBean);
 						} else {
-							onReceiveMessage("north", msgBean);
+							onReceiveMessage(region, msgBean);
 						}
 					});
 				}
 				neonChat.setStatus($(this).attr("id"), "online");
 				$(this).unbind();
 			});
+		}
+
+
+		document.addEventListener("DOMContentLoaded", function () {
+			initRegionChat("north");
+			initRegionChat("middle");
+			initRegionChat("south");
+			initRegionChat("east");
 		});
 	</script>
 
@@ -202,6 +246,7 @@
 				<div id="conversationDiv">
 					<label>Input your name: <input type="text" id="name" /></label>
 					<button id="sendName" onclick="sendName();">Send</button>
+					<button id="getOld" onclick="getOld();">getOld</button>
 					<p id="response"></p>
 					<p id="callback"></p>
 				</div>
@@ -216,7 +261,7 @@
 		<a href="#" class="btn btn-default" data-toggle="chat" style="float: right">Toggle Chat</a>
 		<a href="#" class="btn btn-default chat-open">Force Open</a>
 		<span class="badge badge-danger chat-notifications-badge is-hidden" style="float: right"></span>
-		<div id="chat" class="fixed" data-current-user="測試用一號" data-order-by-status="1" data-max-chat-history="25">
+		<div id="chat" class="fixed" data-current-user="測試用一號" data-order-by-status="1" data-max-chat-history="999">
 
 			<div class="chat-inner">
 
@@ -234,17 +279,17 @@
 
 
 					<a href="#" id="north"><span class="user-status is-offline"></span> <em>北部聊天室</em></a>
-					<a href="#" id="midChat"><span class="user-status is-offline"></span> <em>中部聊天室</em></a>
-					<a href="#" id="southChat"><span class="user-status is-offline"></span> <em>南部聊天室</em></a>
-					<a href="#" id="eastChat"><span class="user-status is-offline"></span> <em>東部聊天室</em></a>
+					<a href="#" id="middle"><span class="user-status is-offline"></span> <em>中部聊天室</em></a>
+					<a href="#" id="south"><span class="user-status is-offline"></span> <em>南部聊天室</em></a>
+					<a href="#" id="east"><span class="user-status is-offline"></span> <em>東部聊天室</em></a>
 				</div>
 
 
 				<div class="chat-group" id="group-2">
 					<strong>Favorites</strong>
 
-					<a href="#" id="pikachu"><span class="user-status is-offline"></span> <em>pikachu</em></a>
-					<a href="#" id="sonic"><span class="user-status is-offline"></span> <em>sonic</em></a>
+					<a href="#" id="pikachu" index="0"><span class="user-status is-offline"></span> <em>pikachu</em></a>
+					<a href="#" id="sonic" index="0"><span class="user-status is-offline"></span> <em>sonic</em></a>
 				</div>
 
 			</div>
