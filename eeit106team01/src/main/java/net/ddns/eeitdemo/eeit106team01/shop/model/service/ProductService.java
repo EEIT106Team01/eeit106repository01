@@ -159,7 +159,7 @@ public class ProductService {
 		return null;
 	}
 
-	public List<DataBean> findProductTypes(String dataName, String type) {
+	public List<DataBean> findProductData(String dataName, String type) {
 		List<DataBean> result = productDAO.findProductData(dataName, type);
 		if (result != null) {
 			return result;

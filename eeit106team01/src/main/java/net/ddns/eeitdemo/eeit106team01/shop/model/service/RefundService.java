@@ -1,7 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
-import java.util.Date;
-import java.util.Iterator;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.transaction.Transactional;
@@ -9,9 +8,15 @@ import javax.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.RefundDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @Service
 @Transactional
@@ -20,47 +25,154 @@ public class RefundService {
 	@Autowired
 	private RefundDAO refundDAO;
 
-	public RefundBean createRefund(RefundBean refund, List<RefundListBean> refundDetails) {
-		if (refund != null && refundDetails != null) {
-			Date date = new Date(System.currentTimeMillis());
-			refund.setCreateTime(date);
-			refund.setUpdatedTime(date);
-			refund.setProcessStatus("refund created");
+	@Autowired
+	private ProductDAO productDAO;
 
-			Iterator<RefundListBean> iterator = refundDetails.iterator();
-			while (iterator.hasNext()) {
-				RefundListBean refundDetail = (RefundListBean) iterator.next();
-				refundDetail.setRefundId(refund);
-				refundDAO.insertRefundList(refundDetail);
+	@Autowired
+	private PurchaseDAO purchaseDAO;
+
+	// Create Refunds
+	public RefundBean newRefund(ArrayList<PurchaseListBean> purchaseListBeans, RefundBean refund) {
+		if (purchaseListBeans != null && purchaseListBeans.size() > 0 && refund.isNotNull()) {
+			// Create a refund
+			RefundBean newRefund = refundDAO.insertRefund(refund);
+			RefundListBean refundList;
+
+			ArrayList<Integer> productsPrice = new ArrayList<Integer>();
+			PurchaseBean purchaseBean = purchaseListBeans.get(0).getPurchaseId();
+			// Get PurchaseList want to be refund
+			for (PurchaseListBean purchaseList : purchaseListBeans) {
+				String serialNumber = purchaseList.getSerialNumber();
+				refundList = new RefundListBean(purchaseList, newRefund);
+				refundDAO.insertRefundList(refundList);
+
+				// Change SN status
+				SerialNumberBean serialNumberBean = productDAO.findSerialNumber(serialNumber);
+				serialNumberBean.setAvailabilityStatus("refund");
+				productDAO.updateAvailabilityStatus(serialNumberBean);
+				// Get Refund products price
+				Integer productPrice = purchaseList.getPrice();
+				if (productPrice != null) {
+					productsPrice.add(productPrice);
+				}
 			}
 
-			RefundBean result = refundDAO.insertRefund(refund);
+			// Change totalProductPrice
+			Integer totalRefundPrice = 0;
+			for (Integer price : productsPrice) {
+				totalRefundPrice += price;
+			}
+			purchaseBean.setProductTotalPrice(purchaseBean.getProductTotalPrice() - totalRefundPrice);
+			purchaseDAO.updatePurchase(purchaseBean);
 
-			return result;
+			return newRefund;
 		}
 		return null;
 	}
 
+	// Update Refund
 	public RefundBean updateRefundProcessStatus(RefundBean refund, String processStatus) {
-		if (refund != null && processStatus != null) {
-			Date date = new Date(System.currentTimeMillis());
-			refund.setUpdatedTime(date);
-			refund.setProcessStatus(processStatus);
-			RefundBean result = refundDAO.updateRefund(refund);
-			return result;
+		if (refund.isNotNull() && NullChecker.isEmpty(processStatus) == false) {
+			Boolean flag = false;
+			if (!processStatus.equalsIgnoreCase(refund.getProcessStatus())) {
+				refund.setProcessStatus(processStatus);
+				flag = true;
+			}
+			if (flag) {
+				return refundDAO.updateRefund(refund);
+			}
 		}
 		return null;
 	}
 
-	public List<RefundBean> findRefundsByMemberId(Long memberId) {
-		if (memberId != null) {
-			return refundDAO.findRefundByMemberId(memberId);
+	// Find Refund
+	public List<RefundBean> findRefundsById(String idType, Long id) {
+		if (NullChecker.isEmpty(idType) == false && id != null && id.longValue() > 0L) {
+			List<RefundBean> result = new ArrayList<RefundBean>();
+			if (idType.equalsIgnoreCase("refund")) {
+				RefundBean refundBean = refundDAO.findRefundByRefundId(id);
+				if (refundBean != null) {
+					result.add(refundBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
+				}
+			} else if (idType.equalsIgnoreCase("member")) {
+				result = refundDAO.findRefundByMemberId(id);
+				if (result != null && result.size() > 0) {
+					return result;
+				}
+			} else {
+				throw new IllegalArgumentException("idType must be refund, member");
+			}
+		}
+		return null;
+	}
+
+	public List<RefundBean> findRefundsByType(String type, String stringValue) {
+		if (NullChecker.isEmpty(type) == false && NullChecker.isEmpty(stringValue) == false) {
+			List<RefundBean> result = new ArrayList<RefundBean>();
+			if (type.equalsIgnoreCase("processStatus")) {
+				result = refundDAO.findRefundByProcessStatus(stringValue);
+				if (result != null && result.size() > 0) {
+					return result;
+				}
+			} else {
+				throw new IllegalArgumentException("type must be processStatus");
+			}
 		}
 		return null;
 	}
 
 	public List<RefundBean> findRefunds() {
-		return refundDAO.findAllRefund();
+		List<RefundBean> result = new ArrayList<RefundBean>();
+		result = refundDAO.findAllRefund();
+		if (result != null && result.size() > 0) {
+			return result;
+		} else {
+			return null;
+		}
+	}
+
+	// Find Refund List
+	public List<RefundListBean> findRefundListById(String idType, Long id) {
+		if (NullChecker.isEmpty(idType) == false && id != null && id.longValue() > 0L) {
+			List<RefundListBean> result = new ArrayList<RefundListBean>();
+			if (idType.equalsIgnoreCase("refundList")) {
+				RefundListBean refundListBean = refundDAO.findRefundListByRefundListId(id);
+				if (refundListBean != null) {
+					result.add(refundListBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
+				}
+			} else if (idType.equalsIgnoreCase("purchaseList")) {
+				RefundListBean refundListBean = refundDAO.findRefundListByPurchaseListId(id);
+				if (refundListBean != null) {
+					result.add(refundListBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
+				}
+			} else if (idType.equalsIgnoreCase("refund")) {
+				result = refundDAO.findRefundListByRefundId(id);
+				if (result != null && result.size() > 0) {
+					return result;
+				}
+			} else {
+				throw new IllegalArgumentException("idType must be refundList, purchaseList, refund");
+			}
+		}
+		return null;
+	}
+
+	public List<RefundListBean> findAllRefundList() {
+		List<RefundListBean> result = new ArrayList<RefundListBean>();
+		result = refundDAO.findAllRefundList();
+		if (result != null && result.size() > 0) {
+			return result;
+		}
+		return null;
 	}
 
 }

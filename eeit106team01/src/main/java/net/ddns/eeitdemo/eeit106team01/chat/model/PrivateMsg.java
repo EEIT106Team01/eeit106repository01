@@ -2,7 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.chat.model;
 
 import java.io.Serializable;
 
-public class PrivateMessage implements Serializable{
+public class PrivateMsg implements Serializable{
 	/**
 	 * 
 	 */
@@ -11,6 +11,7 @@ public class PrivateMessage implements Serializable{
 	private String toUser;
 	private String message;
 	private java.util.Date sendTime;
+	private String command;
 	public String getFromUser() {
 		return fromUser;
 	}
@@ -34,5 +35,17 @@ public class PrivateMessage implements Serializable{
 	}
 	public void setSendTime(java.util.Date sendTime) {
 		this.sendTime = sendTime;
+	}
+	/**
+	 * @return the command
+	 */
+	public String getCommand() {
+		return command;
+	}
+	/**
+	 * @param command the command to set
+	 */
+	public void setCommand(String command) {
+		this.command = command;
 	}
 }
