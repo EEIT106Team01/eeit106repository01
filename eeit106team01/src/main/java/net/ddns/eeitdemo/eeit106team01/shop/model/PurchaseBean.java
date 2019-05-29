@@ -40,7 +40,7 @@ public class PurchaseBean implements Serializable {
 	@Column(name = "UpdatedTime", nullable = false)
 	private java.util.Date updatedTime;
 
-	@Column(name = "ProductTotalPrice", nullable = false, updatable = false)
+	@Column(name = "ProductTotalPrice", nullable = false)
 	private Integer productTotalPrice;
 
 	@Column(name = "DeliverStatus", nullable = false)

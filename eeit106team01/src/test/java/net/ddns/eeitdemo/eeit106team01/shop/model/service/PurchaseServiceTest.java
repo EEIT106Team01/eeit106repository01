@@ -66,12 +66,14 @@ public class PurchaseServiceTest extends ShopTest {
 		purchaseService.newPurchase(productIdList, purchaseBean);
 	}
 
+	@Test
 	public void testUpdatePurchase() throws Exception {
 		List<PurchaseBean> purchaseBeans = purchaseService.findPurchaseById(1L, "purchase");
 		PurchaseBean purchaseBean = purchaseBeans.get(0);
 		purchaseBean.setUpdatedTime(NewDate.newCurrentTime());
-		assertNull(purchaseService.updatePurchase(purchaseBean, "unpaid", null));
-		assertNotNull(purchaseService.updatePurchase(purchaseBean, "paid", null));
+		assertNull(purchaseService.updatePurchase(purchaseBean, "paid", null, null));
+		assertNotNull(purchaseService.updatePurchase(purchaseBean, "unpaid", null, null));
+		assertNotNull(purchaseService.updatePurchase(purchaseBean, null, null, 20000));
 	}
 
 	public void testFindPurchaseById() throws Exception {
@@ -140,7 +142,6 @@ public class PurchaseServiceTest extends ShopTest {
 		assertNotNull(purchaseService.findReviewById("product", 1L));
 	}
 
-	@Test
 	public void testFindReviewByType() throws Exception {
 		Date startDay = NewDate.newDate("yyyy-MM-dd", "2019-05-29");
 		Date endDay = NewDate.newDate("yyyy-MM-dd", "2019-05-30");

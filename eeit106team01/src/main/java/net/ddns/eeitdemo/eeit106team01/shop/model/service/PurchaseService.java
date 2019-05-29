@@ -65,20 +65,30 @@ public class PurchaseService {
 	}
 
 	// Update a Purchase
-	// @formatter:off
-	public PurchaseBean updatePurchase(PurchaseBean purchaseBean, String payStatus, String deliverStatus) {
-		if (purchaseBean.isNotNull() && (NullChecker.isEmpty(payStatus) == false || NullChecker.isEmpty(deliverStatus) == false)) {
-			// PayStatus, DeliverStatus
+	public PurchaseBean updatePurchase(PurchaseBean purchaseBean, String payStatus, String deliverStatus,
+			Integer productTotalPrice) {
+		if (purchaseBean.isNotNull()
+				&& (NullChecker.isEmpty(payStatus) == false || NullChecker.isEmpty(deliverStatus) == false)
+				|| (productTotalPrice != null && productTotalPrice.intValue() >= 0)) {
+			// PayStatus, DeliverStatus, productTotalPrice
 			Boolean flag = false;
 			if (NullChecker.isEmpty(payStatus) == false) {
-				if (!payStatus.equalsIgnoreCase(purchaseBean.getPayStatus()) && NullChecker.isEmpty(payStatus) == false) {
+				if (!payStatus.equalsIgnoreCase(purchaseBean.getPayStatus())
+						&& NullChecker.isEmpty(payStatus) == false) {
 					purchaseBean.setPayStatus(payStatus);
 					flag = true;
 				}
 			}
 			if (NullChecker.isEmpty(deliverStatus) == false) {
-				if (!deliverStatus.equalsIgnoreCase(purchaseBean.getDeliverStatus()) && NullChecker.isEmpty(deliverStatus) == false) {
+				if (!deliverStatus.equalsIgnoreCase(purchaseBean.getDeliverStatus())
+						&& NullChecker.isEmpty(deliverStatus) == false) {
 					purchaseBean.setDeliverStatus(deliverStatus);
+					flag = true;
+				}
+			}
+			if (productTotalPrice != null && productTotalPrice.intValue() >= 0) {
+				if (productTotalPrice != purchaseBean.getProductTotalPrice()) {
+					purchaseBean.setProductTotalPrice(productTotalPrice);
 					flag = true;
 				}
 			}
