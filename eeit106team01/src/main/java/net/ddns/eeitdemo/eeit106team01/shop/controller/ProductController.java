@@ -9,6 +9,7 @@ import java.util.Map;
 import javax.servlet.ServletContext;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
@@ -87,7 +88,9 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/products/updatedTime" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductsByUpdatedTime(@RequestParam Date startDay, Date endDay) {
+	public ResponseEntity<?> getProductsByUpdatedTime(
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDay,
+			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDay) {
 		if (startDay != null && endDay != null && startDay.equals(endDay) == false && startDay.compareTo(endDay) < 0) {
 			List<ProductBean> result = productService.findProductsByUpdatedTime(startDay, endDay);
 			if (result != null) {
@@ -112,8 +115,8 @@ public class ProductController {
 
 	@GetMapping(path = { "/search/price" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByPrice(@RequestParam String byNameBrandType, @RequestParam String queryString,
-			@RequestParam(defaultValue = "0",required = false) Integer minPrice, 
-			@RequestParam(defaultValue = "999999",required = false) Integer maxPrice) {
+			@RequestParam(defaultValue = "0", required = false) Integer minPrice,
+			@RequestParam(defaultValue = "999999", required = false) Integer maxPrice) {
 		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(byNameBrandType) == false
 				&& (minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null)
 				&& (maxPrice.intValue() > 0)) {
@@ -140,8 +143,9 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/search/data" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductTypes(@RequestParam String dataName, @RequestParam(required = false) String type) {
-		if (NullChecker.isEmpty(dataName)==false) {
+	public ResponseEntity<?> getProductTypes(@RequestParam String dataName,
+			@RequestParam(required = false) String type) {
+		if (NullChecker.isEmpty(dataName) == false) {
 			List<DataBean> result = productService.findProductData(dataName, type);
 			if (result != null) {
 				return new ResponseEntity<List<DataBean>>(result, HttpStatus.OK);

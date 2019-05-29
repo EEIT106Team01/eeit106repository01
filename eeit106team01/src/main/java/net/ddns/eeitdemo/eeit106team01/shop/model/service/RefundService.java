@@ -52,7 +52,9 @@ public class RefundService {
 				productDAO.updateAvailabilityStatus(serialNumberBean);
 				// Get Refund products price
 				Integer productPrice = purchaseList.getPrice();
-				productsPrice.add(productPrice);
+				if (productPrice != null) {
+					productsPrice.add(productPrice);
+				}
 			}
 
 			// Change totalProductPrice
@@ -88,9 +90,12 @@ public class RefundService {
 		if (NullChecker.isEmpty(idType) == false && id != null && id.longValue() > 0L) {
 			List<RefundBean> result = new ArrayList<RefundBean>();
 			if (idType.equalsIgnoreCase("refund")) {
-				result.add(refundDAO.findRefundByRefundId(id));
-				if (result != null && result.size() > 0) {
-					return result;
+				RefundBean refundBean = refundDAO.findRefundByRefundId(id);
+				if (refundBean != null) {
+					result.add(refundBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
 				}
 			} else if (idType.equalsIgnoreCase("member")) {
 				result = refundDAO.findRefundByMemberId(id);
@@ -134,14 +139,20 @@ public class RefundService {
 		if (NullChecker.isEmpty(idType) == false && id != null && id.longValue() > 0L) {
 			List<RefundListBean> result = new ArrayList<RefundListBean>();
 			if (idType.equalsIgnoreCase("refundList")) {
-				result.add(refundDAO.findRefundListByRefundListId(id));
-				if (result != null && result.size() > 0) {
-					return result;
+				RefundListBean refundListBean = refundDAO.findRefundListByRefundListId(id);
+				if (refundListBean != null) {
+					result.add(refundListBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
 				}
 			} else if (idType.equalsIgnoreCase("purchaseList")) {
-				result.add(refundDAO.findRefundListByPurchaseListId(id));
-				if (result != null && result.size() > 0) {
-					return result;
+				RefundListBean refundListBean = refundDAO.findRefundListByPurchaseListId(id);
+				if (refundListBean != null) {
+					result.add(refundListBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
 				}
 			} else if (idType.equalsIgnoreCase("refund")) {
 				result = refundDAO.findRefundListByRefundId(id);

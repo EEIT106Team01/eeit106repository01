@@ -39,7 +39,9 @@ public class PurchaseService {
 			// Get products
 			ArrayList<ProductBean> productBeans = new ArrayList<ProductBean>();
 			for (Long productId : productIdList) {
-				productBeans.add(productDAO.findProductByProductId(productId));
+				if (productId != null) {
+					productBeans.add(productDAO.findProductByProductId(productId));
+				}
 			}
 
 			for (ProductBean productBean : productBeans) {
@@ -104,9 +106,12 @@ public class PurchaseService {
 		if (id != null && id.longValue() > 0L && NullChecker.isEmpty(idType) == false) {
 			List<PurchaseBean> result = new ArrayList<PurchaseBean>();
 			if (idType.equalsIgnoreCase("purchase")) {
-				result.add(purchaseDAO.findPurchaseByPurchaseId(id));
-				if (result != null && result.size() > 0) {
-					return result;
+				PurchaseBean purchaseBean = purchaseDAO.findPurchaseByPurchaseId(id);
+				if (purchaseBean != null) {
+					result.add(purchaseBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
 				}
 			} else if (idType.equalsIgnoreCase("member")) {
 				result = purchaseDAO.findPurchaseByMemberId(id);
@@ -174,9 +179,12 @@ public class PurchaseService {
 		if (id != null && id.longValue() > 0L && NullChecker.isEmpty(idType) == false) {
 			List<PurchaseListBean> result = new ArrayList<PurchaseListBean>();
 			if (idType.equalsIgnoreCase("purchaseList")) {
-				result.add(purchaseDAO.findPurchaseListByPurchaseListId(id));
-				if (result != null && result.size() > 0) {
-					return result;
+				PurchaseListBean purchaseListBean = purchaseDAO.findPurchaseListByPurchaseListId(id);
+				if (purchaseListBean != null) {
+					result.add(purchaseListBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
 				}
 			} else if (idType.equalsIgnoreCase("purchase")) {
 				result = purchaseDAO.findPurchaseListByPurchaseId(id);
@@ -199,9 +207,12 @@ public class PurchaseService {
 		if (NullChecker.isEmpty(type) == false) {
 			List<PurchaseListBean> result = new ArrayList<PurchaseListBean>();
 			if (type.equalsIgnoreCase("serialNumber") && NullChecker.isEmpty(stringValue) == false) {
-				result.add(purchaseDAO.findPurchaseListBySerialNumber(stringValue));
-				if (result != null && result.size() > 0) {
-					return result;
+				PurchaseListBean purchaseListBean = purchaseDAO.findPurchaseListBySerialNumber(stringValue);
+				if (purchaseListBean != null) {
+					result.add(purchaseListBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
 				}
 			} else if (type.equalsIgnoreCase("price") & intValue != null && intValue.intValue() >= 0) {
 				result = purchaseDAO.findPurchaseListByPrice(intValue);
@@ -230,9 +241,13 @@ public class PurchaseService {
 		if (reviews != null && reviews.size() > 0) {
 			List<ReviewBean> result = new ArrayList<ReviewBean>();
 			for (ReviewBean reviewBean : reviews) {
-				result.add(purchaseDAO.insertReview(reviewBean));
+				if (reviewBean != null) {
+					result.add(purchaseDAO.insertReview(reviewBean));
+				}
 			}
-			return result;
+			if (result != null && result.size() > 0) {
+				return result;
+			}
 		}
 		return null;
 	}
@@ -278,9 +293,12 @@ public class PurchaseService {
 		if (NullChecker.isEmpty(idType) == false && id != null && id.longValue() > 0L) {
 			List<ReviewBean> result = new ArrayList<ReviewBean>();
 			if (idType.equalsIgnoreCase("review")) {
-				result.add(purchaseDAO.findReviewByReviewId(id));
-				if (result != null && result.size() > 0) {
-					return result;
+				ReviewBean reviewBean = purchaseDAO.findReviewByReviewId(id);
+				if (reviewBean != null) {
+					result.add(reviewBean);
+					if (result != null && result.size() > 0) {
+						return result;
+					}
 				}
 			} else if (idType.equalsIgnoreCase("member")) {
 				result = purchaseDAO.findReviewsByMemberId(id);
