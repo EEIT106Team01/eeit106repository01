@@ -1,7 +1,10 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
+import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.assertNull;
+
 import java.util.ArrayList;
-import java.util.List;
+import java.util.Date;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -9,8 +12,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
+import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -18,39 +24,57 @@ public class RefundServiceTest {
 
 	@Autowired
 	private RefundService refundService;
+	@Autowired
+	private PurchaseService purchaseService;
+	@Autowired
+	private MemberDAO memberDAO;
 
-//	@Test
-	public void testCreateRefund() throws Exception {
-		RefundBean refund = new RefundBean();
-		refund.setComment("我要退貨兩件商品");
+	private Date date = NewDate.newCurrentTime();
+	private Member member;
+	private ArrayList<PurchaseListBean> purchaseListBeans = new ArrayList<PurchaseListBean>();
 
-		List<RefundListBean> refundDetails = new ArrayList<RefundListBean>();
-		RefundListBean refundDetail = new RefundListBean();
-
-		RefundListBean refundDetail1 = new RefundListBean();
-
-		refundDetails.add(refundDetail);
-		refundDetails.add(refundDetail1);
-
-		System.out.println(refundService.createRefund(refund, refundDetails).toString());
+	public void testNewRefund() throws Exception {
+		member = memberDAO.findByMemberId(1L);
+		RefundBean refund = new RefundBean(date, date, "test refund", "created", member);
+		PurchaseListBean purchaseListBean = purchaseService.findPurchaseListById(1L, "purchaseList").get(0);
+		purchaseListBeans.add(purchaseListBean);
+		PurchaseListBean purchaseListBean2 = purchaseService.findPurchaseListById(2L, "purchaseList").get(0);
+		purchaseListBeans.add(purchaseListBean2);
+		PurchaseListBean purchaseListBean3 = purchaseService.findPurchaseListById(3L, "purchaseList").get(0);
+		purchaseListBeans.add(purchaseListBean3);
+		refundService.newRefund(purchaseListBeans, refund);
 	}
 
-//	@Test
 	public void testUpdateRefundProcessStatus() throws Exception {
-		RefundBean refund = new RefundBean();
-		refund.setId(3L);
-		refund.setComment("123");
-		refundService.updateRefundProcessStatus(refund, "refund complete");
+		RefundBean refundBean = refundService.findRefundsById("refund", 2L).get(0);
+		refundBean.setUpdatedTime(date);
+		assertNull(refundService.updateRefundProcessStatus(refundBean, "done"));
+		assertNotNull(refundService.updateRefundProcessStatus(refundBean, "created"));
 	}
 
-//	@Test
-	public void testFindRefundsByMemberId() throws Exception {
-		System.out.println(refundService.findRefundsByMemberId(2L));
+	public void testFindRefundsById() throws Exception {
+		assertNotNull(refundService.findRefundsById("refund", 2L));
+		assertNotNull(refundService.findRefundsById("member", 1L));
+	}
+
+	public void testFindRefundsByType() throws Exception {
+		assertNotNull(refundService.findRefundsByType("ProcessStatus", "created"));
+		assertNull(refundService.findRefundsByType("ProcessStatus", "fail"));
+	}
+
+	public void testFindRefunds() throws Exception {
+		assertNotNull(refundService.findRefunds());
+	}
+
+	public void testFindRefundListById() throws Exception {
+		assertNotNull(refundService.findRefundListById("refundList", 3L));
+		assertNotNull(refundService.findRefundListById("purchaseList", 3L));
+		assertNotNull(refundService.findRefundListById("refund", 2L));
 	}
 
 	@Test
-	public void testFindRefunds() throws Exception {
-		System.out.println(refundService.findRefunds().size());
+	public void testFindAllRefundList() throws Exception {
+		assertNotNull(refundService.findAllRefundList());
 	}
 
 }

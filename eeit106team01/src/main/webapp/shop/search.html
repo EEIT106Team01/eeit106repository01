@@ -24,12 +24,14 @@
     <link rel="stylesheet" href="assets/css/neon-forms.css">
     <link rel="stylesheet" href="assets/css/custom.css">
 
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
+
     <!-- Isotope排序用 -->
     <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 
-    <script async src="js/search.js"></script>
     <link rel="stylesheet" href="css/search.css">
-
+    <script async src="js/search.js"></script>
     <!-- <script src="assets/js/jquery-1.11.3.min.js"></script> -->
 
 </head>
@@ -178,15 +180,6 @@
         </div>
 
         <div class="main-content">
-            <div class="row" id="searchTitle">
-                <h1 id="productQuantity"></h1>
-                <div>
-                    <a href="" id="ByPriceAsc">價格低到高</a>
-                    <a href="" id="ByPriceDesc">價格高到低</a>
-                    <a href="" id="ByTime">上架時間</a>
-                    <a href="" id="totleSelled">銷量</a>
-                </div>
-            </div>
 
             <div class="row" id="newProducts">
 
@@ -194,8 +187,24 @@
             <div class="row" id="topProducts">
 
             </div>
-            <div id="Products">
+
+            <div class="row" id="searchTitle">
+                    <h4 id="productQuantity" class="col-8"></h4>               
+
+                        <div class="btn-group col-5" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-secondary">價格低到高</button>
+                            <button type="button" class="btn btn-secondary">價格高到低</button>
+                            <button type="button" class="btn btn-secondary">上架時間</button>
+                            <button type="button" class="btn btn-secondary">銷量</button>
+                        </div>
+                    <!-- <div id="PageCon"></div> 顯示目前頁數-->
+                    <div id="PageShow" style="text-align:center;margin-left: 15px;">
+                        <ul id="PageShowUL"></ul>
+                    </div>
             </div>
+            <div class="Products" id="Products">
+            </div>
+
         </div>
     </div>
 
