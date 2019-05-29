@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.chat.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class PrivateMessageService {
 //		return result;
 //	}
 
-	public List<PrivateMessageBean> getAllActiveByUser(String username) {
+	public List<PrivateMessageBean> findAllActiveByUser(String username) {
 		List<PrivateMessageBean> results = null;
 		String hql = "from PrivateMessageBean pmb where (pmb.userOne='" + username + "' or pmb.userTwo='" + username
 				+ "') and (pmb.status='active')";
@@ -73,7 +74,7 @@ public class PrivateMessageService {
 		return results;
 	}
 
-	public PrivateMessageBean getByUsersAndIndex(String userOne, String userTwo, Integer index) {
+	public PrivateMessageBean findByUsersAndIndex(String userOne, String userTwo, Integer index) {
 		PrivateMessageBean result = null;
 		List<PrivateMessageBean> results = null;
 		String hql = "from PrivateMessageBean pmb where (pmb.userOne='" + userOne + "' and pmb.userTwo='" + userTwo
@@ -93,7 +94,7 @@ public class PrivateMessageService {
 
 	public PrivateMessageBean addMessage(String userOne, String userTwo, PrivateMsg privateMsg) {
 		PrivateMessageBean result = null;
-		PrivateMessageBean pmb = this.getByUsersAndIndex(userOne, userTwo, null);
+		PrivateMessageBean pmb = this.findByUsersAndIndex(userOne, userTwo, null);
 		if (pmb == null) {
 			pmb = this.createFirstRecord(userOne, userTwo);
 		}
@@ -108,7 +109,7 @@ public class PrivateMessageService {
 	public PrivateMessageBean addOfflineMessage(String userOne, String userTwo, String offlineUser,
 			PrivateMsg privateMsg) {
 		PrivateMessageBean result = null;
-		PrivateMessageBean pmb = this.getByUsersAndIndex(userOne, userTwo, null);
+		PrivateMessageBean pmb = this.findByUsersAndIndex(userOne, userTwo, null);
 		if (pmb == null) {
 			pmb = this.createFirstRecord(userOne, userTwo);
 		}
@@ -123,12 +124,14 @@ public class PrivateMessageService {
 
 	public PrivateMessageBean clearOfflineMessage(String userOne, String userTwo, String offlineUser) {
 		PrivateMessageBean result = null;
-		PrivateMessageBean pmb = this.getByUsersAndIndex(userOne, userTwo, null);
+		PrivateMessageBean pmb = this.findByUsersAndIndex(userOne, userTwo, null);
 		if (pmb != null) {
 			if (pmb.getUserOne().equals(offlineUser)) {
 				pmb.getMessages().addAll(pmb.getUserOneOfflineMessages());
+				pmb.setUserOneOfflineMessages(new ArrayList<PrivateMsg>());
 			} else if (pmb.getUserTwo().equals(offlineUser)) {
 				pmb.getMessages().addAll(pmb.getUserTwoOfflineMessages());
+				pmb.setUserTwoOfflineMessages(new ArrayList<PrivateMsg>());
 			}
 			result = privateMessageDAO.update(pmb);
 		}

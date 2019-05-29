@@ -20,20 +20,11 @@ public class RegionMessageBean {
 	private ArrayList<RegionMsg> messages;
 	@Column(name = "indexs")
 	private Integer index;
+	private String status;
 	
 	public RegionMessageBean() {
 		this.messages = new ArrayList<RegionMsg>();
-	}
-
-	public RegionMessageBean generateNewRecord() {
-		RegionMessageBean newRecord = null;
-		newRecord = new RegionMessageBean();
-		if (this.getIndex() != null) {
-			newRecord.setIndex(this.getIndex() + 1);
-		}
-		newRecord.setMessage(new ArrayList<RegionMsg>());
-		newRecord.setRegion(this.getRegion());
-		return newRecord;
+		this.setStatus("active");
 	}
 
 	public Integer getId() {
@@ -52,11 +43,11 @@ public class RegionMessageBean {
 		this.region = region;
 	}
 
-	public ArrayList<RegionMsg> getMessage() {
+	public ArrayList<RegionMsg> getMessages() {
 		return messages;
 	}
 
-	public void setMessage(ArrayList<RegionMsg> message) {
+	public void setMessages(ArrayList<RegionMsg> message) {
 		this.messages = message;
 	}
 
@@ -66,5 +57,19 @@ public class RegionMessageBean {
 
 	public void setIndex(Integer index) {
 		this.index = index;
+	}
+
+	/**
+	 * @return the status
+	 */
+	public String getStatus() {
+		return status;
+	}
+
+	/**
+	 * @param status the status to set
+	 */
+	public void setStatus(String status) {
+		this.status = status;
 	}
 }
