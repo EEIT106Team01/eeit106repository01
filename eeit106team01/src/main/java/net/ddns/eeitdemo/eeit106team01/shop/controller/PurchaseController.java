@@ -1,10 +1,8 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -15,7 +13,6 @@ import javax.sql.rowset.serial.SerialException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -139,7 +136,7 @@ public class PurchaseController {
 			File file;
 			FileOutputStream out;
 			try {
-				file = new File("C:\\Users\\User\\Pictures\\something.binary");
+				file = new File("D:\\Pictures\\something.binary");
 				out = new FileOutputStream(file);
 				out.write(array);
 				out.close();
