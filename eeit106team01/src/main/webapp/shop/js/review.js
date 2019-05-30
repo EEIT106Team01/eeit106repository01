@@ -13,9 +13,6 @@ $("#search").click(function () {
             var text = [];
             var img = [];
             $.each(result[0], function (key, val) {
-                console.log(result[0].memberId.id);
-                console.log(result[0].purchaseListId.id);
-                console.log(result[0].productId.id);
                 if (key.match(/^(image)$/) && !val.match(/^(AA==)$/)) {
                     img.push("<img src='data:image/png;base64," + val + "' class='img-thumbnail'>");
                 } else if (key.match(/^(createTime|updatedTime)$/)) {
@@ -29,7 +26,7 @@ $("#search").click(function () {
                     text.push("<td scope='row'>" + val + "</td>");
                 } else if (key.match(/^(memberId|purchaseListId|productId)$/)) {
                     textHead.push("<th class='" + key + "'>" + key + "</th>");
-                    text.push("<td scope='row'>" + val + "</td>");
+                    text.push("<td scope='row'>" + val.id + "</td>");
                 }
             });
 

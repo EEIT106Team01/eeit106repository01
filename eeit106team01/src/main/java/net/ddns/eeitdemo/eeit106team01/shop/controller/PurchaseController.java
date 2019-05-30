@@ -116,7 +116,7 @@ public class PurchaseController {
 
 	// Review
 	@GetMapping(value = "/shop/findReviewById")
-	public ResponseEntity<?> findReviewById(@RequestParam(defaultValue = "review") String idType, @RequestParam Long id) throws SerialException {
+	public ResponseEntity<?> findReviewById(@RequestParam(defaultValue = "review") String idType, @RequestParam(defaultValue = "1") Long id) throws SerialException {
 		List<ReviewBean> result = new ArrayList<ReviewBean>();
 		if (id.longValue() <= 0) {
 			return new ResponseEntity<>("ID不合法", HttpStatus.BAD_REQUEST);
