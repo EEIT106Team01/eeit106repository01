@@ -3,6 +3,7 @@ package net.ddns.eeitdemo.eeit106team01.chat.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -19,6 +20,8 @@ import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMsg;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageService;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMsg;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 
 @EnableScheduling
 @Controller
@@ -35,6 +38,9 @@ public class ChatController {
 
 	@Autowired
 	private PrivateMessageService privateMessageService;
+
+	@Autowired
+	private MemberBeanService memberBeanService;
 
 	@Autowired
 	public ChatController(SimpMessagingTemplate messagingTemplate) {
@@ -58,19 +64,19 @@ public class ChatController {
 	public Object northChat(RegionMsg regionMessage) {
 		return this.processRegionChat("north", regionMessage);
 	}
-	
+
 	@MessageMapping("/middle")
 	@SendTo("/topic/middle")
 	public Object middleChat(RegionMsg regionMessage) {
 		return this.processRegionChat("middle", regionMessage);
 	}
-	
+
 	@MessageMapping("/south")
 	@SendTo("/topic/south")
 	public Object sourthChat(RegionMsg regionMessage) {
 		return this.processRegionChat("south", regionMessage);
 	}
-	
+
 	@MessageMapping("/east")
 	@SendTo("/topic/east")
 	public Object eastChat(RegionMsg regionMessage) {
@@ -176,6 +182,25 @@ public class ChatController {
 			return privateMessages;
 		}
 		return null;
+	}
+
+	@MessageMapping("/checkUser")
+	public void checkUser(PrivateMsg privateMsg, Principal user) {
+		if (privateMsg != null && user != null) {
+			MemberBean mb = memberBeanService.findByName(privateMsg.getMessage());
+			if (mb != null) {
+				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", true);
+			} else {
+				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", false);
+			}
+		}
+	}
+
+	@MessageMapping("/getOnlineUsers")
+	public void getOnlineUsers() {
+		Set<String> onlineUsers = connectionsHandler.getOnlineUsers().keySet();
+		System.out.println("send online userlist....");
+		messagingTemplate.convertAndSend("/topic/getOnlineUsers", onlineUsers);
 	}
 
 }
