@@ -72,7 +72,7 @@ function getProductsByName() {
 }
 
 // 單件商品
-function getProduct() {
+function getProduct(id) {
     var id = 50;
     
     $.ajax({

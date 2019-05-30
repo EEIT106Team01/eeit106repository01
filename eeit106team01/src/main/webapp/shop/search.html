@@ -52,12 +52,6 @@
                     </div>
 
                     <!-- logo collapse icon -->
-                    <div class="sidebar-collapse">
-                        <a href="#" class="sidebar-collapse-icon">
-                            <!-- add class "with-animation" if you want sidebar to have animation during expanding/collapsing transition -->
-                            <i class="entypo-menu"></i>
-                        </a>
-                    </div>
 
 
                     <!-- open/close menu icon (do not remove if you want to enable menu on mobile devices) -->
@@ -125,7 +119,7 @@
                                             </p>
                                             <p>最高：
                                                 <input type="text" name="maxPrice" id="maxPrice" placeholder="最高價錢">
-                                                <input type="button" value="搜尋" id="searchPrice">
+                                                <button type="button" id="searchPrice" class="searchPrice">搜尋</button>
                                             </p>
                                         </form>
                                     </li>
@@ -189,18 +183,46 @@
             </div>
 
             <div class="row" id="searchTitle">
-                    <h4 id="productQuantity" class="col-8"></h4>               
+                <h4 id="productQuantity" class="col-8"></h4>
 
-                        <div class="btn-group col-5" role="group" aria-label="Basic example">
+                <div class="btn-group left-dropdown">
+                    <button type="button" class="btn btn-green">商品排序</button>
+                    <button type="button" class="btn btn-green dropdown-toggle" data-toggle="dropdown">
+                        <span class="caret"></span>
+                    </button>
+
+                    <ul class="dropdown-menu dropdown-green" role="menu">
+                        <li>
+                            <a href="#">銷量</a>
+                        </li>
+                        <li>
+                            <a href="#">上架時間</a>
+                        </li>
+                        <li>
+                            <a href="#">價格低到高</a>
+                        </li>
+                        <li>
+                            <a href="#">價格高到低</a>
+                        </li>
+                        </li>
+
+                        <li class="divider"></li>
+                        <li>
+                            <a href="#">預設</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- <div class="btn-group col-5" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-secondary">價格低到高</button>
                             <button type="button" class="btn btn-secondary">價格高到低</button>
                             <button type="button" class="btn btn-secondary">上架時間</button>
                             <button type="button" class="btn btn-secondary">銷量</button>
-                        </div>
-                    <!-- <div id="PageCon"></div> 顯示目前頁數-->
-                    <div id="PageShow" style="text-align:center;margin-left: 15px;">
-                        <ul id="PageShowUL"></ul>
-                    </div>
+                        </div> -->
+                <!-- <div id="PageCon"></div> 顯示目前頁數-->
+                <div id="PageShow" style="text-align:center;margin-left: 15px;">
+                    <ul id="PageShowUL"></ul>
+                </div>
             </div>
             <div class="Products" id="Products">
             </div>
