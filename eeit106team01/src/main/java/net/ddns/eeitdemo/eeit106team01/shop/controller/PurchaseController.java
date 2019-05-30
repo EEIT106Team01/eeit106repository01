@@ -1,6 +1,10 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -22,11 +26,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
+import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.PurchaseService;
-import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @RestController
@@ -34,6 +39,9 @@ public class PurchaseController {
 
 	@Autowired
 	private PurchaseService purchaseService;
+
+	@Autowired
+	private MemberDAO memberDAO;
 
 	// Get Method
 	// Purchase
@@ -176,9 +184,9 @@ public class PurchaseController {
 	// POST Method
 	// Create a Purchase and Purchase List
 	@PostMapping(value = "/shop/newPurchase")
-	public ResponseEntity<?> newPurchase(@RequestBody HashMap<String, String> productIdList, PurchaseBean purchaseBean,
-			BindingResult bindingResult) {
+	public ResponseEntity<?> newPurchase(@RequestBody HashMap<String, Object> json, BindingResult bindingResult) {
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			System.err.println("error");
 			Map<String, String> errors = new HashMap<String, String>();
 			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
 			for (ObjectError bindingError : bindingErrors) {
@@ -187,23 +195,48 @@ public class PurchaseController {
 			return ResponseEntity.badRequest().body(errors);
 		}
 		PurchaseBean result = new PurchaseBean();
-		HashMap<Long, Long> mapLong = new HashMap<Long, Long>();
-		if ((productIdList == null || productIdList.size() < 0) || purchaseBean == null) {
+		if ((json == null) || json.size() < 0) {
 			return new ResponseEntity<>("缺少必要值: productIdList, purchaseBean", HttpStatus.BAD_REQUEST);
 		}
 		try {
-			Iterator<Entry<String, String>> iterator = productIdList.entrySet().iterator();
+			System.err.println("error1");
+			ArrayList<Integer> productIdList = new ArrayList<>();
+			PurchaseBean purchaseBean = new PurchaseBean();
+			Iterator<Entry<String, Object>> iterator = json.entrySet().iterator();
 			while (iterator.hasNext()) {
-				Map.Entry<String, String> entry = (Entry<String, String>) iterator.next();
-				Long keyLong = Long.valueOf(entry.getKey());
-				Long valueLong = Long.valueOf(entry.getValue());
-				mapLong.put(keyLong, valueLong);
+				Map.Entry<String, Object> entry = (Entry<String, Object>) iterator.next();
+				String key = entry.getKey();
+				String value = String.valueOf(entry.getValue());
+				if (key.equalsIgnoreCase("id")) {
+					productIdList.addAll((Collection<? extends Integer>) entry.getValue());
+				} else if (key.equalsIgnoreCase("createTime") | key.equalsIgnoreCase("createTime")) {
+					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+					Date time = dateFormat.parse(value);
+					purchaseBean.setCreateTime(time);
+					purchaseBean.setUpdatedTime(time);
+				} else if (key.equalsIgnoreCase("payStatus")) {
+					purchaseBean.setPayStatus(value);
+				} else if (key.equalsIgnoreCase("productTotalPrice")) {
+					purchaseBean.setProductTotalPrice(Integer.valueOf(value));
+				} else if (key.equalsIgnoreCase("deliverStatus")) {
+					purchaseBean.setDeliverStatus(value);
+				} else if (key.equalsIgnoreCase("deliverType")) {
+					purchaseBean.setDeliverType(value);
+				} else if (key.equalsIgnoreCase("deliverPrice")) {
+					purchaseBean.setDeliverPrice(Integer.valueOf(value));
+				} else if (key.equalsIgnoreCase("receiver") || key.equalsIgnoreCase("address")) {
+					HashMap<String, String> receiverInformation = new HashMap<String, String>();
+					receiverInformation.put(key, value);
+					purchaseBean.setReceiverInformation(receiverInformation);
+				} else if (key.equalsIgnoreCase("memberId")) {
+					Member member = memberDAO.findByMemberId(Long.valueOf(value));
+					purchaseBean.setMemberId(member);
+				}
 			}
-			purchaseBean.setCreateTime(NewDate.newCurrentTime());
-			purchaseBean.setUpdatedTime(NewDate.newCurrentTime());
-			result = purchaseService.newPurchase(mapLong, purchaseBean);
 
-		} catch (IllegalArgumentException e) {
+			result = purchaseService.newPurchase(productIdList, purchaseBean);
+		} catch (IllegalArgumentException | ParseException e) {
+			System.err.println("error");
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.isNotNull()) {
