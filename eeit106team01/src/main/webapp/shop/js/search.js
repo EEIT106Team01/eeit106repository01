@@ -39,8 +39,6 @@ function ByBrand(brand){
     console.log(brand)  
 } 
 
-
-
 //顯示此次搜尋的產品數量
 function getProductQuantity(data){
     var productQuantity = data.length;
@@ -159,8 +157,6 @@ function getProductsByType(type){
     })
 }
 
-
-
 // 側邊menu用↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 function getAllBrand(type){
     $.ajax({
@@ -203,7 +199,6 @@ function getAllType(){
     })
 }
 // 側邊menu用↑↑↑↑↑↑↑↑↑↑
-
 
 function getProductsByUpdateTime(){
     $.ajax({

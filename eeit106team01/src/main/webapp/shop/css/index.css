@@ -1,3 +1,4 @@
+/* headerDIV--------------------------------------- */
 #headerDiv{
     background-color: yellow;
     height: 300px;
@@ -22,3 +23,31 @@
     /* top: 47%;
     left: 20% */
 }
+/* headerDIV--------------------------------------- */
+
+/* 產品--------------------------------------------- */
+.productImg{
+    width: 200px
+}
+
+.name{
+    width: 200px;
+    display:inline-block;
+    padding: 5px 5px;
+    font-size: 10px;
+}
+
+.price{
+    color: red;
+}
+
+.productDiv{
+    width: 200px;
+    height: 300px;
+    display: inline-block;
+    margin-left: 20px;
+}
+
+
+/* 產品--------------------------------------------- */
+

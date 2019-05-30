@@ -84,7 +84,7 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<ProductBean> findProducts() {
 		try {
-			this.productsResutlt = this.getSession().createQuery("from ProductBean", ProductBean.class).getResultList();
+			this.productsResutlt = this.getSession().createQuery("from ProductBean order by totalSold desc", ProductBean.class).getResultList();
 		} catch (HibernateException e) {
 			throw new HibernateException(e.getMessage());
 		}
