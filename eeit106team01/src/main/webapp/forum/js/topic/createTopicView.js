@@ -1,52 +1,87 @@
 function createTopicView(dataTopicList, divTopicId) {
     $(`#${divTopicId}`).text("");
-    let divCardDeck;
     for (let i = 0; i < dataTopicList.length; i++) {
-        divCardDeck = $("<div></div>").addClass("card-deck").width("900px").appendTo($(`#${divTopicId}`));
-
-
-        // <div class="col-md-3">
+        let divTopic = $("<div></div>").addClass("col-md-3").attr("id", `id${dataTopicList[i].id}`).css({padding: "8px"}).appendTo($(`#${divTopicId}`));
+            let divVideo = $("<div></div>").addClass("col-md-12").css({height: "150px",margin: "1px"}).appendTo(divTopic);
+                // if(dataTopicList[i].videoBean){
+                //     let videoBean = dataTopicList[i].videoBean;
+                //     let videoId = `topic${dataTopicList[i].id}player`;
+                //     let videoBlock = createVideo(videoBean, videoId).appendTo(divVideo);
+                //     createVideoPlayer(videoBean, videoId);
+                // }
+                $("<img />", { 
+                    src: "/navbar/images/1558837130883Indian Parrot Greet Indian Parrot.mp4.jpg",
+                    height: "100%",
+                    width: "100%"
+                }).appendTo(divVideo);
+            let aLinkToContent = $("<a></a>").attr("href", "http://localhost:8080/forum/showContents.html")
+                                .on("click", function(){
+                                    localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
+                                }).appendTo(divTopic);
+                let divTopicHeader = $("<div></div>").addClass("col-md-12").css({margin: "1px","text-decoration": "underline","font-weight": "bolder"}).text(dataTopicList[i].topicHeader).appendTo(aLinkToContent);
+                let divTopicContent = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px"}).text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(aLinkToContent);
+            let divMemberName = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px",color: "#0066CC"}).appendTo(divTopic);
+                $("<img />", { 
+                    src: "/navbar/images/wowlogo.png",
+                    class: "img-circle",
+                    width: "34"
+                }).appendTo(divMemberName);
+                $("<p>&nbsp;John Henderson</p>").appendTo(divMemberName);
+            let divTopicLikeNum = $("<div></div>").addClass("col-md-2").css({"font-size": "14px",margin: "1px",width: "45px"}).appendTo(divTopic);
+                $("<i></i>").addClass("fa fa-thumbs-o-up").appendTo(divTopicLikeNum);
+                $(`<p>&nbsp;${dataTopicList[i].topicLikeNum}</p>`).appendTo(divTopicLikeNum);
+            let divContentReplyNum = $("<div></div>").addClass("col-md-2").css({"font-size": "14px",margin: "1px",width: "45px"}).appendTo(divTopic);
+                $("<i></i>").addClass("fa fa-commenting-o").appendTo(divContentReplyNum);
+                $(`<p>&nbsp;${dataTopicList[i].contentReplyNum}</p>`).appendTo(divContentReplyNum);
+            let divPageViews = $("<div></div>").addClass("col-md-2").css({"font-size": "14px",margin: "1px",width: "45px"}).appendTo(divTopic);
+                $("<i></i>").addClass("fa fa-eye").appendTo(divPageViews);
+                $(`<p>&nbsp;${dataTopicList[i].pageViews}</p>`).appendTo(divPageViews);
+            let divAccidentTime = $("<div></div>").addClass("col-md-6").css({"font-size": "14px",margin: "1px",float: "right", "text-align": "right", width: "95px"}).appendTo(divTopic);
+                $("<i></i>").addClass("fa fa-video-camera").appendTo(divAccidentTime);
+                $(`<p>&nbsp;${dataTopicList[i].accidentTime} hours+8</p>`).appendTo(divAccidentTime);
+        // <div class="col-md-3" style="padding: 8px">
         //     <div class="col-md-12" style="height: 150px; margin: 1px;  ">
         //         <img height="100%" width="100%" src="navbar/images/1558837130883Indian Parrot Greet Indian Parrot.mp4.jpg">
         //     </div>
         //     <a href="index.html" id="linkToContent">
-        //         <div class="col-md-12" id="topicHeaderDiv" style="margin: 1px; ">我是好一個很長的標題嗎</div>
+        //         <div class="col-md-12" id="topicHeaderDiv" style="margin: 1px; text-decoration: underline; font-weight: bolder;">我是好一個很長的標題嗎</div>
         //         <div class="col-md-12" style="font-size: 14px; margin: 1px;  ">主要目標是發大財主要目標是發大財主要目標是發大財主要目標是發大財......</div>
         //     </a>
-        //     <div class="col-md-12" id="memberNameDiv" style="font-size: 14px; margin: 1px;  ">
+        //     <div class="col-md-12" id="memberNameDiv" style="font-size: 14px; margin: 1px; color: #0066CC;">
         //         <img src="/navbar/images/wowlogo.png" alt="" class="img-circle" width="34" />&nbsp;John Henderson</div>
-        //     <div class="col-md-2" style="font-size: 14px; margin: 1px;  ">
+        //     <div class="col-md-2" style="font-size: 14px; margin: 1px; width: 45px;">
         //         <i class="fa fa-thumbs-o-up"></i>&nbsp;1</div>
-        //     <div class="col-md-2" style="font-size: 14px; margin: 1px;  ">
+        //     <div class="col-md-2" style="font-size: 14px; margin: 1px; width: 45px;">
         //         <i class="fa fa-commenting-o"></i>&nbsp;322</div>
-        //     <div class="col-md-2" style="font-size: 14px; margin: 1px;  ">
+        //     <div class="col-md-2" style="font-size: 14px; margin: 1px; width: 45px;">
         //         <i class="fa fa-eye"></i>&nbsp;225</div>
-        //     <div class="col-md-6" style="float: right; text-align: right; font-size: 14px; margin: 1px;  ">
+        //     <div class="col-md-6" style="float: right; text-align: right; font-size: 14px; margin: 1px; width: 95px;">
         //         <i class="fa fa-video-camera"></i>&nbsp;2019-05-06</div>
         // </div>
 
 
-
-            divCardDeck = $("<div></div>").addClass("card-deck").width("900px").appendTo($(`#${divTopicId}`));
-        let divCard = $("<div></div>").addClass("card").attr("id", `id${dataTopicList[i].id}`).appendTo(divCardDeck);
-            if(dataTopicList[i].videoBean){
-                let videoBean = dataTopicList[i].videoBean;
-                let videoId = `topic${dataTopicList[i].id}player`;
-                let videoBlock = createVideo(videoBean, videoId).appendTo(divCard);
-                createVideoPlayer(videoBean, videoId);
-            }
-            let divCardBody = $("<div></div>").addClass("card-body").appendTo(divCard);
-                let h4TopicHeader = $("<h4></h4>").addClass("card-title").text(dataTopicList[i].topicHeader).appendTo(divCardBody);
-                let pTopicContent = $("<p></p>").addClass("card-text").text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(divCardBody);
-                    let aLinkToContent = $("<a></a>").addClass("card-link").attr("href", "http://localhost:8080/forum/showContents.html")
-                        .on("click", function(){
-                            localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
-                        }).text("<詳細內容>").appendTo(pTopicContent);
-                let pMemberName = $("<p></p>").addClass("card-text").text("Fadachai").appendTo(divCardBody);
-                let spanPageViews = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].pageViews).appendTo(divCardBody);
-                let spanTopicLikeNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].topicLikeNum).appendTo(divCardBody);
-                let spanContentReplyNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].contentReplyNum).appendTo(divCardBody);
-                let spanAccidentTime = $("<span></span>").addClass("badge badge-warning").text(dataTopicList[i].accidentTime+"hours+8").appendTo(divCardBody);
+        // if(( i + 1 ) % 3 == 1){
+        //     divCardDeck = $("<div></div>").addClass("card-deck").width("900px").appendTo($(`#${divTopicId}`));
+        // }
+        // let divCard = $("<div></div>").addClass("card").attr("id", `id${dataTopicList[i].id}`).appendTo(divCardDeck);
+        //     if(dataTopicList[i].videoBean){
+        //         let videoBean = dataTopicList[i].videoBean;
+        //         let videoId = `topic${dataTopicList[i].id}player`;
+        //         let videoBlock = createVideo(videoBean, videoId).appendTo(divCard);
+        //         createVideoPlayer(videoBean, videoId);
+        //     }
+        //     let divCardBody = $("<div></div>").addClass("card-body").appendTo(divCard);
+        //         let h4TopicHeader = $("<h4></h4>").addClass("card-title").text(dataTopicList[i].topicHeader).appendTo(divCardBody);
+        //         let pTopicContent = $("<p></p>").addClass("card-text").text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(divCardBody);
+        //             let aLinkToContent = $("<a></a>").addClass("card-link").attr("href", "http://localhost:8080/forum/showContents.html")
+        //                 .on("click", function(){
+        //                     localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
+        //                 }).text("<詳細內容>").appendTo(pTopicContent);
+        //         let pMemberName = $("<p></p>").addClass("card-text").text("Fadachai").appendTo(divCardBody);
+        //         let spanPageViews = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].pageViews).appendTo(divCardBody);
+        //         let spanTopicLikeNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].topicLikeNum).appendTo(divCardBody);
+        //         let spanContentReplyNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].contentReplyNum).appendTo(divCardBody);
+        //         let spanAccidentTime = $("<span></span>").addClass("badge badge-warning").text(dataTopicList[i].accidentTime+"hours+8").appendTo(divCardBody);
     }
 }
 
