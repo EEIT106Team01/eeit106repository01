@@ -40,31 +40,32 @@ public class PurchaseServiceTest extends ShopTest {
 	@Autowired
 	private MemberDAO memberDAO;
 
-	private ArrayList<Long> productIdList;
+	private HashMap<Long, Long> productIdList;
 	private Date date = NewDate.newCurrentTime();
 
+	@Test
 	public void testNewPurchase() throws Exception {
 		Member member = new Member();
 		memberDAO.insertMember(member);
 
-		productIdList = new ArrayList<Long>();
-		productIdList.add(1L);
-		productIdList.add(1L);
-		productIdList.add(1L);
-		productIdList.add(1L);
-		productIdList.add(1L);
-		productIdList.add(2L);
-		productIdList.add(3L);
+		productIdList = new HashMap<Long, Long>();
+		productIdList.put(1L, 8L);
+		productIdList.put(2L, 8L);
+		productIdList.put(3L, 8L);
+		productIdList.put(4L, 6L);
+		productIdList.put(5L, 6L);
+		productIdList.put(6L, 6L);
+		productIdList.put(7L, 7L);
 
-		Integer productTotalPrice = (productService.findProductByPrimaryKey(1L).getPrice() * 5)
-				+ productService.findProductByPrimaryKey(2L).getPrice()
-				+ productService.findProductByPrimaryKey(3L).getPrice();
+		Integer productTotalPrice = (productService.findProductByPrimaryKey(5L).getPrice() * 5)
+				+ productService.findProductByPrimaryKey(6L).getPrice()
+				+ productService.findProductByPrimaryKey(7L).getPrice();
 
 		HashMap<String, String> receiverInformation = new HashMap<String, String>();
 		receiverInformation.put("receiver", "Alex");
 		receiverInformation.put("address", "Neihu district");
 
-		PurchaseBean purchaseBean = new PurchaseBean("unpaid", date, date, productTotalPrice, "unsend", "7-11", 25,
+		PurchaseBean purchaseBean = new PurchaseBean("unpaid", date, date, productTotalPrice, "unsend", "7-11", 200,
 				receiverInformation, member);
 
 		purchaseService.newPurchase(productIdList, purchaseBean);
@@ -130,7 +131,6 @@ public class PurchaseServiceTest extends ShopTest {
 		purchaseService.newReviews(reviewBeans);
 	}
 
-	@Test
 	public void testUpdateReview() throws Exception {
 		ReviewBean reviewBean = purchaseService.findReviewById("review", 1L).get(0);
 		reviewBean.setUpdatedTime(NewDate.newCurrentTime());

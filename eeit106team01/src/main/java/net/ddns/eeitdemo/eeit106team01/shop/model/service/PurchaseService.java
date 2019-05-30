@@ -2,7 +2,11 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
@@ -30,18 +34,19 @@ public class PurchaseService {
 	private ProductDAO productDAO;
 
 	// Create a Purchase and Purchase List
-	public PurchaseBean newPurchase(ArrayList<Long> productIdList, PurchaseBean purchaseBean) {
-		if (productIdList != null && productIdList.size() > 0L && purchaseBean.isNotNull()) {
+	public PurchaseBean newPurchase(HashMap<Long, Long> productIdList, PurchaseBean purchaseBean) {
+		if (productIdList != null && productIdList.size() > 0 && purchaseBean.isNotNull()) {
 
 			// insert purchase
 			PurchaseBean purchase = purchaseDAO.insertPurchase(purchaseBean);
 
 			// Get products
 			ArrayList<ProductBean> productBeans = new ArrayList<ProductBean>();
-			for (Long productId : productIdList) {
-				if (productId != null) {
-					productBeans.add(productDAO.findProductByProductId(productId));
-				}
+			Iterator<Entry<Long, Long>> iterator = productIdList.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry<Long, Long> entry = (Entry<Long, Long>) iterator.next();
+				Long productId = entry.getValue();
+				productBeans.add(productDAO.findProductByProductId(productId));
 			}
 
 			for (ProductBean productBean : productBeans) {
@@ -259,10 +264,10 @@ public class PurchaseService {
 	// Update Review
 	// @formatter:on
 	public ReviewBean updateReview(ReviewBean reviewBean, Double rating, String comment, SerialBlob image) {
-		if (reviewBean.isNotNull() && ((rating != null && rating.doubleValue() >= 0d)
+		if (reviewBean.isNotNull() && ((rating != null && rating.doubleValue() >= 0D)
 				|| NullChecker.isEmpty(comment) == false || NullChecker.isEmpty(image) == false)) {
 			Boolean flag = false;
-			if ((rating != null && rating.doubleValue() >= 0d)) {
+			if ((rating != null && rating.doubleValue() >= 0D)) {
 				if (rating != reviewBean.getRating()) {
 					reviewBean.setRating(rating);
 					flag = true;
@@ -340,20 +345,20 @@ public class PurchaseService {
 				if (result != null && result.size() > 0) {
 					return result;
 				}
-			} else if (type.equalsIgnoreCase("rating") && doubleValue != null && doubleValue.doubleValue() <= 10d
-					&& doubleValue.doubleValue() >= 0d) {
+			} else if (type.equalsIgnoreCase("rating") && doubleValue != null && doubleValue.doubleValue() <= 5D
+					&& doubleValue.doubleValue() >= 0D) {
 				result = purchaseDAO.findReviewsByRating(doubleValue);
 				if (result != null && result.size() > 0) {
 					return result;
 				}
-			} else if (type.equalsIgnoreCase("ratingLower") && doubleValue != null && doubleValue.doubleValue() <= 10d
-					&& doubleValue.doubleValue() >= 0d) {
+			} else if (type.equalsIgnoreCase("ratingLower") && doubleValue != null && doubleValue.doubleValue() <= 5D
+					&& doubleValue.doubleValue() >= 0D) {
 				result = purchaseDAO.findReviewsByRatingLower(doubleValue);
 				if (result != null && result.size() > 0) {
 					return result;
 				}
-			} else if (type.equalsIgnoreCase("ratingHigher") && doubleValue != null && doubleValue.doubleValue() <= 10d
-					&& doubleValue.doubleValue() >= 0d) {
+			} else if (type.equalsIgnoreCase("ratingHigher") && doubleValue != null && doubleValue.doubleValue() <= 5D
+					&& doubleValue.doubleValue() >= 0D) {
 				result = purchaseDAO.findReviewsByRatingHigher(doubleValue);
 				if (result != null && result.size() > 0) {
 					return result;

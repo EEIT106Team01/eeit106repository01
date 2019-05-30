@@ -483,7 +483,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Override
 	public List<ReviewBean> findReviewsByRating(Double rating) {
-		if (rating != null && rating.doubleValue() <= 10d && rating.doubleValue() >= 0d) {
+		if (rating != null && rating.doubleValue() <= 5D && rating.doubleValue() >= 0D) {
 			try {
 				this.review = this.getSession().createQuery("from ReviewBean where rating= :rating", ReviewBean.class)
 						.setParameter("rating", rating).getResultList();
@@ -499,7 +499,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Override
 	public List<ReviewBean> findReviewsByRatingLower(Double rating) {
-		if (rating != null && rating.doubleValue() <= 10d && rating.doubleValue() >= 0d) {
+		if (rating != null && rating.doubleValue() <= 5D && rating.doubleValue() >= 0D) {
 			try {
 				this.review = this.getSession().createQuery("from ReviewBean where rating<= :rating", ReviewBean.class)
 						.setParameter("rating", rating).getResultList();
@@ -515,7 +515,7 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 
 	@Override
 	public List<ReviewBean> findReviewsByRatingHigher(Double rating) {
-		if (rating != null && rating.doubleValue() <= 10d && rating.doubleValue() >= 0d) {
+		if (rating != null && rating.doubleValue() <= 5D && rating.doubleValue() >= 0D) {
 			try {
 				this.review = this.getSession().createQuery("from ReviewBean where rating>= :rating", ReviewBean.class)
 						.setParameter("rating", rating).getResultList();
