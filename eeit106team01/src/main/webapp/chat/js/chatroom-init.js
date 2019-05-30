@@ -1,3 +1,6 @@
+var chatUsername = "pikachu";
+
+
 var neonChat;
 
 function onSubmitMessage(id, msg, chatData) {
@@ -10,16 +13,16 @@ function onSubmitMessage(id, msg, chatData) {
         || id === "south"
         || id === "east"
     ) {
-        stompClient.send("/" + id, {}, JSON.stringify({ 'name': name, 'message': msg, 'command': 'normal' }));
+        stompClient.send("/" + id, {}, JSON.stringify({ 'name': chatUsername, 'message': msg, 'command': 'normal' }));
 
     } else {
-        stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': name, 'message': msg, 'command': 'normal' }));
+        stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': chatUsername, 'message': msg, 'command': 'normal' }));
     }
 
 }
 
 function onReceiveMessage(id, msgBean) {
-    if (msgBean && msgBean.name !== name) {
+    if (msgBean && msgBean.name !== chatUsername) {
         neonChat.pushMessage(id, msgBean.message, msgBean.name, new Date(msgBean.sendTime), true, true);
         if (neonChatNowOpenId && neonChatNowOpenId == id) {
             neonChat.renderMessages(id);
@@ -28,7 +31,7 @@ function onReceiveMessage(id, msgBean) {
 }
 
 function onReceivePrivateMessage(id, msgBean) {
-    if (msgBean && msgBean.fromUser !== name) {
+    if (msgBean && msgBean.fromUser !== chatUsername) {
         if (!$("#" + id).get(0)) {
             neonChat.addUser("group-2", msgBean.fromUser, "online", false, id);
         }
@@ -44,7 +47,7 @@ function showOldMessage(msgBeans) {
         $("#" + id).attr("index", msgBeans[i].index);
         console.log($("#" + id).attr("index"));
         for (let j = msgBeans[i].messages.length - 1; j >= 0; j--) {
-            if (msgBeans[i].messages[j].name !== name) {
+            if (msgBeans[i].messages[j].name !== chatUsername) {
                 fromOpponent = true;
             } else {
                 fromOpponent = false;
@@ -59,7 +62,7 @@ function showOldPrivateMessage(msgBeans) {
     let fromOpponent;
     for (let i = msgBeans.length - 1; i >= 0; i--) {
         let id;
-        if (msgBeans[i].userOne !== name) {
+        if (msgBeans[i].userOne !== chatUsername) {
             id = msgBeans[i].userOne;
         } else {
             id = msgBeans[i].userTwo;
@@ -69,7 +72,7 @@ function showOldPrivateMessage(msgBeans) {
         }
         $("#" + id).attr("index", msgBeans[i].index);
         for (let j = msgBeans[i].messages.length - 1; j >= 0; j--) {
-            if (msgBeans[i].messages[j].fromUser !== name) {
+            if (msgBeans[i].messages[j].fromUser !== chatUsername) {
                 fromOpponent = true;
             } else {
                 fromOpponent = false;
@@ -77,7 +80,7 @@ function showOldPrivateMessage(msgBeans) {
             neonChat.unshiftMessage(id, msgBeans[i].messages[j].message, msgBeans[i].messages[j].fromUser, new Date(msgBeans[i].messages[j].sendTime), fromOpponent, false);
         }
         for (let j = msgBeans[i].userOneOfflineMessages.length - 1; j >= 0; j--) {
-            if (msgBeans[i].userOneOfflineMessages[j].fromUser !== name) {
+            if (msgBeans[i].userOneOfflineMessages[j].fromUser !== chatUsername) {
                 fromOpponent = true;
             } else {
                 fromOpponent = false;
@@ -85,7 +88,7 @@ function showOldPrivateMessage(msgBeans) {
             neonChat.unshiftMessage(id, msgBeans[i].userOneOfflineMessages[j].message, msgBeans[i].userOneOfflineMessages[j].fromUser, new Date(msgBeans[i].userOneOfflineMessages[j].sendTime), fromOpponent, fromOpponent);
         }
         for (let j = msgBeans[i].userTwoOfflineMessages.length - 1; j >= 0; j--) {
-            if (msgBeans[i].userTwoOfflineMessages[j].fromUser !== name) {
+            if (msgBeans[i].userTwoOfflineMessages[j].fromUser !== chatUsername) {
                 fromOpponent = true;
             } else {
                 fromOpponent = false;
@@ -109,27 +112,27 @@ function keepScrollPosition($el, oldScrollHeight) {
 var stompClient = null;
 
 function setConnected(connected) {
-    document.getElementById("connect").disabled = connected;
-    document.getElementById("disconnect").disabled = !connected;
-    document.getElementById("conversationDiv").style.visibility = connected ? 'visible' : 'hidden';
-    $("#response").html();
-    $("#callback").html();
+    // document.getElementById("connect").disabled = connected;
+    // document.getElementById("disconnect").disabled = !connected;
+    // document.getElementById("conversationDiv").style.visibility = connected ? 'visible' : 'hidden';
+    // $("#response").html();
+    // $("#callback").html();
 }
 
-var name;
 
 function connect() {
     name = $('#name').val();
     var socket = new SockJS('/simple');
     stompClient = Stomp.over(socket);
     stompClient.connect({
-        'name': name
+        'name': chatUsername
     }, function (frame) {
         setConnected(true);
         console.log('Connected:' + frame);
+        sendName();
 
     });
-    $('#chat').attr('data-current-user', name);
+    $('#chat').attr('data-current-user', chatUsername);
 }
 
 function disconnect() {
@@ -187,7 +190,7 @@ function getOnlineUsers() {
 function checkUserExist() {
     let username = $("#checkUser").val();
     if (stompClient != null && !$("#" + username).get(0)) {
-        stompClient.send("/checkUser", {}, JSON.stringify({ 'toUser': '', 'fromUser': name, 'message': username, 'command': 'checkUserExist' }));
+        stompClient.send("/checkUser", {}, JSON.stringify({ 'toUser': '', 'fromUser': chatUsername, 'message': username, 'command': 'checkUserExist' }));
     }
 }
 
@@ -200,9 +203,9 @@ function getOld(id, index) {
             || id === "south"
             || id === "east"
         ) {
-            stompClient.send("/" + id, {}, JSON.stringify({ 'name': name, 'message': index, 'command': 'getOldByIndex' }));
+            stompClient.send("/" + id, {}, JSON.stringify({ 'name': chatUsername, 'message': index, 'command': 'getOldByIndex' }));
         } else {
-            stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': name, 'message': index, 'command': 'getOldByIndex' }));
+            stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': chatUsername, 'message': index, 'command': 'getOldByIndex' }));
         }
     }
 }
@@ -277,6 +280,7 @@ $(document).ready(function () {
 
         + '</div>'
 
+        + '</div>'
         + '</div>'
 
     );
@@ -1188,6 +1192,9 @@ $(document).ready(function () {
 
     })(jQuery, window);
     //----------------------------------------
+
+    connect();
+    // sendName();
 
     initRegionChat("north");
     initRegionChat("middle");
