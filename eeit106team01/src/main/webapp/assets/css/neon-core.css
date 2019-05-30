@@ -9385,9 +9385,9 @@ table {
 }
 #chat {
   position: absolute;
-  position: relative;
+  position: fixed;
   right: 0;
-  top: 0;
+  top: 52px;
   bottom: 0;
   width: 280px;
   background: #303641;
@@ -9655,6 +9655,9 @@ table {
 #chat .chat-conversation .conversation-body > li .user {
   font-weight: bold;
   color: #fff;
+}
+#chat .chat-conversation .conversation-body > li p {
+  color: rgba(255, 255, 255, 0.5);
 }
 #chat .chat-conversation .conversation-body > li .time {
   float: right;
