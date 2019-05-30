@@ -2,32 +2,9 @@ function createTopicView(dataTopicList, divTopicId) {
     $(`#${divTopicId}`).text("");
     let divCardDeck;
     for (let i = 0; i < dataTopicList.length; i++) {
-        divCardDeck = $("<div></div>").addClass("card-deck").width("900px").appendTo($(`#${divTopicId}`));
-
-
-        // <div class="col-md-3">
-        //     <div class="col-md-12" style="height: 150px; margin: 1px;  ">
-        //         <img height="100%" width="100%" src="navbar/images/1558837130883Indian Parrot Greet Indian Parrot.mp4.jpg">
-        //     </div>
-        //     <a href="index.html" id="linkToContent">
-        //         <div class="col-md-12" id="topicHeaderDiv" style="margin: 1px; ">我是好一個很長的標題嗎</div>
-        //         <div class="col-md-12" style="font-size: 14px; margin: 1px;  ">主要目標是發大財主要目標是發大財主要目標是發大財主要目標是發大財......</div>
-        //     </a>
-        //     <div class="col-md-12" id="memberNameDiv" style="font-size: 14px; margin: 1px;  ">
-        //         <img src="/navbar/images/wowlogo.png" alt="" class="img-circle" width="34" />&nbsp;John Henderson</div>
-        //     <div class="col-md-2" style="font-size: 14px; margin: 1px;  ">
-        //         <i class="fa fa-thumbs-o-up"></i>&nbsp;1</div>
-        //     <div class="col-md-2" style="font-size: 14px; margin: 1px;  ">
-        //         <i class="fa fa-commenting-o"></i>&nbsp;322</div>
-        //     <div class="col-md-2" style="font-size: 14px; margin: 1px;  ">
-        //         <i class="fa fa-eye"></i>&nbsp;225</div>
-        //     <div class="col-md-6" style="float: right; text-align: right; font-size: 14px; margin: 1px;  ">
-        //         <i class="fa fa-video-camera"></i>&nbsp;2019-05-06</div>
-        // </div>
-
-
-
+        if(( i + 1 ) % 3 == 1){
             divCardDeck = $("<div></div>").addClass("card-deck").width("900px").appendTo($(`#${divTopicId}`));
+        }
         let divCard = $("<div></div>").addClass("card").attr("id", `id${dataTopicList[i].id}`).appendTo(divCardDeck);
             if(dataTopicList[i].videoBean){
                 let videoBean = dataTopicList[i].videoBean;
