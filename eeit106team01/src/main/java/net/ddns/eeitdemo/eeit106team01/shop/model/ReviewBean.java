@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 
 @Entity
 @Table(schema = "Shop", name = "Review")
@@ -146,8 +147,23 @@ public class ReviewBean implements Serializable {
 		this.comment = comment;
 	}
 
-	public SerialBlob getImage() {
-		return image;
+	public byte[] getImage() {
+		byte[] encoder = null;
+		byte[] nullByte = {0};
+		try {
+			if (image != null) {
+				encoder = image.getBytes(1L, (int) image.length());
+			} else {
+				return nullByte;
+			} 
+		} catch (SerialException e) {
+			e.printStackTrace();
+		}
+		if (encoder != null) {
+			return encoder;
+		} else {
+			return null;
+		}
 	}
 
 	public void setImage(SerialBlob image) {
