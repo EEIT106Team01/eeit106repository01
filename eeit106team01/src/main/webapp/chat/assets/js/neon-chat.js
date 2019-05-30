@@ -699,6 +699,14 @@ var neonChat = neonChat || {
 			return this.chat_history[id] ? this.chat_history[id] : null;
 		},
 
+		getAllUserIds: function () {
+			let ids = [];
+			$(".chat-group > a").each(function () {
+				ids.push($(this).attr("id"));
+			});
+			return ids;
+		},
+
 		moveUser: function (user_id, new_group_id, prepend) {
 			var $new_group = $chat.find("#" + new_group_id.replace('#', '') + '.chat-group'),
 				user = this.chat_history[user_id];

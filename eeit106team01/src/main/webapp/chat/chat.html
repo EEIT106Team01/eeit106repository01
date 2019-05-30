@@ -25,7 +25,6 @@
 			console.log(id);
 			console.log(msg);
 			console.log(chatData);
-
 			if (
 				id === "north"
 				|| id === "middle"
@@ -50,7 +49,10 @@
 		}
 
 		function onReceivePrivateMessage(id, msgBean) {
-			if (msgBean && msgBean.name !== name) {
+			if (msgBean && msgBean.fromUser !== name) {
+				if (!$("#" + id).get(0)) {
+					neonChat.addUser("group-2", msgBean.fromUser, "online", false, id);
+				}
 				neonChat.pushMessage(id, msgBean.message, msgBean.fromUser, new Date(msgBean.sendTime), true, true);
 				neonChat.renderMessages(id);
 			}
@@ -83,6 +85,9 @@
 				} else {
 					id = msgBeans[i].userTwo;
 				}
+				if (!$("#" + id).get(0)) {
+					neonChat.addUser("group-2", id, "offline", false, id);
+				}
 				$("#" + id).attr("index", msgBeans[i].index);
 				for (let j = msgBeans[i].messages.length - 1; j >= 0; j--) {
 					if (msgBeans[i].messages[j].fromUser !== name) {
@@ -110,6 +115,8 @@
 				}
 				neonChat.renderMessagesWithKeepScrollPosition(id);
 			}
+			neonChat.refreshUserIds()
+			getOnlineUsers();
 		}
 
 		function keepScrollPosition($el, oldScrollHeight) {
@@ -165,6 +172,44 @@
 					onReceivePrivateMessage(msgBean.fromUser, msgBean);
 				}
 			});
+			stompClient.subscribe('/user/topic/checkUser', function (response) {
+				console.log(eval(response.body));
+				if (eval(response.body)) {
+					let id = $("#checkUser").val();
+					if (!$("#" + id).get(0)) {
+						neonChat.addUser("group-2", id, "online", false, id);
+						neonChat.refreshUserIds();
+					}
+					getOnlineUsers();
+				} else {
+					$("#checkUser").attr("placeholder", "User does not exist!");
+				}
+				$("#checkUser").val("");
+			});
+			stompClient.subscribe('/topic/getOnlineUsers', function (response) {
+				let data = eval(response.body);
+				let allUsers = neonChat.getAllUserIds();
+				if (Array.isArray(allUsers)) {
+					$(allUsers).each(function (i) {
+						if (data.indexOf(allUsers[i]) !== -1) {
+							neonChat.setStatus(allUsers[i], "online");
+						} else {
+							neonChat.setStatus(allUsers[i], "offline");
+						}
+					});
+				}
+			});
+		}
+
+		function getOnlineUsers() {
+			stompClient.send("/getOnlineUsers", {});
+		}
+
+		function checkUserExist() {
+			let username = $("#checkUser").val();
+			if (stompClient != null && !$("#" + username).get(0)) {
+				stompClient.send("/checkUser", {}, JSON.stringify({ 'toUser': '', 'fromUser': name, 'message': username, 'command': 'checkUserExist' }));
+			}
 		}
 
 		function getOld(id, index) {
@@ -207,6 +252,15 @@
 			initRegionChat("middle");
 			initRegionChat("south");
 			initRegionChat("east");
+			$("#checkUser").keydown(function (e) {
+				if (e.keyCode == 13 && !e.shiftKey) {
+					e.preventDefault();
+					checkUserExist();
+					return false;
+				} else if (e.keyCode == 27) {
+					$(this).val("");
+				}
+			});
 		});
 	</script>
 
@@ -286,10 +340,12 @@
 
 
 				<div class="chat-group" id="group-2">
-					<strong>Favorites</strong>
+					<strong>Contacts</strong>
+					<input type="text" id="checkUser" class="form-control" placeholder="Search User"
+						style="margin: 1% 10% 1% 10%;width: 80%" />
 
-					<a href="#" id="pikachu" index="0"><span class="user-status is-offline"></span> <em>pikachu</em></a>
-					<a href="#" id="sonic" index="0"><span class="user-status is-offline"></span> <em>sonic</em></a>
+					<!-- <a href="#" id="pikachu" index="0"><span class="user-status is-offline"></span> <em>pikachu</em></a> -->
+					<!-- <a href="#" id="sonic" index="0"><span class="user-status is-offline"></span> <em>sonic</em></a> -->
 				</div>
 
 			</div>
