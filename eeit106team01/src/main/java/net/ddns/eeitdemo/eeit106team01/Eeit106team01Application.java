@@ -24,9 +24,6 @@ import org.springframework.orm.hibernate5.LocalSessionFactoryBuilder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.SerializationFeature;
-
 import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMessageBean;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
@@ -142,11 +139,6 @@ public class Eeit106team01Application {
 			ffu = new FFmpegUtils();
 		}
 		return ffu;
-	}
-
-	@Bean("objectMapper")
-	public ObjectMapper myMapper() {
-		return new ObjectMapper().disable(SerializationFeature.FAIL_ON_EMPTY_BEANS);
 	}
 
 }

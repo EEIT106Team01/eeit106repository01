@@ -1,13 +1,9 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -120,7 +116,7 @@ public class PurchaseController {
 
 	// Review
 	@GetMapping(value = "/shop/findReviewById")
-	public ResponseEntity<?> findReviewById(@RequestParam String idType, @RequestParam Long id) throws SerialException {
+	public ResponseEntity<?> findReviewById(@RequestParam(defaultValue = "review") String idType, @RequestParam Long id) throws SerialException {
 		List<ReviewBean> result = new ArrayList<ReviewBean>();
 		if (id.longValue() <= 0) {
 			return new ResponseEntity<>("ID不合法", HttpStatus.BAD_REQUEST);
@@ -131,18 +127,6 @@ public class PurchaseController {
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.size() > 0) {
-			SerialBlob serialBlob = result.get(0).getImage();
-			byte[] array = serialBlob.getBytes(1, (int) serialBlob.length());
-			File file;
-			FileOutputStream out;
-			try {
-				file = new File("D:\\Pictures\\something.binary");
-				out = new FileOutputStream(file);
-				out.write(array);
-				out.close();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
 			return new ResponseEntity<List<ReviewBean>>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("無此訂單", HttpStatus.NOT_FOUND);
