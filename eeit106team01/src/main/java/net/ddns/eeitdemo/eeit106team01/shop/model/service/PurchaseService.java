@@ -2,11 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
 
 import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
@@ -34,21 +30,21 @@ public class PurchaseService {
 	private ProductDAO productDAO;
 
 	// Create a Purchase and Purchase List
-	public PurchaseBean newPurchase(HashMap<Long, Long> productIdList, PurchaseBean purchaseBean) {
+	public PurchaseBean newPurchase(ArrayList<Integer> productIdList, PurchaseBean purchaseBean) {
 		if (productIdList != null && productIdList.size() > 0 && purchaseBean.isNotNull()) {
-
+			
+			System.err.println("error4");
 			// insert purchase
 			PurchaseBean purchase = purchaseDAO.insertPurchase(purchaseBean);
 
 			// Get products
 			ArrayList<ProductBean> productBeans = new ArrayList<ProductBean>();
-			Iterator<Entry<Long, Long>> iterator = productIdList.entrySet().iterator();
-			while (iterator.hasNext()) {
-				Map.Entry<Long, Long> entry = (Entry<Long, Long>) iterator.next();
-				Long productId = entry.getValue();
+			for (Integer intId : productIdList) {	
+				String stringObject= String.valueOf(intId);
+				Long productId = Long.valueOf(stringObject);
 				productBeans.add(productDAO.findProductByProductId(productId));
 			}
-
+			
 			for (ProductBean productBean : productBeans) {
 				// insert purchase lists
 				SerialNumberBean serialNumberBean = productDAO
