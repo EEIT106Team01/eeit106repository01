@@ -18,42 +18,91 @@
 
 <body>
     <div class="container border rounded mt-3 mb-3 bg-dark">
-        <h1 class="text-light mt-3 mb-3">Review Query</h1>
-        <table class="table table-dark">
-            <thead>
-                <tr>
-                    <th>
-                        <span>idType:</span>
-                    </th>
-                    <th>
-                        <span>id:</span>
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td scope="col">
-                        <div class="form-group">
-                            <label for=""></label>
-                            <input type="text" class="form-control" name="" id="idType" aria-describedby="helpId" placeholder="review">
-                            <small id="helpId" class="form-text text-muted">idType must be review, member, product, default is review</small>
-                        </div>
-                    </td>
-                    <td>
-                        <div class="form-group">
-                            <label for=""></label>
-                            <input type="number" class="form-control" name="" id="id" aria-describedby="helpId" placeholder="1">
-                            <small id="helpId" class="form-text text-muted">id must greater than 0, default is 1</small>
-                        </div>
-                    </td>
-                </tr>
-                <tr>
-                    <td scope="row" colspan="2">
-                        <button type="button" name="" id="search" class="btn btn-primary btn-bl btn-lg btn-block">Search</button>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <article>
+            <h1 class="text-light mt-3 mb-3">Review Query</h1>
+            <table class="table table-dark table-inverse">
+                <tbody>
+                    <tr>
+                        <td scope="col">
+                            <div class="form-group">
+                                <label for="">idType</label>
+                                <input type="text" class="form-control" name="" id="idType" aria-describedby="helpId" placeholder="review">
+                                <small id="helpId" class="form-text text-muted">idType must be review, member, product, default is review</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="">id</label>
+                                <input type="number" class="form-control" name="" id="id" aria-describedby="helpId" placeholder="1">
+                                <small id="helpId" class="form-text text-muted">id must greater than 0, default is 1</small>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row" colspan="2">
+                            <button type="button" name="" id="search" class="btn btn-primary btn-bl btn-lg btn-block">Search</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
+        <article>
+            <h1 class="text-light mt-3 mb-3">Review Insert</h1>
+            <table class="table table-dark table-inverse table-responsive ">
+                <tbody>
+                    <tr>
+                        <td scope="row">
+                            <div class="form-group">
+                                <label for="">rating</label>
+                                <input type="number" class="form-control" name="" id="rating" aria-describedby="helpId" placeholder="">
+                                <small id="helpId" class="form-text text-muted">rating must greater than 0 and less than 5</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="">comment</label>
+                                <textarea class="form-control" name="" id="comment" rows="3"></textarea>
+                                <small id="helpId" class="form-text text-muted">left your comment</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="">image</label>
+                                <br>
+                                <input type="file" id="upload" data-target="image" accept="image/*" />
+                                <small id="helpId" class="form-text text-muted">image only</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="">memberId</label>
+                                <input type="number" class="form-control" name="" id="memberId" aria-describedby="helpId" placeholder="">
+                                <small id="helpId" class="form-text text-muted">memberId must greater than 0</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="">purchaseListId</label>
+                                <input type="number" class="form-control" name="" id="purchaseListId" aria-describedby="helpId" placeholder="">
+                                <small id="helpId" class="form-text text-muted">purchaseListId must greater than 0</small>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label for="">productId</label>
+                                <input type="number" class="form-control" name="" id="productId" aria-describedby="helpId" placeholder="">
+                                <small id="helpId" class="form-text text-muted">productId must greater than 0</small>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td scope="row" colspan="6">
+                            <button type="button" name="" id="insert" class="btn btn-primary btn-bl btn-lg btn-block">Insert</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </article>
         <div id="image" class="mb-3"></div>
         <table class="table table-striped table-inverse table-responsive table-dark" id="content">
             <thead class="thead-inverse">

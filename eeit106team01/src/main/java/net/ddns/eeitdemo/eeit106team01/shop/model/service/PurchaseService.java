@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,18 +31,18 @@ public class PurchaseService {
 	// Create a Purchase and Purchase List
 	public PurchaseBean newPurchase(ArrayList<Integer> productIdList, PurchaseBean purchaseBean) {
 		if (productIdList != null && productIdList.size() > 0 && purchaseBean.isNotNull()) {
-			
+
 			// insert purchase
 			PurchaseBean purchase = purchaseDAO.insertPurchase(purchaseBean);
 
 			// Get products
 			ArrayList<ProductBean> productBeans = new ArrayList<ProductBean>();
-			for (Integer intId : productIdList) {	
-				String stringObject= String.valueOf(intId);
+			for (Integer intId : productIdList) {
+				String stringObject = String.valueOf(intId);
 				Long productId = Long.valueOf(stringObject);
 				productBeans.add(productDAO.findProductByProductId(productId));
 			}
-			
+
 			for (ProductBean productBean : productBeans) {
 				// insert purchase lists
 				SerialNumberBean serialNumberBean = productDAO
@@ -245,7 +244,7 @@ public class PurchaseService {
 		if (reviews != null && reviews.size() > 0) {
 			List<ReviewBean> result = new ArrayList<ReviewBean>();
 			for (ReviewBean reviewBean : reviews) {
-				if (reviewBean != null) {
+				if (reviewBean.isNotNull()) {
 					result.add(purchaseDAO.insertReview(reviewBean));
 				}
 			}
@@ -258,7 +257,7 @@ public class PurchaseService {
 
 	// Update Review
 	// @formatter:on
-	public ReviewBean updateReview(ReviewBean reviewBean, Double rating, String comment, SerialBlob image) {
+	public ReviewBean updateReview(ReviewBean reviewBean, Double rating, String comment, byte[] image) {
 		if (reviewBean.isNotNull() && ((rating != null && rating.doubleValue() >= 0D)
 				|| NullChecker.isEmpty(comment) == false || NullChecker.isEmpty(image) == false)) {
 			Boolean flag = false;
@@ -274,14 +273,9 @@ public class PurchaseService {
 					flag = true;
 				}
 			}
-			if (NullChecker.isEmpty(image) == false) {
+			if (image != null && image.length > 0) {
 				if (reviewBean.getImage() != null) {
-					if (!image.equals(reviewBean.getImage())) {
-						reviewBean.setImage(image);
-						flag = true;
-					}
-				} else {
-					reviewBean.setImage(image);
+					reviewBean.setImage(reviewBean.getImage());
 					flag = true;
 				}
 			}

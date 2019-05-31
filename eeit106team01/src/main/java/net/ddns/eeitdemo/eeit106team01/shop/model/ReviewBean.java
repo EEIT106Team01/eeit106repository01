@@ -15,8 +15,6 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.sql.rowset.serial.SerialBlob;
-import javax.sql.rowset.serial.SerialException;
 
 @Entity
 @Table(schema = "Shop", name = "Review")
@@ -43,8 +41,8 @@ public class ReviewBean implements Serializable {
 	@Column(name = "Comment", columnDefinition = "nvarchar(max)", nullable = false)
 	private String comment;
 
-	@Column(name = "Image", columnDefinition = "varbinary(max)")
-	private SerialBlob image;
+	@Column(name = "Image", columnDefinition = "image")
+	private Byte[] image;
 
 	@ManyToOne
 	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
@@ -147,26 +145,11 @@ public class ReviewBean implements Serializable {
 		this.comment = comment;
 	}
 
-	public byte[] getImage() {
-		byte[] encoder = null;
-		byte[] nullByte = {0};
-		try {
-			if (image != null) {
-				encoder = image.getBytes(1L, (int) image.length());
-			} else {
-				return nullByte;
-			} 
-		} catch (SerialException e) {
-			e.printStackTrace();
-		}
-		if (encoder != null) {
-			return encoder;
-		} else {
-			return null;
-		}
+	public Byte[] getImage() {
+		return image;
 	}
 
-	public void setImage(SerialBlob image) {
+	public void setImage(Byte[] image) {
 		this.image = image;
 	}
 
