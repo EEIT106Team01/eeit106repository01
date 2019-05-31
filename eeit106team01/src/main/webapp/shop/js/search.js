@@ -1,21 +1,9 @@
 $(document).ready(function () {
-
-    // $("#searchPrice").on('click',(function () {
-    //     getProductsByPrice();
-    // }))
     getAllType()
     $("#starDay").datepicker()
     $("#endDay").datepicker()
 
 })
-
-// function clickBrand(brand){
-//     $("#searchPrice").on('click',(function () {
-//         getProductsByPriceByBrand(brand)
-//         getProductsByPriceByType(type)
-//     }))   
-// }
-
 
 function ByType(type){
     var type = $(type).text()
@@ -199,20 +187,6 @@ function getAllType(){
     })
 }
 // 側邊menu用↑↑↑↑↑↑↑↑↑↑
-
-function getProductsByUpdateTime(){
-    $.ajax({
-        url: "http://localhost:8080/search/type",
-        method: "GET",
-        dataType: "json",
-        cache:false,
-        success: function (typeData) {   
-
-        },error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
-        }
-    })
-}
 
 function getProductsByPrice(){
     // let NameBrandType = brand;

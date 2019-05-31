@@ -1,7 +1,10 @@
 /* headerDIV--------------------------------------- */
 #headerDiv{
-    background-color: yellow;
+    background-color: #4d4033;
     height: 300px;
+    justify-content:center;
+    align-items:center;
+    display:-webkit-flex;
 }
 
 .form-control{
@@ -13,9 +16,17 @@
 }
 
 #search{
-    width: 400px;
+    /* width: 400px; */
     font-size: 30px;
-    text-align: center
+    text-align: center;
+}
+
+.form-control{
+    width: auto
+}
+
+#searchType{
+    width: 10px;
 }
 
 #title{
@@ -51,3 +62,11 @@
 
 /* 產品--------------------------------------------- */
 
+#left-area{
+    /* width: 20%; */
+    float: left;
+}
+#left-area{
+    /* width: 80%; */
+    /* float: right;; */
+}
