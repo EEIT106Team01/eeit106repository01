@@ -33,7 +33,6 @@ public class PurchaseService {
 	public PurchaseBean newPurchase(ArrayList<Integer> productIdList, PurchaseBean purchaseBean) {
 		if (productIdList != null && productIdList.size() > 0 && purchaseBean.isNotNull()) {
 			
-			System.err.println("error4");
 			// insert purchase
 			PurchaseBean purchase = purchaseDAO.insertPurchase(purchaseBean);
 
