@@ -1,9 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -32,6 +29,8 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.PurchaseService;
+import net.ddns.eeitdemo.eeit106team01.shop.util.Converter;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @RestController
@@ -184,6 +183,7 @@ public class PurchaseController {
 	// POST Method
 	// Create a Purchase and Purchase List
 	@PostMapping(value = "/shop/newPurchase")
+	@SuppressWarnings("unchecked")
 	public ResponseEntity<?> newPurchase(@RequestBody HashMap<String, Object> json, BindingResult bindingResult) {
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 			System.err.println("error");
@@ -196,24 +196,22 @@ public class PurchaseController {
 		}
 		PurchaseBean result = new PurchaseBean();
 		if ((json == null) || json.size() < 0) {
-			return new ResponseEntity<>("缺少必要值: productIdList, purchaseBean", HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
 		}
 		try {
-			System.err.println("error1");
 			ArrayList<Integer> productIdList = new ArrayList<>();
 			PurchaseBean purchaseBean = new PurchaseBean();
+			Date currentTime = NewDate.newCurrentTime();
+			purchaseBean.setCreateTime(currentTime);
+			purchaseBean.setUpdatedTime(currentTime);
 			Iterator<Entry<String, Object>> iterator = json.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Map.Entry<String, Object> entry = (Entry<String, Object>) iterator.next();
 				String key = entry.getKey();
 				String value = String.valueOf(entry.getValue());
 				if (key.equalsIgnoreCase("id")) {
-					productIdList.addAll((Collection<? extends Integer>) entry.getValue());
-				} else if (key.equalsIgnoreCase("createTime") | key.equalsIgnoreCase("createTime")) {
-					SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-					Date time = dateFormat.parse(value);
-					purchaseBean.setCreateTime(time);
-					purchaseBean.setUpdatedTime(time);
+					List<?> integers = Converter.convertObjectToList(entry.getValue());
+					productIdList.addAll((Collection<? extends Integer>) integers);
 				} else if (key.equalsIgnoreCase("payStatus")) {
 					purchaseBean.setPayStatus(value);
 				} else if (key.equalsIgnoreCase("productTotalPrice")) {
@@ -224,9 +222,9 @@ public class PurchaseController {
 					purchaseBean.setDeliverType(value);
 				} else if (key.equalsIgnoreCase("deliverPrice")) {
 					purchaseBean.setDeliverPrice(Integer.valueOf(value));
-				} else if (key.equalsIgnoreCase("receiver") || key.equalsIgnoreCase("address")) {
+				} else if (key.equalsIgnoreCase("receiverInformation")) {
 					HashMap<String, String> receiverInformation = new HashMap<String, String>();
-					receiverInformation.put(key, value);
+					receiverInformation = (HashMap<String, String>) entry.getValue();
 					purchaseBean.setReceiverInformation(receiverInformation);
 				} else if (key.equalsIgnoreCase("memberId")) {
 					Member member = memberDAO.findByMemberId(Long.valueOf(value));
@@ -235,7 +233,7 @@ public class PurchaseController {
 			}
 
 			result = purchaseService.newPurchase(productIdList, purchaseBean);
-		} catch (IllegalArgumentException | ParseException e) {
+		} catch (IllegalArgumentException e) {
 			System.err.println("error");
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
