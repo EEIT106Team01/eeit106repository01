@@ -1,7 +1,39 @@
 var chatUsername = "pikachu";
 
-
 var neonChat;
+
+var quill;
+
+
+// ----------append quill js&css
+var head = document.getElementsByTagName('head')[0];
+
+var quillJs1 = document.createElement('script');
+quillJs1.src = 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js';
+
+var quillJs2 = document.createElement('script');
+quillJs2.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js';
+
+var quillJs3 = document.createElement('script');
+quillJs3.src = '/forum/quill/quill.js';
+
+var quillCss1 = document.createElement('link');
+quillCss1.rel = 'stylesheet';
+quillCss1.type = 'text/css';
+quillCss1.href = '/forum/quill/quill.snow.css';
+
+var quillCss2 = document.createElement('link');
+quillCss2.rel = 'stylesheet';
+quillCss2.type = 'text/css';
+quillCss2.href = '/forum/quill/quill.bubble.css';
+
+head.appendChild(quillJs1);
+head.appendChild(quillJs2);
+head.appendChild(quillJs3);
+head.appendChild(quillCss1);
+head.appendChild(quillCss2);
+// ----------append quill js&css end
+
 
 function onSubmitMessage(id, msg, chatData) {
     console.log(id);
@@ -275,13 +307,66 @@ $(document).ready(function () {
         + '</ul>'
 
         + '<div class="chat-textarea">'
-        + '<textarea class="form-control autogrow" placeholder="Type your message"></textarea>'
+        + '<div id="standalone-container">'
+        + '<div id="toolbar-container">'
+        + '<span class="ql-formats">'
+        + '<select class="ql-font"></select>'
+        + '<select class="ql-size"></select>'
+        + '</span>'
+        + '<span class="ql-formats">'
+        + '<button class="ql-bold"></button>'
+        + '<button class="ql-italic"></button>'
+        + '<button class="ql-underline"></button>'
+        + '<button class="ql-strike"></button>'
+        + '</span>'
+        + '<span class="ql-formats">'
+        + '<select class="ql-color"></select>'
+        + '<select class="ql-background"></select>'
+        + '</span>'
+        + '<span class="ql-formats">'
+        + '<button class="ql-script" value="sub"></button>'
+        + '<button class="ql-script" value="super"></button>'
+        + '</span>'
+        + '<span class="ql-formats">'
+        + '<button class="ql-header" value="1"></button>'
+        + '<button class="ql-header" value="2"></button>'
+        + '<button class="ql-blockquote"></button>'
+        + '<button class="ql-code-block"></button>'
+        + '</span>'
+        + '<span class="ql-formats">'
+        + '<button class="ql-list" value="ordered"></button>'
+        + '<button class="ql-list" value="bullet"></button>'
+        + '<button class="ql-indent" value="-1"></button>'
+        + '<button class="ql-indent" value="+1"></button>'
+        + '</span>'
+        + '<span class="ql-formats">'
+        + '<button class="ql-direction" value="rtl"></button>'
+        + '<select class="ql-align"></select>'
+        + '</span>'
+        + '<span class="ql-formats">'
+        + '<button class="ql-link"></button>'
+        + '<button class="ql-image"></button>'
+        + '<button class="ql-video"></button>'
+        + '<button class="ql-formula"></button>'
+        + '</span>'
+        + '<span class="ql-formats">'
+        + '<button class="ql-clean"></button>'
+        + '</span>'
+        + '</div>'
+        + '<div id="editor-container" style="height: 80px"></div>'
         + '</div>'
 
         + '</div>'
 
         + '</div>'
+
         + '</div>'
+        + '</div>'
+        + '<style>'
+        + '#chat {'
+        + 'font-size: 0.8em;'
+        + '}'
+        + '</style>'
 
     );
 
@@ -297,7 +382,7 @@ $(document).ready(function () {
 
     var neonChatNowOpenId;
 
-        neonChat = neonChat || {
+    neonChat = neonChat || {
         $current_user: null,
         isOpen: false,
         chat_history: [],
@@ -366,7 +451,7 @@ $(document).ready(function () {
 
 
                 // Texarea
-                $textarea.keydown(function (e) {
+                $("#editor-container").keydown(function (e) {
                     if (e.keyCode == 13 && !e.shiftKey) {
                         e.preventDefault();
                         neonChat.submitMessage();
@@ -525,6 +610,12 @@ $(document).ready(function () {
 
                 offset -= minus;
 
+                let maxOffset = $(window).height() - $conversation_window.height() - $("#bs-example-navbar-collapse-2").height() + 2;
+
+                if (offset > maxOffset) {
+                    offset = maxOffset;
+                }
+
                 $conversation_window.transition({
                     top: offset,
                     opacity: 1
@@ -545,16 +636,21 @@ $(document).ready(function () {
 
             submitMessage: function () // Submit whats on textarea
             {
-                var msg = $.trim($textarea.val());
+                // var msg = $.trim($textarea.val());
+                var msg = JSON.stringify(quill.getContents());
 
-                $textarea.val('');
+                // $textarea.val('');
+                quill.setText('');
 
                 if (this.isOpen && this.$current_user) {
                     var id = this.$current_user.uniqueId().attr('id');
-                    if (msg.replace(/<.*?>/g, '')) {
-                        onSubmitMessage(id, msg.replace(/<.*?>/g, ''), $chat.data('current-user'));
-                    }
-                    this.pushMessage(id, msg.replace(/<.*?>/g, ''), $chat.data('current-user'), new Date());
+                    // if (msg.replace(/<.*?>/g, '')) {
+                    //     onSubmitMessage(id, msg.replace(/<.*?>/g, ''), $chat.data('current-user'));
+                    // }
+
+                    onSubmitMessage(id, msg, $chat.data('current-user'));
+
+                    this.pushMessage(id, msg, $chat.data('current-user'), new Date());
                     this.renderMessages(id);
                 }
             },
@@ -671,7 +767,22 @@ $(document).ready(function () {
 
                         // Populate message DOM
                         $entry.find('.user').html(entry.from);
-                        $entry.find('p').html(entry.message.replace(/\n/g, '<br>'));
+
+                        // $entry.find('p').html(entry.message);
+
+
+                        let container = document.createElement("div");
+                        let quillContainer = document.createElement("div");
+                        $(container).addClass("standalone-container");
+                        container.appendChild(quillContainer);
+                        $entry.find('p').html(container);
+                        let quillContent = new Quill(container, {
+                            readOnly: true,
+                            theme: 'bubble'
+                        });
+                        quillContent.setContents(JSON.parse(entry.message));
+
+
                         $entry.find('.time').html(date_formated);
 
                         if (entry.fromOpponent) {
@@ -716,7 +827,22 @@ $(document).ready(function () {
 
                         // Populate message DOM
                         $entry.find('.user').html(entry.from);
-                        $entry.find('p').html(entry.message.replace(/\n/g, '<br>'));
+
+
+                        // $entry.find('p').html(entry.message);
+
+                        let container = document.createElement("div");
+                        let quillContainer = document.createElement("div");
+                        $(container).addClass("standalone-container");
+                        container.appendChild(quillContainer);
+                        $entry.find('p').html(container);
+                        let quillContent = new Quill(container, {
+                            readOnly: true,
+                            theme: 'bubble'
+                        });
+                        quillContent.setContents(JSON.parse(entry.message));
+
+
                         $entry.find('.time').html(date_formated);
 
                         if (entry.fromOpponent) {
@@ -1208,6 +1334,15 @@ $(document).ready(function () {
         } else if (e.keyCode == 27) {
             $(this).val("");
         }
+    });
+
+    quill = new Quill('#editor-container', {
+        modules: {
+            formula: true,
+            syntax: true,
+            toolbar: '#toolbar-container'
+        },
+        theme: 'snow'
     });
 
 });
