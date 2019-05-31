@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -19,6 +20,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +30,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.PurchaseService;
 import net.ddns.eeitdemo.eeit106team01.shop.util.Converter;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
@@ -40,7 +43,12 @@ public class PurchaseController {
 	private PurchaseService purchaseService;
 
 	@Autowired
+	private ProductService productService;
+
+	@Autowired
 	private MemberDAO memberDAO;
+
+	private Date currentTime = NewDate.newCurrentTime();
 
 	// Get Method
 	// Purchase
@@ -186,7 +194,6 @@ public class PurchaseController {
 	@SuppressWarnings("unchecked")
 	public ResponseEntity<?> newPurchase(@RequestBody HashMap<String, Object> json, BindingResult bindingResult) {
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
-			System.err.println("error");
 			Map<String, String> errors = new HashMap<String, String>();
 			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
 			for (ObjectError bindingError : bindingErrors) {
@@ -194,14 +201,13 @@ public class PurchaseController {
 			}
 			return ResponseEntity.badRequest().body(errors);
 		}
-		PurchaseBean result = new PurchaseBean();
 		if ((json == null) || json.size() < 0) {
 			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
 		}
+		PurchaseBean result = new PurchaseBean();
 		try {
 			ArrayList<Integer> productIdList = new ArrayList<>();
 			PurchaseBean purchaseBean = new PurchaseBean();
-			Date currentTime = NewDate.newCurrentTime();
 			purchaseBean.setCreateTime(currentTime);
 			purchaseBean.setUpdatedTime(currentTime);
 			Iterator<Entry<String, Object>> iterator = json.entrySet().iterator();
@@ -234,13 +240,154 @@ public class PurchaseController {
 
 			result = purchaseService.newPurchase(productIdList, purchaseBean);
 		} catch (IllegalArgumentException e) {
-			System.err.println("error");
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.isNotNull()) {
 			return new ResponseEntity<PurchaseBean>(result, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<>("無此訂單", HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// Create Review
+	@PostMapping(value = "/shop/newReviews")
+	public ResponseEntity<?> newReviews(@RequestBody List<ReviewBean> reviews, BindingResult bindingResult) {
+		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			Map<String, String> errors = new HashMap<String, String>();
+			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+			for (ObjectError bindingError : bindingErrors) {
+				errors.put(bindingError.getObjectName(), bindingError.toString());
+			}
+			return ResponseEntity.badRequest().body(errors);
+		}
+		if ((reviews == null) || reviews.size() < 0) {
+			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
+		}
+		List<ReviewBean> reviewsWithTime = new ArrayList<ReviewBean>();
+		List<ReviewBean> result = new ArrayList<ReviewBean>();
+		try {
+			for (ReviewBean review : reviews) {
+				review.setCreateTime(currentTime);
+				review.setUpdatedTime(currentTime);
+				review.setMemberId(memberDAO.findByMemberId(review.getMemberId().getId()));
+				review.setProductId(productService.findProductByPrimaryKey(review.getProductId().getId()));
+				review.setPurchaseListId(purchaseService
+						.findPurchaseListById(review.getPurchaseListId().getId(), "purchaseList").get(0));
+				reviewsWithTime.add(review);
+			}
+			result = purchaseService.newReviews(reviewsWithTime);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		if (result != null && result.size() > 0) {
+			return new ResponseEntity<List<ReviewBean>>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// Put Method
+	// Update a Purchase
+	@PutMapping(value = "/shop/updatePurchase")
+	public ResponseEntity<?> updatePurchase(@RequestBody HashMap<String, Object> json, BindingResult bindingResult) {
+		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			Map<String, String> errors = new HashMap<String, String>();
+			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+			for (ObjectError bindingError : bindingErrors) {
+				errors.put(bindingError.getObjectName(), bindingError.toString());
+			}
+			return ResponseEntity.badRequest().body(errors);
+		}
+		if ((json == null) || json.size() < 0) {
+			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
+		}
+		PurchaseBean result = new PurchaseBean();
+		String payStatus = null;
+		String deliverStatus = null;
+		Integer productTotalPrice = null;
+		try {
+			PurchaseBean purchaseBean = new PurchaseBean();
+			Iterator<Entry<String, Object>> iterator = json.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry<String, Object> entry = (Entry<String, Object>) iterator.next();
+				String key = entry.getKey();
+				String value = String.valueOf(entry.getValue());
+				if (key.equalsIgnoreCase("id")) {
+					String stringId = String.valueOf(value);
+					Long purchaseId = Long.valueOf(stringId);
+					purchaseBean = purchaseService.findPurchaseById(purchaseId, "purchase").get(0);
+					purchaseBean.setUpdatedTime(currentTime);
+				} else if (key.equalsIgnoreCase("payStatus")) {
+					payStatus = value;
+				} else if (key.equalsIgnoreCase("deliverStatus")) {
+					deliverStatus = value;
+				} else if (key.equalsIgnoreCase("productTotalPrice")) {
+					productTotalPrice = Integer.valueOf(value);
+				}
+			}
+			if (NullChecker.isEmpty(payStatus) && NullChecker.isEmpty(deliverStatus) && productTotalPrice == null) {
+				return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
+			}
+			result = purchaseService.updatePurchase(purchaseBean, payStatus, deliverStatus, productTotalPrice);
+		} catch (IllegalArgumentException e) {
+			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		if (result != null && result.isNotNull()) {
+			return new ResponseEntity<PurchaseBean>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	// Update Review
+	@PutMapping(value = "/shop/updateReview")
+	public ResponseEntity<?> updateReview(@RequestBody HashMap<String, Object> json, BindingResult bindingResult) {
+		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			Map<String, String> errors = new HashMap<String, String>();
+			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+			for (ObjectError bindingError : bindingErrors) {
+				errors.put(bindingError.getObjectName(), bindingError.toString());
+			}
+			return ResponseEntity.badRequest().body(errors);
+		}
+		if ((json == null) || json.size() < 0) {
+			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
+		}
+		ReviewBean result = new ReviewBean();
+		Double rating = null;
+		String comment = null;
+		byte[] image = null;
+		try {
+			ReviewBean reviewBean = new ReviewBean();
+			Iterator<Entry<String, Object>> iterator = json.entrySet().iterator();
+			while (iterator.hasNext()) {
+				Map.Entry<String, Object> entry = (Entry<String, Object>) iterator.next();
+				String key = entry.getKey();
+				String value = String.valueOf(entry.getValue());
+				if (key.equalsIgnoreCase("id")) {
+					String stringId = String.valueOf(value);
+					Long reviewId = Long.valueOf(stringId);
+					reviewBean = purchaseService.findReviewById("review", reviewId).get(0);
+					reviewBean.setUpdatedTime(currentTime);
+				} else if (key.equalsIgnoreCase("rating")) {
+					rating = Double.valueOf(value);
+				} else if (key.equalsIgnoreCase("comment")) {
+					comment = value;
+				} else if (key.equalsIgnoreCase("image")) {
+					image = Converter.objToByte(value);
+				}
+			}
+			if (rating == null && NullChecker.isEmpty(comment) && image == null) {
+				return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
+			}
+			result = purchaseService.updateReview(reviewBean, rating, comment, image);
+		} catch (IllegalArgumentException | IOException e) {
+			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
+		}
+		if (result != null && result.isNotNull()) {
+			return new ResponseEntity<ReviewBean>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
 		}
 	}
 
