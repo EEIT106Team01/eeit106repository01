@@ -9,7 +9,7 @@
 	<link rel="stylesheet" href="assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
 	<link rel="stylesheet" href="assets/css/font-icons/entypo/css/entypo.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
-	<link rel="stylesheet" href="assets/css/neon-core.css">
+	<link rel="stylesheet" href="/assets/css/neon-core.css">
 	<link rel="stylesheet" href="assets/css/neon-theme.css">
 	<link rel="stylesheet" href="assets/css/neon-forms.css">
 	<link rel="stylesheet" href="assets/css/custom.css">
@@ -246,8 +246,37 @@
 			});
 		}
 
+		var quill;
+
+		var head = document.getElementsByTagName('head')[0];
+		
+		var quillJs1 = document.createElement('script');
+		quillJs1.src = 'https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js';
+
+		var quillJs2 = document.createElement('script');
+		quillJs2.src = 'https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js';
+
+		var quillJs3 = document.createElement('script');
+		quillJs3.src = '/forum/quill/quill.js';
+
+		var quillCss1 = document.createElement('link');
+		quillCss1.rel = 'stylesheet';
+		quillCss1.type = 'text/css';
+		quillCss1.href = '/forum/quill/quill.snow.css';
+
+		var quillCss2 = document.createElement('link');
+		quillCss2.rel = 'stylesheet';
+		quillCss2.type = 'text/css';
+		quillCss2.href = '/forum/quill/quill.bubble.css';
+
+		head.appendChild(quillJs1);
+		head.appendChild(quillJs2);
+		head.appendChild(quillJs3);
+		head.appendChild(quillCss1);
+		head.appendChild(quillCss2);
 
 		document.addEventListener("DOMContentLoaded", function () {
+
 			initRegionChat("north");
 			initRegionChat("middle");
 			initRegionChat("south");
@@ -260,6 +289,14 @@
 				} else if (e.keyCode == 27) {
 					$(this).val("");
 				}
+			});
+			quill = new Quill('#editor-container', {
+				modules: {
+					formula: true,
+					syntax: true,
+					toolbar: '#toolbar-container'
+				},
+				theme: 'snow'
 			});
 		});
 	</script>
@@ -289,7 +326,7 @@
 	<div class="container" style="margin-top: 2%">
 		<div class="row">
 			<div class="col-sm-4">
-					<a href="#" class="btn btn-default" data-toggle="chat" style="float: right">Toggle Chat</a>
+				<a href="#" class="btn btn-default" data-toggle="chat" style="float: right">Toggle Chat</a>
 			</div>
 			<div class="col-sm-4">
 				<h3>Column 2</h3>
@@ -313,7 +350,7 @@
 	</div>
 	<div class="page-container chat-visible">
 
-		
+
 		<a href="#" class="btn btn-default chat-open">Force Open</a>
 		<span class="badge badge-danger chat-notifications-badge is-hidden" style="float: right"></span>
 		<div id="chat" class="fixed" data-current-user="測試用一號" data-order-by-status="1" data-max-chat-history="999">
@@ -366,7 +403,55 @@
 				</ul>
 
 				<div class="chat-textarea">
-					<textarea class="form-control autogrow" placeholder="Type your message"></textarea>
+					<!-- <textarea class="form-control autogrow" placeholder="Type your message"></textarea> -->
+					<div id="standalone-container">
+						<div id="toolbar-container">
+							<span class="ql-formats">
+								<select class="ql-font"></select>
+								<select class="ql-size"></select>
+							</span>
+							<span class="ql-formats">
+								<button class="ql-bold"></button>
+								<button class="ql-italic"></button>
+								<button class="ql-underline"></button>
+								<button class="ql-strike"></button>
+							</span>
+							<span class="ql-formats">
+								<select class="ql-color"></select>
+								<select class="ql-background"></select>
+							</span>
+							<span class="ql-formats">
+								<button class="ql-script" value="sub"></button>
+								<button class="ql-script" value="super"></button>
+							</span>
+							<span class="ql-formats">
+								<button class="ql-header" value="1"></button>
+								<button class="ql-header" value="2"></button>
+								<button class="ql-blockquote"></button>
+								<button class="ql-code-block"></button>
+							</span>
+							<span class="ql-formats">
+								<button class="ql-list" value="ordered"></button>
+								<button class="ql-list" value="bullet"></button>
+								<button class="ql-indent" value="-1"></button>
+								<button class="ql-indent" value="+1"></button>
+							</span>
+							<span class="ql-formats">
+								<button class="ql-direction" value="rtl"></button>
+								<select class="ql-align"></select>
+							</span>
+							<span class="ql-formats">
+								<button class="ql-link"></button>
+								<button class="ql-image"></button>
+								<button class="ql-video"></button>
+								<button class="ql-formula"></button>
+							</span>
+							<span class="ql-formats">
+								<button class="ql-clean"></button>
+							</span>
+						</div>
+						<div id="editor-container" style="height: 80px"></div>
+					</div>
 				</div>
 
 			</div>

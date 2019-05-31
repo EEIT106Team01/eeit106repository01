@@ -33,38 +33,42 @@
         <!-- your page start -->
         <div class="main-content">
             <div id="headerDiv">
-                <div class="col-md-4">
-                    <span id="title">三寶購物</span>
-                    <button class="btn btn-primary" type="button" id="search">
-                        <input type="text" class="form-control input-lg col-md-8" placeholder="請輸入關鍵字">Go!</button>
+                <span id="title" class="col-md-4">三寶購物</span>
+                <div class="col-md-8">
+                    <div class="col-md-8">
+                        <select class="form-control col-md-3" id="searchType"></select>   
+                        <input type="text" class="form-control input-lg col-md-4" placeholder="請輸入關鍵字">
+                        <button class="btn btn-primary" type="button" id="search">Go!</button>
+                    </div>
                 </div>
                 <div class="col-md-12" id="keyWordDiv">
                     <p>大家都在找...</p>
                     <div id="keyWord"></div>
                 </div>
-                <div id="productsQuantity">
-                    
-                </div>
+
             </div>
             <div class="main-content">
-                <div id="main">
+                <div id="left-area" class="col-md-2">
+                    <div id="productsQuantity">
+
+                    </div>
                     <div id="classification">
                         <ol>
 
                         </ol>
                     </div>
-                    <div id="Advertising wall"></div>
                 </div>
-
-                <div class="col-md-8" id="productsTop10Div">
-                    <p>全站商品TOP 10</p>
-                    <span>更多人氣排行</span>
-                    <div id="productsTop10"></div>
-                </div>
-                <div class="col-md-12" id="newUpdateProductDiv">
-                    <p>新產品</p>
-                    <span>更多新商品</span>
-                    <div id="newUpdateProductDiv" ></div>
+                <div id="right-area" class="col-md-10">
+                    <div class="col-md-12" id="productsTop10Div">
+                        <spanp>全站商品TOP 10</span>
+                            <span>更多人氣排行</span>
+                            <div id="productsTop10"></div>
+                    </div>
+                    <div class="col-md-12" id="newUpdateProductDiv">
+                        <spanp>新產品</spanp>
+                        <span>更多新商品</span>
+                        <div id="newUpdateProduct"></div>
+                    </div>
                 </div>
             </div>
         </div>

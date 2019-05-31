@@ -87,7 +87,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/updatedTime" }, produces = { "application/json" })
+	@GetMapping(path = { "/search/updatedTime" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByUpdatedTime(
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDay,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDay) {
