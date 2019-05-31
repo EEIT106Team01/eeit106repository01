@@ -267,6 +267,7 @@ public class PurchaseController {
 		List<ReviewBean> result = new ArrayList<ReviewBean>();
 		try {
 			for (ReviewBean review : reviews) {
+				System.out.println(review.getImageString());
 				review.setCreateTime(currentTime);
 				review.setUpdatedTime(currentTime);
 				review.setMemberId(memberDAO.findByMemberId(review.getMemberId().getId()));

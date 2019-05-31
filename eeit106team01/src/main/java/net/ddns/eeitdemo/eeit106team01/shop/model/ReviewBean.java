@@ -15,6 +15,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.sql.rowset.serial.SerialBlob;
 
 @Entity
 @Table(schema = "Shop", name = "Review")
@@ -42,7 +43,7 @@ public class ReviewBean implements Serializable {
 	private String comment;
 
 	@Column(name = "Image", columnDefinition = "image")
-	private Byte[] image;
+	private SerialBlob image;
 
 	@ManyToOne
 	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
@@ -55,6 +56,8 @@ public class ReviewBean implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "ProductID", columnDefinition = "bigint", nullable = false, updatable = false)
 	private ProductBean productId;
+
+	private String imageString;
 
 	public ReviewBean() {
 		super();
@@ -145,11 +148,11 @@ public class ReviewBean implements Serializable {
 		this.comment = comment;
 	}
 
-	public Byte[] getImage() {
+	public SerialBlob getImage() {
 		return image;
 	}
 
-	public void setImage(Byte[] image) {
+	public void setImage(SerialBlob image) {
 		this.image = image;
 	}
 
@@ -175,6 +178,14 @@ public class ReviewBean implements Serializable {
 
 	public void setProductId(ProductBean productId) {
 		this.productId = productId;
+	}
+
+	public String getImageString() {
+		return imageString;
+	}
+
+	public void setImageString(String imageString) {
+		this.imageString = imageString;
 	}
 
 }
