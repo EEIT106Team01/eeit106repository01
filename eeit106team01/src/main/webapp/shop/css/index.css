@@ -1,6 +1,6 @@
 /* headerDIV--------------------------------------- */
 #headerDiv{
-    background-color: #4d4033;
+    background-color: #797067;
     height: 300px;
     justify-content:center;
     align-items:center;
@@ -25,14 +25,25 @@
     width: auto
 }
 
-#searchType{
-    width: 10px;
+#search{
+    display: inline;
 }
 
-#title{
-    /* position: absolute; */
-    /* top: 47%;
-    left: 20% */
+.keyWord{
+    display: inline;
+}
+
+.titleIimg1{
+    position:absolute;
+    width: 50%;
+    top:-80px;
+    left:20%;
+}
+.titleIimg2{
+    position:absolute;
+    width: 50%;
+    top:-60px;
+    left: 50%;
 }
 /* headerDIV--------------------------------------- */
 
@@ -45,7 +56,7 @@
     width: 200px;
     display:inline-block;
     padding: 5px 5px;
-    font-size: 10px;
+    font-size: 20px;
 }
 
 .price{
@@ -54,12 +65,25 @@
 
 .productDiv{
     width: 200px;
-    height: 300px;
+    height: 400px;
     display: inline-block;
     margin-left: 20px;
 }
+/* 標籤--------------------------------------------- */
+.hotSale{
+    position:absolute;
+    width: 40px;
+    top:0%;
+    left: 90%;
+}
 
-
+.newSale{
+    position:absolute;
+    width: 40px;
+    top:0%;
+    left: 90%;
+}
+/* 標籤--------------------------------------------- */
 /* 產品--------------------------------------------- */
 
 #left-area{
@@ -69,4 +93,25 @@
 #left-area{
     /* width: 80%; */
     /* float: right;; */
+}
+
+#productsQuantity{
+    text-align:center;
+}
+.productsQuantityTitle{
+    color: #666;
+}
+
+.more{
+    float: right;
+}
+
+.classification{
+    color: #666;
+    margin-bottom: 1%;
+}
+
+.li{
+    list-style:none;
+    color: #666;
 }

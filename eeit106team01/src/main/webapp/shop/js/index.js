@@ -27,14 +27,14 @@ function getProducts() {
             })
 
             var pageSize = productsData.length;
-            $("#productsQuantity").empty().append("<p>全站共有"+pageSize+"件商品</p>")
+            $("#productsQuantity").empty().append("<span class='productsQuantityTitle'>全站共有<h2>"+pageSize+"件商品</h2></span><hr>")
 
             var products =[]
             var top = 10;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href=""><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
-                    '<span class="name">' + productsName[i] + '</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
+                    '<div class="col-md-2  productDiv"><a href=""><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
+                    '<span class="name">' + productsName[i].substr( 0, 25 )  + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
             var result = products.join("")
@@ -55,7 +55,7 @@ function getAllType(){
             var i=0;    
             var productTypeArray =[];
             $.each(typesData,function(){
-                    productTypeArray.push('<li><a href="" onclick="ByType(this);return false">'+typesData[i].data+'</a></li>')
+                    productTypeArray.push('<li class="li"><a href="http://localhost:8080/shop/search.html?type='+typesData[i].data+'">'+typesData[i].data+'</a></li>')
                     i++
                 })   
             $("#classification").empty().append(productTypeArray.join(""))
@@ -75,7 +75,6 @@ function getAllType(){
 
 function getProductsByUpdateTime(){
 
-
     var endDay = GetDateStr(0)
     var startDay = GetDateStr(-30)
 
@@ -90,12 +89,13 @@ function getProductsByUpdateTime(){
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
-
+            var productsId = [];
             var y = 0;
             $.each(dayData, function () {
                 productsName.push(dayData[y].name)
                 productsPrice.push(dayData[y].price)
                 productsImg.push(dayData[y].imageLink[0])
+                productsId.push(dayData[y].id)
                 y++;
             })
 
@@ -103,8 +103,8 @@ function getProductsByUpdateTime(){
             var top = 10;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href=""><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
-                    '<span class="name">' + productsName[i] + '</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
+                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html/?'+productsId[i]+'"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/newSale.png" class="newSale"></div>' +
+                    '<span class="name">' + productsName[i].substr( 0, 25 ) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
             var result = products.join("")
@@ -115,7 +115,7 @@ function getProductsByUpdateTime(){
         }
     })
 }
-
+//計算時間
 function GetDateStr(AddDayCount) {   
     var dd = new Date();  
     dd.setDate(dd.getDate()+AddDayCount);
@@ -124,3 +124,17 @@ function GetDateStr(AddDayCount) {
     var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();
     return y+"-"+m+"-"+d;   
  }  
+
+ function search(productType,productName){
+    $.ajax({
+        url: "http://localhost:8080/search/TypeName?productType="+productType+"&productName="+productName,
+        method: "GET",
+        dataType: "json",
+        cache:false,
+        success: function (searchData) {   
+           
+        },error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
+ }

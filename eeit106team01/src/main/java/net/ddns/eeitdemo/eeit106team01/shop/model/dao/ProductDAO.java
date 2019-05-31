@@ -29,6 +29,8 @@ public interface ProductDAO {
 			String queryString, Integer minPrice, Integer maxPrice);
 
 	abstract List<ProductBean> findProductsByUpdatedTimeDayBetween(Date startDay, Date endDay);
+	
+	abstract List<ProductBean> findProductsByTypeName(String type,String name);
 
 	abstract SerialNumberBean findSerialNumber(String serialNumber);
 

@@ -1,79 +1,19 @@
 $(document).ready(function () {
-    $("#getNameButton").click(function () {
-        getProductsByName();
-    }),
-    $("[data-toggle=popover]")
-        .popover({html:true}),
-    $("#ClassificationDiv").one('click',function(){
-        getAllType();
-    })
   
-    getProduct();
+    getProduct(takeUrlValue())
 });
 
-function classification(){
+function takeUrlValue() {
+    //URL
+    var url = location.href;
     
-}
-
-//產品種類搜尋
-function getProductsByType(){
-    var type = 行車紀錄器;
-    $.ajax({
-        url: "http://localhost:8080/products/type?type=" + type,
-        method: "GET",
-        dataType: "json",
-        success: function (products) {
-
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
-        }
-    })
-}   
-
-// 產品名搜尋
-function getProductsByName() {
-    var name = $("#getNameForm").serialize();
-    $.ajax({
-        url: "http://localhost:8080/products/name?" + name,
-        method: "GET",
-        dataType: "json",
-        success: function (products) {
-            $("#searchResult").html("");
-            var i = 0;
-            var imgLink = [];
-            var productsName =[];
-            var productsPrice =[];
-            var productsImg =[];
-            $.each(products, function () {
-
-                $.each(products[i].imageLink, function (key, val) {
-                    imgLink.push(val)
-                },
-
-                $.each(recommendData,function(){
-                    var y=0;
-                    productsName.push(products[y].name)
-                    productsPrice.push(products[y].price)
-                    productsImg.push(products[y].imageLink[0])
-                    i++;
-                }),
-
-                $("#searchResult").append(
-
-                ),
-            i++)
-            });
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
-        }
-    })
+    //取得問號之後的值
+    var temp = url.split("?");
+    return temp[1]
 }
 
 // 單件商品
 function getProduct(id) {
-    var id = 50;
     
     $.ajax({
         url: "http://localhost:8080/product/" + id,

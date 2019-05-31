@@ -436,4 +436,23 @@ public class ProductDAOImpl implements ProductDAO {
 		return null;
 	}
 
+	@Override
+	public List<ProductBean> findProductsByTypeName(String type, String name) {
+		if (NullChecker.isEmpty(name) == false && (NullChecker.isEmpty(type) == false)){
+			try {
+				this.productsResutlt = this.getSession()
+						.createQuery("from ProductBean where name like :name and type= :type", ProductBean.class)
+						.setParameter("name", "%" + name + "%")
+						.setParameter("type", type)
+						.getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+				return this.productsResutlt;
+			}
+		}
+		return null;
+	}
+
 }

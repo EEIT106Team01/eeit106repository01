@@ -1,8 +1,16 @@
 $(document).ready(function () {
     getAllType()
+    getProductsByType(takeUrlValue())
+    getAllBrand(takeUrlValue())
     $("#starDay").datepicker()
     $("#endDay").datepicker()
-
+    $("#searchPrice").on('click',(function () {
+        var brand = $(brand).text()
+        if(brand == "")
+            var type = takeUrlValue().split("=")
+            console.log(type)
+            getProductsByPriceByType(type[1]);
+    }))   
 })
 
 function ByType(type){
@@ -30,12 +38,21 @@ function ByBrand(brand){
 //顯示此次搜尋的產品數量
 function getProductQuantity(data){
     var productQuantity = data.length;
-    $("#productQuantity").text("總共有"+productQuantity+"件商品")  
+    $("#productQuantity").text(+productQuantity)  
+}
+
+function takeUrlValue() {
+    //URL
+    var url = location.href;
+    
+    //取得問號之後的值
+    var temp = url.split("?");
+    return temp[1]
 }
 
 function getProductsByType(type){
     $.ajax({
-        url: "http://localhost:8080/search/type?type="+type,
+        url: "http://localhost:8080/search/type?"+type,
         method: "GET",
         dataType: "json",
         cache:false,
@@ -61,7 +78,7 @@ function getProductsByType(type){
             console.log("取資料塞入array")
 
             var pageSize = typeData.length; 
-            var onePageProducts = 12;
+            var onePageProducts = 40;
             var total = Math.ceil(pageSize/onePageProducts);
             var remain = pageSize%onePageProducts;
 
@@ -148,7 +165,7 @@ function getProductsByType(type){
 // 側邊menu用↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 function getAllBrand(type){
     $.ajax({
-        url: "http://localhost:8080/search/data?dataName=brand&type="+type,
+        url: "http://localhost:8080/search/data?dataName=brand&"+type,
         method: "GET",
         dataType: "json",
         cache:false,
@@ -222,7 +239,7 @@ function getProductsByPrice(){
             }) 
 
             var pageSize = priceData.length; 
-            var onePageProducts = 12;
+            var onePageProducts = 40;
             var total = Math.ceil(pageSize/onePageProducts);
             var remain = pageSize%onePageProducts;
 
@@ -331,7 +348,7 @@ function getProductsByPriceByType(type){
             }) 
 
             var pageSize = priceData.length; 
-            var onePageProducts = 12;
+            var onePageProducts = 40;
             var total = Math.ceil(pageSize/onePageProducts);
             var remain = pageSize%onePageProducts;
 
@@ -544,7 +561,7 @@ function getProductsByBrand(brand){
             })
 
             var pageSize = brandData.length; 
-            var onePageProducts = 12;
+            var onePageProducts = 40;
             var total = Math.ceil(pageSize/onePageProducts);
             var remain = pageSize%onePageProducts;
 

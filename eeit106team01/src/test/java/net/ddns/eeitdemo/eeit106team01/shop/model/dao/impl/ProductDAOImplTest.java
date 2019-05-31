@@ -151,10 +151,15 @@ public class ProductDAOImplTest {
 		assertNull(productDAO.findSerialNumbersByProductIdAndAvailabilityStatus(2L, "sold"));
 	}
 
-	@Test
+	
 	public void testFindProductData() throws Exception {
 		assertEquals(new Integer(productDAO.findProductData("type", null).size()), new Integer(6));
 		assertEquals(new Integer(productDAO.findProductData("brand", "行車紀錄器").size()), new Integer(162));
+	}
+	@Test
+	public void testFindProductsByTypeName() throws Exception{
+		assertNotNull(productDAO.findProductsByTypeName("行車紀錄器", "快譯通"));
+		assertNull(productDAO.findProductsByTypeName("", ""));
 	}
 
 }

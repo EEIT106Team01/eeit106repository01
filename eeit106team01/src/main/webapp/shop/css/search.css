@@ -21,6 +21,13 @@
     float: left;
 }
 
+#productQuantity{
+    display: inline;
+}
+
+.page{
+    float: right;
+}
 
 #PageCon {height:35px;text-align:center}
 #PageShow ul{display:inline-block; margin:0 auto}
