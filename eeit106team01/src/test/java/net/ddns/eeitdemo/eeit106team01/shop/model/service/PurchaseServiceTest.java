@@ -40,7 +40,7 @@ public class PurchaseServiceTest extends ShopTest {
 	@Autowired
 	private MemberDAO memberDAO;
 
-	private ArrayList<Long> productIdList;
+	private ArrayList<Integer> productIdList;
 	private Date date = NewDate.newCurrentTime();
 
 	@Test
@@ -61,7 +61,7 @@ public class PurchaseServiceTest extends ShopTest {
 		PurchaseBean purchaseBean = new PurchaseBean("unpaid", date, date, productTotalPrice, "unsend", "7-11", 200,
 				receiverInformation, member);
 
-//		purchaseService.newPurchase(productIdList, purchaseBean);
+		purchaseService.newPurchase(productIdList, purchaseBean);
 	}
 
 	public void testUpdatePurchase() throws Exception {
@@ -134,7 +134,7 @@ public class PurchaseServiceTest extends ShopTest {
 		byte[] fileContent = Files.readAllBytes(filePath);
 
 		SerialBlob serialBlob = new javax.sql.rowset.serial.SerialBlob(fileContent);
-//		assertNotNull(purchaseService.updateReview(reviewBean, null, null, serialBlob));
+		assertNotNull(purchaseService.updateReview(reviewBean, null, null, serialBlob.getBytes(1, (int) serialBlob.length())));
 	}
 
 	public void testFindReviewById() throws Exception {

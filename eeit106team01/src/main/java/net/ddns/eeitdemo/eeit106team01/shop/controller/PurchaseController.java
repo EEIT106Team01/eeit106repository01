@@ -382,7 +382,7 @@ public class PurchaseController {
 				} else if (key.equalsIgnoreCase("comment")) {
 					comment = value;
 				} else if (key.equalsIgnoreCase("image")) {
-//					image = Converter.objToByte(value);
+					image = value.getBytes();
 				}
 			}
 			if (rating == null && NullChecker.isEmpty(comment) && image == null) {

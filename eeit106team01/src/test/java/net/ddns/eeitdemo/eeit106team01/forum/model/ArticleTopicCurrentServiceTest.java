@@ -19,6 +19,7 @@ public class ArticleTopicCurrentServiceTest {
 	@Autowired
 	private ArticleTopicCurrentService articleTopicCurrentService;
 	
+	@SuppressWarnings("unused")
 	@Autowired
 	private ArticleContentCurrentService articleContentCurrentService;
 	
