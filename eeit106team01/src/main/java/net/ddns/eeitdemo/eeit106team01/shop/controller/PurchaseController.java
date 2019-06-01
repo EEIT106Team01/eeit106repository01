@@ -1,6 +1,5 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
-import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Base64;
@@ -29,8 +28,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.google.common.base.Utf8;
-
 import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
@@ -41,7 +38,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.service.PurchaseService;
 import net.ddns.eeitdemo.eeit106team01.shop.util.Converter;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
-import sun.text.normalizer.UTF16;
 
 @RestController
 public class PurchaseController {
