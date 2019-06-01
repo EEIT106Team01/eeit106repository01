@@ -1,6 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
-import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -267,6 +269,12 @@ public class PurchaseController {
 		List<ReviewBean> result = new ArrayList<ReviewBean>();
 		try {
 			for (ReviewBean review : reviews) {
+				if (NullChecker.isEmpty(review.getImageBase64()) == false) {
+					Byte[] byteObjects = review.getImageBase64();
+					SerialBlob serialBlob = new SerialBlob(ArrayUtils.toPrimitive(byteObjects));
+					review.setImage(serialBlob);
+					review.setImageBase64(null);
+				}
 				review.setCreateTime(currentTime);
 				review.setUpdatedTime(currentTime);
 				review.setMemberId(memberDAO.findByMemberId(review.getMemberId().getId()));
@@ -276,7 +284,7 @@ public class PurchaseController {
 				reviewsWithTime.add(review);
 			}
 			result = purchaseService.newReviews(reviewsWithTime);
-		} catch (IllegalArgumentException e) {
+		} catch (IllegalArgumentException | SQLException e) {
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.size() > 0) {
@@ -374,14 +382,14 @@ public class PurchaseController {
 				} else if (key.equalsIgnoreCase("comment")) {
 					comment = value;
 				} else if (key.equalsIgnoreCase("image")) {
-					image = Converter.objToByte(value);
+//					image = Converter.objToByte(value);
 				}
 			}
 			if (rating == null && NullChecker.isEmpty(comment) && image == null) {
 				return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
 			}
 			result = purchaseService.updateReview(reviewBean, rating, comment, image);
-		} catch (IllegalArgumentException | IOException e) {
+		} catch (IllegalArgumentException e) {
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.isNotNull()) {

@@ -15,7 +15,7 @@ $("#search").click(function () {
             var img = [];
             $.each(result[0], function (key, val) {
                 if (key.match(/^(image)$/) && val != null) {
-                    img.push("<img src='data:image/png;base64," + val + "' class='img-thumbnail'>");
+                    img.push("<img src='data:image/jpeg;base64," + val + "' class='img-thumbnail'>");
                 } else if (key.match(/^(createTime|updatedTime)$/)) {
                     textHead.push("<th class='" + key + "'>" + key + "</th>");
                     text.push("<td>" + new Date(val) + "</td>");
@@ -58,32 +58,70 @@ $("#search").click(function () {
     });
 });
 
+// 當上傳檔案改變時清除目前預覽圖，並且呼叫previewFiles()
+$("#upload").change(function () {
+    $("#previewDiv").empty() // 清空當下預覽
+    previewFiles(this.files) // this即為<input>元素
+})
+// 使用FileReader讀取檔案，並且回傳Base64編碼後的source
+function convertFile(file) {
+    return new Promise((resolve, reject) => {
+        // 建立FileReader物件
+        let reader = new FileReader()
+        // 註冊onload事件，取得result則resolve (會是一個Base64字串)
+        reader.onload = () => { resolve(reader.result) }
+        // 註冊onerror事件，若發生error則reject
+        reader.onerror = () => { reject(reader.error) }
+        // 讀取檔案
+        reader.readAsDataURL(file)
+    })
+}
+// 在頁面上新增<img>
+function showPreviewImage(src, fileName) {
+    let image = new Image(300) // 設定寬px
+    image.id = "preImage";
+    image.name = fileName
+    image.src = src // <img>中src屬性除了接url外也可以直接接Base64字串
+    $("#previewDiv").append(image).append(`<p>File: ${image.name}`)
+}
+// 預覽圖片，將取得的files一個個取出丟到convertFile()
+function previewFiles(files) {
+    if (files && files.length >= 1) {
+        $.map(files, file => {
+            convertFile(file)
+                .then(data => {
+                    console.log(data) // 把編碼後的字串輸出到console
+                    showPreviewImage(data, file.name)
+                })
+                .catch(err => console.log(err))
+        })
+    }
+}
 
-// Insert 
+//Insert 
 $("#insert").click(function () {
     $("#image").empty();
     $("#content thead tr").empty();
     $("#content tbody tr").empty();
     const url = 'http://localhost:8080/shop/newReviews';
-    
+
     //Parse type
     var rating = parseFloat($('#rating').val());
     var memberId = parseInt($('#memberId').val());
     var purchaseListId = parseInt($('#purchaseListId').val());
     var productId = parseInt($('#productId').val());
-    
-    var image = $('#upload').prop('files');
-    console.log(image);
+    //Image
+    var image = $('#preImage').attr('src');
+    var imgByte = image.substr(image.indexOf(',') + 1, image.length);
 
     var json = new Object();
     json.rating = rating;
     json.comment = $('#comment').val();
-    json.image = image;
+    json.imageBase64 = imgByte;
     json.memberId = { 'id': memberId };
     json.purchaseListId = { 'id': purchaseListId };
     json.productId = { 'id': productId };
-    var jsonString = JSON.stringify([json]);
-    var data = jsonString;
+    var data = JSON.stringify([json]);
     console.log(data);
 
     $.ajax({
@@ -97,7 +135,13 @@ $("#insert").click(function () {
             var img = [];
             $.each(result[0], function (key, val) {
                 if (key.match(/^(image)$/) && val != null) {
-                    img.push("<img src='data:image/png;base64," + val + "' class='img-thumbnail'>");
+                    var reader = new FileReader();
+                    reader.readAsDataURL(val); 
+                    reader.onloadend = function() {
+                        base64data = reader.result;                
+                        console.log(base64data);
+                    }
+                    img.push("<img src='data:image/jpeg;base64," + val + "' class='img-thumbnail'>");
                 } else if (key.match(/^(createTime|updatedTime)$/)) {
                     textHead.push("<th class='" + key + "'>" + key + "</th>");
                     text.push("<td>" + new Date(val) + "</td>");

@@ -1,14 +1,16 @@
 package net.ddns.eeitdemo.eeit106team01.shop.util;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+
+import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
+
+import sun.misc.BASE64Decoder;
 
 public class Converter {
 
@@ -22,21 +24,10 @@ public class Converter {
 		return list;
 	}
 
-	public static byte[] objToByte(Object object) throws IOException {
-		ByteArrayOutputStream byteStream = new ByteArrayOutputStream();
-		ObjectOutputStream objStream = new ObjectOutputStream(byteStream);
-		objStream.writeObject(object);
-		byteStream.close();
-		objStream.close();
-		return byteStream.toByteArray();
-	}
-
-	public static Object byteToObj(byte[] bytes) throws IOException, ClassNotFoundException {
-		ByteArrayInputStream byteStream = new ByteArrayInputStream(bytes);
-		ObjectInputStream objStream = new ObjectInputStream(byteStream);
-		byteStream.close();
-		objStream.close();
-		return objStream.readObject();
+	public static SerialBlob decodeToImage(String imageString) throws SerialException, SQLException, IOException {
+	    BASE64Decoder decoder = new BASE64Decoder();
+	    byte[] imageByte = decoder.decodeBuffer(imageString);    
+	    return new SerialBlob(imageByte);    
 	}
 
 }
