@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -382,7 +383,10 @@ public class PurchaseController {
 				} else if (key.equalsIgnoreCase("comment")) {
 					comment = value;
 				} else if (key.equalsIgnoreCase("image")) {
-//					image = Converter.objToByte(value);
+					if (value.equals("null")) {
+						image = null;
+					}
+					image = Base64.getDecoder().decode(value);
 				}
 			}
 			if (rating == null && NullChecker.isEmpty(comment) && image == null) {

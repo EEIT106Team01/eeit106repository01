@@ -1,8 +1,30 @@
-#image,
+/* review */
+
+#image {
+    text-align: center;
+    width: 300px;
+}
+
 h1 {
     text-align: center;
 }
 
 body {
     background-color: black;
+}
+
+#previewDiv img {
+    width: 300px;
+}
+
+.container {
+    width: 1080px;
+}
+
+
+/* drag and drop */
+
+#draggable-events {
+    width: 200px;
+    position: absolute;
 }

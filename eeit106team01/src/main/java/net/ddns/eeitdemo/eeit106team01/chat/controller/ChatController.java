@@ -9,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.messaging.simp.annotation.SubscribeMapping;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 
@@ -100,24 +99,28 @@ public class ChatController {
 		return regionMessage;
 	}
 
-	@SubscribeMapping("/topic/north")
-	public List<RegionMessageBean> sendActiveNorthMessages() {
-		return this.sendActiveRegionMessages("north");
+//	@SubscribeMapping("/topic/north")
+	@MessageMapping("/north/getActive")
+	public void sendActiveNorthMessages(Principal user) {
+		messagingTemplate.convertAndSendToUser(user.getName(), "/topic/north/getActive", this.sendActiveRegionMessages("north"));
 	}
 
-	@SubscribeMapping("/topic/middle")
-	public List<RegionMessageBean> sendActiveMiddleMessages() {
-		return this.sendActiveRegionMessages("middle");
+//	@SubscribeMapping("/topic/middle")
+	@MessageMapping("/middle/getActive")
+	public void sendActiveMiddleMessages(Principal user) {
+		messagingTemplate.convertAndSendToUser(user.getName(), "/topic/middle/getActive", this.sendActiveRegionMessages("middle"));
 	}
 
-	@SubscribeMapping("/topic/south")
-	public List<RegionMessageBean> sendActiveSourthMessages() {
-		return this.sendActiveRegionMessages("south");
+//	@SubscribeMapping("/topic/south")
+	@MessageMapping("/south/getActive")
+	public void sendActiveSourthMessages(Principal user) {
+		messagingTemplate.convertAndSendToUser(user.getName(), "/topic/south/getActive", this.sendActiveRegionMessages("south"));
 	}
 
-	@SubscribeMapping("/topic/east")
-	public List<RegionMessageBean> sendActiveEastMessages() {
-		return this.sendActiveRegionMessages("east");
+//	@SubscribeMapping("/topic/east")
+	@MessageMapping("/east/getActive")
+	public void sendActiveEastMessages(Principal user) {
+		messagingTemplate.convertAndSendToUser(user.getName(), "/topic/east/getActive", this.sendActiveRegionMessages("east"));
 	}
 
 	public List<RegionMessageBean> sendActiveRegionMessages(String region) {
@@ -154,10 +157,12 @@ public class ChatController {
 						System.out.println(toUser.getName());
 						privateMessageService.addMessage(fromUser.getName(), toUser.getName(), privateMsg);
 						messagingTemplate.convertAndSendToUser(toUser.getName(), "/topic/msg", privateMsg);
+						messagingTemplate.convertAndSendToUser(fromUser.getName(), "/topic/msg", privateMsg);
 					} else {
 						System.out.println("Can not find or not online user : " + privateMsg.getToUser());
 						privateMessageService.addOfflineMessage(fromUser.getName(), privateMsg.getToUser(),
 								privateMsg.getToUser(), privateMsg);
+						messagingTemplate.convertAndSendToUser(fromUser.getName(), "/topic/msg", privateMsg);
 					}
 				} else if (privateMsg.getCommand().equalsIgnoreCase("getOldByIndex")) {
 					int index = Integer.parseInt(privateMsg.getMessage());
@@ -170,8 +175,9 @@ public class ChatController {
 		}
 	}
 
-	@SubscribeMapping("/user/topic/msg")
-	public List<PrivateMessageBean> sendAllActivePrivateMessage(Principal user) {
+//	@SubscribeMapping("/user/topic/msg")
+	@MessageMapping("/getAllActiveMsg")
+	public void sendAllActivePrivateMessage(Principal user) {
 		if (user != null && user.getName() != null && user.getName().trim().length() != 0) {
 			System.err.println(user.getName() + " subcribed private message.");
 			List<PrivateMessageBean> privateMessages = privateMessageService.findAllActiveByUser(user.getName());
@@ -179,9 +185,8 @@ public class ChatController {
 				privateMessageService.clearOfflineMessage(privateMessage.getUserOne(), privateMessage.getUserTwo(),
 						user.getName());
 			}
-			return privateMessages;
+			messagingTemplate.convertAndSendToUser(user.getName(), "/topic/getAllActiveMsg", privateMessages);
 		}
-		return null;
 	}
 
 	@MessageMapping("/checkUser")

@@ -1,9 +1,11 @@
 package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -275,8 +277,16 @@ public class PurchaseService {
 			}
 			if (image != null && image.length > 0) {
 				if (reviewBean.getImage() != null) {
-					reviewBean.setImage(reviewBean.getImage());
-					flag = true;
+					if (!reviewBean.getImage().equals(image)) {
+						SerialBlob serialBlob = null;
+						try {
+							serialBlob = new SerialBlob(image);
+						} catch (SQLException e) {
+							e.printStackTrace();
+						}
+						reviewBean.setImage(serialBlob);
+						flag = true;
+					}
 				}
 			}
 			if (flag) {
