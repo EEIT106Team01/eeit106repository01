@@ -33,7 +33,7 @@ public class TopSearchService {
 			query.setParameter("keyWord", keyWord);
 			List<TopSearchBean> keyWordResult = query.getResultList();
 			Query query1 = this.getSession().createQuery(
-					"from TopSearchBean where time >= DATEADD(day,:day ,GETDATE()) AND time <= DATEADD(day,:day1,GETDATE()) AND keyWord = :keyWord",
+					"from TopSearchBean where updatedTime >= DATEADD(day,:day ,GETDATE()) AND updatedTime <= DATEADD(day,:day1,GETDATE()) AND keyWord = :keyWord",
 					TopSearchBean.class);
 			query1.setParameter("day", -30);
 			query1.setParameter("day1", 0);

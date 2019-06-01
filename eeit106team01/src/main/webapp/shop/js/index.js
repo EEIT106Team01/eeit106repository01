@@ -2,8 +2,15 @@ $(document).ready(function () {
     getProducts()
     getAllType()
     getProductsByUpdateTime()
+    getKeyword()
+    $("#search").on("click", (function () {
+        insertKeyWord();
+        var productType = $("#searchType").val();
+        var productName = $("#searchName").val();
+        window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+    }))
 })
-
+//right-area-全站產品排行and全站產品數量
 function getProducts() {
 
     $.ajax({
@@ -28,14 +35,14 @@ function getProducts() {
             })
 
             var pageSize = productsData.length;
-            $("#productsQuantity").empty().append("<span class='productsQuantityTitle'>全站共有<h2>"+pageSize+"件商品</h2></span><hr>")
+            $("#productsQuantity").empty().append("<span class='productsQuantityTitle'>全站共有<h2>" + pageSize + "件商品</h2></span><hr>")
 
-            var products =[];
+            var products = [];
             var top = 10;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
-                    '<span class="name">' + productsName[i].substr( 0, 25 )  + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
+                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
+                    '<span class="name">' + productsName[i].substr(0, 25) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
             var result = products.join("");
@@ -45,48 +52,45 @@ function getProducts() {
         }
     })
 }
-
-function getAllType(){
+//left-area種類列表
+function getAllType() {
     $.ajax({
         url: "http://localhost:8080/search/data?dataName=type",
         method: "GET",
         dataType: "json",
-        cache:false,
-        success: function (typesData) {   
-            var i=0;    
-            var productTypeArray =[];
-            $.each(typesData,function(){
-                    productTypeArray.push('<li class="li"><a href="http://localhost:8080/shop/search.html?type='+typesData[i].data+'">'+typesData[i].data+'</a></li>')
-                    i++
-                })   
+        cache: false,
+        success: function (typesData) {
+            var i = 0;
+            var productTypeArray = [];
+            $.each(typesData, function () {
+                productTypeArray.push('<li class="li"><a href="http://localhost:8080/shop/search.html?type=' + typesData[i].data + '">' + typesData[i].data + '</a></li>')
+                i++
+            })
             $("#classification").empty().append(productTypeArray.join(""))
 
-            var y =0;
-            productTypeArray2=[];
-            $.each(typesData,function(){
-                productTypeArray2.push("<option>"+typesData[y].data+"</option>")
+            var y = 0;
+            productTypeArray2 = [];
+            $.each(typesData, function () {
+                productTypeArray2.push("<option>" + typesData[y].data + "</option>")
                 y++
-            })   
-            $("#searchType").empty().append("<option>全站搜尋</option>"+productTypeArray2.join(""))
-        },error: function (jqXHR, textStatus, errorThrown) {
+            })
+            $("#searchType").empty().append("<option>All</option>" + productTypeArray2.join(""))
+        }, error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus);
         }
     })
 }
-
-function getProductsByUpdateTime(){
+//新產品推薦
+function getProductsByUpdateTime() {
 
     var endDay = GetDateStr(0);
     var startDay = GetDateStr(-30);
-
-    console.log("endDay====="+endDay);
-    console.log("startDay====="+startDay);
     $.ajax({
-        url: "http://localhost:8080/search/updatedTime?startDay="+startDay+"&endDay="+endDay,
+        url: "http://localhost:8080/search/updatedTime?startDay=" + startDay + "&endDay=" + endDay,
         method: "GET",
         dataType: "json",
-        cache:false,
-        success: function (dayData) {   
+        cache: false,
+        success: function (dayData) {
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
@@ -100,42 +104,74 @@ function getProductsByUpdateTime(){
                 y++;
             })
 
-            var products =[]
+            var products = []
             var top = 10;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/newSale.png" class="newSale"></div>' +
-                    '<span class="name">' + productsName[i].substr( 0, 25 ) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
+                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/newSale.png" class="newSale"></div>' +
+                    '<span class="name">' + productsName[i].substr(0, 25) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
             var result = products.join("")
             $("#newUpdateProduct").empty().append(result)
 
-        },error: function (jqXHR, textStatus, errorThrown) {
+        }, error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
         }
     })
 }
 //計算時間
-function GetDateStr(AddDayCount) {   
-    var dd = new Date();  
-    dd.setDate(dd.getDate()+AddDayCount);
-    var y = dd.getFullYear();   
-    var m = (dd.getMonth()+1)<10?"0"+(dd.getMonth()+1):(dd.getMonth()+1);
-    var d = dd.getDate()<10?"0"+dd.getDate():dd.getDate();
-    return y+"-"+m+"-"+d;   
- }  
+function GetDateStr(AddDayCount) {
+    var dd = new Date();
+    dd.setDate(dd.getDate() + AddDayCount);
+    var y = dd.getFullYear();
+    var m = (dd.getMonth() + 1) < 10 ? "0" + (dd.getMonth() + 1) : (dd.getMonth() + 1);
+    var d = dd.getDate() < 10 ? "0" + dd.getDate() : dd.getDate();
+    return y + "-" + m + "-" + d;
+}
 
- function search(productType,productName){
+//關鍵字新增
+function insertKeyWord() {
+    var KW = $("#searchName").val();
+    var keyWordInput = { keyword: KW }
     $.ajax({
-        url: "http://localhost:8080/search/TypeName?productType="+productType+"&productName="+productName,
-        method: "GET",
+        url: "http://localhost:8080/keyWord/insert",
+        method: "POST",
         dataType: "json",
-        cache:false,
-        success: function (searchData) {   
-           
-        },error: function (jqXHR, textStatus, errorThrown) {
+        contentType: "application/json;charset=UTF-8",
+        data: JSON.stringify(keyWordInput),
+        success: function () {
+            console.log("keyWord input success")
+        }, error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
         }
     })
- }
+}
+
+//取關鍵字
+function getKeyword(){
+    $.ajax({
+        url: "http://localhost:8080/keyWords",
+        method: "GET",
+        dataType: "json",
+        cache: false,
+        success: function (keywordData) {
+            var kwArray=[];
+            var i =0;
+            $.each(keywordData,function(){
+                kwArray.push('<button type="button" class="btn btn-primary">'+keywordData[i].keyword+'</button>')
+                i++
+                })
+            if(kwArray.length<5){
+                kwArray.length=5;
+                console.log("kwArray<5")
+            }             
+            var result = kwArray.join("")
+            console.log(result)
+            $("#keyWord").empty().append(result)                
+                        
+        }, error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
+}

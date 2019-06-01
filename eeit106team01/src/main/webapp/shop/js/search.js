@@ -1,19 +1,75 @@
 $(document).ready(function () {
-    
+    console.log(takeSearchUrlValue3())
     getAllType()
-    getProductsByType(takeUrlValue())
-    getAllBrand(takeUrlValue())
+    getProductsByType(takeTypeUrlValue())
+    getAllBrand(takeTypeUrlValue())
+    userSearch()
+
     $("#starDay").datepicker()
     $("#endDay").datepicker()
     $("#searchPriceByBrandBtn").hide();
     $("#searchPriceBytypeBtn").on('click',(function () {
-        var brand = $(brand).text()
-        if(brand == "")
-            var type = takeUrlValue().split("=")
+            var type = takeTypeUrlValue().split("=")
             console.log(type)
             getProductsByPriceByType(type[1]);
-    }))   
+    }))
+
 })
+//搜尋
+function userSearch(){
+    var type = takeSearchUrlValue2()
+    if(type.match("All") != null){   
+        console.log("if")
+        search("productType=&"+takeSearchUrlValue())
+    }
+    else{
+        console.log("else")
+        search(takeSearchUrlValue3())
+    }
+}
+
+//顯示此次搜尋的產品數量
+function getProductQuantity(data){
+    var productQuantity = data.length;
+    $("#productQuantity").text(+productQuantity)  
+}
+//url處理-取type
+function takeTypeUrlValue() {
+    //URL
+    var url = location.href;
+    //取得問號之後的值
+    var temp = url.split("=");
+    return temp[1]
+}
+//url處理-取productName
+function takeSearchUrlValue() {
+    //URL
+    var url = location.href;
+    //取得問號之後的值
+    var temp = url.split("&productType=");
+    console.log(temp)
+    var temp2 = temp[0].split("?");
+    console.log(temp2)
+    return temp2[1]
+}
+//url處理-取productType
+function takeSearchUrlValue2() {
+    //URL
+    var url = location.href;
+    //取得問號之後的值
+    var temp = url.split("&productType=");
+    console.log(temp)
+    return temp[1]
+}
+//url處理-取productType&Name
+function takeSearchUrlValue3() {
+    //URL
+    var url = location.href;
+    //取得問號之後的值
+    var temp = url.split("?");
+    return temp[1]
+}
+// 側邊menu用↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 function ByType(type){
     $("#searchPriceByBrandBtn").hide();
@@ -37,22 +93,270 @@ function ByBrand(brand){
     })) 
     console.log(brand)  
 } 
+//取得該種類全部品牌
+function getAllBrand(type){
+    $.ajax({
+        url: "http://localhost:8080/search/data?dataName=brand&type="+type,
+        method: "GET",
+        dataType: "json",
+        cache:false,
+        success: function (brandData) {   
+            var i=0;    
+            var productBrandArray =[];
+            $.each(brandData,function(){
+                productBrandArray.push('<li><a href="" class="brandLabelA" onclick="ByBrand(this);return false">'+brandData[i].data+'</a></li>')
+                    i++
+                })   
 
-//顯示此次搜尋的產品數量
-function getProductQuantity(data){
-    var productQuantity = data.length;
-    $("#productQuantity").text(+productQuantity)  
+            $("#brandForm").empty().append(productBrandArray.join(""))
+        },error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
 }
-
-function takeUrlValue() {
-    //URL
-    var url = location.href;
-    
-    //取得問號之後的值
-    var temp = url.split("=");
-    return temp[1]
+//取得全部種類
+function getAllType(){
+    $.ajax({
+        url: "http://localhost:8080/search/data?dataName=type",
+        method: "GET",
+        dataType: "json",
+        cache:false,
+        success: function (typesData) {   
+            var i=0;    
+            var productTypeArray =[];
+            $.each(typesData,function(){
+                    productTypeArray.push('<li><a href="" onclick="ByType(this);return false">'+typesData[i].data+'</a></li>')
+                    i++
+                })   
+            $("#typeForm").empty().append(productTypeArray.join(""))
+        },error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
 }
+// 側邊menu用↑↑↑↑↑↑↑↑↑↑
 
+//全站產品依產品搜尋
+function getProductsByPrice(){
+    // let NameBrandType = brand;
+    var queryString = 1080;
+    var minPrice = $("#minPrice").val()
+    var maxPrice = $("#maxPrice").val()
+    var produstUrl ="http://localhost:8080/search/price?byNameBrandType=name&queryString="+queryString+"&minPrice="+minPrice+"&maxPrice="+maxPrice;
+    if(minPrice==0 || minPrice==null || isNaN(minPrice) || typeof(minPrice) == "undefined"){
+        produstUrl ="http://localhost:8080/search/price?byNameBrandType=name&queryString="+queryString+"&maxPrice="+maxPrice;
+    }
+    $.ajax({
+        url: produstUrl,
+        method: "GET",
+        dataType: "json",
+        cache:false,
+        success: function (priceData) {
+            console.log("getProductsByPrice() star") 
+            console.log("getProductQuantity() star") 
+            getProductQuantity(priceData)
+            console.log("getProductQuantity() end") 
+            var productsName =[];
+            var productsPrice =[];
+            var productsImg =[];
+            var productTotalSold = []
+            var productsId = [];
+            var y=0;
+            $.each(priceData,function(){
+                productsName.push(priceData[y].name)
+                productsPrice.push(priceData[y].price)
+                productsImg.push(priceData[y].imageLink[0])
+                productTotalSold.push(priceData[y].totalSold)
+                productsId.push(priceData[y].id)
+                y++;
+            }) 
+
+            var pageSize = priceData.length; 
+            var onePageProducts = 40;
+            var total = Math.ceil(pageSize/onePageProducts);
+            var remain = pageSize%onePageProducts;
+
+            $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
+               totalPages:total,
+               visiblePages:pageSize>5?5:pageSize,
+               hideOnlyOnePage: true,
+               startPage: 1,
+               version:'1.1',
+               first:"首頁",
+               prev:"上一頁",
+               next:"下一頁",
+               last:"頁尾",
+               onPageClick: function (event, page) {
+                console.log("twbsPagination")
+                //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
+
+
+                   var products=[];
+                        if(page==1){
+                            if(pageSize < onePageProducts){
+                                for(var i=0;i<pageSize;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )
+                                }
+                            }else{
+                                for(var i=0;i<=onePageProducts-1;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )                                  
+                                }
+                            }
+                            var result = products.join("") 
+                            console.log("append")
+                            $(".Products").empty().append(result)
+                            console.log("getProductsByPrice() end") 
+                        }else if(page==total){       
+                                for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )
+                                }
+                                var result = products.join("") 
+                                console.log("append")
+                                $(".Products").empty().append(result)
+                                console.log("getProductsByPrice() end") 
+                        }else{
+                            for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
+                                products.push(
+                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                    '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                    '</div>'
+                                )                            
+                            }
+                            var result = products.join("") 
+                            console.log("append")
+                            $(".Products").empty().append(result)
+                            console.log("getProductsByPrice() end") 
+                        }
+                    }
+                });		   
+
+        },error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
+}
+//依種類搜尋and價錢區間搜尋
+function getProductsByPriceByType(type){
+    var queryString = type;
+    var minPrice = $("#minPrice").val()
+    var maxPrice = $("#maxPrice").val()
+    var produstUrl ="http://localhost:8080/search/price?byNameBrandType=type&queryString="+queryString+"&minPrice="+minPrice+"&maxPrice="+maxPrice;
+    if(minPrice==0 || minPrice==null || isNaN(minPrice) || typeof(minPrice) == "undefined"){
+        produstUrl ="http://localhost:8080/search/price?byNameBrandType=type&queryString="+queryString+"&maxPrice="+maxPrice;
+    }
+    $.ajax({
+        url: produstUrl,
+        method: "GET",
+        dataType: "json",
+        cache:false,
+        success: function (priceData) {
+            console.log("getProductsByPriceByType() star") 
+            console.log("getProductQuantity() star") 
+            getProductQuantity(priceData)
+            console.log("getProductQuantity() end") 
+            var productsName =[];
+            var productsPrice =[];
+            var productsImg =[];
+            var productTotalSold = []
+            var productsId =[];
+            var y=0;
+            $.each(priceData,function(){
+                productsName.push(priceData[y].name)
+                productsPrice.push(priceData[y].price)
+                productsImg.push(priceData[y].imageLink[0])
+                productTotalSold.push(priceData[y].totalSold)
+                productsId.push(priceData[y].id)
+                y++;
+            }) 
+
+            var pageSize = priceData.length; 
+            var onePageProducts = 40;
+            var total = Math.ceil(pageSize/onePageProducts);
+            var remain = pageSize%onePageProducts;
+
+            $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
+               totalPages:total,
+               visiblePages:pageSize>5?5:pageSize,
+               hideOnlyOnePage: true,
+               startPage: 1,
+               version:'1.1',
+               first:"首頁",
+               prev:"上一頁",
+               next:"下一頁",
+               last:"頁尾",
+               onPageClick: function (event, page) {
+                console.log("twbsPagination")
+                //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
+
+
+                   var products=[];
+                        if(page==1){
+                            if(pageSize < onePageProducts){
+                                for(var i=0;i<pageSize;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )
+                                }
+                            }else{
+                                for(var i=0;i<=onePageProducts-1;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )                                  
+                                }
+                            }
+                            var result = products.join("") 
+                            console.log("append")
+                            $(".Products").empty().append(result)
+                            console.log("getProductsByPriceByType() end") 
+                        }else if(page==total){       
+                                for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )
+                                }
+                                var result = products.join("") 
+                                console.log("append")
+                                $(".Products").empty().append(result)
+                                console.log("getProductsByPriceByType() end") 
+                        }else{
+                            for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
+                                products.push(
+                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                    '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                    '</div>'
+                                )                            
+                            }
+                            var result = products.join("") 
+                            console.log("append")
+                            $(".Products").empty().append(result)
+                            console.log("getProductsByPriceByType() end") 
+                        }
+                    }
+                });		   
+        },error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
+}
+//依種類搜尋
 function getProductsByType(type){
     $.ajax({
         url: "http://localhost:8080/search/type?type="+type,
@@ -166,270 +470,7 @@ function getProductsByType(type){
         }
     })
 }
-
-// 側邊menu用↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
-function getAllBrand(type){
-    $.ajax({
-        url: "http://localhost:8080/search/data?dataName=brand&type="+type,
-        method: "GET",
-        dataType: "json",
-        cache:false,
-        success: function (brandData) {   
-            var i=0;    
-            var productBrandArray =[];
-            $.each(brandData,function(){
-                productBrandArray.push('<li><a href="" class="brandLabelA" onclick="ByBrand(this);return false">'+brandData[i].data+'</a></li>')
-                    i++
-                })   
-
-            $("#brandForm").empty().append(productBrandArray.join(""))
-        },error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
-        }
-    })
-}
-
-function getAllType(){
-    $.ajax({
-        url: "http://localhost:8080/search/data?dataName=type",
-        method: "GET",
-        dataType: "json",
-        cache:false,
-        success: function (typesData) {   
-            var i=0;    
-            var productTypeArray =[];
-            $.each(typesData,function(){
-                    productTypeArray.push('<li><a href="" onclick="ByType(this);return false">'+typesData[i].data+'</a></li>')
-                    i++
-                })   
-            $("#typeForm").empty().append(productTypeArray.join(""))
-        },error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
-        }
-    })
-}
-// 側邊menu用↑↑↑↑↑↑↑↑↑↑
-
-function getProductsByPrice(){
-    // let NameBrandType = brand;
-    var queryString = 1080;
-    var minPrice = $("#minPrice").val()
-    var maxPrice = $("#maxPrice").val()
-    var produstUrl ="http://localhost:8080/search/price?byNameBrandType=name&queryString="+queryString+"&minPrice="+minPrice+"&maxPrice="+maxPrice;
-    if(minPrice==0 || minPrice==null || isNaN(minPrice) || typeof(minPrice) == "undefined"){
-        produstUrl ="http://localhost:8080/search/price?byNameBrandType=name&queryString="+queryString+"&maxPrice="+maxPrice;
-    }
-    $.ajax({
-        url: produstUrl,
-        method: "GET",
-        dataType: "json",
-        cache:false,
-        success: function (priceData) {
-            console.log("getProductsByPrice() star") 
-            console.log("getProductQuantity() star") 
-            getProductQuantity(priceData)
-            console.log("getProductQuantity() end") 
-            var productsName =[];
-            var productsPrice =[];
-            var productsImg =[];
-            var productTotalSold = []
-            var productsId = [];
-            var y=0;
-            $.each(priceData,function(){
-                productsName.push(priceData[y].name)
-                productsPrice.push(priceData[y].price)
-                productsImg.push(priceData[y].imageLink[0])
-                productTotalSold.push(priceData[y].totalSold)
-                productsId.push(priceData[y].id)
-                y++;
-            }) 
-
-            var pageSize = priceData.length; 
-            var onePageProducts = 40;
-            var total = Math.ceil(pageSize/onePageProducts);
-            var remain = pageSize%onePageProducts;
-
-            $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
-               totalPages:total,
-               visiblePages:pageSize>5?5:pageSize,
-               hideOnlyOnePage: true,
-               startPage: 1,
-               version:'1.1',
-               first:"首頁",
-               prev:"上一頁",
-               next:"下一頁",
-               last:"頁尾",
-               onPageClick: function (event, page) {
-                console.log("twbsPagination")
-                //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
-                   var products=[];
-                        if(page==1){
-                            if(pageSize < onePageProducts){
-                                for(var i=0;i<pageSize;i++){
-                                    products.push(
-                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
-                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
-                                        '</div>'
-                                    )
-                                }
-                            }else{
-                                for(var i=0;i<=onePageProducts-1;i++){
-                                    products.push(
-                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
-                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
-                                        '</div>'
-                                    )                                  
-                                }
-                            }
-                            var result = products.join("") 
-                            console.log("append")
-                            $(".Products").empty().append(result)
-                            console.log("getProductsByPrice() end") 
-                        }else if(page==total){       
-                                for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
-                                    products.push(
-                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
-                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
-                                        '</div>'
-                                    )
-                                }
-                                var result = products.join("") 
-                                console.log("append")
-                                $(".Products").empty().append(result)
-                                console.log("getProductsByPrice() end") 
-                        }else{
-                            for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
-                                products.push(
-                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
-                                    '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
-                                    '</div>'
-                                )                            
-                            }
-                            var result = products.join("") 
-                            console.log("append")
-                            $(".Products").empty().append(result)
-                            console.log("getProductsByPrice() end") 
-                        }
-                    }
-                });		   
-
-        },error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
-        }
-    })
-}
-
-function getProductsByPriceByType(type){
-    var queryString = type;
-    var minPrice = $("#minPrice").val()
-    var maxPrice = $("#maxPrice").val()
-    var produstUrl ="http://localhost:8080/search/price?byNameBrandType=type&queryString="+queryString+"&minPrice="+minPrice+"&maxPrice="+maxPrice;
-    if(minPrice==0 || minPrice==null || isNaN(minPrice) || typeof(minPrice) == "undefined"){
-        produstUrl ="http://localhost:8080/search/price?byNameBrandType=type&queryString="+queryString+"&maxPrice="+maxPrice;
-    }
-    $.ajax({
-        url: produstUrl,
-        method: "GET",
-        dataType: "json",
-        cache:false,
-        success: function (priceData) {
-            console.log("getProductsByPriceByType() star") 
-            console.log("getProductQuantity() star") 
-            getProductQuantity(priceData)
-            console.log("getProductQuantity() end") 
-            var productsName =[];
-            var productsPrice =[];
-            var productsImg =[];
-            var productTotalSold = []
-            var productsId =[];
-            var y=0;
-            $.each(priceData,function(){
-                productsName.push(priceData[y].name)
-                productsPrice.push(priceData[y].price)
-                productsImg.push(priceData[y].imageLink[0])
-                productTotalSold.push(priceData[y].totalSold)
-                productsId.push(priceData[y].id)
-                y++;
-            }) 
-
-            var pageSize = priceData.length; 
-            var onePageProducts = 40;
-            var total = Math.ceil(pageSize/onePageProducts);
-            var remain = pageSize%onePageProducts;
-
-            $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
-               totalPages:total,
-               visiblePages:pageSize>5?5:pageSize,
-               hideOnlyOnePage: true,
-               startPage: 1,
-               version:'1.1',
-               first:"首頁",
-               prev:"上一頁",
-               next:"下一頁",
-               last:"頁尾",
-               onPageClick: function (event, page) {
-                console.log("twbsPagination")
-                //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
-                   var products=[];
-                        if(page==1){
-                            if(pageSize < onePageProducts){
-                                for(var i=0;i<pageSize;i++){
-                                    products.push(
-                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
-                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
-                                        '</div>'
-                                    )
-                                }
-                            }else{
-                                for(var i=0;i<=onePageProducts-1;i++){
-                                    products.push(
-                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
-                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
-                                        '</div>'
-                                    )                                  
-                                }
-                            }
-                            var result = products.join("") 
-                            console.log("append")
-                            $(".Products").empty().append(result)
-                            console.log("getProductsByPriceByType() end") 
-                        }else if(page==total){       
-                                for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
-                                    products.push(
-                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
-                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
-                                        '</div>'
-                                    )
-                                }
-                                var result = products.join("") 
-                                console.log("append")
-                                $(".Products").empty().append(result)
-                                console.log("getProductsByPriceByType() end") 
-                        }else{
-                            for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
-                                products.push(
-                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
-                                    '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
-                                    '</div>'
-                                )                            
-                            }
-                            var result = products.join("") 
-                            console.log("append")
-                            $(".Products").empty().append(result)
-                            console.log("getProductsByPriceByType() end") 
-                        }
-                    }
-                });		   
-        },error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
-        }
-    })
-}
-
+//依品牌搜尋and價錢區間搜尋
 function getProductsByPriceByBrand(brand){
     var queryString = brand;
     console.log("getProductsByPriceByBrand"+queryString)
@@ -540,7 +581,7 @@ function getProductsByPriceByBrand(brand){
         }
     })
 }
-
+//依品牌搜尋
 function getProductsByBrand(brand){
     
     $.ajax({
@@ -647,3 +688,110 @@ function getProductsByBrand(brand){
         }
     })
 }
+//搜尋
+function search(searchResult){
+console.log("searchStart")
+    var searchUrl = "http://localhost:8080/search/TypeName?"+searchResult;
+    $.ajax({
+        url: searchUrl,
+        method: "GET",
+        dataType: "json",
+        cache:false,
+        success: function (searchData) {   
+            console.log("getProductQuantity() star") 
+            getProductQuantity(searchData)
+            console.log("getProductQuantity() end")
+            
+            var productsName =[];
+            var productsPrice =[];
+            var productsImg =[];
+            var productTotalSold = []
+            var productsId = [];
+            var y=0;
+            $.each(searchData,function(){
+                productsName.push(searchData[y].name)
+                productsPrice.push(searchData[y].price)
+                productsImg.push(searchData[y].imageLink[0])
+                productTotalSold.push(searchData[y].totalSold)
+                productsId.push(searchData[y].id)
+                y++;
+            })
+
+            var pageSize = searchData.length; 
+            var onePageProducts = 40;
+            var total = Math.ceil(pageSize/onePageProducts);
+            var remain = pageSize%onePageProducts;
+
+            $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
+               totalPages:total,
+               visiblePages:pageSize>5?5:pageSize,
+               hideOnlyOnePage: true,
+               startPage: 1,
+               version:'1.1',
+               first:"首頁",
+               prev:"上一頁",
+               next:"下一頁",
+               last:"頁尾",
+               onPageClick: function (event, page) {
+                console.log("twbsPagination")
+                //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
+
+                   var products=[];
+                        if(page==1){
+                            if(pageSize < onePageProducts){
+                                for(var i=0;i<pageSize;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )                               
+                                }
+                                console.log("page 1 i<pageSize push end")
+                            }else{
+                                for(var i=0;i<=onePageProducts-1;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )
+                                }
+                                console.log("page 1 i<=onePageProducts-1 push end")
+                            }
+                            var result = products.join("") 
+                            console.log("append")
+                            $(".Products").empty().append(result)
+                            console.log("getProductsByBrand() end")
+                        }else if(page==total){       
+                                for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
+                                    products.push(
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                        '</div>'
+                                    )
+                                }
+                                console.log("page end push end")
+                                var result = products.join("") 
+                                console.log("append")
+                                $(".Products").empty().append(result)
+                                console.log("getProductsByBrand() end")
+                        }else{
+                            for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
+                                products.push(
+                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                    '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
+                                    '</div>'
+                                )
+                            }
+                            console.log("page else push end")
+                            var result = products.join("") 
+                            console.log("append")
+                            $(".Products").empty().append(result)
+                            console.log("getProductsByBrand() end")
+                        }
+                    }
+                });	
+        },error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
+ }
