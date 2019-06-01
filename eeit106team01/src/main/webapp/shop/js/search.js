@@ -1,10 +1,12 @@
 $(document).ready(function () {
+    
     getAllType()
     getProductsByType(takeUrlValue())
     getAllBrand(takeUrlValue())
     $("#starDay").datepicker()
     $("#endDay").datepicker()
-    $("#searchPrice").on('click',(function () {
+    $("#searchPriceByBrandBtn").hide();
+    $("#searchPriceBytypeBtn").on('click',(function () {
         var brand = $(brand).text()
         if(brand == "")
             var type = takeUrlValue().split("=")
@@ -14,23 +16,24 @@ $(document).ready(function () {
 })
 
 function ByType(type){
-    var type = $(type).text()
-    var brand = $(brand).text()
-    getProductsByType(type)
-    getAllBrand(type)
-    $("#searchPrice").on('click',(function () {
-        console.log(brand)
-        if(brand == "")
+    $("#searchPriceByBrandBtn").hide();
+    $("#searchPriceBytypeBtn").show();
+    var type = $(type).text();
+    getProductsByType(type);
+    getAllBrand(type);
+    $("#searchPriceBytypeBtn").on('click',(function () {
             getProductsByPriceByType(type);
     }))   
     console.log(type)
 }
 
 function ByBrand(brand){
-    var brand = $(brand).text()
-    getProductsByBrand(brand)
-    $("#searchPrice").on('click',(function () {
-        getProductsByPriceByBrand(brand)
+    $("#searchPriceByBrandBtn").show();
+    $("#searchPriceBytypeBtn").hide();
+    var brand = $(brand).text();
+    getProductsByBrand(brand);
+    $("#searchPriceByBrandBtn").on('click',(function () {
+        getProductsByPriceByBrand(brand);
     })) 
     console.log(brand)  
 } 
@@ -46,13 +49,13 @@ function takeUrlValue() {
     var url = location.href;
     
     //取得問號之後的值
-    var temp = url.split("?");
+    var temp = url.split("=");
     return temp[1]
 }
 
 function getProductsByType(type){
     $.ajax({
-        url: "http://localhost:8080/search/type?"+type,
+        url: "http://localhost:8080/search/type?type="+type,
         method: "GET",
         dataType: "json",
         cache:false,
@@ -65,7 +68,8 @@ function getProductsByType(type){
             var productsName =[];
             var productsPrice =[];
             var productsImg =[];
-            var productTotalSold = []
+            var productTotalSold = [];
+            var productsId =[];
 
             var y=0;
             $.each(typeData,function(){
@@ -73,6 +77,7 @@ function getProductsByType(type){
                 productsPrice.push(typeData[y].price)
                 productsImg.push(typeData[y].imageLink[0])
                 productTotalSold.push(typeData[y].totalSold)
+                productsId.push(typeData[y].id);
                 y++;
             })
             console.log("取資料塞入array")
@@ -104,7 +109,7 @@ function getProductsByType(type){
                             if(pageSize < onePageProducts){
                                 for(var i=0;i<pageSize;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -114,7 +119,7 @@ function getProductsByType(type){
                                 console.log("page 1 i<=onePageProducts-1 star")
                                 for(var i=0;i<=onePageProducts-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -130,7 +135,7 @@ function getProductsByType(type){
                         }else if(page==total){       
                                 for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -143,7 +148,7 @@ function getProductsByType(type){
                         }else{
                             for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
                                 products.push(
-                                    '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                     '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                     '</div>'
                                 )
@@ -165,7 +170,7 @@ function getProductsByType(type){
 // 側邊menu用↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 function getAllBrand(type){
     $.ajax({
-        url: "http://localhost:8080/search/data?dataName=brand&"+type,
+        url: "http://localhost:8080/search/data?dataName=brand&type="+type,
         method: "GET",
         dataType: "json",
         cache:false,
@@ -228,13 +233,14 @@ function getProductsByPrice(){
             var productsPrice =[];
             var productsImg =[];
             var productTotalSold = []
-
+            var productsId = [];
             var y=0;
             $.each(priceData,function(){
                 productsName.push(priceData[y].name)
                 productsPrice.push(priceData[y].price)
                 productsImg.push(priceData[y].imageLink[0])
                 productTotalSold.push(priceData[y].totalSold)
+                productsId.push(priceData[y].id)
                 y++;
             }) 
 
@@ -263,7 +269,7 @@ function getProductsByPrice(){
                             if(pageSize < onePageProducts){
                                 for(var i=0;i<pageSize;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -271,7 +277,7 @@ function getProductsByPrice(){
                             }else{
                                 for(var i=0;i<=onePageProducts-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )                                  
@@ -284,7 +290,7 @@ function getProductsByPrice(){
                         }else if(page==total){       
                                 for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -296,7 +302,7 @@ function getProductsByPrice(){
                         }else{
                             for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
                                 products.push(
-                                    '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                     '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                     '</div>'
                                 )                            
@@ -337,13 +343,14 @@ function getProductsByPriceByType(type){
             var productsPrice =[];
             var productsImg =[];
             var productTotalSold = []
-
+            var productsId =[];
             var y=0;
             $.each(priceData,function(){
                 productsName.push(priceData[y].name)
                 productsPrice.push(priceData[y].price)
                 productsImg.push(priceData[y].imageLink[0])
                 productTotalSold.push(priceData[y].totalSold)
+                productsId.push(priceData[y].id)
                 y++;
             }) 
 
@@ -372,7 +379,7 @@ function getProductsByPriceByType(type){
                             if(pageSize < onePageProducts){
                                 for(var i=0;i<pageSize;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -380,7 +387,7 @@ function getProductsByPriceByType(type){
                             }else{
                                 for(var i=0;i<=onePageProducts-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )                                  
@@ -393,7 +400,7 @@ function getProductsByPriceByType(type){
                         }else if(page==total){       
                                 for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -405,7 +412,7 @@ function getProductsByPriceByType(type){
                         }else{
                             for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
                                 products.push(
-                                    '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                     '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                     '</div>'
                                 )                            
@@ -445,14 +452,15 @@ function getProductsByPriceByBrand(brand){
             var productsName =[];
             var productsPrice =[];
             var productsImg =[];
-            var productTotalSold = []
-
+            var productTotalSold = [];
+            var productsId = [];
             var y=0;
             $.each(priceData,function(){
                 productsName.push(priceData[y].name)
                 productsPrice.push(priceData[y].price)
                 productsImg.push(priceData[y].imageLink[0])
                 productTotalSold.push(priceData[y].totalSold)
+                productsId.push(priceData[y].id)
                 y++;
             }) 
 
@@ -481,7 +489,7 @@ function getProductsByPriceByBrand(brand){
                             if(pageSize < onePageProducts){
                                 for(var i=0;i<pageSize;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -489,7 +497,7 @@ function getProductsByPriceByBrand(brand){
                             }else{
                                 for(var i=0;i<=onePageProducts-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )                                  
@@ -502,7 +510,7 @@ function getProductsByPriceByBrand(brand){
                         }else if(page==total){       
                                 for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -514,7 +522,7 @@ function getProductsByPriceByBrand(brand){
                         }else{
                             for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
                                 products.push(
-                                    '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                     '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                     '</div>'
                                 )                            
@@ -550,13 +558,14 @@ function getProductsByBrand(brand){
             var productsPrice =[];
             var productsImg =[];
             var productTotalSold = []
-
+            var productsId = [];
             var y=0;
             $.each(brandData,function(){
                 productsName.push(brandData[y].name)
                 productsPrice.push(brandData[y].price)
                 productsImg.push(brandData[y].imageLink[0])
                 productTotalSold.push(brandData[y].totalSold)
+                productsId.push(brandData[y].id)
                 y++;
             })
 
@@ -584,7 +593,7 @@ function getProductsByBrand(brand){
                             if(pageSize < onePageProducts){
                                 for(var i=0;i<pageSize;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )                               
@@ -593,7 +602,7 @@ function getProductsByBrand(brand){
                             }else{
                                 for(var i=0;i<=onePageProducts-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -607,7 +616,7 @@ function getProductsByBrand(brand){
                         }else if(page==total){       
                                 for(var i=(page-1)*onePageProducts;i<=(page-1)*onePageProducts+remain-1;i++){
                                     products.push(
-                                        '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                        '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                         '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                         '</div>'
                                     )
@@ -620,7 +629,7 @@ function getProductsByBrand(brand){
                         }else{
                             for(var i=(page-1)*onePageProducts;i<=page*onePageProducts-1;i++){
                                 products.push(
-                                    '<div class="productsDiv border"><a href=""><div><img src='+productsImg[i]+' class="productImg"></div>'+
+                                    '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src='+productsImg[i]+' class="productImg"></div>'+
                                     '<span class="name">'+productsName[i]+'</span></a><hr><p class="sold"><span class="price">$'+productsPrice[i]+'</span>/ 已售出'+productTotalSold[i]+'件</p></span>'+
                                     '</div>'
                                 )

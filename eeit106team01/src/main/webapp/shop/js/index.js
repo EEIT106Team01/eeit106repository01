@@ -16,31 +16,32 @@ function getProducts() {
             var productsPrice = [];
             var productsImg = [];
             var productTotalSold = []
-
+            var productsId = [];
             var y = 0;
             $.each(productsData, function () {
-                productsName.push(productsData[y].name)
-                productsPrice.push(productsData[y].price)
-                productsImg.push(productsData[y].imageLink[0])
-                productTotalSold.push(productsData[y].totalSold)
+                productsName.push(productsData[y].name);
+                productsPrice.push(productsData[y].price);
+                productsImg.push(productsData[y].imageLink[0]);
+                productTotalSold.push(productsData[y].totalSold);
+                productsId.push(productsData[y].id);
                 y++;
             })
 
             var pageSize = productsData.length;
             $("#productsQuantity").empty().append("<span class='productsQuantityTitle'>全站共有<h2>"+pageSize+"件商品</h2></span><hr>")
 
-            var products =[]
+            var products =[];
             var top = 10;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href=""><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
+                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
                     '<span class="name">' + productsName[i].substr( 0, 25 )  + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
-            var result = products.join("")
-            $("#productsTop10").empty().append(result)
+            var result = products.join("");
+            $("#productsTop10").empty().append(result);
         }, error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
+            console.log(textStatus);
         }
     })
 }
@@ -68,18 +69,18 @@ function getAllType(){
             })   
             $("#searchType").empty().append("<option>全站搜尋</option>"+productTypeArray2.join(""))
         },error: function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
+            console.log(textStatus);
         }
     })
 }
 
 function getProductsByUpdateTime(){
 
-    var endDay = GetDateStr(0)
-    var startDay = GetDateStr(-30)
+    var endDay = GetDateStr(0);
+    var startDay = GetDateStr(-30);
 
-    console.log("endDay====="+endDay)
-    console.log("startDay====="+startDay)
+    console.log("endDay====="+endDay);
+    console.log("startDay====="+startDay);
     $.ajax({
         url: "http://localhost:8080/search/updatedTime?startDay="+startDay+"&endDay="+endDay,
         method: "GET",
@@ -103,7 +104,7 @@ function getProductsByUpdateTime(){
             var top = 10;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html/?'+productsId[i]+'"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/newSale.png" class="newSale"></div>' +
+                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?'+productsId[i]+'"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/newSale.png" class="newSale"></div>' +
                     '<span class="name">' + productsName[i].substr( 0, 25 ) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }

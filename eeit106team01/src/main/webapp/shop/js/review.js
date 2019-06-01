@@ -15,7 +15,7 @@ $("#search").click(function () {
             var img = [];
             $.each(result[0], function (key, val) {
                 if (key.match(/^(image)$/) && val != null) {
-                    img.push("<img src='data:image/png;base64," + val + "' class='img-thumbnail'>");
+                    img.push("<img src='data:image/jpeg;base64," + val + "' class='img-thumbnail'>");
                 } else if (key.match(/^(createTime|updatedTime)$/)) {
                     textHead.push("<th class='" + key + "'>" + key + "</th>");
                     text.push("<td>" + new Date(val) + "</td>");
@@ -79,6 +79,7 @@ function convertFile(file) {
 // 在頁面上新增<img>
 function showPreviewImage(src, fileName) {
     let image = new Image(300) // 設定寬px
+    image.id = "preImage";
     image.name = fileName
     image.src = src // <img>中src屬性除了接url外也可以直接接Base64字串
     $("#previewDiv").append(image).append(`<p>File: ${image.name}`)
@@ -89,7 +90,7 @@ function previewFiles(files) {
         $.map(files, file => {
             convertFile(file)
                 .then(data => {
-                    // console.log(data) // 把編碼後的字串輸出到console
+                    console.log(data) // 把編碼後的字串輸出到console
                     showPreviewImage(data, file.name)
                 })
                 .catch(err => console.log(err))
@@ -110,25 +111,13 @@ $("#insert").click(function () {
     var purchaseListId = parseInt($('#purchaseListId').val());
     var productId = parseInt($('#productId').val());
     //Image
-    function getBase64(file) {
-        var reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = function () {
-            console.log(reader.result);
-        };
-        reader.onerror = function (error) {
-            console.log('Error: ', error);
-        };
-    }
-
-    var file = document.getElementById('upload').files[0];
-    getBase64(file);
-   
+    var image = $('#preImage').attr('src');
+    var imgByte = image.substr(image.indexOf(',') + 1, image.length);
 
     var json = new Object();
     json.rating = rating;
     json.comment = $('#comment').val();
-    json.imageString = null;
+    json.imageBase64 = imgByte;
     json.memberId = { 'id': memberId };
     json.purchaseListId = { 'id': purchaseListId };
     json.productId = { 'id': productId };
@@ -146,7 +135,13 @@ $("#insert").click(function () {
             var img = [];
             $.each(result[0], function (key, val) {
                 if (key.match(/^(image)$/) && val != null) {
-                    img.push("<img src='data:image/png;base64," + val + "' class='img-thumbnail'>");
+                    var reader = new FileReader();
+                    reader.readAsDataURL(val); 
+                    reader.onloadend = function() {
+                        base64data = reader.result;                
+                        console.log(base64data);
+                    }
+                    img.push("<img src='data:image/jpeg;base64," + val + "' class='img-thumbnail'>");
                 } else if (key.match(/^(createTime|updatedTime)$/)) {
                     textHead.push("<th class='" + key + "'>" + key + "</th>");
                     text.push("<td>" + new Date(val) + "</td>");
