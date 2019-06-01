@@ -5,20 +5,58 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Review</title>
+
     <!-- Bootstrap 4.0.0 CSS -->
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" data-integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" data-crossorigin="anonymous">
+
     <!-- jQuery 3.4.1 -->
     <script src="https://code.jquery.com/jquery-3.4.1.js" data-integrity="sha256-WpOohJOqMqqyKL9FccASB9O0KwACQJpFTUBLTYOVvVU=" data-crossorigin="anonymous"></script>
+    <!-- jQuery UI 1.12.1 -->
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js" data-integrity="sha256-T0Vest3yCU7pafRw9r+settMBX6JkKN06dqBnpQ8d30=" data-crossorigin="anonymous"></script>
+
     <!-- Bootstrap 4.2.1 JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" data-integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" data-crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" data-integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" data-crossorigin="anonymous"></script>
-
 </head>
 
 <body>
+
+    <!-- drag and drop start  -->
+    <div class="row">
+        <div class="col-md-4">
+            <!-- Card -->
+            <div id="draggable-events" class="card">
+
+                <!-- Card image -->
+                <img class="card-img-top" src="https://mdbootstrap.com/img/Photos/Lightbox/Thumbnail/img%20(147).jpg" alt="Card image cap">
+
+                <!-- Card content -->
+                <div class="card-body">
+
+                    <!-- Title -->
+                    <h4 class="card-title"><a>Draggable card</a></h4>
+                    <!-- Text -->
+                    <p class="card-text">Start event fired <span class="start-event">0</span> times</p>
+                    <hr>
+                    <p class="card-text">Drag event fired <span class="drag-event">0</span> times</p>
+                    <hr>
+                    <p class="card-text">Stop event fired <span class="stop-event">0</span> times</p>
+
+                </div>
+
+            </div>
+            <!-- Card -->
+        </div>
+    </div>
+    <!-- drag and drop end -->
+
+    <!-- container start -->
     <div class="container border rounded mt-3 mb-3 bg-dark">
+
+        <!-- query start -->
         <h1 class="text-light mt-3 mb-3">Review Query</h1>
+
         <table class="table table-dark">
             <tbody>
                 <tr>
@@ -44,7 +82,11 @@
                 </tr>
             </tbody>
         </table>
+        <!-- query end -->
+
+        <!-- insert start -->
         <h1 class="text-light mt-3 mb-3">Review Insert</h1>
+
         <table class="table table-dark table-responsive">
             <tbody>
                 <tr>
@@ -105,13 +147,19 @@
                 </tr>
             </tbody>
         </table>
+        <!-- insert end -->
+
+        <!-- result table start -->
         <div id="image"></div>
+
         <div id="updateImageButton"></div>
+
         <table class="table table-inverse table-responsive table-dark" id="content">
             <thead class="thead-inverse">
                 <tr>
                 </tr>
             </thead>
+
             <tbody>
                 <tr>
                 </tr>
@@ -119,9 +167,17 @@
                 </tr>
             </tbody>
         </table>
+        <!-- result table end -->
+
     </div>
+    <!-- container end -->
+
 </body>
+
+<!-- script  src-->
 <script type="text/javascript" src="js/review.js"></script>
+
+<!-- style src -->
 <link rel="stylesheet" href="css/review.css" />
 
 </html>

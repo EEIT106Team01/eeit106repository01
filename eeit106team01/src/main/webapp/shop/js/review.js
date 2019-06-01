@@ -26,7 +26,7 @@ function convertFile(file) {
     })
 }
 // 在頁面上新增<img>
-//Insert
+//Insert preview
 function showPreviewImage(src, fileName) {
     let image = new Image(300) // 設定寬px
     image.id = "preImage";
@@ -35,7 +35,7 @@ function showPreviewImage(src, fileName) {
     image.src = src // <img>中src屬性除了接url外也可以直接接Base64字串
     $("#previewDiv").append(image)
 }
-//Update
+//Update preview
 function showUpdatePreviewImage(src, fileName) {
     let image = new Image(300) // 設定寬px
     image.id = "preUpdateImage"
@@ -129,7 +129,6 @@ $("#search").click(function () {
     })
 });
 
-
 //Insert 
 $("#insert").click(function () {
     $("#image").empty();
@@ -219,7 +218,7 @@ function updateReview() {
         var currentImageVal = $('#currentImage').attr('src');
         if (newImageVal != null) {
             var imgByte = newImageVal.substr(newImageVal.indexOf(',') + 1, newImageVal.length);
-        } else if (newImageVal == null && currentImageVal != null){
+        } else if (newImageVal == null && currentImageVal != null) {
             var imgByte = currentImageVal.substr(currentImageVal.indexOf(',') + 1, currentImageVal.length);
         }
 
@@ -285,3 +284,43 @@ function updateReview() {
         });
     });
 };
+
+//drag and drop
+$('#draggable-events').draggable({
+    start: onDragStart,
+    drag: onDrag,
+    stop: onDragStop
+});
+
+var $startCounter = $('.start-event');
+var $dragCounter = $('.drag-event');
+var $stopCounter = $('.stop-event');
+
+var counts = {
+    start: 0,
+    drag: 0,
+    stop: 0
+};
+
+function onDragStart() {
+    counts.start++;
+    updateCounter($startCounter, counts.start);
+}
+
+function onDrag() {
+    counts.drag++;
+    updateCounter($dragCounter, counts.drag);
+}
+
+function onDragStop() {
+    counts.stop++;
+    updateCounter($stopCounter, counts.stop);
+}
+
+function updateCounter(selector, value) {
+    $(selector).text(value);
+}
+
+$('#draggable-events').draggable({
+    revert: true
+  });
