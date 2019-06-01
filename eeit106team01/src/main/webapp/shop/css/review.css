@@ -1,8 +1,20 @@
-#image,
+#image {
+    text-align: center;
+    width: 300px;
+}
+
 h1 {
     text-align: center;
 }
 
 body {
     background-color: black;
+}
+
+#previewDiv img {
+    width: 300px;
+}
+
+.container {
+    width: 1080px;
 }

@@ -277,7 +277,7 @@ public class PurchaseService {
 			}
 			if (image != null && image.length > 0) {
 				if (reviewBean.getImage() != null) {
-					if (reviewBean.getImage().equals(image)) {
+					if (!reviewBean.getImage().equals(image)) {
 						SerialBlob serialBlob = null;
 						try {
 							serialBlob = new SerialBlob(image);

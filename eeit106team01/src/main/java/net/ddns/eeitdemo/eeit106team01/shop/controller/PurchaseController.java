@@ -1,7 +1,9 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
+import java.io.UnsupportedEncodingException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collection;
 import java.util.Date;
 import java.util.HashMap;
@@ -27,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.google.common.base.Utf8;
+
 import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
@@ -37,6 +41,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.service.PurchaseService;
 import net.ddns.eeitdemo.eeit106team01.shop.util.Converter;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
+import sun.text.normalizer.UTF16;
 
 @RestController
 public class PurchaseController {
@@ -382,7 +387,10 @@ public class PurchaseController {
 				} else if (key.equalsIgnoreCase("comment")) {
 					comment = value;
 				} else if (key.equalsIgnoreCase("image")) {
-					image = value.getBytes();
+					if (value.equals("null")) {
+						image = null;
+					}
+					image = Base64.getDecoder().decode(value);
 				}
 			}
 			if (rating == null && NullChecker.isEmpty(comment) && image == null) {
