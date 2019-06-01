@@ -16,6 +16,7 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 import javax.sql.rowset.serial.SerialBlob;
+import javax.sql.rowset.serial.SerialException;
 
 @Entity
 @Table(schema = "Shop", name = "Review")
@@ -57,7 +58,7 @@ public class ReviewBean implements Serializable {
 	@JoinColumn(name = "ProductID", columnDefinition = "bigint", nullable = false, updatable = false)
 	private ProductBean productId;
 
-	private String imageString;
+	private Byte[] imageBase64;
 
 	public ReviewBean() {
 		super();
@@ -88,7 +89,7 @@ public class ReviewBean implements Serializable {
 	public String toString() {
 		return "ReviewBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", rating="
 				+ rating + ", comment=" + comment + ", image=" + image + ", memberId=" + memberId + ", purchaseListId="
-				+ purchaseListId + ", productId=" + productId + "]";
+				+ purchaseListId + ", productId=" + productId + ", imageBase64=" + imageBase64 + "]";
 	}
 
 	/**
@@ -148,8 +149,19 @@ public class ReviewBean implements Serializable {
 		this.comment = comment;
 	}
 
-	public SerialBlob getImage() {
-		return image;
+	public byte[] getImage() {
+		SerialBlob serialBlob = image;
+		byte[] byteArray = null;
+		try {
+			if (serialBlob != null) {
+				byteArray = serialBlob.getBytes(1, (int) serialBlob.length());
+			} else {
+				return null;
+			}
+		} catch (SerialException e) {
+			e.printStackTrace();
+		}
+		return byteArray;
 	}
 
 	public void setImage(SerialBlob image) {
@@ -180,12 +192,12 @@ public class ReviewBean implements Serializable {
 		this.productId = productId;
 	}
 
-	public String getImageString() {
-		return imageString;
+	public Byte[] getImageBase64() {
+		return imageBase64;
 	}
 
-	public void setImageString(String imageString) {
-		this.imageString = imageString;
+	public void setImageBase64(Byte[] imageBase64) {
+		this.imageBase64 = imageBase64;
 	}
 
 }
