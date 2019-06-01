@@ -1,0 +1,117 @@
+/* headerDIV--------------------------------------- */
+#headerDiv{
+    background-color: #797067;
+    height: 300px;
+    justify-content:center;
+    align-items:center;
+    display:-webkit-flex;
+}
+
+.form-control{
+    width: 70% !important;
+    /* display: inline !important; */
+    /* position: absolute;
+    top: 45%;
+    left: 27%; */
+}
+
+#search{
+    /* width: 400px; */
+    font-size: 30px;
+    text-align: center;
+}
+
+.form-control{
+    width: auto
+}
+
+#search{
+    display: inline;
+}
+
+.keyWord{
+    display: inline;
+}
+
+.titleIimg1{
+    position:absolute;
+    width: 50%;
+    top:-80px;
+    left:20%;
+}
+.titleIimg2{
+    position:absolute;
+    width: 50%;
+    top:-60px;
+    left: 50%;
+}
+/* headerDIV--------------------------------------- */
+
+/* 產品--------------------------------------------- */
+.productImg{
+    width: 200px
+}
+
+.name{
+    width: 200px;
+    display:inline-block;
+    padding: 5px 5px;
+    font-size: 20px;
+}
+
+.price{
+    color: red;
+}
+
+.productDiv{
+    width: 200px;
+    height: 400px;
+    display: inline-block;
+    margin-left: 20px;
+}
+/* 標籤--------------------------------------------- */
+.hotSale{
+    position:absolute;
+    width: 40px;
+    top:0%;
+    left: 90%;
+}
+
+.newSale{
+    position:absolute;
+    width: 40px;
+    top:0%;
+    left: 90%;
+}
+/* 標籤--------------------------------------------- */
+/* 產品--------------------------------------------- */
+
+#left-area{
+    /* width: 20%; */
+    float: left;
+}
+#left-area{
+    /* width: 80%; */
+    /* float: right;; */
+}
+
+#productsQuantity{
+    text-align:center;
+}
+.productsQuantityTitle{
+    color: #666;
+}
+
+.more{
+    float: right;
+}
+
+.classification{
+    color: #666;
+    margin-bottom: 1%;
+}
+
+.li{
+    list-style:none;
+    color: #666;
+}

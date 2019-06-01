@@ -43,7 +43,7 @@ public class ReviewBean implements Serializable {
 	@Column(name = "Comment", columnDefinition = "nvarchar(max)", nullable = false)
 	private String comment;
 
-	@Column(name = "Image", columnDefinition = "varbinary(max)")
+	@Column(name = "Image", columnDefinition = "image")
 	private SerialBlob image;
 
 	@ManyToOne
@@ -57,6 +57,8 @@ public class ReviewBean implements Serializable {
 	@ManyToOne
 	@JoinColumn(name = "ProductID", columnDefinition = "bigint", nullable = false, updatable = false)
 	private ProductBean productId;
+
+	private Byte[] imageBase64;
 
 	public ReviewBean() {
 		super();
@@ -87,7 +89,7 @@ public class ReviewBean implements Serializable {
 	public String toString() {
 		return "ReviewBean [id=" + id + ", createTime=" + createTime + ", updatedTime=" + updatedTime + ", rating="
 				+ rating + ", comment=" + comment + ", image=" + image + ", memberId=" + memberId + ", purchaseListId="
-				+ purchaseListId + ", productId=" + productId + "]";
+				+ purchaseListId + ", productId=" + productId + ", imageBase64=" + imageBase64 + "]";
 	}
 
 	/**
@@ -148,22 +150,18 @@ public class ReviewBean implements Serializable {
 	}
 
 	public byte[] getImage() {
-		byte[] encoder = null;
-		byte[] nullByte = {0};
+		SerialBlob serialBlob = image;
+		byte[] byteArray = null;
 		try {
-			if (image != null) {
-				encoder = image.getBytes(1L, (int) image.length());
+			if (serialBlob != null) {
+				byteArray = serialBlob.getBytes(1, (int) serialBlob.length());
 			} else {
-				return nullByte;
-			} 
+				return null;
+			}
 		} catch (SerialException e) {
 			e.printStackTrace();
 		}
-		if (encoder != null) {
-			return encoder;
-		} else {
-			return null;
-		}
+		return byteArray;
 	}
 
 	public void setImage(SerialBlob image) {
@@ -192,6 +190,14 @@ public class ReviewBean implements Serializable {
 
 	public void setProductId(ProductBean productId) {
 		this.productId = productId;
+	}
+
+	public Byte[] getImageBase64() {
+		return imageBase64;
+	}
+
+	public void setImageBase64(Byte[] imageBase64) {
+		this.imageBase64 = imageBase64;
 	}
 
 }

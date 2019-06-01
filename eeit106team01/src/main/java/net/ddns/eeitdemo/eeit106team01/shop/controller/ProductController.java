@@ -87,7 +87,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/updatedTime" }, produces = { "application/json" })
+	@GetMapping(path = { "/search/updatedTime" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByUpdatedTime(
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDay,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDay) {
@@ -130,10 +130,16 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/products/name" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductsByName(@RequestParam String productName) {
-		if (productName != null) {
+	@GetMapping(path = { "/search/TypeName" }, produces = { "application/json" })
+	public ResponseEntity<?> getProductsByName(@RequestParam String productType,@RequestParam String productName) {
+		if (productName != null && NullChecker.isEmpty(productType) == true) {
 			List<ProductBean> result = productService.findProductsByName(productName);
+			if (result != null) {
+				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
+			}
+			return ResponseEntity.notFound().build();
+		}else if((productName != null && NullChecker.isEmpty(productType) == false)){
+			List<ProductBean> result = productService.findProductsByTypeName(productType, productName);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -165,7 +171,7 @@ public class ProductController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-
+	
 	@PutMapping(path = { "/products" }, consumes = { "application/json; charset=UTF-8" }, produces = {
 			"application/json" })
 	public ResponseEntity<?> putProduct(@RequestBody ProductBean productBean, BindingResult bindingResult) {

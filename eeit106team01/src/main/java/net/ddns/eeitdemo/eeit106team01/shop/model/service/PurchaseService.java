@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,18 +29,18 @@ public class PurchaseService {
 	private ProductDAO productDAO;
 
 	// Create a Purchase and Purchase List
-	public PurchaseBean newPurchase(ArrayList<Long> productIdList, PurchaseBean purchaseBean) {
-		if (productIdList != null && productIdList.size() > 0L && purchaseBean.isNotNull()) {
+	public PurchaseBean newPurchase(ArrayList<Integer> productIdList, PurchaseBean purchaseBean) {
+		if (productIdList != null && productIdList.size() > 0 && purchaseBean.isNotNull()) {
 
 			// insert purchase
 			PurchaseBean purchase = purchaseDAO.insertPurchase(purchaseBean);
 
 			// Get products
 			ArrayList<ProductBean> productBeans = new ArrayList<ProductBean>();
-			for (Long productId : productIdList) {
-				if (productId != null) {
-					productBeans.add(productDAO.findProductByProductId(productId));
-				}
+			for (Integer intId : productIdList) {
+				String stringObject = String.valueOf(intId);
+				Long productId = Long.valueOf(stringObject);
+				productBeans.add(productDAO.findProductByProductId(productId));
 			}
 
 			for (ProductBean productBean : productBeans) {
@@ -245,7 +244,7 @@ public class PurchaseService {
 		if (reviews != null && reviews.size() > 0) {
 			List<ReviewBean> result = new ArrayList<ReviewBean>();
 			for (ReviewBean reviewBean : reviews) {
-				if (reviewBean != null) {
+				if (reviewBean.isNotNull()) {
 					result.add(purchaseDAO.insertReview(reviewBean));
 				}
 			}
@@ -258,11 +257,11 @@ public class PurchaseService {
 
 	// Update Review
 	// @formatter:on
-	public ReviewBean updateReview(ReviewBean reviewBean, Double rating, String comment, SerialBlob image) {
-		if (reviewBean.isNotNull() && ((rating != null && rating.doubleValue() >= 0d)
+	public ReviewBean updateReview(ReviewBean reviewBean, Double rating, String comment, byte[] image) {
+		if (reviewBean.isNotNull() && ((rating != null && rating.doubleValue() >= 0D)
 				|| NullChecker.isEmpty(comment) == false || NullChecker.isEmpty(image) == false)) {
 			Boolean flag = false;
-			if ((rating != null && rating.doubleValue() >= 0d)) {
+			if ((rating != null && rating.doubleValue() >= 0D)) {
 				if (rating != reviewBean.getRating()) {
 					reviewBean.setRating(rating);
 					flag = true;
@@ -274,14 +273,9 @@ public class PurchaseService {
 					flag = true;
 				}
 			}
-			if (NullChecker.isEmpty(image) == false) {
+			if (image != null && image.length > 0) {
 				if (reviewBean.getImage() != null) {
-					if (!image.equals(reviewBean.getImage())) {
-						reviewBean.setImage(image);
-						flag = true;
-					}
-				} else {
-					reviewBean.setImage(image);
+					reviewBean.setImage(reviewBean.getImage());
 					flag = true;
 				}
 			}
@@ -340,20 +334,20 @@ public class PurchaseService {
 				if (result != null && result.size() > 0) {
 					return result;
 				}
-			} else if (type.equalsIgnoreCase("rating") && doubleValue != null && doubleValue.doubleValue() <= 10d
-					&& doubleValue.doubleValue() >= 0d) {
+			} else if (type.equalsIgnoreCase("rating") && doubleValue != null && doubleValue.doubleValue() <= 5D
+					&& doubleValue.doubleValue() >= 0D) {
 				result = purchaseDAO.findReviewsByRating(doubleValue);
 				if (result != null && result.size() > 0) {
 					return result;
 				}
-			} else if (type.equalsIgnoreCase("ratingLower") && doubleValue != null && doubleValue.doubleValue() <= 10d
-					&& doubleValue.doubleValue() >= 0d) {
+			} else if (type.equalsIgnoreCase("ratingLower") && doubleValue != null && doubleValue.doubleValue() <= 5D
+					&& doubleValue.doubleValue() >= 0D) {
 				result = purchaseDAO.findReviewsByRatingLower(doubleValue);
 				if (result != null && result.size() > 0) {
 					return result;
 				}
-			} else if (type.equalsIgnoreCase("ratingHigher") && doubleValue != null && doubleValue.doubleValue() <= 10d
-					&& doubleValue.doubleValue() >= 0d) {
+			} else if (type.equalsIgnoreCase("ratingHigher") && doubleValue != null && doubleValue.doubleValue() <= 5D
+					&& doubleValue.doubleValue() >= 0D) {
 				result = purchaseDAO.findReviewsByRatingHigher(doubleValue);
 				if (result != null && result.size() > 0) {
 					return result;

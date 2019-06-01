@@ -43,31 +43,25 @@ public class PurchaseServiceTest extends ShopTest {
 	private ArrayList<Long> productIdList;
 	private Date date = NewDate.newCurrentTime();
 
+	@Test
 	public void testNewPurchase() throws Exception {
 		Member member = new Member();
 		memberDAO.insertMember(member);
 
-		productIdList = new ArrayList<Long>();
-		productIdList.add(1L);
-		productIdList.add(1L);
-		productIdList.add(1L);
-		productIdList.add(1L);
-		productIdList.add(1L);
-		productIdList.add(2L);
-		productIdList.add(3L);
 
-		Integer productTotalPrice = (productService.findProductByPrimaryKey(1L).getPrice() * 5)
-				+ productService.findProductByPrimaryKey(2L).getPrice()
-				+ productService.findProductByPrimaryKey(3L).getPrice();
+
+		Integer productTotalPrice = (productService.findProductByPrimaryKey(5L).getPrice() * 5)
+				+ productService.findProductByPrimaryKey(6L).getPrice()
+				+ productService.findProductByPrimaryKey(7L).getPrice();
 
 		HashMap<String, String> receiverInformation = new HashMap<String, String>();
 		receiverInformation.put("receiver", "Alex");
 		receiverInformation.put("address", "Neihu district");
 
-		PurchaseBean purchaseBean = new PurchaseBean("unpaid", date, date, productTotalPrice, "unsend", "7-11", 25,
+		PurchaseBean purchaseBean = new PurchaseBean("unpaid", date, date, productTotalPrice, "unsend", "7-11", 200,
 				receiverInformation, member);
 
-		purchaseService.newPurchase(productIdList, purchaseBean);
+//		purchaseService.newPurchase(productIdList, purchaseBean);
 	}
 
 	public void testUpdatePurchase() throws Exception {
@@ -130,7 +124,6 @@ public class PurchaseServiceTest extends ShopTest {
 		purchaseService.newReviews(reviewBeans);
 	}
 
-	@Test
 	public void testUpdateReview() throws Exception {
 		ReviewBean reviewBean = purchaseService.findReviewById("review", 1L).get(0);
 		reviewBean.setUpdatedTime(NewDate.newCurrentTime());
@@ -141,7 +134,7 @@ public class PurchaseServiceTest extends ShopTest {
 		byte[] fileContent = Files.readAllBytes(filePath);
 
 		SerialBlob serialBlob = new javax.sql.rowset.serial.SerialBlob(fileContent);
-		assertNotNull(purchaseService.updateReview(reviewBean, null, null, serialBlob));
+//		assertNotNull(purchaseService.updateReview(reviewBean, null, null, serialBlob));
 	}
 
 	public void testFindReviewById() throws Exception {
