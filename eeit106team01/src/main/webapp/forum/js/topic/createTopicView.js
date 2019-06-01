@@ -1,45 +1,47 @@
 function createTopicView(dataTopicList, divTopicId) {
     $(`#${divTopicId}`).text("");
     for (let i = 0; i < dataTopicList.length; i++) {
-        let divTopic = $("<div></div>").addClass("col-md-3").attr("id", `id${dataTopicList[i].id}`).css({padding: "8px"}).appendTo($(`#${divTopicId}`));
-            let divVideo = $("<div></div>").addClass("col-md-12").css({height: "150px",margin: "1px"}).appendTo(divTopic);
-                // if(dataTopicList[i].videoBean){
-                //     let videoBean = dataTopicList[i].videoBean;
-                //     let videoId = `topic${dataTopicList[i].id}player`;
-                //     let videoBlock = createVideo(videoBean, videoId).appendTo(divVideo);
-                //     createVideoPlayer(videoBean, videoId);
-                // }
-                $("<img />", { 
-                    src: "/navbar/images/1558837130883Indian Parrot Greet Indian Parrot.mp4.jpg",
-                    height: "100%",
-                    width: "100%"
-                }).appendTo(divVideo);
+        let divTopic = $("<div></div>").addClass("col-md-3").attr("id", `id${dataTopicList[i].id}`).css({padding: "8px", width: "259px"}).appendTo($(`#${divTopicId}`));
+            if(dataTopicList[i].videoBean){
+                let divVideo = $("<div></div>").addClass("col-md-12").css({"height": "150px",margin: "1px"}).appendTo(divTopic);
+                let videoBean = dataTopicList[i].videoBean;
+                let videoId = `topic${dataTopicList[i].id}player`;
+                let videoBlock = createVideo(videoBean, videoId).appendTo(divVideo);
+                createVideoPlayer(videoBean, videoId);
+            
+                // $("<img />", { 
+                //     src: "/navbar/images/1558837130883Indian Parrot Greet Indian Parrot.mp4.jpg",
+                //     height: "100%",
+                //     width: "100%"
+                // }).appendTo(divVideo);
+            }
             let aLinkToContent = $("<a></a>").attr("href", "http://localhost:8080/forum/showContents.html")
                                 .on("click", function(){
                                     localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
                                 }).appendTo(divTopic);
-                let divTopicHeader = $("<div></div>").addClass("col-md-12").css({margin: "1px","text-decoration": "underline","font-weight": "bolder"}).text(dataTopicList[i].topicHeader).appendTo(aLinkToContent);
+                let divTopicHeader = $("<div></div>").addClass("col-md-12").css({margin: "1px","text-decoration": "underline","font-weight": "bolder"}).text(parseTopicHeader(dataTopicList[i].topicHeader)).appendTo(aLinkToContent);
                 let divTopicContent = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px"}).text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(aLinkToContent);
             let divMemberName = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px",color: "#0066CC"}).appendTo(divTopic);
                 $("<img />", { 
-                    src: "/navbar/images/wowlogo.png",
+                    src: "/navbar/images/icon02.png",
                     class: "img-circle",
                     width: "34"
                 }).appendTo(divMemberName);
-                $("<p>&nbsp;John Henderson</p>").appendTo(divMemberName);
+                divMemberName.append("&nbsp;John Henderson");
             let divTopicLikeNum = $("<div></div>").addClass("col-md-2").css({"font-size": "14px",margin: "1px",width: "45px"}).appendTo(divTopic);
                 $("<i></i>").addClass("fa fa-thumbs-o-up").appendTo(divTopicLikeNum);
-                $(`<p>&nbsp;${dataTopicList[i].topicLikeNum}</p>`).appendTo(divTopicLikeNum);
+                divTopicLikeNum.append(`&nbsp;${dataTopicList[i].topicLikeNum}`);
             let divContentReplyNum = $("<div></div>").addClass("col-md-2").css({"font-size": "14px",margin: "1px",width: "45px"}).appendTo(divTopic);
                 $("<i></i>").addClass("fa fa-commenting-o").appendTo(divContentReplyNum);
-                $(`<p>&nbsp;${dataTopicList[i].contentReplyNum}</p>`).appendTo(divContentReplyNum);
+                divContentReplyNum.append(`&nbsp;${dataTopicList[i].contentReplyNum}`);
             let divPageViews = $("<div></div>").addClass("col-md-2").css({"font-size": "14px",margin: "1px",width: "45px"}).appendTo(divTopic);
                 $("<i></i>").addClass("fa fa-eye").appendTo(divPageViews);
-                $(`<p>&nbsp;${dataTopicList[i].pageViews}</p>`).appendTo(divPageViews);
+                divPageViews.append(`&nbsp;${dataTopicList[i].pageViews}`);
             let divAccidentTime = $("<div></div>").addClass("col-md-6").css({"font-size": "14px",margin: "1px",float: "right", "text-align": "right", width: "95px"}).appendTo(divTopic);
                 $("<i></i>").addClass("fa fa-video-camera").appendTo(divAccidentTime);
-                $(`<p>&nbsp;${dataTopicList[i].accidentTime} hours+8</p>`).appendTo(divAccidentTime);
-        // <div class="col-md-3" style="padding: 8px">
+                divAccidentTime.append(`&nbsp;${new Date(dataTopicList[i].accidentTime).yyyymmddhhii().substr(0,10)}`);
+    }
+                // <div class="col-md-3" style="padding: 8px">
         //     <div class="col-md-12" style="height: 150px; margin: 1px;  ">
         //         <img height="100%" width="100%" src="navbar/images/1558837130883Indian Parrot Greet Indian Parrot.mp4.jpg">
         //     </div>
@@ -82,7 +84,7 @@ function createTopicView(dataTopicList, divTopicId) {
         //         let spanTopicLikeNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].topicLikeNum).appendTo(divCardBody);
         //         let spanContentReplyNum = $("<span></span>").addClass("badge badge-dark").text(dataTopicList[i].contentReplyNum).appendTo(divCardBody);
         //         let spanAccidentTime = $("<span></span>").addClass("badge badge-warning").text(dataTopicList[i].accidentTime+"hours+8").appendTo(divCardBody);
-    }
+    
 }
 
 function createVideo(videoBean, videoId) {
@@ -96,17 +98,18 @@ function createVideo(videoBean, videoId) {
         thumbnailURI = "/storage/jpgs/" + videoBean.thumbnailURI;
     }
 
-    let videoCard = $("<div></div>").addClass("card").css({
-                        margin: "0",
-                        width: "100%"
-                    });
-        let videoTop = $("<div></div>").css({
-                            margin: "0"
-                        }).appendTo(videoCard);
-            let video = $("<video></video>").addClass("card-img-top").attr("id", videoId).attr("poster", thumbnailURI).attr("src", videoURI).prop("controls", true).appendTo(videoTop);
+    // let videoCard = $("<div></div>").css({
+    //                     margin: "0",
+    //                     width: "100%"
+    //                 });
+        // let videoTop = $("<div></div>").css({
+        //                     margin: "0"
+        //                 }).appendTo(videoCard);
+            let video = $("<video></video>").attr("id", videoId).attr("poster", thumbnailURI).attr("src", videoURI).prop("controls", true);
         // let videoBottom = $("<div></div>").addClass("card-body").text(videoBean.videoURI.substr(0, 13)).appendTo(videoCard);
     
-    return videoCard;
+    // return videoCard;
+    return video;
 }
 
 function createVideoPlayer(videoBean, videoId) {
@@ -128,10 +131,18 @@ function createVideoPlayer(videoBean, videoId) {
     });
 }
 
+function parseTopicHeader(headerString){
+    let lengthLimit = 10;
+    if(headerString.length > lengthLimit){
+        headerString = headerString.substr(0,lengthLimit) + "......";
+    }
+    return headerString;
+}
+
 function parseQuillContent(quillTopicContent) {
     let ops = quillTopicContent.ops;
     let shortTopicContent = "";
-    let lengthLimit = 35;
+    let lengthLimit = 15;
     for (let i = 0; i < ops.length; i++){
         if (typeof ops[i].insert === "string") {
             shortTopicContent = shortTopicContent + ops[i].insert;

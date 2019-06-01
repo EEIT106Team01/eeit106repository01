@@ -1,75 +1,191 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>探索</title>
-    <link rel="stylesheet"
+
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+
+    <!--input data-include property in any tag when window.onload-->
+    <script src="/navbar/js/csi.min.js"></script>
+
+    <!-- include navbarCss when window.onload-->
+    <div data-include="/navbar/navbarCssInHeadTag.html"></div>
+
+    <!-- chatroom -->
+    <script src="/chat/js/sockjs.min.js"></script>
+    <script src="/chat/js/stomp.min.js"></script>
+    <script src="/chat/js/chatroom-init.js"></script>
+
+    <!-- <link rel="stylesheet"
         href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
     <script
         src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
     <script
         src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
     <script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
     <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
         crossorigin="anonymous"></script> -->
     <!-- google map -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0&libraries=places" async
+        defer></script>
     <!-- Main Quill library -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-	<script src="/forum/quill/quill.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+    <script src="/forum/quill/quill.js"></script>
     <script src="/forum/quill/quill.min.js"></script>
     <!-- plyr -->
     <link rel="stylesheet" href="https://cdn.plyr.io/3.5.3/plyr.css" />
     <script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
-    
-    <script src="js/topic/createTopicView.js"></script>
+
+    <script src="/forum/js/topic/yyyymmddhhiiDate.js"></script>
+    <script src="/forum/js/topic/createTopicView.js"></script>
+
+    <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.min.css">
+
+    <style>
+        .main-content * {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .leftPart {
+            max-width: 777px;
+        }
+
+        .leftTopPart {
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ebebeb;
+        }
+
+        .rightPart {
+            /* position: absolute; */
+            /* z-index: 99998; */
+            /* top: 20px; */
+            /* right: 20px; */
+            width: 100%;
+            height: 100%;
+            max-width: 600px;
+            max-height: 500px;
+        }
+        
+        .rightTopPart {
+            padding-bottom: 20px;
+            margin-bottom: 8px;
+            border-bottom: 1px solid #ebebeb;
+        }
+
+        #map_canvas {
+            width: 100%;
+            height: 100%;
+            /* width: 600px;
+            height: 500px; */
+        }
+
+        #pac-input {
+            background-color: #fff;
+            font-family: Roboto;
+            font-size: 15px;
+            font-weight: 300;
+            margin-left: 12px;
+            padding: 0 11px 0 13px;
+            text-overflow: ellipsis;
+            width: 400px;
+            height: 32px;
+        }
+
+        #pac-input:focus {
+            border-color: #4d90fe;
+        }
+    </style>
 
     <script type="text/javascript">
         let map;
         let markers = [];
         let listener;
-        
-        $(window).on("load", function(){
+        $(window).on("load", function () {
             initMap();
-            $("#taipei").on("click", function(){
+            $("#taipei").on("click", function () {
                 map.setCenter(new google.maps.LatLng(25.044991025205064, 121.53621722216803));
             });
-            $("#taoyuan").on("click", function(){
+            $("#taoyuan").on("click", function () {
                 map.setCenter(new google.maps.LatLng(24.973514234746464, 121.26104139430254));
             });
-            $("#taichung").on("click", function(){
+            $("#taichung").on("click", function () {
                 map.setCenter(new google.maps.LatLng(24.1436761923398, 120.64985612179316));
             });
-            $("#tainan").on("click", function(){
+            $("#tainan").on("click", function () {
                 map.setCenter(new google.maps.LatLng(23.01296258224154, 120.21863764873228));
             });
-            $("#kaohsiung").on("click", function(){
+            $("#kaohsiung").on("click", function () {
                 map.setCenter(new google.maps.LatLng(22.626350313412292, 120.34279125318312));
             });
-            $("#yilan").on("click", function(){
+            $("#yilan").on("click", function () {
                 map.setCenter(new google.maps.LatLng(24.71783993530108, 121.7467274256129));
             });
-            $("#taitung").on("click", function(){
+            $("#taitung").on("click", function () {
                 map.setCenter(new google.maps.LatLng(22.778863312914602, 121.10624217157897));
             });
         });
 
         function initMap() {
             map = new google.maps.Map(document.getElementById("map_canvas"), {
-                    zoom: 12    //0-21
-                    , center: { lat: 25.033793, lng: 121.543427 }
-                    , scaleControl: true
-                    // , maxZoom: 15
-                    // , minZoom: 8
-                });
-            
+                zoom: 12    //0-21
+                , center: { lat: 25.033793, lng: 121.543427 }
+                , scaleControl: true
+                , mapTypeControlOptions: { mapTypeIds: [] }
+            });
+
             google.maps.event.addListener(map, 'dragstart', onDragstart);
             google.maps.event.addListener(map, 'dragend', onDragend);
             listener = google.maps.event.addListener(map, 'bounds_changed', onBounds_changed);
+
+            var input = document.getElementById('pac-input');
+
+            var autocomplete = new google.maps.places.Autocomplete(input);
+
+            // Bind the map's bounds (viewport) property to the autocomplete object,
+            // so that the autocomplete requests use the current map bounds for the
+            // bounds option in the request.
+            autocomplete.bindTo('bounds', map);
+
+            // Set the data fields to return when the user selects a place.
+            autocomplete.setFields(
+                ['address_components', 'geometry', 'icon', 'name']);
+
+            autocomplete.addListener('place_changed', function () {
+                var place = autocomplete.getPlace();
+                if (!place.geometry) {
+                    // User entered the name of a Place that was not suggested and
+                    // pressed the Enter key, or the Place Details request failed.
+                    // window.alert("查無此地區: '" + place.name + "'");
+                    return;
+                }
+
+                // If the place has a geometry, then present it on a map.
+                if (place.geometry.viewport) {
+                    map.fitBounds(place.geometry.viewport);
+                } else {
+                    map.setCenter(place.geometry.location);
+                    map.setZoom(14);  // Why 17? Because it looks good.
+                }
+
+                var address = '';
+                if (place.address_components) {
+                    address = [
+                        (place.address_components[0] && place.address_components[0].short_name || ''),
+                        (place.address_components[1] && place.address_components[1].short_name || ''),
+                        (place.address_components[2] && place.address_components[2].short_name || '')
+                    ].join(' ');
+                }
+
+            });
         }
 
         function getTopicList() {
@@ -83,32 +199,35 @@
                 success: function (dataTopicList) {
                     createTopicView(dataTopicList, "topicList");
                     addMarker(dataTopicList);
+                    $(".plyr video").height("150px");
+                    $(".plyr__controls").hide();
+                    $(".plyr__control--overlaid").hide();
                 }
             })
         }
 
         function addMarker(dataTopicList) {
-            for (let i = 0; i < markers.length; i++){
+            for (let i = 0; i < markers.length; i++) {
                 markers[i].setMap(null);
             }
 
             for (let i = 0; i < dataTopicList.length; i++) {
-                markers[i] = 
+                markers[i] =
                     new google.maps.Marker({
                         position: {
                             lat: dataTopicList[i].accidentLocationLatitude,
                             lng: dataTopicList[i].accidentLocationLongitude
                         }
                         , map: map
-                        , label: `${dataTopicList[i].id}`
+                        // , label: `${dataTopicList[i].id}`
                         // , animation: google.maps.Animation.BOUNCE    //for marker remove check
                     });
 
-                markers[i].addListener('mouseover', function() {
+                markers[i].addListener('mouseover', function () {
                     $(`#id${dataTopicList[i].id}`).addClass("bg-info");
                 });
 
-                markers[i].addListener('mouseout', function() {
+                markers[i].addListener('mouseout', function () {
                     $(`#id${dataTopicList[i].id}`).removeClass("bg-info");
                 });
             }
@@ -132,17 +251,53 @@
 
 </head>
 
-<body>
-    <div id="map_canvas" style="width:600px; height:500px; float: right;"></div>
-    <input type="button" id="taipei" value="台北市">
-    <input type="button" id="taoyuan" value="桃園市">
-    <input type="button" id="taichung" value="台中市">
-    <input type="button" id="tainan" value="台南市">
-    <input type="button" id="kaohsiung" value="高雄市">
-    <input type="button" id="yilan" value="宜蘭縣">
-    <input type="button" id="taitung" value="台東縣">
-    <hr>
-    <div id="topicList"></div>
+<body class="page-body" data-url="http://neon.dev">
+    <!-- include navbar when window.onload-->
+    <div data-include="/navbar/navbarWhite.html"></div>
+
+    <div class="page-container">
+        <div class="main-content">
+
+            <div class="col-md-7 leftPart">
+                <div class="col-md-12 leftTopPart">
+                    <input type="button" id="taipei" value="台北市">
+                    <input type="button" id="taoyuan" value="桃園市">
+                    <input type="button" id="taichung" value="台中市">
+                    <input type="button" id="tainan" value="台南市">
+                    <input type="button" id="kaohsiung" value="高雄市">
+                    <input type="button" id="yilan" value="宜蘭縣">
+                    <input type="button" id="taitung" value="台東縣">
+                </div>
+                <div class="col-md-12" id="topicList"></div>
+            </div>
+            <div class="col-md-5 rightPart">
+                <div class="col-md-12 rightTopPart">
+                    <input id="pac-input" type="text" placeholder="請輸入位置">
+                </div>
+                <div class="col-md-12" id="map_canvas"></div>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- JavaScripts initializations and stuff -->
+    <!-- YW: this is important for navbar -->
+    <script src="/assets/js/neon-custom.js"></script>
+
+    <!-- Bottom scripts (common) -->
+    <script src="/assets/js/gsap/TweenMax.min.js"></script>
+    <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/joinable.js"></script>
+    <script src="/assets/js/resizeable.js"></script>
+    <script src="/assets/js/neon-api.js"></script>
+
+    <!-- Imported scripts on this page -->
+    <!-- <script src="/assets/js/neon-chat.js"></script> -->
+
+    <!-- Demo Settings -->
+    <!-- <script src="/assets/js/neon-demo.js"></script> -->
+
 </body>
 
 </html>
