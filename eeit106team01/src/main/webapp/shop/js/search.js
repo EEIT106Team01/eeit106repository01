@@ -565,7 +565,7 @@ function getProductsByBrand(brand){
                 productsPrice.push(brandData[y].price)
                 productsImg.push(brandData[y].imageLink[0])
                 productTotalSold.push(brandData[y].totalSold)
-                productsId.push(priceData[y].id)
+                productsId.push(brandData[y].id)
                 y++;
             })
 
