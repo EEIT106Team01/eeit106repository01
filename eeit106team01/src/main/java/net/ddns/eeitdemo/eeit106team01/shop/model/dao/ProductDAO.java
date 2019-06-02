@@ -24,6 +24,8 @@ public interface ProductDAO {
 	abstract List<ProductBean> findProductsByStock(String emptyORnotEmpty);
 
 	abstract List<ProductBean> findProductsByType(String type);
+	
+	abstract List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort);
 
 	abstract List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
 			String queryString, Integer minPrice, Integer maxPrice);

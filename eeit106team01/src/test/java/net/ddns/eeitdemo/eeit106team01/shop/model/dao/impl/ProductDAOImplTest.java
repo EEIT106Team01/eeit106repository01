@@ -156,10 +156,22 @@ public class ProductDAOImplTest {
 		assertEquals(new Integer(productDAO.findProductData("type", null).size()), new Integer(6));
 		assertEquals(new Integer(productDAO.findProductData("brand", "行車紀錄器").size()), new Integer(162));
 	}
-	@Test
+	
 	public void testFindProductsByTypeName() throws Exception{
 		assertNotNull(productDAO.findProductsByTypeName("行車紀錄器", "快譯通"));
 		assertNull(productDAO.findProductsByTypeName("", ""));
+	}
+	@Test
+	public void testFindProductsSort() throws Exception{
+		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","totalSold","desc"));
+//		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","price","asc"));
+//		assertNull(productDAO.findProductsSort("", "","",""));
+//		assertNotNull(productDAO.findProductsSort("brand", "快譯通","totalSold","desc"));
+//		assertNotNull(productDAO.findProductsSort("brand", "快譯通","price","asc"));
+//		assertNull(productDAO.findProductsSort("", "","",""));
+//		assertNotNull(productDAO.findProductsSort("name", "1080","totalSold","desc"));
+//		assertNotNull(productDAO.findProductsSort("name", "1080","price","asc"));
+//		assertNull(productDAO.findProductsSort("", "","",""));
 	}
 
 }

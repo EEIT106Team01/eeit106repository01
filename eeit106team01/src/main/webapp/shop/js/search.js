@@ -13,7 +13,9 @@ $(document).ready(function () {
             console.log(type)
             getProductsByPriceByType(type[1]);
     }))
-
+    $("sortPriceDesc").on('click',(function () {
+        
+    }))
 })
 //搜尋
 function userSearch(){
@@ -136,10 +138,8 @@ function getAllType(){
 }
 // 側邊menu用↑↑↑↑↑↑↑↑↑↑
 
-//全站產品依產品搜尋
+//全站產品依產品搜尋(不使用)
 function getProductsByPrice(){
-    // let NameBrandType = brand;
-    var queryString = 1080;
     var minPrice = $("#minPrice").val()
     var maxPrice = $("#maxPrice").val()
     var produstUrl ="http://localhost:8080/search/price?byNameBrandType=name&queryString="+queryString+"&minPrice="+minPrice+"&maxPrice="+maxPrice;
@@ -794,4 +794,17 @@ console.log("searchStart")
             console.log(textStatus)
         }
     })
+ }
+
+ //商品排序(price低到高)
+function sortPriceAsc(){
+
+}
+ //商品排序(price高到低)
+function sortPriceDesc(){
+  
+}
+ //商品排序(銷量)
+ function sortSold(){
+   
  }

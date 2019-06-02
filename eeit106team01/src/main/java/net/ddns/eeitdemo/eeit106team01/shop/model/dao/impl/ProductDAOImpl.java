@@ -455,4 +455,27 @@ public class ProductDAOImpl implements ProductDAO {
 		return null;
 	}
 
+	@SuppressWarnings("unchecked")
+	@Override
+	public List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort) {
+		try {
+			if (dataName.equalsIgnoreCase("type") && NullChecker.isEmpty(queryString) == false
+					&& NullChecker.isEmpty(type) == false && NullChecker.isEmpty(sort) == false) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where :dataName = :queryString order by :type :sort")
+						.setParameter("dataName", dataName)
+						.setParameter("queryString", queryString)
+						.setParameter("type", type)
+						.setParameter("sort",sort)
+						.getResultList();
+			}else {
+				throw new IllegalArgumentException("enter type or brand or name, and type is a must in brand search name");
+			}
+			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
+					return this.productsResutlt;
+			}
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+	return null;
+	}
 }
