@@ -1,5 +1,10 @@
 /* review */
 
+body {
+    font-family: 'Noto Sans TC', sans-serif;
+    background-color: white;
+}
+
 #image {
     text-align: center;
     width: 300px;
@@ -9,7 +14,7 @@ h1 {
     text-align: center;
 }
 
-body {
+.card-img-top {
     background-color: black;
 }
 
@@ -18,13 +23,43 @@ body {
 }
 
 .container {
-    width: 1080px;
+    width: 900px;
 }
 
 
 /* drag and drop */
 
+#div-draggable-events {
+    position: fixed;
+    top: 45px;
+    right: 100px;
+}
+
 #draggable-events {
-    width: 200px;
-    position: absolute;
+    width: 180px;
+    border: none;
+    background: transparent;
+}
+
+#draggable-events div,
+#draggable-events img {
+    background: transparent;
+    border: 0;
+}
+
+.card-img-top {
+    width: 50px;
+}
+
+.card-header {
+    text-align: center;
+}
+
+.badge {
+    width: 23px;
+    height: 23px;
+}
+
+.badge p {
+    font-size: 15px;
 }

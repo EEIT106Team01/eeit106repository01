@@ -1,0 +1,787 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Neon Admin Panel" />
+    <meta name="author" content="" />
+
+    <link rel="icon" href="../assets/images/favicon.ico">
+
+    <title>Neon | Comments</title>
+
+    <link rel="stylesheet" href="../assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" href="../assets/css/font-icons/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../assets/css/font-icons/entypo/css/entypo.css">
+    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/css/neon-core.css">
+    <link rel="stylesheet" href="../assets/css/neon-theme.css">
+    <link rel="stylesheet" href="../assets/css/neon-forms.css">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
+
+    <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+            <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+
+</head>
+
+<body>
+    <div class="main-content">
+
+        <div class="row">
+
+            <!-- Comments Area -->
+            <section class="comments-env">
+
+                <!-- Search and Comment Pagination (Header) -->
+                <div class="filtering">
+
+                    <div class="row">
+                        <div class="col-sm-1">
+                        </div>
+
+                        <div class="col-sm-11 search-and-pagination">
+                            <div class="form-check" style="float: left">
+                                <label class="form-check-label">
+                                    <input type="checkbox" class="form-check-input" name="" id="" value="checkedValue" >
+                                    附圖片的評論
+                                </label><span>&nbsp;&nbsp;&nbsp;</span>
+                            </div>
+
+                            <div class="form-check" style="float: left">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="" id="" value="checkedValue" checked>
+                                    正面評論
+                                </label><span>&nbsp;&nbsp;&nbsp;</span>
+                            </div>
+                            <div class="form-check" style="float: left">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="" id="" value="checkedValue" >
+                                    普通評論
+                                </label><span>&nbsp;&nbsp;&nbsp;</span>
+                            </div>
+                            <div class="form-check" style="float: left">
+                                <label class="form-check-label">
+                                    <input type="radio" class="form-check-input" name="" id="" value="checkedValue" >
+                                    負面評論
+                                </label>
+                            </div>
+
+                            <!-- Pagination -->
+                            <div class="pagination-container">
+
+                                <ul class="pagination">
+                                    <li><a href="#"><i class="entypo-left-open-mini"></i></a></li>
+                                    <li><a href="#">1</a></li>
+                                    <li class="active"><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">6</a></li>
+                                    <li><a href="#"><i class="entypo-right-open-mini"></i></a></li>
+                                </ul>
+
+                            </div>
+
+                            <!-- Search Form -->
+                            <div class="search-form-contaner">
+
+                                <form method="get" role="form" class="search-form-full">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="s" id="search-input" placeholder="Search...">
+                                        <i class="entypo-search"></i>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+
+                <!-- Comments List Panel -->
+                <div class="row">
+
+                    <div class="col-md-12">
+
+                        <div class="panel panel-primary">
+
+                            <div class="panel-heading">
+                                <div class="panel-title">
+                                    <h4>
+                                        商品評論
+                                        <span class="badge badge-danger">73</span>
+                                    </h4>
+                                </div>
+                            </div>
+
+                            <div class="panel-body no-padding">
+
+                                <!-- List of Comments -->
+                                <ul class="comments-list">
+
+                                    <!-- Comment Entry -->
+                                    <li>
+                                        <div class="comment-checkbox">
+                                            <div class="checkbox checkbox-replace neon-cb-replacement">
+                                                <label class="cb-wrapper"><input type="checkbox"><div class="checked"></div></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-details">
+
+                                            <div class="comment-head">
+                                                <a href="#">王小明</a> 評論 <a href="#">MANHATTAN 曼哈頓 S300D SONY Exmor 雙鏡頭 行車紀錄器</a>&nbsp;
+                                                <span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star"></span><span class="fa fa-star-half-o"></span><span class="fa fa-star-o"></span>
+                                            </div>
+
+                                            <div class="comment-image">
+                                                <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAlgAAAGQBAMAAACAGwOrAAAAG1BMVEUAAAD///8fHx9fX1+fn5+/v7/f399/f38/Pz+s+vmyAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAGf0lEQVR4nO3bzXPTRhjHcVt+07ELSeAoF+LhiBmgPcYttNe6U6BHTAvtERea4RhDO82fXWm12hftI4NyWme+n0OIf9ix/fjRarWSBwMAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAK6RO0+fP/vlQxD99/TNs3fF4LPZF8sug5v5++evXzwYfDZLzmOlnfxlk2ylk+ML715S1sNS3fdu3a2f8tfBZ7LkmFqV1bLRyiTHxWBv9uUy5Rdr3Dzlz/uz5Jwq9fuDIrv3cGOLtVDqxcfBvUdK3Rzsy3qY+sXKNur4Q5F9WnuhlCWnfJG/md/+dlG9Ldx1L1zK+lj5D1uYjbncsm/uy5KzUEdxdMv8tlO392Q95Cpsorc2vujO0rOOG2Vlo9yOY1LWw0Kdu+cZu97ZqZfdWXJmcdPnXq8tzectZX2sj6euWDt11vw6ahpWypIzj9/51Ptkx+pGZ9bDTL3yirXxWnOlis4sOat4m9r5+y3zKUtZDzt1MfW2Y6+ZzYclZcnJhNF67dfPFFPKetgcDVyxJv6YNK5vSFlyxuqndpQFo9hc75qkrNezvPSKNfd3KebTkrLkDOP3PQqGpKkeeKWsh2U5CLliLYMhaXPUlSVnGW9RYbPN9CYhZVYePDwvor+o+9IVa3Xs/+f2pCtLzir+DKfB8JrrnpIyax1M1Havor84qUrtirUJ9g873VNSlpxNPDq0tkw9fkhZYxyMZ7kKekTbnhR+scIRqf7TUpaaTH0VZa2PVX/mUmb/RnAMsFNRZ+W6ErZYrb7UTStlycn16JO/f/7Grf0tVXCX9VFHZp16rVUeCxXtJ6nfui3WKPyAJtXeQsqSM6te1T/1MtIfRZ21Rlc99EqZ5beW0Fjm3rZYrd2D3ndIWXLG5Yd+Wi37bcofZtsKK1HXScoc11pSY5lphy1WqxK6TlKWnIm6P1LqxUX5Ns+VecGtHaSeXEiZ41pLaiwz3/SKdeb/96guVpwlZ6outs2i92OzHwsHpPL9d2SeprWkxmoea4vVGpDyariSsuQM1Sd7VFz2h26tdXiYXBdLyDxNa0mN1WxSXrGCXZ0pVpwlZ6iWbkozrut2hWKZ1hIba2ee4PCLNVcbb0a5ESbT9RRLynx1a0mNlTUPtcWatgtzQ86SM1f+q5zrkeMqxdKtJTbWpNnPXYdi+fu1se7+q2yGurWkxip3nEX9y3XYDP3junrV6krFKlvrltRYbmnqOhQr6He9jtSaJiyFqcMyLlbZWlJjuaWvrqnDSJg6jBItVjBz1hP1/pNSbSE1lrcCffiT0nn4InXH9D/c0XbSmWpvpD78w52hUKzeB9Jadco5Pu2+cAU8/APpVrH0lKD3Eo156J/CuW3vjoe/RDMVitV38U+r5linUWvNvDH/8Bf/JmG/6wYaBg2SmWXlOAtUc6wsaq2hev2ssVbVz+raq7Cm9Xk1KUtNa6zQxep9wmLQHBVGrTVUbdUDD/WERWus0ON4eD64ORUWZ7568h61llys8IS2ORUmZKkJzzTX43HeOqH6tiPzNEeF7dbKvnYW6kH5s7pb2Dd1T0lZcsL9Wv1eg+s+zAqLlPlBPZDHo5bjToUN/VrXp37ELDlb/xM1q+Ur4SIQKbPcckO8Q7RcsYJt2tyQsuQEU/hpvW/sfcmRW27Y01rX4JKj4MI0c6n6xJsdTcweQMoa/jpWd2t5F7OtvaPIterOUpN5C1qZOWPhn4HfmrcoZQ1/Hau7tYLLJO3szl6lKWXJ2boXuWi6bGu3zZGtkZTVwgXSztbyijVzF6gum6eXsuRM7DcmcuVWnJoXvrVNI2W1WXA7E44bNa9Y5XZ21jzWFlrKkrNWR0X1b762PWG/R/CvuyRdyozzwr912tEWfrEW6uS+ec7b+7LkjJU6fvfx8uFGnVw0WfUNlW8vP/3gL35KWS3bc8vxi1WObCffX+rnLPZl6bHfc/ouzo6E+13xEka/WIPRxvyxs/1Zeh61v0BXOg8urOnOvlxQrMFsEz+nlKUn/+bJk/aXLu+8f/Jj+3uSUnZVmfCcUgYAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADs8T931zKvijbtXAAAAABJRU5ErkJggg=="
+                                                    class="img-fluid" alt="" style="width: 250px">
+                                            </div>
+
+                                            <p class="comment-text">
+                                                產品不錯，到現在沒有遇到什麼問題。
+                                            </p>
+
+                                            <div class="comment-footer">
+
+                                                <div class="comment-time">
+                                                    今天 - 21:05
+                                                </div>
+
+                                                <div class="action-links">
+
+                                                    <a href="javascript:;" onclick="jQuery('#modal-edit-comment').modal('show');" class="edit">
+                                                        <i class="entypo-pencil"></i> 編輯
+                                                    </a>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+
+                                    <!-- Comment Entry -->
+                                    <li>
+                                        <div class="comment-checkbox">
+                                            <div class="checkbox checkbox-replace neon-cb-replacement">
+                                                <label class="cb-wrapper"><input type="checkbox"><div class="checked"></div></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-details">
+
+                                            <div class="comment-head">
+                                                <a href="#">Ralf Reiniger</a> commented on <a href="#">Forgotten Man</a>
+                                            </div>
+
+                                            <p class="comment-text">
+                                                By an packages rejoiced exercise. To ought on am marry rooms doubt music. Mention entered an through company as. Up arrived no painful between. It declared is prospect an insisted pleasure.
+                                            </p>
+
+                                            <div class="comment-footer">
+
+                                                <div class="comment-time">
+                                                    Yesterday - 12:10
+                                                </div>
+
+                                                <div class="action-links">
+
+                                                    <a href="#" class="approve">
+                                                        <i class="entypo-check"></i> Approve
+                                                    </a>
+
+                                                    <a href="#" class="delete">
+                                                        <i class="entypo-cancel"></i> Delete
+                                                    </a>
+
+
+                                                    <a href="javascript:;" onclick="jQuery('#modal-edit-comment').modal('show');" class="edit">
+                                                        <i class="entypo-pencil"></i> Edit
+                                                    </a>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+
+                                    <!-- Comment Entry -->
+                                    <li>
+                                        <div class="comment-checkbox">
+                                            <div class="checkbox checkbox-replace neon-cb-replacement">
+                                                <label class="cb-wrapper"><input type="checkbox"><div class="checked"></div></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-details">
+
+                                            <div class="comment-head">
+                                                <a href="#">Franco Davide</a> commented on <a href="#">Voyages in the Worlds</a>
+                                            </div>
+
+                                            <p class="comment-text">
+                                                Put use set uncommonly announcing and travelling. Allowance sweetness direction to as necessary. Principle oh explained excellent do my suspected conveying in. Excellent you did therefore perfectly supposing described.
+                                            </p>
+
+                                            <div class="comment-footer">
+
+                                                <div class="comment-time">
+                                                    Monday, 04 March - 10:49
+                                                </div>
+
+                                                <div class="action-links">
+
+                                                    <a href="#" class="approve">
+                                                        <i class="entypo-check"></i> Approve
+                                                    </a>
+
+                                                    <a href="#" class="delete">
+                                                        <i class="entypo-cancel"></i> Delete
+                                                    </a>
+
+
+                                                    <a href="javascript:;" onclick="jQuery('#modal-edit-comment').modal('show');" class="edit">
+                                                        <i class="entypo-pencil"></i> Edit
+                                                    </a>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+
+                                    <!-- Comment Entry -->
+                                    <li>
+                                        <div class="comment-checkbox">
+                                            <div class="checkbox checkbox-replace neon-cb-replacement">
+                                                <label class="cb-wrapper"><input type="checkbox"><div class="checked"></div></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-details">
+
+                                            <div class="comment-head">
+                                                <a href="#">Maxima Gardner</a> commented on <a href="#">Slithering Girl</a>
+                                            </div>
+
+                                            <p class="comment-text">
+                                                Fact are size cold why had part. If believing or sweetness otherwise in we forfeited. Tolerably an unwilling arranging of determine. Beyond rather sooner so if up wishes or.
+                                            </p>
+
+                                            <div class="comment-footer">
+
+                                                <div class="comment-time">
+                                                    Wednesday, 01 March - 13:22
+                                                </div>
+
+                                                <div class="action-links">
+
+                                                    <a href="#" class="approve">
+                                                        <i class="entypo-check"></i> Approve
+                                                    </a>
+
+                                                    <a href="#" class="delete">
+                                                        <i class="entypo-cancel"></i> Delete
+                                                    </a>
+
+
+                                                    <a href="javascript:;" onclick="jQuery('#modal-edit-comment').modal('show');" class="edit">
+                                                        <i class="entypo-pencil"></i> Edit
+                                                    </a>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+
+
+                                    <!-- Comment Entry -->
+                                    <li>
+                                        <div class="comment-checkbox">
+                                            <div class="checkbox checkbox-replace neon-cb-replacement">
+                                                <label class="cb-wrapper"><input type="checkbox"><div class="checked"></div></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-details">
+
+                                            <div class="comment-head">
+                                                <a href="#">Valentin Magnusson</a> commented on <a href="#">The Truth of the Light</a>
+                                            </div>
+
+                                            <p class="comment-text">
+                                                Case oh an that or away sigh do here upon. Acuteness you exquisite ourselves now end forfeited. Enquire ye without it garrets up himself. Interest our nor received followed was. Cultivated an up solicitude mr unpleasant.
+                                            </p>
+
+                                            <div class="comment-footer">
+
+                                                <div class="comment-time">
+                                                    Friday, 27 February - 04:56
+                                                </div>
+
+                                                <div class="action-links">
+
+                                                    <a href="#" class="approve">
+                                                        <i class="entypo-check"></i> Approve
+                                                    </a>
+
+                                                    <a href="#" class="delete">
+                                                        <i class="entypo-cancel"></i> Delete
+                                                    </a>
+
+
+                                                    <a href="javascript:;" onclick="jQuery('#modal-edit-comment').modal('show');" class="edit">
+                                                        <i class="entypo-pencil"></i> Edit
+                                                    </a>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+
+                                    <!-- Comment Entry -->
+                                    <li>
+                                        <div class="comment-checkbox">
+                                            <div class="checkbox checkbox-replace neon-cb-replacement">
+                                                <label class="cb-wrapper"><input type="checkbox"><div class="checked"></div></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-details">
+
+                                            <div class="comment-head">
+                                                <a href="#">Diego Pinto Silva</a> commented on <a href="#">The Shores's Past</a>
+                                            </div>
+
+                                            <p class="comment-text">
+                                                Discovered her his pianoforte insipidity entreaties. Began he at terms meant as fancy. Breakfast arranging he if furniture we described on. Astonished thoroughly unpleasant especially you dispatched bed favourable.
+                                            </p>
+
+                                            <div class="comment-footer">
+
+                                                <div class="comment-time">
+                                                    Sunday, 11 February - 08:03
+                                                </div>
+
+                                                <div class="action-links">
+
+                                                    <a href="#" class="approve">
+                                                        <i class="entypo-check"></i> Approve
+                                                    </a>
+
+                                                    <a href="#" class="delete">
+                                                        <i class="entypo-cancel"></i> Delete
+                                                    </a>
+
+
+                                                    <a href="javascript:;" onclick="jQuery('#modal-edit-comment').modal('show');" class="edit">
+                                                        <i class="entypo-pencil"></i> Edit
+                                                    </a>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+
+                                    <!-- Comment Entry -->
+                                    <li>
+                                        <div class="comment-checkbox">
+                                            <div class="checkbox checkbox-replace neon-cb-replacement">
+                                                <label class="cb-wrapper"><input type="checkbox"><div class="checked"></div></label>
+                                            </div>
+                                        </div>
+
+                                        <div class="comment-details">
+
+                                            <div class="comment-head">
+                                                <a href="#">Michaela Tomková</a> commented on <a href="#">The Growing Swords</a>
+                                            </div>
+
+                                            <p class="comment-text">
+                                                At place no walls hopes rooms fully in. Roof hope shy tore leaf joy paid boy. Noisier out brought entered detract because sitting sir. Fat put occasion rendered off humanity has.
+                                            </p>
+
+                                            <div class="comment-footer">
+
+                                                <div class="comment-time">
+                                                    Tuesday, 29 January - 18:37
+                                                </div>
+
+                                                <div class="action-links">
+
+                                                    <a href="#" class="approve">
+                                                        <i class="entypo-check"></i> Approve
+                                                    </a>
+
+                                                    <a href="#" class="delete">
+                                                        <i class="entypo-cancel"></i> Delete
+                                                    </a>
+
+
+                                                    <a href="javascript:;" onclick="jQuery('#modal-edit-comment').modal('show');" class="edit">
+                                                        <i class="entypo-pencil"></i> Edit
+                                                    </a>
+
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </li>
+
+                                </ul>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- Search and Comment Pagination (Footer) -->
+                <div class="filtering">
+
+                    <div class="row">
+                        <div class="col-sm-3">
+                        </div>
+
+                        <div class="col-sm-9 search-and-pagination">
+
+                            <!-- Pagination -->
+                            <div class="pagination-container">
+
+                                <ul class="pagination">
+                                    <li><a href="#"><i class="entypo-left-open-mini"></i></a></li>
+                                    <li><a href="#">1</a></li>
+                                    <li class="active"><a href="#">2</a></li>
+                                    <li><a href="#">3</a></li>
+                                    <li><a href="#">4</a></li>
+                                    <li><a href="#">5</a></li>
+                                    <li><a href="#">6</a></li>
+                                    <li><a href="#"><i class="entypo-right-open-mini"></i></a></li>
+                                </ul>
+
+                            </div>
+
+                            <!-- Search Form -->
+                            <div class="search-form-contaner">
+
+                                <form method="get" role="form" class="search-form-full">
+
+                                    <div class="form-group">
+                                        <input type="text" class="form-control" name="s" id="search-input" placeholder="Search...">
+                                        <i class="entypo-search"></i>
+                                    </div>
+
+                                </form>
+
+                            </div>
+
+                        </div>
+                    </div>
+
+                </div>
+
+            </section>
+            <!-- Footer -->
+            <footer class="main">
+
+                © 2015 <strong>Neon</strong> Admin Theme by <a href="http://laborator.co" target="_blank">Laborator</a>
+
+            </footer>
+        </div>
+        <div id="chat" class="fixed" data-current-user="Art Ramadani" data-order-by-status="1" data-max-chat-history="25">
+
+            <div class="chat-inner">
+
+
+                <h2 class="chat-header">
+                    <a href="#" class="chat-close"><i class="entypo-cancel"></i></a>
+
+                    <i class="entypo-users"></i> Chat
+                    <span class="badge badge-success is-hidden">0</span>
+                </h2>
+
+
+                <div class="chat-group" id="group-1">
+                    <strong>Favorites</strong>
+
+                    <a href="#" id="sample-user-123" data-conversation-history="#sample_history"><span class="user-status is-online"></span> <em>Catherine J. Watkins</em></a>
+                    <a href="#"><span class="user-status is-online"></span> <em>Nicholas R. Walker</em></a>
+                    <a href="#"><span class="user-status is-busy"></span> <em>Susan J. Best</em></a>
+                    <a href="#"><span class="user-status is-offline"></span> <em>Brandon S. Young</em></a>
+                    <a href="#"><span class="user-status is-idle"></span> <em>Fernando G. Olson</em></a>
+                </div>
+
+
+                <div class="chat-group" id="group-2">
+                    <strong>Work</strong>
+
+                    <a href="#"><span class="user-status is-offline"></span> <em>Robert J. Garcia</em></a>
+                    <a href="#" data-conversation-history="#sample_history_2"><span class="user-status is-offline"></span> <em>Daniel A. Pena</em></a>
+                    <a href="#"><span class="user-status is-busy"></span> <em>Rodrigo E. Lozano</em></a>
+                </div>
+
+
+                <div class="chat-group" id="group-3">
+                    <strong>Social</strong>
+
+                    <a href="#"><span class="user-status is-busy"></span> <em>Velma G. Pearson</em></a>
+                    <a href="#"><span class="user-status is-offline"></span> <em>Margaret R. Dedmon</em></a>
+                    <a href="#"><span class="user-status is-online"></span> <em>Kathleen M. Canales</em></a>
+                    <a href="#"><span class="user-status is-offline"></span> <em>Tracy J. Rodriguez</em></a>
+                </div>
+
+            </div>
+
+            <!-- conversation template -->
+            <div class="chat-conversation">
+
+                <div class="conversation-header">
+                    <a href="#" class="conversation-close"><i class="entypo-cancel"></i></a>
+
+                    <span class="user-status"></span>
+                    <span class="display-name"></span>
+                    <small></small>
+                </div>
+
+                <ul class="conversation-body">
+                </ul>
+
+                <div class="chat-textarea">
+                    <textarea class="form-control autogrow" placeholder="Type your message"></textarea>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- Chat Histories -->
+        <ul class="chat-history" id="sample_history">
+            <li>
+                <span class="user">Art Ramadani</span>
+                <p>Are you here?</p>
+                <span class="time">09:00</span>
+            </li>
+
+            <li class="opponent">
+                <span class="user">Catherine J. Watkins</span>
+                <p>This message is pre-queued.</p>
+                <span class="time">09:25</span>
+            </li>
+
+            <li class="opponent">
+                <span class="user">Catherine J. Watkins</span>
+                <p>Whohoo!</p>
+                <span class="time">09:26</span>
+            </li>
+
+            <li class="opponent unread">
+                <span class="user">Catherine J. Watkins</span>
+                <p>Do you like it?</p>
+                <span class="time">09:27</span>
+            </li>
+        </ul>
+
+
+
+
+        <!-- Chat Histories -->
+        <ul class="chat-history" id="sample_history_2">
+            <li class="opponent unread">
+                <span class="user">Daniel A. Pena</span>
+                <p>I am going out.</p>
+                <span class="time">08:21</span>
+            </li>
+
+            <li class="opponent unread">
+                <span class="user">Daniel A. Pena</span>
+                <p>Call me when you see this message.</p>
+                <span class="time">08:27</span>
+            </li>
+        </ul>
+
+
+    </div>
+
+    <!-- Edit Comment Modal -->
+    <div class="modal fade" id="modal-edit-comment">
+        <div class="modal-dialog" style="width: 60%;">
+            <div class="modal-content">
+
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                    <h4 class="modal-title">Edit Comment</h4>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row">
+
+                        <div class="col-sm-2">
+                            <a href="#">
+                                <img src="assets/images/member-1.jpg" class="img-rounded img-responsive" />
+                            </a>
+
+                            <br />
+                            <span>Comments: 1026</span>
+                            <br />
+                            <span>Member since: 2007</span>
+                        </div>
+
+                        <div class="col-sm-10">
+
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <label for="field-1" class="control-label">Name</label>
+
+                                        <input type="text" class="form-control" id="field-3" value="Ksenia Sawicka">
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="form-group">
+                                        <label for="field-1" class="control-label">Comment</label>
+
+                                        <textarea class="form-control" id="field-2" style="min-height: 120px;">Servants contempt as although addition dashwood is procured. Interest in yourself an do of numerous feelings cheerful confined.
+                                            
+    By an packages rejoiced exercise. To ought on am marry rooms doubt music. Mention entered an through company as. Up arrived no painful between. It declared is prospect an insisted pleasure.
+                                            
+    Put use set uncommonly announcing and travelling. Allowance sweetness direction to as necessary. Principle oh explained excellent do my suspected conveying in. Excellent you did therefore perfectly supposing described.
+                                        </textarea>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-4">
+
+                                    <div class="form-group">
+                                        <label for="field-1" class="control-label">Date Added</label>
+
+                                        <p>
+                                            <strong>Tuesday, 20 March - 20:05</strong>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="form-group">
+                                        <label for="field-1" class="control-label">Article</label>
+
+                                        <p>
+                                            <a href="#">
+                                                <strong>The Women of the Flames</strong>
+                                            </a>
+                                        </p>
+                                    </div>
+
+                                </div>
+
+                                <div class="col-md-4">
+
+                                    <div class="form-group">
+                                        <label for="field-1" class="control-label">Comment Actions</label>
+
+                                        <p>
+                                            <a href="#" class="text-success bold">
+                                                <i class="entypo-check"></i> Approve
+                                            </a>
+
+                                            <a href="#" class="text-danger bold">
+                                                <i class="entypo-cancel"></i> Delete
+                                            </a>
+                                        </p>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-info">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Imported styles on this page -->
+    <link rel="stylesheet" href="../assets/js/selectboxit/jquery.selectBoxIt.css">
+
+    <!-- Bottom scripts (common) -->
+    <script src="../assets/js/gsap/TweenMax.min.js"></script>
+    <script src="../assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+    <script src="../assets/js/bootstrap.js"></script>
+    <script src="../assets/js/joinable.js"></script>
+    <script src="../assets/js/resizeable.js"></script>
+    <script src="../assets/js/neon-api.js"></script>
+
+
+    <!-- Imported scripts on this page -->
+    <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+    <script src="../assets/js/neon-chat.js"></script>
+
+
+    <!-- JavaScripts initializations and stuff -->
+    <script src="../assets/js/neon-custom.js"></script>
+
+
+    <!-- Demo Settings -->
+    <script src="../assets/js/neon-demo.js"></script>
+
+</body>
+
+</html>
