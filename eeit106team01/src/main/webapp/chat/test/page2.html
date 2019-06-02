@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+</head>
+
+<body>
+    <h2><input id="input" type="text" readonly /></h2>
+    <script>
+        var myWorker = new SharedWorker('worker.js');
+        myWorker.port.start();
+        myWorker.port.onmessage = function (e) {
+            $("#input").val(e.data);
+            console.log('Message received from worker');
+        }
+
+    </script>
+</body>
+
+</html>

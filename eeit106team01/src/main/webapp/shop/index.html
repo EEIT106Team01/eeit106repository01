@@ -10,7 +10,7 @@
     <meta name="author" content="" />
 
     <link rel="icon" href="/assets/images/favicon.ico">
-    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+    
     <!--input data-include property in any tag when window.onload-->
     <script src="/navbar/js/csi.min.js"></script>
     <!-- include navbarCss when window.onload-->
@@ -38,9 +38,11 @@
                 </span>
                 <div class="col-md-8 search">
                     <div class="col-md-12 ">
-                        <select class="form-control col-md-2" id="searchType"></select>
-                        <input type="text" class="form-control input-lg col-md-8" placeholder="請輸入關鍵字">
-                        <button class="btn btn-primary" type="button" id="search">Go!</button>
+                        <form id="searchForm">
+                            <select class="form-control col-md-2" id="searchType"></select>
+                            <input type="text" class="form-control input-lg col-md-8" placeholder="請輸入關鍵字" id="searchName">
+                            <button class="btn btn-primary" type="button" id="search">Go!</button>
+                        </form>
                     </div>
                     <div class="col-md-12" id="keyWordDiv">
                         <p>大家都在找...</p>
@@ -49,8 +51,6 @@
                         </div>
                     </div>
                 </div>
-
-
             </div>
             <div class="main-content">
                 <div id="left-area" class="col-md-2">
@@ -91,6 +91,8 @@
         <!-- your page end -->
     </div>
 
+
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
 
     <!-- JavaScripts initializations and stuff -->
     <!-- YW: this is important for navbar -->

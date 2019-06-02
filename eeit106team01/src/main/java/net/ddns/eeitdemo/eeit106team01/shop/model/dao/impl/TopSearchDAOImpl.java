@@ -72,7 +72,7 @@ public class TopSearchDAOImpl implements TopSearchDAO {
 	public List<TopSearchBean> findAllTopSearch() {
 		try {
 			List<TopSearchBean> result = this.getSession()
-					.createQuery("from TopSearchBean order by updatedTime desc", TopSearchBean.class).getResultList();
+					.createQuery("from TopSearchBean order by searchCount desc", TopSearchBean.class).getResultList();
 			if (result != null && result.size() > 0) {
 				return result;
 			}
