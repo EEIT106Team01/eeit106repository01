@@ -245,7 +245,9 @@
             let map = new google.maps.Map(document.getElementById("map_canvas"), {
                 zoom: 13
                 , center: { lat: topicBean.accidentLocationLatitude, lng: topicBean.accidentLocationLongitude }
-                , scaleControl: true
+				, scaleControl: true
+				, mapTypeControlOptions: { mapTypeIds: [] }
+                , gestureHandling: 'greedy'
             });
 			
 			// for preInput()

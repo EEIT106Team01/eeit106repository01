@@ -14,24 +14,14 @@
     <!--input data-include property in any tag when window.onload-->
     <script src="/navbar/js/csi.min.js"></script>
 
-    <!-- include navbarCss when window.onload-->
-    <div data-include="/navbar/navbarCssInHeadTag.html"></div>
+    <!-- navbar-->
+    <script src="/navbar/js/navbar-init.js"></script>
 
     <!-- chatroom -->
     <script src="/chat/js/sockjs.min.js"></script>
     <script src="/chat/js/stomp.min.js"></script>
     <script src="/chat/js/chatroom-init.js"></script>
 
-    <!-- <link rel="stylesheet"
-        href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-    <script
-        src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script
-        src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script
-        src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script> -->
-    <!-- <script src="https://code.jquery.com/jquery-1.12.4.min.js" integrity="sha256-ZosEbRLbNQzLpnKIkEdrPv7lOy9C27hHQ+Xp8a4MxAQ="
-        crossorigin="anonymous"></script> -->
     <!-- google map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0&libraries=places" async
         defer></script>
@@ -50,10 +40,6 @@
     <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.min.css">
 
     <style>
-        /* body {
-            overflow: hidden;
-        } */
-
         .main-content * {
             margin: 0px;
             padding: 0px;
@@ -64,13 +50,23 @@
         }
 
         .leftTopPart {
+            position: fixed;
+            z-index: 50000;
+            top: 52px;
+            background-color: white;
+            padding-top: 20px;
             padding-bottom: 20px;
             border-bottom: 1px solid #ebebeb;
         }
 
+        #topicList {
+            margin-top: 52px;
+        }
+
         .rightPart {
-            position: absolute;
-            /* z-index: 99998; */
+            position: fixed;
+            z-index: 50001;
+            top: 72px;
             right: 20px;
             width: 100%;
             height: 100%;
@@ -78,6 +74,11 @@
             max-height: 500px;
         }
         
+        .pac-container {
+            z-index: 50002;
+            margin-top: -51px;
+        }
+
         .rightTopPart {
             padding-bottom: 20px;
             margin-bottom: 8px;
@@ -143,6 +144,7 @@
                 , center: { lat: 25.033793, lng: 121.543427 }
                 , scaleControl: true
                 , mapTypeControlOptions: { mapTypeIds: [] }
+                , gestureHandling: 'greedy'
             });
 
             google.maps.event.addListener(map, 'dragstart', onDragstart);
@@ -232,6 +234,11 @@
 
                 markers[i].addListener('mouseout', function () {
                     $(`#id${dataTopicList[i].id}`).removeClass("bg-info");
+                });
+
+                markers[i].addListener('click', function () {
+                    localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
+                    location.href = "/forum/showContents.html";
                 });
             }
         }

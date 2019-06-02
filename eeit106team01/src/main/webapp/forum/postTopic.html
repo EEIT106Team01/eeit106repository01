@@ -192,7 +192,9 @@
             let map = new google.maps.Map(document.getElementById("map_canvas"), {
                 zoom: 12
                 , center: { lat: 25.033793, lng: 121.543427 }
-                , scaleControl: true
+				, scaleControl: true
+				, mapTypeControlOptions: { mapTypeIds: [] }
+                , gestureHandling: 'greedy'
             });
 
             google.maps.event.addListener(map, 'click', function (event) {
