@@ -10,11 +10,13 @@ public interface ArticleTopicCurrentDAO {
 
 	public List<ArticleTopicCurrentBean> findAll();
 	
-	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn);
-
+	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn, String likeTopicHeader);
+	
 	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude, Double lowerLongitude, Double upperLongitude);
 	
 	public List<ArticleTopicCurrentBean> findLikeTopicHeader(String likeTopicHeader);
+	
+	public Long findTopicNum(String topicType, String likeTopicHeader);
 	
 	public List<String> findAutocompleteByTopicHeader(String inputString);
 	

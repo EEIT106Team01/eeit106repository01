@@ -39,12 +39,20 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn) {
+	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn, String likeTopicHeader) {
 		String queryString = "";
 		if("topicUpdateTime".equals(orderColumn)) {
-			queryString = "from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') order by topicUpdateTime desc";
+			if(likeTopicHeader == null) {
+				queryString = "from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') order by topicUpdateTime desc";
+			} else {
+				queryString = "from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') and (topicHeader like '%"+ likeTopicHeader +"%') order by topicUpdateTime desc";
+			}
 		}else if("topicLikeNum".equals(orderColumn)) {
-			queryString = "from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') order by topicLikeNum desc";
+			if(likeTopicHeader == null) {
+				queryString = "from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') order by topicLikeNum desc";
+			} else {
+				queryString = "from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') and (topicHeader like '%"+ likeTopicHeader +"%') order by topicLikeNum desc";
+			}
 		}else {
 			System.out.println("OrderColumn Error!");
 		}
@@ -82,6 +90,20 @@ public class ArticleTopicCurrentDAOImpl implements ArticleTopicCurrentDAO {
 		String queryString = "select topicHeader from ArticleTopicCurrentBean where topicHeader like '%"+ inputString +"%'";
 		Query query = getSession().createQuery(queryString);
 		return query.getResultList();
+	}
+	
+	@Override
+	public Long findTopicNum(String topicType, String likeTopicHeader) {
+		String queryString = "";
+		if(likeTopicHeader == null) {
+			queryString = "select count(*) from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal')";
+		} else {
+			queryString = "select count(*) from ArticleTopicCurrentBean where (topicType = :topicType) and (topicStatus = 'normal') and (topicHeader like '%"+ likeTopicHeader +"%')";
+		}
+		
+		Query query = getSession().createQuery(queryString);
+		query.setParameter("topicType", topicType);
+		return (Long) query.getSingleResult();
 	}
 
 	@Override

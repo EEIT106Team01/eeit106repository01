@@ -41,6 +41,7 @@ public class ArticleTopicController {
 			@RequestParam(required = false) Integer end,
 			@RequestParam(required = false) String topicType,	//requestTopic shareTopic
 			@RequestParam(required = false) String orderType,	//orderByTime orderByLike
+			@RequestParam(required = false) String likeTopicHeader,
 			@RequestParam(required = false) Double lowerLatitude,
 			@RequestParam(required = false) Double upperLatitude,
 			@RequestParam(required = false) Double lowerLongitude,
@@ -51,6 +52,7 @@ public class ArticleTopicController {
 		System.out.println("end: " + end);
 		System.out.println("topicType: " + topicType);
 		System.out.println("orderType: " + orderType);
+		System.out.println("likeTopicHeader: " + likeTopicHeader);
 		System.out.println("lowerLatitude: " + lowerLatitude);
 		System.out.println("upperLatitude: " + upperLatitude);
 		System.out.println("lowerLongitude: " + lowerLongitude);
@@ -63,11 +65,21 @@ public class ArticleTopicController {
 			(lowerLatitude == null) && (upperLatitude == null) && 
 			(lowerLongitude == null) && (upperLongitude == null)) {
 			if("orderByTime".equals(orderType)) {
-				findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicUpdateTime");
+				if(("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {					
+					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicUpdateTime", null);
+				}else {
+					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicUpdateTime", likeTopicHeader);
+				}
 			}else if("orderByLike".equals(orderType)) {
-				findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicLikeNum");
+				if(("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {
+					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicLikeNum", null);					
+				}else {
+					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicLikeNum", likeTopicHeader);
+				}
 			}
-		} else if ((begin == null) && (end == null) && (("".equals(orderType)) || (orderType == null)) &&
+		} else if ((begin == null) && (end == null) && 
+				(("".equals(orderType)) || (orderType == null)) &&
+				(("".equals(likeTopicHeader)) || (likeTopicHeader == null)) &&
 				(lowerLatitude != null) && (upperLatitude != null) && 
 				(lowerLongitude != null) && (upperLongitude != null)){
 			findRange = articleTopicCurrentService.findByCoordinateRange(lowerLatitude, upperLatitude, lowerLongitude, upperLongitude);
@@ -111,6 +123,30 @@ public class ArticleTopicController {
 			return ResponseEntity.ok(findResult);
 		} else {
 			return ResponseEntity.ok().build();
+		}
+	}
+	
+	@GetMapping(path = { "/countTopics" })
+	public ResponseEntity<?> countTopics(
+			@RequestParam(required = false) String topicType,	//requestTopic shareTopic
+			@RequestParam(required = false) String likeTopicHeader
+			) {
+		System.out.println("countTopics method running");
+		System.out.println("topicType: " + topicType);
+		System.out.println("likeTopicHeader: " + likeTopicHeader);
+		Long countResult = null;
+		if(("shareTopic".equals(topicType)) || ("requestTopic".equals(topicType))) {
+			if(("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {
+				countResult = articleTopicCurrentService.findTopicNum(topicType, null);
+			}else {				
+				countResult = articleTopicCurrentService.findTopicNum(topicType, likeTopicHeader);
+			}
+		}
+		System.err.println("countResult: " + countResult);
+		if (countResult != null) {				
+			return ResponseEntity.ok(countResult);
+		} else {
+			return ResponseEntity.notFound().build();
 		}
 	}
 	

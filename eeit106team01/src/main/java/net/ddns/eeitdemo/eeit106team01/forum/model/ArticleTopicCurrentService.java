@@ -35,10 +35,10 @@ public class ArticleTopicCurrentService {
 		return articleTopicCurrentDAO.findAll();
 	};
 
-	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn) {
-		return articleTopicCurrentDAO.findByLastRange(startPosition, maxResult, topicType, orderColumn);
+	public List<ArticleTopicCurrentBean> findByLastRange(int startPosition, int maxResult, String topicType, String orderColumn, String likeTopicHeader) {
+		return articleTopicCurrentDAO.findByLastRange(startPosition, maxResult, topicType, orderColumn, likeTopicHeader);
 	}
-
+	
 	public List<ArticleTopicCurrentBean> findByCoordinateRange(Double lowerLatitude, Double upperLatitude,
 			Double lowerLongitude, Double upperLongitude) {
 		return articleTopicCurrentDAO.findByCoordinateRange(lowerLatitude, upperLatitude, lowerLongitude,
@@ -47,6 +47,10 @@ public class ArticleTopicCurrentService {
 
 	public List<String> findAutocompleteByTopicHeader(String inputString) {
 		return articleTopicCurrentDAO.findAutocompleteByTopicHeader(inputString);
+	}
+	
+	public Long findTopicNum(String topicType, String likeTopicHeader) {
+		return articleTopicCurrentDAO.findTopicNum(topicType, likeTopicHeader);
 	}
 	
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {

@@ -56,10 +56,17 @@
             margin: auto;
         }
 
-        .searchClass {
+        .mySearch {
             /* position: fixed;
             z-index: 55000; */
-            border-bottom: 1px solid #ebebeb;
+            /* border-bottom: 1px solid #ebebeb; */
+            border-bottom: 1px solid #CCCCCC;
+            padding-bottom: 10px;
+            margin-bottom: 10px;
+        }
+
+        .mySubTopicBlock {
+            border-bottom: 1px solid #CCCCCC;
             padding-bottom: 10px;
             margin-bottom: 10px;
         }
@@ -126,13 +133,25 @@
     </style>
 
     <script>
-        $(document).ready(function(){
+        let startPosition = 1;
+        let maxResult = 8;
+        let orderType = "orderByTime"; //orderByTime orderByLike
+        $(document).ready(function () {
             autocomplete(document.getElementById("myInput"));
             let searchInput = getUrlParameters().q;
             if (searchInput) {
-                getSearchResults(searchInput);
+                $("#requestTopicBlock").hide();
+                $("#shareTopicBlock").hide();
+                getSearchResults(startPosition, maxResult, "requestTopic", orderType, searchInput);
+                getTopicsNum("requestTopic", searchInput);
+                getSearchResults(startPosition, maxResult, "shareTopic", orderType, searchInput);
+                getTopicsNum("shareTopic", searchInput);
             } else {
-                getTopicList();
+                $("#searchTopicBlock").hide();
+                getTopicList(startPosition, maxResult, "requestTopic", orderType);
+                getTopicsNum("requestTopic", "");
+                getTopicList(startPosition, maxResult, "shareTopic", orderType);
+                getTopicsNum("shareTopic", "");
             }
         })
 
@@ -148,40 +167,56 @@
             return parameters;
         }
 
-        function getSearchResults(searchInput) {
+        function getSearchResults(begin, end, topicType, orderType, searchInput) {
             $.ajax({
-                url: "http://localhost:8080/articleTopics/" + searchInput,
+                url: `http://localhost:8080/articleTopics?begin=${begin}&end=${end}&topicType=${topicType}&orderType=${orderType}&likeTopicHeader=${searchInput}`,
                 type: "GET",
-                success: function (data, textStatus, jqXHR) {
-                    if (data.length > 0) {
-                        createTopicView(data, "searchTopic");
+                success: function (dataTopicList) {
+                    resultDivId = topicType + "Search";
+                    if (dataTopicList.length > 0) {
+                        createTopicView(dataTopicList, resultDivId);
                         $(".plyr video").height("150px");
                         $(".plyr__controls").hide();
                         $(".plyr__control--overlaid").hide();
                     } else {
-                        $("#searchTopic").text("查無資料");
+                        $(`#${resultDivId}`).text("查無資料");
                     }
                 }
             });
         }
 
-        function getTopicList() {
-            let begin = 1;
-            let end = 9;
-            let orderType = "orderByTime"; //orderByTime orderByLike
-            $.each(["requestTopic", "shareTopic"], function (index, value) {
-                let topicType = value;
-                $.ajax({
-                    url: `http://localhost:8080/articleTopics?begin=${begin}&end=${end}&topicType=${topicType}&orderType=${orderType}`,
-                    type: "GET",
-                    success: function (dataTopicList) {
-                        createTopicView(dataTopicList, topicType);
-                        $(".plyr video").height("150px");
-                        $(".plyr__controls").hide();
-                        $(".plyr__control--overlaid").hide();
-                    }
-                });
+        function getTopicList(begin, end, topicType, orderType) {
+            $.ajax({
+                url: `http://localhost:8080/articleTopics?begin=${begin}&end=${end}&topicType=${topicType}&orderType=${orderType}`,
+                type: "GET",
+                success: function (dataTopicList) {
+                    createTopicView(dataTopicList, topicType);
+                    $(".plyr video").height("150px");
+                    $(".plyr__controls").hide();
+                    $(".plyr__control--overlaid").hide();
+                }
             });
+        }
+
+        function getTopicsNum(topicType, likeTopicHeader) {
+            $.ajax({
+                url: `http://localhost:8080/countTopics?topicType=${topicType}&likeTopicHeader=${likeTopicHeader}`,
+                type: "GET",
+                success: function (data) {
+                    createPagination(data, topicType, likeTopicHeader);
+                }
+            });
+        }
+
+        function createPagination(totalNum, topicType, likeTopicHeader) {
+            let paginationDivId;
+            if (likeTopicHeader == "") {
+                paginationDivId = topicType + "Pagi";
+            } else {
+                paginationDivId = topicType + "SearchPagi";
+            }
+            console.log(totalNum + " " + paginationDivId);
+            console.log($(`#${paginationDivId}`).text());
         }
 
     </script>
@@ -195,7 +230,7 @@
         <div class="main-content">
 
             <div class="myTopicList">
-                <div class="col-md-12 searchClass">
+                <div class="col-md-12 mySearch">
                     <!--Make sure the form has the autocomplete function switched off:-->
                     <form id="searchForm" autocomplete="off" action="/index.html">
                         <div class="autocomplete">
@@ -204,14 +239,73 @@
                         <input type="submit" value="搜尋">
                     </form>
                 </div>
-                <h1>協尋文</h1>
-                <div class="col-md-12" id="requestTopic"></div>
-                <hr>
-                <h1>分享文</h1>
-                <div class="col-md-12" id="shareTopic"></div>
-                <hr>
-                <h1>搜尋結果</h1>
-                <div class="col-md-12" id="searchTopic"></div>
+                <div class="col-md-12 mySubTopicBlock">
+                    <form>
+                        排序依據：
+                        <input type="radio" name="orderTypeName" value="orderByTime" checked>時間
+                        <input type="radio" name="orderTypeName" value="orderByLike">熱度
+                    </form>
+                </div>
+                <div class="col-md-12 mySubTopicBlock" id="requestTopicBlock">
+                    <div class="col-md-12">
+                        <h1>需求</h1>
+                    </div>
+                    <div class="col-md-12" id="requestTopic"></div>
+                    <div class="col-md-12" id="requestTopicPagi">
+                        <ul class="pagination pagination-lg">
+                            <li>
+                                <a href="#">
+                                    <i class="entypo-left-open-mini"></i>
+                                </a>
+                            </li>
+                            <li>
+                                <a href="#">1</a>
+                            </li>
+                            <li class="active">
+                                <a href="#">2</a>
+                            </li>
+                            <li>
+                                <a href="#">3</a>
+                            </li>
+                            <li>
+                                <a href="#">4</a>
+                            </li>
+                            <li>
+                                <a href="#">5</a>
+                            </li>
+                            <li>
+                                <a href="#">6</a>
+                            </li>
+                            <li>
+                                <a href="#">
+                                    <i class="entypo-right-open-mini"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="col-md-12 mySubTopicBlock" id="shareTopicBlock">
+                    <div class="col-md-12">
+                        <h1>提供</h1>
+                    </div>
+                    <div class="col-md-12" id="shareTopic"></div>
+                    <div class="col-md-12" id="shareTopicPagi">2</div>
+                </div>
+                <div class="col-md-12 mySubTopicBlock" id="searchTopicBlock">
+                    <div class="col-md-12">
+                        <h1>搜尋結果</h1>
+                    </div>
+                    <div class="col-md-12">
+                        <h1>需求</h1>
+                    </div>
+                    <div class="col-md-12" id="requestTopicSearch"></div>
+                    <div class="col-md-12" id="requestTopicSearchPagi">3</div>
+                    <div class="col-md-12">
+                        <h1>提供</h1>
+                    </div>
+                    <div class="col-md-12" id="shareTopicSearch"></div>
+                    <div class="col-md-12" id="shareTopicSearchPagi">4</div>
+                </div>
 
                 <!-- <div class="col-md-3" style="padding: 8px">
                     <div class="col-md-12" style="height: 150px; margin: 1px;  ">
