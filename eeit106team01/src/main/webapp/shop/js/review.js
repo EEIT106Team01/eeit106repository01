@@ -321,6 +321,22 @@ function updateCounter(selector, value) {
     $(selector).text(value);
 }
 
-$('#draggable-events').draggable({
-    revert: true
-  });
+//revert
+// $('#draggable-events').draggable({
+//     revert: true
+//   });
+
+
+//Card Accordion
+//Shopping Cart
+$('#card-shopping-cart').click(function () {
+    console.log('click');
+    openCardAccordion('shopping-cart')
+})
+
+function openCardAccordion(type) {
+    if (type == 'shopping-cart') {
+        $('#accordion-shopping-cart').slideToggle('slow','linear');
+    } else {
+    }
+}
