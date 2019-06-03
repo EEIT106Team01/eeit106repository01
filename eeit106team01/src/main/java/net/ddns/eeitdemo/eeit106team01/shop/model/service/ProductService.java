@@ -128,7 +128,10 @@ public class ProductService {
 	public List<ProductBean> findProductsByTypeName(String type, String name) {
 		return productDAO.findProductsByTypeName(type, name);
 	}
-
+	public List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort){
+		return productDAO.findProductsSort(dataName, queryString, type, sort);
+	}
+	
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {
 		ProductBean temp = productDAO.findProductByProductId(id);
 		if (temp != null) {

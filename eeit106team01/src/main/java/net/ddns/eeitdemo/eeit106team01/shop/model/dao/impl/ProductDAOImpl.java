@@ -459,16 +459,68 @@ public class ProductDAOImpl implements ProductDAO {
 	@Override
 	public List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort) {
 		try {
-			if (dataName.equalsIgnoreCase("type") && NullChecker.isEmpty(queryString) == false
-					&& NullChecker.isEmpty(type) == false && NullChecker.isEmpty(sort) == false) {
-				this.productsResutlt = this.getSession().createQuery("from ProductBean where :dataName = :queryString order by :type :sort")
-						.setParameter("dataName", dataName)
+			if (sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("type") && type.equalsIgnoreCase("price")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where type = :queryString order by price desc")
 						.setParameter("queryString", queryString)
-						.setParameter("type", type)
-						.setParameter("sort",sort)
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("type") && type.equalsIgnoreCase("totalSold")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where type = :queryString order by totalSold desc")
+						.setParameter("queryString", queryString)
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("brand") && type.equalsIgnoreCase("price")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString order by price desc")
+						.setParameter("queryString", queryString)
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("brand") && type.equalsIgnoreCase("totalSold")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString order by totalSold desc")
+						.setParameter("queryString", queryString)
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("name") && type.equalsIgnoreCase("price")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where name like :queryString order by price desc")
+						.setParameter("queryString", "%"+queryString+"%")
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("name") && type.equalsIgnoreCase("totalSold")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where name like :queryString order by totalSold desc")
+						.setParameter("queryString", "%"+queryString+"%")
+						.getResultList();
+			}else if (sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("type") && type.equalsIgnoreCase("price")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where type = :queryString order by price")
+						.setParameter("queryString", queryString)
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("type") && type.equalsIgnoreCase("totalSold")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where type = :queryString order by totalSold")
+						.setParameter("queryString", queryString)
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("brand") && type.equalsIgnoreCase("price")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString order by price")
+						.setParameter("queryString", queryString)
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("brand") && type.equalsIgnoreCase("totalSold")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString order by totalSold")
+						.setParameter("queryString", queryString)
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("name") && type.equalsIgnoreCase("price")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where name like :queryString order by price")
+						.setParameter("queryString", "%"+queryString+"%")
+						.getResultList();
+			}else if(sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
+					&& dataName.equalsIgnoreCase("name") && type.equalsIgnoreCase("totalSold")) {
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where name like :queryString order by totalSold")
+						.setParameter("queryString", "%"+queryString+"%")
 						.getResultList();
 			}else {
-				throw new IllegalArgumentException("enter type or brand or name, and type is a must in brand search name");
+				throw new IllegalArgumentException("format error");
 			}
 			if (this.productsResutlt != null && this.productsResutlt.size() > 0) {
 					return this.productsResutlt;
