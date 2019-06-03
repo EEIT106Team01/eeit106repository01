@@ -135,22 +135,25 @@
     <script>
         let startPosition = 1;
         let maxResult = 8;
-        let orderType = "orderByTime"; //orderByTime orderByLike
+        let searchInput;
         $(document).ready(function () {
+            $("#orderByTime").on("click", orderChange);
+            $("#orderByLike").on("click", orderChange);
+            
             autocomplete(document.getElementById("myInput"));
-            let searchInput = getUrlParameters().q;
+            searchInput = getUrlParameters().q;
             if (searchInput) {
                 $("#requestTopicBlock").hide();
                 $("#shareTopicBlock").hide();
-                getSearchResults(startPosition, maxResult, "requestTopic", orderType, searchInput);
+                getTopicList(startPosition, maxResult, "requestTopic", "orderByTime", searchInput);
                 getTopicsNum("requestTopic", searchInput);
-                getSearchResults(startPosition, maxResult, "shareTopic", orderType, searchInput);
+                getTopicList(startPosition, maxResult, "shareTopic", "orderByTime", searchInput);
                 getTopicsNum("shareTopic", searchInput);
             } else {
                 $("#searchTopicBlock").hide();
-                getTopicList(startPosition, maxResult, "requestTopic", orderType);
+                getTopicList(startPosition, maxResult, "requestTopic", "orderByTime", "");
                 getTopicsNum("requestTopic", "");
-                getTopicList(startPosition, maxResult, "shareTopic", orderType);
+                getTopicList(startPosition, maxResult, "shareTopic", "orderByTime", "");
                 getTopicsNum("shareTopic", "");
             }
         })
@@ -167,33 +170,27 @@
             return parameters;
         }
 
-        function getSearchResults(begin, end, topicType, orderType, searchInput) {
+        function getTopicList(begin, end, topicType, orderType, likeTopicHeader) {
             $.ajax({
-                url: `http://localhost:8080/articleTopics?begin=${begin}&end=${end}&topicType=${topicType}&orderType=${orderType}&likeTopicHeader=${searchInput}`,
+                url: `http://localhost:8080/articleTopics?begin=${begin}&end=${end}&topicType=${topicType}&orderType=${orderType}&likeTopicHeader=${likeTopicHeader}`,
                 type: "GET",
                 success: function (dataTopicList) {
-                    resultDivId = topicType + "Search";
-                    if (dataTopicList.length > 0) {
-                        createTopicView(dataTopicList, resultDivId);
+                    if (likeTopicHeader == "" || !likeTopicHeader) {
+                        createTopicView(dataTopicList, topicType);
                         $(".plyr video").height("150px");
                         $(".plyr__controls").hide();
                         $(".plyr__control--overlaid").hide();
                     } else {
-                        $(`#${resultDivId}`).text("查無資料");
+                        let resultDivId = topicType + "Search";
+                        if (dataTopicList.length > 0) {
+                            createTopicView(dataTopicList, resultDivId);
+                            $(".plyr video").height("150px");
+                            $(".plyr__controls").hide();
+                            $(".plyr__control--overlaid").hide();
+                        } else {
+                            $(`#${resultDivId}`).text("查無資料");
+                        }
                     }
-                }
-            });
-        }
-
-        function getTopicList(begin, end, topicType, orderType) {
-            $.ajax({
-                url: `http://localhost:8080/articleTopics?begin=${begin}&end=${end}&topicType=${topicType}&orderType=${orderType}`,
-                type: "GET",
-                success: function (dataTopicList) {
-                    createTopicView(dataTopicList, topicType);
-                    $(".plyr video").height("150px");
-                    $(".plyr__controls").hide();
-                    $(".plyr__control--overlaid").hide();
                 }
             });
         }
@@ -216,7 +213,39 @@
                 paginationDivId = topicType + "SearchPagi";
             }
             console.log(totalNum + " " + paginationDivId);
-            console.log($(`#${paginationDivId}`).text());
+            let pageNum = Math.ceil(totalNum/maxResult);
+            //create pagination tag start
+            $(`#${paginationDivId}`).text("");
+            let ulPage = $("<ul></ul>").addClass("pagination pagination-lg").appendTo($(`#${paginationDivId}`));
+                let liPreviousPage = $("<li></li>").appendTo(ulPage);
+                    let aLinkPreviousPage = $("<a></a>").attr("href", "#").appendTo(liPreviousPage);
+                         $("<i></i>").addClass("entypo-left-open-mini").appendTo(aLinkPreviousPage);
+            for (let i = 0; i < pageNum; i++){
+                let liPagination = $("<li></li>").appendTo(ulPage);
+                let aLinkPagination = $("<a></a>").attr("href", `?a=${i+1}`).text(i+1).appendTo(liPagination);
+            }
+                let liNextPage = $("<li></li>").appendTo(ulPage);
+                    let aLinkNextPage = $("<a></a>").attr("href", "#").appendTo(liNextPage);
+                         $("<i></i>").addClass("entypo-right-open-mini").appendTo(aLinkNextPage); 
+            //create pagination tag finished
+
+        }
+        
+        function orderChange() {
+            // console.log($(this).val());
+            // console.log($(this).prop("checked"));
+
+            if (searchInput) {
+                getTopicList(startPosition, maxResult, "requestTopic", $(this).val(), searchInput);
+                getTopicsNum("requestTopic", searchInput);
+                getTopicList(startPosition, maxResult, "shareTopic", $(this).val(), searchInput);
+                getTopicsNum("shareTopic", searchInput);
+            } else {
+                getTopicList(startPosition, maxResult, "requestTopic", $(this).val(), "");
+                getTopicsNum("requestTopic", "");
+                getTopicList(startPosition, maxResult, "shareTopic", $(this).val(), "");
+                getTopicsNum("shareTopic", "");
+            }
         }
 
     </script>
@@ -242,8 +271,8 @@
                 <div class="col-md-12 mySubTopicBlock">
                     <form>
                         排序依據：
-                        <input type="radio" name="orderTypeName" value="orderByTime" checked>時間
-                        <input type="radio" name="orderTypeName" value="orderByLike">熱度
+                        <input type="radio" name="orderTypeName" id="orderByTime" value="orderByTime" checked>更新時間
+                        <input type="radio" name="orderTypeName" id="orderByLike" value="orderByLike">主題熱度
                     </form>
                 </div>
                 <div class="col-md-12 mySubTopicBlock" id="requestTopicBlock">
@@ -252,14 +281,14 @@
                     </div>
                     <div class="col-md-12" id="requestTopic"></div>
                     <div class="col-md-12" id="requestTopicPagi">
-                        <ul class="pagination pagination-lg">
+                        <!-- <ul class="pagination pagination-lg">
                             <li>
                                 <a href="#">
                                     <i class="entypo-left-open-mini"></i>
                                 </a>
                             </li>
                             <li>
-                                <a href="#">1</a>
+                                <a href="?q=">1</a>
                             </li>
                             <li class="active">
                                 <a href="#">2</a>
@@ -281,7 +310,7 @@
                                     <i class="entypo-right-open-mini"></i>
                                 </a>
                             </li>
-                        </ul>
+                        </ul> -->
                     </div>
                 </div>
                 <div class="col-md-12 mySubTopicBlock" id="shareTopicBlock">
@@ -289,7 +318,7 @@
                         <h1>提供</h1>
                     </div>
                     <div class="col-md-12" id="shareTopic"></div>
-                    <div class="col-md-12" id="shareTopicPagi">2</div>
+                    <div class="col-md-12" id="shareTopicPagi"></div>
                 </div>
                 <div class="col-md-12 mySubTopicBlock" id="searchTopicBlock">
                     <div class="col-md-12">
@@ -299,12 +328,12 @@
                         <h1>需求</h1>
                     </div>
                     <div class="col-md-12" id="requestTopicSearch"></div>
-                    <div class="col-md-12" id="requestTopicSearchPagi">3</div>
+                    <div class="col-md-12" id="requestTopicSearchPagi"></div>
                     <div class="col-md-12">
                         <h1>提供</h1>
                     </div>
                     <div class="col-md-12" id="shareTopicSearch"></div>
-                    <div class="col-md-12" id="shareTopicSearchPagi">4</div>
+                    <div class="col-md-12" id="shareTopicSearchPagi"></div>
                 </div>
 
                 <!-- <div class="col-md-3" style="padding: 8px">
