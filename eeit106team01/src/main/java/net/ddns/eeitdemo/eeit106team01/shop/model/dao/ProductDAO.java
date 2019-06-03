@@ -19,16 +19,16 @@ public interface ProductDAO {
 
 	abstract List<ProductBean> findProductsByName(String name);
 
-	abstract List<ProductBean> findProductsByBrand(String brand);
+	abstract List<ProductBean> findProductsByBrand(String brand,String type);
 
 	abstract List<ProductBean> findProductsByStock(String emptyORnotEmpty);
 
 	abstract List<ProductBean> findProductsByType(String type);
 	
-	abstract List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort);
+	abstract List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort,String brandType);
 
 	abstract List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
-			String queryString, Integer minPrice, Integer maxPrice);
+			String queryString,String type, Integer minPrice, Integer maxPrice);
 
 	abstract List<ProductBean> findProductsByUpdatedTimeDayBetween(Date startDay, Date endDay);
 	
