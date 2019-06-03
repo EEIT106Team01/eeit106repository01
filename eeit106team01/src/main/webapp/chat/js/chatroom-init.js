@@ -1052,12 +1052,13 @@ $(document).ready(function () {
 
             puffUnreadsAll: function () {
                 var total_unreads = this.countUnreadMessages();
-                var $topBadge = $($(".badge").get(0));
-                console.log($topBadge);
+                var $navbarBadge = $("#chatBadge");
+                console.log($navbarBadge);
 
                 $chat_badge.html(total_unreads);
                 $chat_badge[total_unreads > 0 ? 'removeClass' : 'addClass']('is-hidden');
-                $topBadge[total_unreads > 0 ? 'removeClass' : 'addClass']('is-hidden');
+                $navbarBadge.html(total_unreads);
+                $navbarBadge[total_unreads > 0 ? 'removeClass' : 'addClass']('is-hidden');
             },
 
             resetUnreads: function (id) {
@@ -1126,8 +1127,8 @@ $(document).ready(function () {
 
                 if ($group && $group.length) {
                     var status = this.statuses[status],
-                        $user = $('<a href="#"><span class="user-status ' + status.class + '"></span> <em>' + display_name + '</em> <span class="badge badge-info is-hidden>0</span></a>');
-
+                        $user = $('<a href="#"><span class="user-status ' + status.class + '"></span> <em>' + display_name + '</em></a>');
+                        $user.append('<span class="badge badge-info is-hidden">0</span>');
                     if (user_id) {
                         $user.attr('id', user_id);
                     }
