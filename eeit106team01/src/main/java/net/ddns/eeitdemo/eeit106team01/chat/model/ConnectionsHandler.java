@@ -23,14 +23,14 @@ public class ConnectionsHandler {
 	@EventListener
 	protected void onDisconnectEvent(SessionDisconnectEvent event) {
 		Collections.synchronizedMap(onlineUsers).remove(event.getUser().getName());
-		System.out.println("Client disconnected : " + event.getUser().getName());
+		System.err.println("Client disconnected : " + event.getUser().getName());
 		chatController.getOnlineUsers();
 	}
 
 	@EventListener
 	protected void onConnectedEvent(SessionConnectedEvent event) {
 		Collections.synchronizedMap(onlineUsers).put(event.getUser().getName(), event.getUser());
-		System.out.println("Client connected : " + event.getUser().getName());
+		System.err.println("Client connected : " + event.getUser().getName());
 		chatController.getOnlineUsers();
 	}
 

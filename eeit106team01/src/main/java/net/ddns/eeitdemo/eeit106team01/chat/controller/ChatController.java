@@ -124,9 +124,8 @@ public class ChatController {
 	}
 
 	public List<RegionMessageBean> sendActiveRegionMessages(String region) {
-		List<RegionMessageBean> oldMessages = null;
+		List<RegionMessageBean> oldMessages = new ArrayList<RegionMessageBean>();
 		if (regionMessageService.findActiveByRegion(region) != null) {
-			oldMessages = new ArrayList<RegionMessageBean>();
 			oldMessages.add(regionMessageService.findActiveByRegion(region));
 		}
 		return oldMessages;
@@ -179,7 +178,7 @@ public class ChatController {
 	@MessageMapping("/getAllActiveMsg")
 	public void sendAllActivePrivateMessage(Principal user) {
 		if (user != null && user.getName() != null && user.getName().trim().length() != 0) {
-			System.err.println(user.getName() + " subcribed private message.");
+//			System.err.println(user.getName() + " subcribed private message.");
 			List<PrivateMessageBean> privateMessages = privateMessageService.findAllActiveByUser(user.getName());
 			for (PrivateMessageBean privateMessage : privateMessages) {
 				privateMessageService.clearOfflineMessage(privateMessage.getUserOne(), privateMessage.getUserTwo(),
@@ -194,7 +193,7 @@ public class ChatController {
 		if (privateMsg != null && user != null) {
 			MemberBean mb = memberBeanService.findByName(privateMsg.getMessage());
 			if (mb != null) {
-				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", true);
+				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", mb.getName());
 			} else {
 				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", false);
 			}
