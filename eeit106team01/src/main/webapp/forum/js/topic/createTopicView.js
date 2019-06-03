@@ -1,7 +1,7 @@
 function createTopicView(dataTopicList, divTopicId) {
     $(`#${divTopicId}`).text("");
     for (let i = 0; i < dataTopicList.length; i++) {
-        let divTopic = $("<div></div>").addClass("col-md-3").attr("id", `id${dataTopicList[i].id}`).css({padding: "8px", width: "259px"}).appendTo($(`#${divTopicId}`));
+        let divTopic = $("<div></div>").addClass("col-md-3 myTopicBlock").attr("id", `id${dataTopicList[i].id}`).css({padding: "8px", width: "259px"}).appendTo($(`#${divTopicId}`));
             if(dataTopicList[i].videoBean){
                 let divVideo = $("<div></div>").addClass("col-md-12").css({"height": "150px",margin: "1px"}).appendTo(divTopic);
                 let videoBean = dataTopicList[i].videoBean;

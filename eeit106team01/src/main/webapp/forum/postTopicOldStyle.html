@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<title>PostTopic</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+	<!-- cookie -->
+	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+	<!-- google map -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async defer></script>
+	<!-- datetime picker -->
+	<link href="/forum/dateTimePicker/css/bootstrap.min.css" rel="stylesheet" media="screen">
+	<link href="/forum/dateTimePicker/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+	<!-- <script type="text/javascript" src="/forum/dateTimePicker/jquery-1.8.3.min.js" charset="UTF-8"></script> -->
+	<script type="text/javascript" src="/forum/dateTimePicker/js/bootstrap.min.js"></script>
+	<script type="text/javascript" src="/forum/dateTimePicker/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+
+	<!-- Main Quill library -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+	<script src="/forum/quill/quill.js"></script>
+	<script src="/forum/quill/quill.min.js"></script>
+
+	<!-- Theme included stylesheets -->
+	<link href="/forum/quill/quill.snow.css" rel="stylesheet">
+	<link href="/forum/quill/quill.bubble.css" rel="stylesheet">
+	
+	<style>
+		body>#standalone-container {
+			margin: 50px auto;
+			max-width: 720px;
+		}
+
+		#editor-container {
+			height: 350px;
+		}
+	</style>
+
+	<script src="js/uploadVideo.js"></script>
+
+	<script>
+		$(window).on('load', initMap);
+		let marker;
+		let accidentLocationLatitude;
+		let accidentLocationLongitude;
+		let quill;
+		let memberBean = Cookies.get("MemberBean");
+		// console.log("CookieMember: " + memberBean);
+		if (!memberBean) {
+			sessionStorage.setItem("previousPage", location.pathname);
+			location.href = "/forum/login.html";
+		}
+		memberBean = JSON.parse(Cookies.get("MemberBean"));
+		// console.log(memberBean);
+
+		function insertTopic(newTopicBean) {
+			$.ajax({
+				url: "/articleTopics",
+				method: "POST",
+				data: JSON.stringify(newTopicBean),
+				contentType: "application/json; charset=UTF-8",
+				dataType: "json",
+				success: function (data, textStatus, jqXHR) {
+					console.log("success");
+					console.log("回傳值 : " + data);
+					// console.log("textStatus : " + textStatus);
+					// console.log("jqXHR : " + jqXHR);
+					// sessionStorage.removeItem("contentBean");
+					// sessionStorage.removeItem("contentPage");
+					// location.href = contentPage;
+					// location.href = ;
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+					// console.log("jqXHRresponseText: " + jqXHR.responseText);
+					// console.log("textStatus: " + textStatus);
+					// console.log("errorThrown: " + errorThrown);
+				}
+			})
+		}
+
+		let videoUploadResult = null;
+
+		// *
+		function submit() {
+			$("#submit").attr('disabled', true);
+			quill.enable(false);
+			$(".formField").attr("disabled", true);
+			let newVideoBean = $("#videoBean").val();
+			if(newVideoBean == ""){
+				newVideoBean = null;
+			}
+			let newTopicBean = {
+				topicHeader: $("#topicHeader").val(),
+				topicType: $("input[name=topicType]:checked").val(),
+				topicRegion: $("#topicRegion option:selected" ).val(),
+				accidentTime: new Date($("#accidentTime").val()),
+				accidentLocation: $("#accidentLocation").val(),
+				accidentLocationLatitude: accidentLocationLatitude,
+				accidentLocationLongitude: accidentLocationLongitude,
+				topicContent: JSON.stringify(quill.getContents()),
+				memberBean: memberBean,
+				videoBean: newVideoBean
+			};
+			console.log("topicHeader:" + newTopicBean.topicHeader);
+			console.log("topicType:" + newTopicBean.topicType);
+			console.log("topicRegion:" + newTopicBean.topicRegion);
+			console.log("accidentTime:" + newTopicBean.accidentTime);
+			console.log("accidentLocation:" + newTopicBean.accidentLocation);
+			console.log("accidentLocationLatitude:" + newTopicBean.accidentLocationLatitude);
+			console.log("accidentLocationLongitude:" + newTopicBean.accidentLocationLongitude);
+			console.log("topicContent:" + newTopicBean.topicContent);
+			console.log("memberBean: ");
+			console.log(newTopicBean.memberBean);
+			console.log("videoBean is null? :" + newTopicBean.videoBean);
+			// var httpMethod = "POST";
+			if (newVideoBean) {
+				console.log("videoBean 不為空");
+				upload();
+				let checkVideo = setInterval(function () {
+					if (videoUploadResult) {
+						clearInterval(checkVideo);
+						console.log("videoUploadResult: ");
+						console.log(videoUploadResult);
+						newTopicBean.videoBean = videoUploadResult;
+						console.log("videoBean: ok");
+						insertTopic(newTopicBean);
+					} else {
+						console.log("videoUploadResult: ");
+						console.log(videoUploadResult);
+					}
+				}, 1000);
+			} else {
+				console.log(newTopicBean);
+				insertTopic(newTopicBean);
+			}
+
+		}
+		
+		Date.prototype.yyyymmddhhii = function() {
+			let mm = this.getMonth() + 1; // getMonth() is zero-based
+			let dd = this.getDate();
+			let hh = this.getHours();
+			let ii = this.getMinutes();
+
+			return [this.getFullYear() + "-",
+					(mm>9 ? '' : '0') + mm + "-",
+					(dd>9 ? '' : '0') + dd + " ",
+					(hh>9 ? '' : '0') + hh + ":",
+					(ii>9 ? '' : '0') + ii
+					].join('');
+		};
+		
+		document.addEventListener("DOMContentLoaded", function () {
+			document.getElementById("submit").addEventListener("click", submit);
+			// datetimepicker
+			let twoYearsAgo = new Date();
+			twoYearsAgo.setMonth(twoYearsAgo.getMonth() - 24);
+			console.log(twoYearsAgo.yyyymmddhhii());
+			console.log(new Date().yyyymmddhhii());
+			$('.form_datetime').datetimepicker({
+				format: "yyyy-mm-dd hh:ii",
+				startDate: twoYearsAgo.yyyymmddhhii(),
+				endDate: new Date().yyyymmddhhii(),
+				weekStart: 1,	//week start from Mon
+				todayBtn:  1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				forceParse: 0,
+				showMeridian: 1
+			});
+			//<!-- Initialize Quill editor -->
+			quill = new Quill('#editor-container', {
+				modules: {
+					formula: true,
+					syntax: true,
+					toolbar: '#toolbar-container'
+				},
+				theme: 'snow'
+			});
+		})
+		
+		//顯示Google Map
+		function initMap() {
+			// console.log("initMap ok");
+            let map = new google.maps.Map(document.getElementById("map_canvas"), {
+                zoom: 12
+                , center: { lat: 25.033793, lng: 121.543427 }
+				, scaleControl: true
+				, mapTypeControlOptions: { mapTypeIds: [] }
+                , gestureHandling: 'greedy'
+            });
+
+            google.maps.event.addListener(map, 'click', function (event) {
+            //    console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
+				// $("#accidentLocationLatitude").html(event.latLng.lat());
+				// $("#accidentLocationLongitude").html(event.latLng.lng());
+				accidentLocationLatitude = event.latLng.lat();
+				accidentLocationLongitude = event.latLng.lng();
+
+				if(marker != undefined){
+					marker.setMap(null);
+				}
+				marker = 
+                    new google.maps.Marker({
+                        position: {
+                            lat: event.latLng.lat(),
+                            lng: event.latLng.lng()
+                        }
+                        , map: map
+                        // , label: `${dataTopicList[i].id}`
+                        , animation: google.maps.Animation.BOUNCE    //for marker remove check
+                    });
+            });
+        }
+
+
+	</script>
+</head>
+
+<body>
+
+	<div class="jumbotron text-center" style="margin-bottom: 0">
+		<h1>Index Page</h1>
+		<p>Resize this responsive page to see the effect!</p>
+
+	</div>
+	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="collapsibleNavbar">
+			<ul class="navbar-nav">
+				<li class="nav-item active"><a class="nav-link" href="index.html">Index</a></li>
+				<li class="nav-item"><a class="nav-link" href="../video.html">Video</a></li>
+				<li class="nav-item"><a class="nav-link" href="../upload.html">Upload</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container" style="margin-top: 2%; background-color: aqua">
+		<div class="card">
+			<div class="card-header">
+
+			</div>
+
+			<div class="card-body">
+				<form>
+					<fieldset class="formField">
+						<div class="form-group">
+							<label><h4>標題: </h4>
+								<input type="text" name="topicHeader" id="topicHeader">
+							</label><br>
+							<label><h4>文章類型: </h4></label>
+								<input type="radio" name="topicType" id="shareTopic" value="shareTopic" checked="checked">分享文
+								<input type="radio" name="topicType" id="requestTopic" value="requestTopic">協尋文<br>
+							<label><h4>地區分類: </h4></label> 北部區域：包括臺北市、新北市、基隆市、新竹市、桃園市、新竹縣及宜蘭縣。
+													中部區域：包括臺中市、苗栗縣、彰化縣、南投縣及雲林縣。
+													南部區域：包括高雄市、臺南市、嘉義市、嘉義縣、屏東縣及澎湖縣。
+													東部區域：包括花蓮縣及臺東縣。<br>
+								<select name="topicRegion" id="topicRegion">
+									<option value="northernRegion">北部區域</option>
+									<option value="centralRegion">中部區域</option>
+									<option value="southernRegion">南部區域</option>
+									<option value="easternRegion">東部區域</option>
+								</select><br>
+								<div class="form-group">
+										<label for="accidentTime" class="col-md-2 control-label"><h4>事故時間: </h4></label>
+										<!-- <div class="input-group date form_datetime col-md-5" data-date="1979-09-16T05:25:07Z" data-date-format="dd MM yyyy - HH:ii p" data-link-field="accidentTime"> -->
+										<div class="input-group date form_datetime col-md-5" data-link-field="accidentTime"> 
+												<!-- data-date="2012-05-15 21:05"   data-date-format="yyyy-mm-dd hh:ii"   -->
+											<input class="form-control" size="16" type="text" value="" readonly>
+											<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+											<span class="input-group-addon"><span class="glyphicon glyphicon-th"></span></span>
+										</div>
+										<input type="hidden" id="accidentTime" value="" /><br/>
+									</div>
+									<br>
+							<label><h4>事故地點說明: </h4>
+								<input type="text" name="accidentLocation" id="accidentLocation">
+							</label><br>
+							<label><h4>請在地圖中選取事故地點: </h4></label>
+							<div id="map_canvas" style="width:600px; height:500px;"></div>
+							<label>文章內容: </label><br>
+							<div id="standalone-container">
+								<div id="toolbar-container">
+									<span class="ql-formats">
+										<select class="ql-font"></select>
+										<select class="ql-size"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-bold"></button>
+										<button class="ql-italic"></button>
+										<button class="ql-underline"></button>
+										<button class="ql-strike"></button>
+									</span>
+									<span class="ql-formats">
+										<select class="ql-color"></select>
+										<select class="ql-background"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-script" value="sub"></button>
+										<button class="ql-script" value="super"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-header" value="1"></button>
+										<button class="ql-header" value="2"></button>
+										<button class="ql-blockquote"></button>
+										<button class="ql-code-block"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-list" value="ordered"></button>
+										<button class="ql-list" value="bullet"></button>
+										<button class="ql-indent" value="-1"></button>
+										<button class="ql-indent" value="+1"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-direction" value="rtl"></button>
+										<select class="ql-align"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-link"></button>
+										<button class="ql-image"></button>
+										<button class="ql-video"></button>
+										<button class="ql-formula"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-clean"></button>
+									</span>
+								</div>
+								<div id="editor-container"></div>
+							</div>
+							<br>
+						</div>
+					</fieldset>
+				</form>
+				<label>
+					<h4>影片： <span id="videoURI" class="badge badge-light"></span></h4>
+					<form id="FileuploadForm"><input type="file" class="form-control-file border" id="videoBean"
+							name="videoFile" /></form>
+				</label><br>
+
+
+				<div style="display: none;" class="container progress-body">
+					<div class="progress">
+						<div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%">
+						</div>
+					</div>
+					<div>
+						<span class="percentage">0%</span><br> <span
+							style="width: 100px; display: inline-block; text-align: right">上傳進度：</span>
+						<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-speed">0
+							M/S, 0/0M</span>
+					</div>
+					<div>
+						<span style="width: 100px; display: inline-block; text-align: right">上傳狀態：</span>
+						<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;"
+							class="progress-info">請選擇檔案並點擊上傳按鈕</span>
+					</div>
+				</div>
+				<hr>
+				<form>
+					<fieldset class="formField">
+						<hr>
+						<!-- <label>
+								<h4>狀態(管理員功能)： </h4>
+								<div class="form-check-inline">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="contentStatus" value="normal">Normal
+									</label>
+								</div>
+								<div class="form-check-inline">
+									<label class="form-check-label">
+										<input type="radio" class="form-check-input" name="contentStatus"
+											value="deleted">Deleted
+									</label>
+								</div>
+							</label><br>
+							<label>
+								<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
+							</label><br> -->
+						<hr>
+						<input type="button" class="form-control" value="submit" id="submit" />
+					</fieldset>
+				</form>
+			</div>
+
+			<div class="card-footer">
+			</div>
+
+		</div>
+	</div>
+
+</body>
+
+</html>
