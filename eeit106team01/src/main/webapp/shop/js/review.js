@@ -437,6 +437,11 @@ function addToCart() {
                 var text = [];
                 var closeIcon = [];
                 var img = [];
+                var purchaseButton = `<div class="card">
+                <a name="" id="purchaseButton" class="btn btn-transparent" href="#" role="button">
+                    <span class='fa fa-shopping-cart'> 去結帳</span>
+                </a>
+            </div>`;
                 $.each(element, function (key, val) {
                     if (key.match(/^(name)$/) && val != null) {
                         text.push("<p class='m-0 p-0''>" + "品名" + val.substr(0, 8) + "..." + "</p>");
@@ -454,15 +459,10 @@ function addToCart() {
                 $(closeIcon.join("")).appendTo("#accordion-shopping-cart");
                 $(img.join("")).appendTo("#accordion-shopping-cart");
                 $(text.join("")).appendTo("#accordion-shopping-cart");
+                $(purchaseButton).appendTo("#accordion-shopping-cart");
             });
         }
 
-        // button
-        {/* <div class="card">
-            <a name="" id="" class="btn" href="#" role="button">
-                <span>去結帳</span>
-            </a>
-        </div> */}
     });
 
     $('#shoppingCartButton').click(function () {
@@ -490,7 +490,7 @@ function addToCart() {
         }
 
         var result = cartLocalStorage.getItem(productId);
-        alert(result);
+        // alert(result);
     });
 
     // button click reload
