@@ -1,6 +1,5 @@
 $(document).ready(function () {
     getProduct(takeUrlValue())
-    // $('#drag-and-drop').load('util/drag-and-drop-icon.html');
 });
 
 function takeUrlValue() {
@@ -56,7 +55,7 @@ function getProduct(id) {
             getRecommendProducts();
 
             function review() {
-                $("#reviewTitle").text("顧客評價")
+                $("#reviewTitle").text("商品評價")
             }
 
         },
@@ -161,19 +160,19 @@ function recommendTop(recommendData) {
 
     for (let k = 0; k < 5; k++) {
         recommendC1.push(
-            '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-blue-ui white"><span class="rec">推薦商品</span></div>' +
+            '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
             '<figure><img alt="" src=' + recommendImg[k] + '></figure>' +
             '</div><div class="item-box-blog-body">' +
-            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k] + '</h5></a></div>' +
+            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 25) + "..." + '</h5></a></div>' +
             '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
             '</div></div></div>'
         )
     }
     for (let q = 5; q < 10; q++) {
-        recommendC2.push('<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-blue-ui white"><span class="rec">推薦商品</span></div>' +
+        recommendC2.push('<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
             '<figure><img alt="" src=' + recommendImg[q] + '></figure>' +
             '</div><div class="item-box-blog-body">' +
-            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[q] + '</h5></a></div>' +
+            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[q].substr(0, 25) + "..." + '</h5></a></div>' +
             '<div class="item-box-blog-text"><p>$' + recommendPrice[q] + '</p></div>' +
             '</div></div></div>'
         )
