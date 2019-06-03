@@ -160,6 +160,20 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
+	@GetMapping(path = { "/search/sort" }, produces = { "application/json" })
+	public ResponseEntity<?> findProductsSort(
+			@RequestParam String dataName,@RequestParam String queryString,
+			@RequestParam String type,@RequestParam String sort) {
+		if (dataName != null && queryString!=null && type!=null && sort!=null) {
+			List<ProductBean> result = productService.findProductsSort(dataName, queryString, type, sort);
+			if (result != null) {
+				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
+			}
+			return ResponseEntity.notFound().build();
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
 	@GetMapping(path = { "/products/recommend" }, produces = { "application/json" })
 	public ResponseEntity<?> getRecommendProducts(@RequestParam String name) {
 		if (name != null) {

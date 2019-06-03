@@ -164,14 +164,11 @@ public class ProductDAOImplTest {
 	@Test
 	public void testFindProductsSort() throws Exception{
 		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","totalSold","desc"));
-//		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","price","asc"));
-//		assertNull(productDAO.findProductsSort("", "","",""));
-//		assertNotNull(productDAO.findProductsSort("brand", "快譯通","totalSold","desc"));
-//		assertNotNull(productDAO.findProductsSort("brand", "快譯通","price","asc"));
-//		assertNull(productDAO.findProductsSort("", "","",""));
-//		assertNotNull(productDAO.findProductsSort("name", "1080","totalSold","desc"));
-//		assertNotNull(productDAO.findProductsSort("name", "1080","price","asc"));
-//		assertNull(productDAO.findProductsSort("", "","",""));
+		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","price","asc"));
+		assertNotNull(productDAO.findProductsSort("name", "行車紀錄器","totalSold","desc"));
+		assertNotNull(productDAO.findProductsSort("name", "行車紀錄器","price","asc"));
+		assertNotNull(productDAO.findProductsSort("brand", "Abee快譯通","totalSold","desc"));
+		assertNotNull(productDAO.findProductsSort("brand", "Abee快譯通","price","asc"));
 	}
 
 }
