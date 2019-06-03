@@ -42,9 +42,10 @@
             box-sizing: border-box;
         }
 
-        /* body {
-            font: 16px Arial;
-        } */
+        body {
+            /* overflow: hidden; */
+            /* font: 16px Arial; */
+        }
 
         .main-content * {
             margin: 0px;
@@ -67,8 +68,19 @@
 
         .mySubTopicBlock {
             border-bottom: 1px solid #CCCCCC;
-            padding-bottom: 10px;
+            /* padding-bottom: 10px; */
             margin-bottom: 10px;
+        }
+
+        .myPagination {
+            text-align: right;
+            margin-top: 5px;
+            padding: 5px;
+        }
+
+        .myTopicBlock {
+            border: 1px solid #CCCCCC;
+            border-radius: 15px;
         }
 
         /*the container must be positioned relative:*/
@@ -135,25 +147,27 @@
     <script>
         let startPosition = 1;
         let maxResult = 8;
+        let currentOrderType = "orderByTime";
         let searchInput;
+        let whichPage = 1;
         $(document).ready(function () {
             $("#orderByTime").on("click", orderChange);
             $("#orderByLike").on("click", orderChange);
-            
+
             autocomplete(document.getElementById("myInput"));
             searchInput = getUrlParameters().q;
             if (searchInput) {
                 $("#requestTopicBlock").hide();
                 $("#shareTopicBlock").hide();
-                getTopicList(startPosition, maxResult, "requestTopic", "orderByTime", searchInput);
+                getTopicList(startPosition, maxResult, "requestTopic", currentOrderType, searchInput);
                 getTopicsNum("requestTopic", searchInput);
-                getTopicList(startPosition, maxResult, "shareTopic", "orderByTime", searchInput);
+                getTopicList(startPosition, maxResult, "shareTopic", currentOrderType, searchInput);
                 getTopicsNum("shareTopic", searchInput);
             } else {
                 $("#searchTopicBlock").hide();
-                getTopicList(startPosition, maxResult, "requestTopic", "orderByTime", "");
+                getTopicList(startPosition, maxResult, "requestTopic", currentOrderType, "");
                 getTopicsNum("requestTopic", "");
-                getTopicList(startPosition, maxResult, "shareTopic", "orderByTime", "");
+                getTopicList(startPosition, maxResult, "shareTopic", currentOrderType, "");
                 getTopicsNum("shareTopic", "");
             }
         })
@@ -207,45 +221,103 @@
 
         function createPagination(totalNum, topicType, likeTopicHeader) {
             let paginationDivId;
+            // let topicTypeHeader;
             if (likeTopicHeader == "") {
                 paginationDivId = topicType + "Pagi";
+                // topicTypeHeader = topicType + "Header";
             } else {
                 paginationDivId = topicType + "SearchPagi";
+                // topicTypeHeader = topicType + "SearchHeader";
             }
-            console.log(totalNum + " " + paginationDivId);
-            let pageNum = Math.ceil(totalNum/maxResult);
+            // console.log(totalNum + " " + paginationDivId);
+            // console.log(topicTypeHeader);
+            let pageNum = Math.ceil(totalNum / maxResult);
             //create pagination tag start
             $(`#${paginationDivId}`).text("");
             let ulPage = $("<ul></ul>").addClass("pagination pagination-lg").appendTo($(`#${paginationDivId}`));
-                let liPreviousPage = $("<li></li>").appendTo(ulPage);
-                    let aLinkPreviousPage = $("<a></a>").attr("href", "#").appendTo(liPreviousPage);
-                         $("<i></i>").addClass("entypo-left-open-mini").appendTo(aLinkPreviousPage);
-            for (let i = 0; i < pageNum; i++){
-                let liPagination = $("<li></li>").appendTo(ulPage);
-                let aLinkPagination = $("<a></a>").attr("href", `?a=${i+1}`).text(i+1).appendTo(liPagination);
+            let liPreviousPage = $("<li></li>").on("click", activeEffect).appendTo(ulPage);
+            let aLinkPreviousPage = $("<a></a>").attr("href", `##`).addClass(`a${paginationDivId.substr(0, paginationDivId.indexOf('P'))}`).on("click", pageChange).appendTo(liPreviousPage);
+            $("<i></i>").addClass("entypo-left-open-mini").appendTo(aLinkPreviousPage);
+            for (let i = 0; i < pageNum; i++) {
+                let liPagination = $("<li></li>").on("click", activeEffect).appendTo(ulPage);
+                let aLinkPagination = $("<a></a>").attr("href", `##`).addClass(`a${paginationDivId.substr(0, paginationDivId.indexOf('P'))}`).on("click", pageChange).text(i + 1).appendTo(liPagination);
+                if (i == 0) {
+                    liPagination.addClass("active");
+                }
             }
-                let liNextPage = $("<li></li>").appendTo(ulPage);
-                    let aLinkNextPage = $("<a></a>").attr("href", "#").appendTo(liNextPage);
-                         $("<i></i>").addClass("entypo-right-open-mini").appendTo(aLinkNextPage); 
+            let liNextPage = $("<li></li>").on("click", activeEffect).appendTo(ulPage);
+            let aLinkNextPage = $("<a></a>").attr("href", `##`).addClass(`a${paginationDivId.substr(0, paginationDivId.indexOf('P'))}`).on("click", pageChange).appendTo(liNextPage);
+            $("<i></i>").addClass("entypo-right-open-mini").attr("id", `right${pageNum}`).appendTo(aLinkNextPage);
             //create pagination tag finished
 
         }
-        
+
         function orderChange() {
             // console.log($(this).val());
             // console.log($(this).prop("checked"));
 
+            currentOrderType = $(this).val();
+
             if (searchInput) {
-                getTopicList(startPosition, maxResult, "requestTopic", $(this).val(), searchInput);
+                getTopicList(startPosition, maxResult, "requestTopic", currentOrderType, searchInput);
                 getTopicsNum("requestTopic", searchInput);
-                getTopicList(startPosition, maxResult, "shareTopic", $(this).val(), searchInput);
+                getTopicList(startPosition, maxResult, "shareTopic", currentOrderType, searchInput);
                 getTopicsNum("shareTopic", searchInput);
             } else {
-                getTopicList(startPosition, maxResult, "requestTopic", $(this).val(), "");
+                getTopicList(startPosition, maxResult, "requestTopic", currentOrderType, "");
                 getTopicsNum("requestTopic", "");
-                getTopicList(startPosition, maxResult, "shareTopic", $(this).val(), "");
+                getTopicList(startPosition, maxResult, "shareTopic", currentOrderType, "");
                 getTopicsNum("shareTopic", "");
             }
+        }
+
+        function pageChange(pageNum) {
+            // console.log($(this).text());
+            // console.log(($(this).text() - 1) * maxResult + 1);
+            // console.log($(this).attr("id").substr(1));
+            // console.log($(this).attr("class"));
+
+            if ($(this).text()) {
+                whichPage = $(this).text();
+            } else {
+                if ($(this).children("i").attr("class") == "entypo-left-open-mini") {
+                    if (whichPage > 1) {
+                        whichPage--;
+                    }
+                } else if ($(this).children("i").attr("class") == "entypo-right-open-mini") {
+                    if (whichPage < $(this).children("i").attr("id").substr(5)) {
+                        whichPage++;
+                    }
+                }
+            }
+            // console.log(whichPage);
+
+            // let newStartPosition = ($(this).text() - 1) * maxResult + 1;
+            let newStartPosition = (whichPage - 1) * maxResult + 1;
+            let currentTopicType;
+            let currentSearchInput;
+            let topicTypeAndSearchString = $(this).attr("class").substr(1);
+            // console.log(topicTypeAndSearchString);
+            
+            if (topicTypeAndSearchString.substr(topicTypeAndSearchString.indexOf('S')) == 'Search') {
+                // console.log("i am search");
+                currentTopicType = topicTypeAndSearchString.substr(0, topicTypeAndSearchString.indexOf('S'));
+                currentSearchInput = searchInput;
+            } else {
+                // console.log("i am not search");
+                currentTopicType = topicTypeAndSearchString;
+                currentSearchInput = "";
+            }
+            // console.log("currentTopicType: " + currentTopicType);
+            // console.log("currentSearchInput: " + currentSearchInput);
+
+            getTopicList(newStartPosition, maxResult, currentTopicType, currentOrderType, currentSearchInput);
+
+        }
+
+        function activeEffect() {
+            $(this).parent().children().removeClass("active");
+            $(this).parent().children().eq(whichPage).addClass("active");
         }
 
     </script>
@@ -271,69 +343,42 @@
                 <div class="col-md-12 mySubTopicBlock">
                     <form>
                         排序依據：
-                        <input type="radio" name="orderTypeName" id="orderByTime" value="orderByTime" checked>更新時間
-                        <input type="radio" name="orderTypeName" id="orderByLike" value="orderByLike">主題熱度
+                        <label><input type="radio" name="orderTypeName" id="orderByTime" value="orderByTime" checked>更新時間</label>
+                        <label><input type="radio" name="orderTypeName" id="orderByLike" value="orderByLike">主題熱度</label>
                     </form>
                 </div>
                 <div class="col-md-12 mySubTopicBlock" id="requestTopicBlock">
-                    <div class="col-md-12">
+                    <div class="col-md-12" id="requestTopicHeader">
                         <h1>需求</h1>
                     </div>
                     <div class="col-md-12" id="requestTopic"></div>
-                    <div class="col-md-12" id="requestTopicPagi">
-                        <!-- <ul class="pagination pagination-lg">
-                            <li>
-                                <a href="#">
-                                    <i class="entypo-left-open-mini"></i>
-                                </a>
-                            </li>
-                            <li>
-                                <a href="?q=">1</a>
-                            </li>
-                            <li class="active">
-                                <a href="#">2</a>
-                            </li>
-                            <li>
-                                <a href="#">3</a>
-                            </li>
-                            <li>
-                                <a href="#">4</a>
-                            </li>
-                            <li>
-                                <a href="#">5</a>
-                            </li>
-                            <li>
-                                <a href="#">6</a>
-                            </li>
-                            <li>
-                                <a href="#">
-                                    <i class="entypo-right-open-mini"></i>
-                                </a>
-                            </li>
-                        </ul> -->
-                    </div>
+                    <div class="col-md-12 myPagination" id="requestTopicPagi"></div>
                 </div>
                 <div class="col-md-12 mySubTopicBlock" id="shareTopicBlock">
-                    <div class="col-md-12">
+                    <div class="col-md-12" id="shareTopicHeader">
                         <h1>提供</h1>
                     </div>
                     <div class="col-md-12" id="shareTopic"></div>
-                    <div class="col-md-12" id="shareTopicPagi"></div>
+                    <div class="col-md-12 myPagination" id="shareTopicPagi"></div>
                 </div>
-                <div class="col-md-12 mySubTopicBlock" id="searchTopicBlock">
+                <div class="col-md-12" id="searchTopicBlock">
                     <div class="col-md-12">
                         <h1>搜尋結果</h1>
                     </div>
-                    <div class="col-md-12">
-                        <h1>需求</h1>
+                    <div class="col-md-12 mySubTopicBlock">
+                        <div class="col-md-12" id="requestTopicSearchHeader">
+                            <h1>需求</h1>
+                        </div>
+                        <div class="col-md-12" id="requestTopicSearch"></div>
+                        <div class="col-md-12 myPagination" id="requestTopicSearchPagi"></div>
                     </div>
-                    <div class="col-md-12" id="requestTopicSearch"></div>
-                    <div class="col-md-12" id="requestTopicSearchPagi"></div>
-                    <div class="col-md-12">
-                        <h1>提供</h1>
+                    <div class="col-md-12 mySubTopicBlock">
+                        <div class="col-md-12" id="shareTopicSearchHeader">
+                            <h1>提供</h1>
+                        </div>
+                        <div class="col-md-12" id="shareTopicSearch"></div>
+                        <div class="col-md-12 myPagination" id="shareTopicSearchPagi"></div>
                     </div>
-                    <div class="col-md-12" id="shareTopicSearch"></div>
-                    <div class="col-md-12" id="shareTopicSearchPagi"></div>
                 </div>
 
                 <!-- <div class="col-md-3" style="padding: 8px">
@@ -362,7 +407,6 @@
         </div>
 
     </div>
-
 
     <!-- JavaScripts initializations and stuff -->
     <!-- YW: this is important for navbar -->
