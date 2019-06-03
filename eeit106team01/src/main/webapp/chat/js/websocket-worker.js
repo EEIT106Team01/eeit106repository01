@@ -1,4 +1,5 @@
-importScripts("/chat/js/sockjs.min.js", "/chat/js/stomp.min.js");
+self.importScripts("/chat/js/sockjs.min.js");
+self.importScripts("/chat/js/stomp.js");
 
 
 var ports = [];
@@ -7,23 +8,31 @@ var subscribeMiddle = [];
 var subscribeSouth = [];
 var subscribeEast = [];
 
-var name = "pikachu";
 var stompClient = null;
 
-if (stompClient == null) {
-    connect();
-}
-
-function connect() {
-    var socket = new SockJS('/simple');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({
-        'name': chatUsername
-    }, function (frame) {
-        console.log('Connected:' + frame);
-        subsribe();
-    });
-    // $('#chat').attr('data-current-user', chatUsername);
+function connect(e) {
+    let chatUsername = e.data.chatUsername;
+    if (stompClient == null) {
+        var socket = new SockJS('/simple');
+        stompClient = Stomp.over(socket);
+        stompClient.connect({
+            'name': chatUsername
+        }, function (frame) {
+            console.log('Connected:' + frame);
+            subsribe();
+            console.log(e);
+            console.log(ports);
+            e.srcElement.postMessage({
+                "command": "connected"
+            });
+        });
+    } else {
+        console.log(e);
+        console.log(ports);
+        e.srcElement.postMessage({
+            "command": "connected"
+        });
+    }
 }
 
 function disconnect() {
@@ -34,45 +43,14 @@ function disconnect() {
 }
 
 function subsribe() {
-    neonChat.close();
     stompClient.subscribe('/user/topic/msg', function (response) {
         sendMessageBack("privateMessage", response.body);
-        // var msgBean = JSON.parse(response.body);
-        // console.log(msgBean);
-        // if (Array.isArray(msgBean)) {
-        //     showOldPrivateMessage(msgBean);
-        // } else {
-        //     onReceivePrivateMessage(msgBean.fromUser, msgBean);
-        // }
     });
     stompClient.subscribe('/user/topic/checkUser', function (response) {
         sendMessageBack("checkUser", response.body);
-        // console.log(eval(response.body));
-        // if (eval(response.body)) {
-        //     let id = $("#checkUser").val();
-        //     if (!$("#" + id).get(0)) {
-        //         neonChat.addUser("group-2", id, "online", false, id);
-        //         neonChat.refreshUserIds();
-        //     }
-        //     getOnlineUsers();
-        // } else {
-        //     $("#checkUser").attr("placeholder", "User does not exist!");
-        // }
-        // $("#checkUser").val("");
     });
     stompClient.subscribe('/topic/getOnlineUsers', function (response) {
         sendMessageBack("getOnlineUsers", response.body);
-        // let data = eval(response.body);
-        // let allUsers = neonChat.getAllUserIds();
-        // if (Array.isArray(allUsers)) {
-        //     $(allUsers).each(function (i) {
-        //         if (data.indexOf(allUsers[i]) !== -1) {
-        //             neonChat.setStatus(allUsers[i], "online");
-        //         } else {
-        //             neonChat.setStatus(allUsers[i], "offline");
-        //         }
-        //     });
-        // }
     });
     subscribeRegion("north");
     subscribeRegion("middle");
@@ -83,48 +61,25 @@ function subsribe() {
 function subscribeRegion(region) {
     stompClient.subscribe('/topic/' + region, function (response) {
         sendMessageBack("regionMessage", response.body, region);
-        // var msgBean = JSON.parse(response.body);
-        // console.log(msgBean);
-        // if (Array.isArray(msgBean)) {
-        //     showOldMessage(msgBean);
-        // } else {
-        //     onReceiveMessage(region, msgBean);
-        // }
     });
 }
 
 
 function sendMessageBack(command, message, region) {
-    let data = [command, message];
+    let data = {
+        "command": command,
+        "message": message,
+        "region": region
+    };
     for (var m = 0, n = ports.length; m < n; m++) {
         ports[m].postMessage(data);
     }
 }
 
-function sendMessageToServer(command, message, region) {
-    if (stompClient != null) {
-        if (command == "privateMessage") {
-            stompClient.send("/msg", {}, message);
-        } else if (command == "checkUser") {
-            stompClient.send("/checkUser", {}, message);
-        } else if (command == "getOnlineUsers") {
-            stompClient.send("/getOnlineUsers", {});
-        } else if (command == "regionMessage") {
-            stompClient.send("/" + region, {}, message);
-        } else if (command == "getOld") {
-            if (!!region) {
-                stompClient.send("/" + region, {}, message);
-            } else {
-                stompClient.send("/msg", {}, message);
-            }
-        }
-    }
-}
-
-
 onconnect = function (e) {
     if (e.ports && e.ports.length > 0) {
         for (var i = 0, j = e.ports.length; i < j; i++) {
+            console.log(e);
             e.ports[i].onmessage = function (e) {
                 if (e.data.command == "subscribeRegion") {
                     if (e.data.region == "north") {
@@ -139,13 +94,28 @@ onconnect = function (e) {
                     if (e.data.region == "east") {
                         subscribeEast.push(e.ports[i]);
                     }
+                } else if (e.data.command == "getAllActiveMsg") {
+                    getAllActiveMsg(e);
+                } else if (e.data.command == "regionMessage") {
+                    sendRegionMessage(e);
+                } else if (e.data.command == "privateMessage") {
+                    sendPrivateMessage(e);
+                } else if (e.data.command == "getOnlineUsers") {
+                    getOnlineUsers(e);
+                } else if (e.data.command == "checkUser") {
+                    checkUser(e);
+                } else if (e.data.command == "getRegionActive") {
                     getRegionActive(e);
+                } else if (e.data.command == "connect") {
+                    connect(e);
+                } else if (e.data.command == "closing") {
+                    ports.splice(ports.indexOf(this), 1);
+                    subscribeNorth.splice(subscribeNorth.indexOf(this), 1);
+                    subscribeMiddle.splice(subscribeMiddle.indexOf(this), 1);
+                    subscribeSouth.splice(subscribeSouth.indexOf(this), 1);
+                    subscribeEast.splice(subscribeEast.indexOf(this), 1);
+                    console.log(ports);
                 }
-
-                for (var m = 0, n = ports.length; m < n; m++) {
-                    ports[m].postMessage(e.data);
-                }
-
             }
             ports.push(e.ports[i]);
         }
@@ -155,16 +125,42 @@ onconnect = function (e) {
 function getRegionActive(e) {
     let region = e.data.region;
     if (region) {
-        let regionSubscribe =  stompClient.subscribe('/user/topic/' + region + '/getActive', function (response) {
-            var msgBean = JSON.parse(response.body);
-            console.log(msgBean);
-            if (Array.isArray(msgBean)) {
-                showOldMessage(msgBean, true);
-            } else {
-                onReceiveMessage(region, msgBean);
-            }
+        let regionSubscribe = stompClient.subscribe('/user/topic/' + region + '/getActive', function (response) {
+            e.srcElement.postMessage({
+                "command": "getRegionActive",
+                "message": response.body,
+                "region": region
+            });
             regionSubscribe.unsubscribe();
         });
         stompClient.send("/" + region + '/getActive', {});
     }
+}
+
+function getAllActiveMsg(e) {
+    let activeMsgSubscribe = stompClient.subscribe('/user/topic/getAllActiveMsg', function (response) {
+        console.log(e);
+        e.srcElement.postMessage({
+            "command": "getAllActiveMsg",
+            "message": response.body
+        });
+        activeMsgSubscribe.unsubscribe();
+    });
+    stompClient.send("/getAllActiveMsg", {});
+}
+
+function sendRegionMessage(e) {
+    stompClient.send("/" + e.data.region, {}, e.data.message);
+}
+
+function sendPrivateMessage(e) {
+    stompClient.send("/msg", {}, e.data.message);
+}
+
+function getOnlineUsers(e) {
+    stompClient.send("/getOnlineUsers", {});
+}
+
+function checkUser(e) {
+    stompClient.send("/checkUser", {}, e.data.message);
 }
