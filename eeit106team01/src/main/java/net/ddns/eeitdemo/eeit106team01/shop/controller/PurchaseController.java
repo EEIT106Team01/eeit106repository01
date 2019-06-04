@@ -191,6 +191,17 @@ public class PurchaseController {
 		}
 	}
 
+	@GetMapping(value = "/shop/findPurchaseIdCount")
+	public ResponseEntity<?> findPurchaseIdCount() {
+		Integer result = null;
+		result = purchaseService.findPurchaseIdCount();
+		if (result != null) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("錯誤", HttpStatus.NOT_FOUND);
+		}
+	}
+
 	// POST Method
 	// Create a Purchase and Purchase List
 	@PostMapping(value = "/shop/newPurchase")

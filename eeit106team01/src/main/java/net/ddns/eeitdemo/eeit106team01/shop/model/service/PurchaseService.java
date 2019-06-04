@@ -369,4 +369,13 @@ public class PurchaseService {
 		return null;
 	}
 
+	public Integer findPurchaseIdCount() {
+		Integer result = null;
+		result = this.purchaseDAO.findPurchaseIdCount();
+		if (result != null) {
+			return result;
+		}
+		return null;
+	}
+
 }
