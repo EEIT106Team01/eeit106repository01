@@ -86,7 +86,7 @@ function getProductsByUpdateTime() {
     var endDay = GetDateStr(0);
     var startDay = GetDateStr(-30);
     $.ajax({
-        url: "http://localhost:8080/search/updatedTime?startDay=" + startDay + "&endDay=" + endDay,
+        url: "http://localhost:8080/search/updatedTime?dataName=&queryString=&brandType=&startDay=" + startDay + "&endDay=" + endDay,
         method: "GET",
         dataType: "json",
         cache: false,

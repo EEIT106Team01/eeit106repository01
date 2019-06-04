@@ -12,29 +12,29 @@ var quillChat;
 
 
 // ----------append quill js&css
-if (typeof Quill === 'undefined') {
-    console.log("Quill does not exist, start loading...");
-    var head = document.getElementsByTagName('head')[0];
-    var quillJs1 = document.createElement('script');
-    quillJs1.src = '/forum/quill/katex.min.js';
-    var quillJs2 = document.createElement('script');
-    quillJs2.src = '/forum/quill/highlight.min.js';
-    var quillJs3 = document.createElement('script');
-    quillJs3.src = '/forum/quill/quill.js';
-    var quillCss1 = document.createElement('link');
-    quillCss1.rel = 'stylesheet';
-    quillCss1.type = 'text/css';
-    quillCss1.href = '/forum/quill/quill.snow.css';
-    var quillCss2 = document.createElement('link');
-    quillCss2.rel = 'stylesheet';
-    quillCss2.type = 'text/css';
-    quillCss2.href = '/forum/quill/quill.bubble.css';
-    head.appendChild(quillJs1);
-    head.appendChild(quillJs2);
-    head.appendChild(quillJs3);
-    head.appendChild(quillCss1);
-    head.appendChild(quillCss2);
-}
+// if (typeof Quill === 'undefined') {
+// console.log("Quill does not exist, start loading...");
+var head = document.getElementsByTagName('head')[0];
+var quillJs1 = document.createElement('script');
+quillJs1.src = '/forum/quill/katex.min.js';
+var quillJs2 = document.createElement('script');
+quillJs2.src = '/forum/quill/highlight.min.js';
+var quillJs3 = document.createElement('script');
+quillJs3.src = '/forum/quill/quill.js';
+var quillCss1 = document.createElement('link');
+quillCss1.rel = 'stylesheet';
+quillCss1.type = 'text/css';
+quillCss1.href = '/forum/quill/quill.snow.css';
+var quillCss2 = document.createElement('link');
+quillCss2.rel = 'stylesheet';
+quillCss2.type = 'text/css';
+quillCss2.href = '/forum/quill/quill.bubble.css';
+head.appendChild(quillJs1);
+head.appendChild(quillJs2);
+head.appendChild(quillJs3);
+head.appendChild(quillCss1);
+head.appendChild(quillCss2);
+// }
 // ----------append quill js&css end
 
 
