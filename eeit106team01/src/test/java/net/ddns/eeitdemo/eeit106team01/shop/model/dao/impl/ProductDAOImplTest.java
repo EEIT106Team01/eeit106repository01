@@ -69,8 +69,8 @@ public class ProductDAOImplTest {
 	}
 
 	public void testFindProductsByBrand() {
-		assertNotNull(productDAO.findProductsByBrand("brand1"));
-		assertNull(productDAO.findProductsByBrand("0"));
+		assertNotNull(productDAO.findProductsByBrand("brand1","行車紀錄器"));
+		assertNull(productDAO.findProductsByBrand("0",""));
 	}
 
 	public void testFindProductsByStock() {
@@ -86,14 +86,14 @@ public class ProductDAOImplTest {
 	public void testFindProductsByNameBrandTypeAndOrderByPriceBetween() {
 		assertEquals(
 				new Integer(
-						productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween("name", "行車王", 1000, 2000).size()),
+						productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween("name", "行車王","行車紀錄器", 1000, 2000).size()),
 				new Integer(29));
 		assertEquals(
 				new Integer(productDAO
-						.findProductsByNameBrandTypeAndOrderByPriceBetween("brand", "CARSCAM行車王", 1000, 2000).size()),
+						.findProductsByNameBrandTypeAndOrderByPriceBetween("brand", "CARSCAM行車王","行車紀錄器", 1000, 2000).size()),
 				new Integer(28));
 		assertEquals(new Integer(
-				productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween("type", "行車紀錄器", 1000, 2000).size()),
+				productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween("type", "行車紀錄器","行車紀錄器", 1000, 2000).size()),
 				new Integer(178));
 	}
 
@@ -163,12 +163,12 @@ public class ProductDAOImplTest {
 	}
 	@Test
 	public void testFindProductsSort() throws Exception{
-		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","totalSold","desc"));
-		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","price","asc"));
-		assertNotNull(productDAO.findProductsSort("name", "行車紀錄器","totalSold","desc"));
-		assertNotNull(productDAO.findProductsSort("name", "行車紀錄器","price","asc"));
-		assertNotNull(productDAO.findProductsSort("brand", "Abee快譯通","totalSold","desc"));
-		assertNotNull(productDAO.findProductsSort("brand", "Abee快譯通","price","asc"));
+		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","totalSold","desc",""));
+		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","price","asc",""));
+		assertNotNull(productDAO.findProductsSort("name", "行車紀錄器","totalSold","desc",""));
+		assertNotNull(productDAO.findProductsSort("name", "行車紀錄器","price","asc",""));
+		assertNotNull(productDAO.findProductsSort("brand", "Abee快譯通","totalSold","desc","行車紀錄器"));
+		assertNotNull(productDAO.findProductsSort("brand", "Abee快譯通","price","asc","行車紀錄器"));
 	}
 
 }

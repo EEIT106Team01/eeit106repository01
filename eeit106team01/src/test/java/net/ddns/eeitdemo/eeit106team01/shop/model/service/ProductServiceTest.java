@@ -96,7 +96,7 @@ public class ProductServiceTest {
 
 //	@Test
 	public void testFindProductsByBrand() {
-		System.out.println(productService.findProductsByBrand("ABC"));
+//		System.out.println(productService.findProductsByBrand("ABC"));
 		System.out.println("========================================");
 	}
 

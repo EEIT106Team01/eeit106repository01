@@ -113,12 +113,21 @@ public class ProductDAOImpl implements ProductDAO {
 	}
 
 	@Override
-	public List<ProductBean> findProductsByBrand(String brand) {
+	public List<ProductBean> findProductsByBrand(String brand,String type) {
 		if (NullChecker.isEmpty(brand) == false) {
 			try {
-				this.productsResutlt = this.getSession()
-						.createQuery("from ProductBean where brand =:brand", ProductBean.class)
-						.setParameter("brand", brand).getResultList();
+				if(NullChecker.isEmpty(type) == true && NullChecker.isEmpty(brand) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where brand =:brand", ProductBean.class)
+							.setParameter("brand", brand).getResultList();
+				}
+				else if(NullChecker.isEmpty(type) == false && NullChecker.isEmpty(brand) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where brand =:brand and type= :type", ProductBean.class)
+							.setParameter("brand", brand)
+							.setParameter("type", type)
+							.getResultList();
+				}
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
 			}
@@ -172,7 +181,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@Override
 	public List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
-			String queryString, Integer minPrice, Integer maxPrice) {
+			String queryString,String type, Integer minPrice, Integer maxPrice) {
 		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(queryString) == false
 				&& minPrice != null && minPrice >= 0 && maxPrice != null && maxPrice >= minPrice) {
 			try {
@@ -183,14 +192,21 @@ public class ProductDAOImpl implements ProductDAO {
 									ProductBean.class)
 							.setParameter("name", "%" + queryString + "%").setParameter("minPrice", minPrice)
 							.setParameter("maxPrice", maxPrice).getResultList();
-				} else if (byNameBrandType.equalsIgnoreCase("brand")) {
+				} else if (byNameBrandType.equalsIgnoreCase("brand") && NullChecker.isEmpty(type) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery(
+									"from ProductBean where brand= :brand and type = :type and price between :minPrice and :maxPrice",
+									ProductBean.class)
+							.setParameter("brand", queryString).setParameter("minPrice", minPrice)
+							.setParameter("maxPrice", maxPrice).setParameter("type", type).getResultList();
+				} else if (byNameBrandType.equalsIgnoreCase("brand") && NullChecker.isEmpty(type) == true) {
 					this.productsResutlt = this.getSession()
 							.createQuery(
 									"from ProductBean where brand= :brand and price between :minPrice and :maxPrice",
 									ProductBean.class)
 							.setParameter("brand", queryString).setParameter("minPrice", minPrice)
 							.setParameter("maxPrice", maxPrice).getResultList();
-				} else if (byNameBrandType.equalsIgnoreCase("type")) {
+				}else if (byNameBrandType.equalsIgnoreCase("type")) {
 					this.productsResutlt = this.getSession()
 							.createQuery("from ProductBean where type= :type and price between :minPrice and :maxPrice",
 									ProductBean.class)
@@ -457,7 +473,7 @@ public class ProductDAOImpl implements ProductDAO {
 
 	@SuppressWarnings("unchecked")
 	@Override
-	public List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort) {
+	public List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort,String brandType) {
 		try {
 			if (sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
 					&& dataName.equalsIgnoreCase("type") && type.equalsIgnoreCase("price")) {
@@ -471,13 +487,15 @@ public class ProductDAOImpl implements ProductDAO {
 						.getResultList();
 			}else if(sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
 					&& dataName.equalsIgnoreCase("brand") && type.equalsIgnoreCase("price")) {
-				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString order by price desc")
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString and type = :brandType order by price desc")
 						.setParameter("queryString", queryString)
+						.setParameter("brandType", brandType)
 						.getResultList();
 			}else if(sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
 					&& dataName.equalsIgnoreCase("brand") && type.equalsIgnoreCase("totalSold")) {
-				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString order by totalSold desc")
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString and type = :brandType order by totalSold desc")
 						.setParameter("queryString", queryString)
+						.setParameter("brandType", brandType)
 						.getResultList();
 			}else if(sort.equalsIgnoreCase("desc") && NullChecker.isEmpty(queryString) == false
 					&& dataName.equalsIgnoreCase("name") && type.equalsIgnoreCase("price")) {
@@ -501,13 +519,15 @@ public class ProductDAOImpl implements ProductDAO {
 						.getResultList();
 			}else if(sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
 					&& dataName.equalsIgnoreCase("brand") && type.equalsIgnoreCase("price")) {
-				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString order by price")
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString and type = :brandType order by price")
 						.setParameter("queryString", queryString)
+						.setParameter("brandType", brandType)
 						.getResultList();
 			}else if(sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
 					&& dataName.equalsIgnoreCase("brand") && type.equalsIgnoreCase("totalSold")) {
-				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString order by totalSold")
+				this.productsResutlt = this.getSession().createQuery("from ProductBean where brand = :queryString and type = :brandType order by totalSold")
 						.setParameter("queryString", queryString)
+						.setParameter("brandType", brandType)
 						.getResultList();
 			}else if(sort.equalsIgnoreCase("asc") && NullChecker.isEmpty(queryString) == false
 					&& dataName.equalsIgnoreCase("name") && type.equalsIgnoreCase("price")) {

@@ -91,19 +91,19 @@ public class ProductService {
 			if (findOne != null) {
 				return this.getSession()
 						.createQuery("from ProductBean where type = :type order by totalSold desc", ProductBean.class)
-						.setParameter("type", findOne.getType()).setMaxResults(8).getResultList();
+						.setParameter("type", findOne.getType()).setMaxResults(10).getResultList();
 			}
 		}
 		return null;
 	}
 
-	public List<ProductBean> findProductsByBrand(String brand) {
-		return productDAO.findProductsByBrand(brand);
+	public List<ProductBean> findProductsByBrand(String brand,String type) {
+		return productDAO.findProductsByBrand(brand,type);
 	}
 
 	public List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
-			String queryString, Integer minPrice, Integer maxPrice) {
-		return productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween(byNameBrandType, queryString, minPrice,
+			String queryString,String type, Integer minPrice, Integer maxPrice) {
+		return productDAO.findProductsByNameBrandTypeAndOrderByPriceBetween(byNameBrandType, queryString,type, minPrice,
 				maxPrice);
 	}
 
@@ -128,8 +128,8 @@ public class ProductService {
 	public List<ProductBean> findProductsByTypeName(String type, String name) {
 		return productDAO.findProductsByTypeName(type, name);
 	}
-	public List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort){
-		return productDAO.findProductsSort(dataName, queryString, type, sort);
+	public List<ProductBean> findProductsSort(String dataName,String queryString,String type,String sort,String brandType){
+		return productDAO.findProductsSort(dataName, queryString, type, sort,brandType);
 	}
 	
 	public List<SerialNumberBean> insertProductsSN(Long id, Integer stock) {

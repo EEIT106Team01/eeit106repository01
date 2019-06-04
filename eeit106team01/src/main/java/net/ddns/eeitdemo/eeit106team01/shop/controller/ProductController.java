@@ -102,9 +102,9 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/search/brand" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand) {
+	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand,@RequestParam(required = false) String type) {
 		if (brand != null) {
-			List<ProductBean> result = productService.findProductsByBrand(brand);
+			List<ProductBean> result = productService.findProductsByBrand(brand,type);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -115,13 +115,14 @@ public class ProductController {
 
 	@GetMapping(path = { "/search/price" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByPrice(@RequestParam String byNameBrandType, @RequestParam String queryString,
+			@RequestParam(required = false) String type,
 			@RequestParam(defaultValue = "0", required = false) Integer minPrice,
 			@RequestParam(defaultValue = "999999", required = false) Integer maxPrice) {
 		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(byNameBrandType) == false
 				&& (minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null)
 				&& (maxPrice.intValue() > 0)) {
 			List<ProductBean> result = productService.findProductsByNameBrandTypeAndOrderByPriceBetween(byNameBrandType,
-					queryString, minPrice, maxPrice);
+					queryString,type, minPrice, maxPrice);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -163,9 +164,9 @@ public class ProductController {
 	@GetMapping(path = { "/search/sort" }, produces = { "application/json" })
 	public ResponseEntity<?> findProductsSort(
 			@RequestParam String dataName,@RequestParam String queryString,
-			@RequestParam String type,@RequestParam String sort) {
+			@RequestParam String type,@RequestParam String sort,@RequestParam(required = false) String brandType) {
 		if (dataName != null && queryString!=null && type!=null && sort!=null) {
-			List<ProductBean> result = productService.findProductsSort(dataName, queryString, type, sort);
+			List<ProductBean> result = productService.findProductsSort(dataName, queryString, type, sort,brandType);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}

@@ -29,6 +29,12 @@ public class PrivateMessageService {
 		newRecord.setUserTwo(privateMessageBean.getUserTwo());
 		newRecord.setIndex(privateMessageBean.getIndex() + 1);
 		privateMessageBean.setStatus("inactive");
+		List<PrivateMsg> oldMessages = privateMessageBean.getMessages();
+		int size = oldMessages.size();
+		for (int i = size - 1; i >= size - 10; i--) {
+			newRecord.getMessages().add(oldMessages.get(i));
+			oldMessages.remove(i);
+		}
 		privateMessageDAO.update(privateMessageBean);
 		return privateMessageDAO.insert(newRecord);
 	}

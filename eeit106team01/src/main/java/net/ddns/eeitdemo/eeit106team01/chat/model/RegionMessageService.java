@@ -25,6 +25,12 @@ public class RegionMessageService {
 		newRecord.setRegion(regionMessageBean.getRegion());
 		newRecord.setIndex(regionMessageBean.getIndex() + 1);
 		regionMessageBean.setStatus("inactive");
+		List<RegionMsg> oldMessages = regionMessageBean.getMessages();
+		int size = oldMessages.size();
+		for (int i = size - 1; i >= size - 10; i--) {
+			newRecord.getMessages().add(oldMessages.get(i));
+			oldMessages.remove(i);
+		}
 		regionMessageDAO.update(regionMessageBean);
 		return regionMessageDAO.insert(newRecord);
 	}

@@ -32,11 +32,11 @@ h1 {
 #div-draggable-events {
     position: fixed;
     top: 45px;
-    right: 100px;
+    right: 150px;
 }
 
 #draggable-events {
-    width: 180px;
+    width: 200px;
     border: none;
     background: transparent;
 }
@@ -62,4 +62,17 @@ h1 {
 
 .badge p {
     font-size: 15px;
+}
+
+
+/* image mouseover color */
+
+.card-img-top {
+    filter: invert(40%);
+    -webkit-filter: invert(40%);
+}
+
+.mouseover {
+    filter: invert(0%);
+    -webkit-filter: invert(0%);
 }
