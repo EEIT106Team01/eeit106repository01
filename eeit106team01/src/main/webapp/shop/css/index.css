@@ -1,7 +1,7 @@
 /* headerDIV--------------------------------------- */
 #headerDiv{
-    background-color: #797067;
-    height: 300px;
+    background-color: #ecdcd2;
+    height: 200px;
     justify-content:center;
     align-items:center;
     display:-webkit-flex;
@@ -114,4 +114,10 @@
 .li{
     list-style:none;
     color: #666;
+}
+
+
+#adWall img{
+    height: 385px;
+    width: 100%
 }

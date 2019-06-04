@@ -55,12 +55,12 @@
             top: 52px;
             background-color: white;
             padding-top: 20px;
-            padding-bottom: 20px;
+            padding-bottom: 18px;
             border-bottom: 1px solid #ebebeb;
         }
 
         #topicList {
-            margin-top: 52px;
+            margin-top: 56px;
         }
 
         .rightPart {
@@ -80,10 +80,16 @@
         }
 
         .rightTopPart {
-            padding-bottom: 20px;
+            padding-bottom: 18px;
             margin-bottom: 8px;
             border-bottom: 1px solid #ebebeb;
         }
+
+        .myButton {
+			border-radius: 3px;
+			padding: 2px;
+			height: 100%;
+		}
 
         #map_canvas {
             width: 100%;
@@ -94,14 +100,14 @@
 
         #pac-input {
             background-color: #fff;
-            font-family: Roboto;
-            font-size: 15px;
+            /* font-family: Roboto; */
+            font-size: 20px;
             font-weight: 300;
             margin-left: 12px;
             padding: 0 11px 0 13px;
             text-overflow: ellipsis;
             width: 400px;
-            height: 32px;
+            height: 36px;
         }
 
         #pac-input:focus {
@@ -270,13 +276,13 @@
 
             <div class="col-md-7 leftPart">
                 <div class="col-md-12 leftTopPart">
-                    <input type="button" id="taipei" value="台北市">
-                    <input type="button" id="taoyuan" value="桃園市">
-                    <input type="button" id="taichung" value="台中市">
-                    <input type="button" id="tainan" value="台南市">
-                    <input type="button" id="kaohsiung" value="高雄市">
-                    <input type="button" id="yilan" value="宜蘭縣">
-                    <input type="button" id="taitung" value="台東縣">
+                    <input type="button" class="myButton" id="taipei" value="台北市">
+                    <input type="button" class="myButton" id="taoyuan" value="桃園市">
+                    <input type="button" class="myButton" id="taichung" value="台中市">
+                    <input type="button" class="myButton" id="tainan" value="台南市">
+                    <input type="button" class="myButton" id="kaohsiung" value="高雄市">
+                    <input type="button" class="myButton" id="yilan" value="宜蘭縣">
+                    <input type="button" class="myButton" id="taitung" value="台東縣">
                 </div>
                 <div class="col-md-12" id="topicList"></div>
             </div>

@@ -4,8 +4,6 @@ $(document).ready(function () {
     getAllBrand(takeTypeUrlValue());
     userSearch();
 
-    $("#startDay").datepicker();
-    $("#endDay").datepicker();
     $("#searchPriceByBrandBtn").hide();
     $("#searchPriceBytypeBtn").on('click', (function () {
         $("#sortByBrandByMixpriceMaxprice").hide();
@@ -73,6 +71,8 @@ $(document).ready(function () {
         getProductsByUpdateTimeByType(type)
     }))
 
+    $("#startDay").datepicker({ format: 'yyyy-mm-dd' });
+    $("#endDay").datepicker({ format: 'yyyy-mm-dd' });
 })
 
 //搜尋
@@ -3140,6 +3140,7 @@ function getSortDescByPriceBybrand(brand,type) {
 function getProductsByUpdateTimeByType(type){
     var startDay = $("#startDay").val()
     var endDay = $("#endDay").val()
+
     $.ajax({
         url: "http://localhost:8080/search/updatedTime?dataName=type&queryString="+type+"&startDay="+startDay+"&endDay="+endDay,
         method: "GET",
@@ -3241,7 +3242,9 @@ function getProductsByUpdateTimeByType(type){
 //品牌updatetTime查詢
 function getProductsByUpdateTimeByBrand(type,brand){
     var startDay = $("#startDay").val()
-    var endDay = $("#endDay").val()
+    var endDay= $("#endDay").val()
+ 
+    console.log(startDay+endDay)
     $.ajax({
         url: "http://localhost:8080/search/updatedTime?dataName=brand&queryString="+brand+"&startDay="+startDay+"&endDay="+endDay+"&brandType="+type,
         method: "GET",

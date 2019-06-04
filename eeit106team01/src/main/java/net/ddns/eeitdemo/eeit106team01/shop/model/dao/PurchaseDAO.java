@@ -33,6 +33,8 @@ public interface PurchaseDAO {
 	abstract List<PurchaseBean> findPurchaseByMemberId(Long memberId);
 
 	abstract List<PurchaseBean> findAllPurchase();
+	
+	abstract Integer findPurchaseIdCount();
 
 	// Purchase List
 	abstract PurchaseListBean insertPurchaseList(PurchaseListBean purchaseListBean);

@@ -50,7 +50,7 @@ function autocomplete(inp) {
                                         (or any other open lists of autocompleted values:*/
                                         closeAllLists();
                                         $.ajax({
-                                            url: "http://localhost:8080/articleTopics/" + $("#myInput").val(),
+                                            url: "http://localhost:8080/queryarticleTopics/" + $("#myInput").val(),
                                             type: "GET",
                                             success: function (data, textStatus, jqXHR) {
                                                 if (data.length == 1) {

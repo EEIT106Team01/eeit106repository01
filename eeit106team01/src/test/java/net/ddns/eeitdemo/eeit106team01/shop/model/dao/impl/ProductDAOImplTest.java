@@ -5,7 +5,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 
@@ -98,15 +97,15 @@ public class ProductDAOImplTest {
 	}
 
 	public void testFindProductsByTime() throws ParseException {
-		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-		assertNotNull(productDAO.findProductsByUpdatedTimeDayBetween(simpleDateFormat.parse("2019-05-24"),
-				simpleDateFormat.parse("2019-05-25")));
-		assertNull(productDAO.findProductsByUpdatedTimeDayBetween(simpleDateFormat.parse("2019-05-23"),
-				simpleDateFormat.parse("2019-05-24")));
-		assertNull(productDAO.findProductsByUpdatedTimeDayBetween(simpleDateFormat.parse("2019-05-24"),
-				simpleDateFormat.parse("2019-05-23")));
-		assertNull(productDAO.findProductsByUpdatedTimeDayBetween(simpleDateFormat.parse("2019-05-24"),
-				simpleDateFormat.parse("2019-05-24")));
+//		SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+//		assertNotNull(productDAO.findProductsByUpdatedTimeDayBetween(simpleDateFormat.parse("2019-05-24"),
+//				simpleDateFormat.parse("2019-05-25")));
+//		assertNull(productDAO.findProductsByUpdatedTimeDayBetween(simpleDateFormat.parse("2019-05-23"),
+//				simpleDateFormat.parse("2019-05-24")));
+//		assertNull(productDAO.findProductsByUpdatedTimeDayBetween(simpleDateFormat.parse("2019-05-24"),
+//				simpleDateFormat.parse("2019-05-23")));
+//		assertNull(productDAO.findProductsByUpdatedTimeDayBetween(simpleDateFormat.parse("2019-05-24"),
+//				simpleDateFormat.parse("2019-05-24")));
 	}
 
 	public void testInsertProductSerialNumberByProductId() throws Exception {

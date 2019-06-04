@@ -2,6 +2,11 @@ body {
     font-size: 20px;
     /* color: #545454; */
     color: rgba(0,0,0,.85);
+    font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
+}
+
+.main-content {
+    background-color: #dddddd8e !important;
 }
 
 .myNavBarGroup {
@@ -10,6 +15,7 @@ body {
     top: 0;
     width: 100%;
     max-height: 52px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
 }
 
 .page-container {

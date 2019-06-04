@@ -54,18 +54,79 @@
 
 		.myTopicList {
 			/* max-width: 1036px; */
-			width: 58%;
+			width: 886px;
+			padding: 15px;
 			margin: auto;
+			height: 100%;
+			background-color: #ffffff;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
 		}
 
 		.itemBlock {
 			border-bottom: 1px solid #CCCCCC;
-			padding-bottom: 8px;
+			padding-bottom: 18px;
 			margin-bottom: 24px;
 		}
 
-		.buttonRegion.popover {
+		.itemBlockSub {
+			padding-bottom: 8px;
+			margin-bottom: 8px;
+		}
+
+		/* .buttonRegion.popover {
 			width: 800px;
+		} */
+
+		.myHeaderInput {
+			background-color: #eee;
+			border-radius: 3px;
+		}
+
+		.myDivDateTimePicker div input {
+			border: 1px solid #AAAAAA;
+		}
+
+		.myDivDateTimePicker input {
+			font-size: 20px;
+			padding-top: 6px;
+			padding-bottom: 6px;
+			padding-left: 12px;
+			padding-right: 12px;
+			border: 1px solid #AAAAAA;
+			height: 32px;
+		}
+
+		.myDateTimeIcon {
+			font-size: 16px;
+			border: 1px solid #AAAAAA;
+			padding-top: 6px;
+			padding-bottom: 6px;
+			padding-left: 12px;
+			padding-right: 12px;
+		}
+
+		.myInputFile {
+			border: 1px solid #AAAAAA;
+			background-color: #eee;
+			height: 34px;
+			border-radius: 3px;
+		}
+
+		.progress {
+			width: 856px;
+		}
+
+		.myButton {
+			border-radius: 3px;
+			padding: 2px;
+			height: 100%;
+		}
+
+		.mySubmit {
+			font-size: 20px;
+			padding: 5px;
+			height: 100%;
+			margin-bottom: 15px;
 		}
 
 		body>#standalone-container {
@@ -81,8 +142,7 @@
 	<script src="js/uploadVideo.js"></script>
 
 	<script>
-		console.log("init my script")
-		$(window).on('load', initMap);
+		let map;
 		let marker;
 		let accidentLocationLatitude;
 		let accidentLocationLongitude;
@@ -96,13 +156,50 @@
 		memberBean = JSON.parse(Cookies.get("MemberBean"));
 		// console.log(memberBean);
 
+		$(window).on('load', function () {
+			initMap();
+			$("#taipei").on("click", function () {
+				map.setCenter(new google.maps.LatLng(25.044991025205064, 121.53621722216803));
+			});
+			$("#taoyuan").on("click", function () {
+				map.setCenter(new google.maps.LatLng(24.973514234746464, 121.26104139430254));
+			});
+			$("#taichung").on("click", function () {
+				map.setCenter(new google.maps.LatLng(24.1436761923398, 120.64985612179316));
+			});
+			$("#tainan").on("click", function () {
+				map.setCenter(new google.maps.LatLng(23.01296258224154, 120.21863764873228));
+			});
+			$("#kaohsiung").on("click", function () {
+				map.setCenter(new google.maps.LatLng(22.626350313412292, 120.34279125318312));
+			});
+			$("#yilan").on("click", function () {
+				map.setCenter(new google.maps.LatLng(24.71783993530108, 121.7467274256129));
+			});
+			$("#taitung").on("click", function () {
+				map.setCenter(new google.maps.LatLng(22.778863312914602, 121.10624217157897));
+			});
+		});
+
 		$(document).ready(function () {
 			let selectedTopicType = getUrlParameters().t;
 			if (selectedTopicType == "share") {
 				$("#shareTopic").attr("checked", true);
+				$("#submit").val("分享影片資源");
+				$(".myVideoDiv").css("display", "block");
 			} else if (selectedTopicType == "help") {
 				$("#requestTopic").attr("checked", true);
+				$("#submit").val("送出協尋請求");
+				$(".myVideoDiv").css("display", "none");
 			}
+			$("#shareTopic").on("click", function () { 
+				$("#submit").val("分享影片資源"); 
+				$(".myVideoDiv").css("display", "block");
+			});
+			$("#requestTopic").on("click", function () { 
+				$("#submit").val("送出協尋請求"); 
+				$(".myVideoDiv").css("display", "none");
+			});
 		});
 
 		function insertTopic(newTopicBean) {
@@ -136,8 +233,11 @@
 		// *
 		function submit() {
 			$("#submit").attr('disabled', true);
+			$(".itemBlock").attr('disabled', true);
 			quillTopic.enable(false);
-			$(".formField").attr("disabled", true);
+			// $(".formField").attr("disabled", true);
+			$(".myVideoDiv").css("display", "block");
+			$(".myProgressDiv").css("display", "block");
 			let newVideoBean = $("#videoBean").val();
 			if (newVideoBean == "") {
 				newVideoBean = null;
@@ -222,7 +322,7 @@
 		//顯示Google Map
 		function initMap() {
 			// console.log("initMap ok");
-			let map = new google.maps.Map(document.getElementById("map_canvas"), {
+			map = new google.maps.Map(document.getElementById("map_canvas"), {
 				zoom: 12
 				, center: { lat: 25.044991025205064, lng: 121.53621722216803 }
 				, scaleControl: true
@@ -273,32 +373,33 @@
 				<!-- <fieldset class="formField"> -->
 				<div class="col-md-12">
 					<div class="col-md-12 itemBlock">
-						<div class="col-md-3">
-							文章類型:
-						</div>
-						<div class="col-md-9">
+						<div class="col-md-2">
 							<label>
-								<input type="radio" name="topicType" id="shareTopic" value="shareTopic">分享文
+								文章類型：
+							</label>
+						</div>
+						<div class="col-md-10">
+							<label>
+								<input type="radio" name="topicType" id="shareTopic" value="shareTopic">提供影片
 							</label>
 							<label>
-								<input type="radio" name="topicType" id="requestTopic" value="requestTopic">協尋文
+								<input type="radio" name="topicType" id="requestTopic" value="requestTopic">需求影片
 							</label>
 						</div>
 					</div>
 
 					<div class="col-md-12 itemBlock">
-						<div class="col-md-3" for="topicHeader">
+						<div class="col-md-2" for="topicHeader">
 							<label for="topicHeader">標題：</label>
 						</div>
-						<div class="col-md-9">
-							<input type="text" name="topicHeader" id="topicHeader">
-							<div class="col-md-12">標題不得為空</div>
+						<div class="col-md-10">
+							<input type="text" class="myHeaderInput" name="topicHeader" id="topicHeader" autocomplete="off">
 						</div>
 					</div>
 
 					<div class="col-md-12 itemBlock" style="display: none">
 						<div class="col-md-3">
-							地區分類:
+							地區分類：
 						</div>
 						<div class="col-md-9">
 							<select name="topicRegion" id="topicRegion">
@@ -317,17 +418,21 @@
 
 					<div class="col-md-12 itemBlock">
 						<!-- <div class="form-group"> -->
-						<div class="col-md-3">
-							事發時間:
+						<div class="col-md-2">
+							<label>
+								事發時間：
+							</label>
 						</div>
-						<div class="col-md-9 input-group date form_datetime col-md-5" data-link-field="accidentTime">
-							<input class="form-control" size="16" type="text" value="" readonly>
-							<span class="input-group-addon">
-								<span class="glyphicon glyphicon-remove"></span>
-							</span>
-							<span class="input-group-addon">
-								<span class="glyphicon glyphicon-th"></span>
-							</span>
+						<div class="col-md-10 myDivDateTimePicker">
+							<div class="input-group date form_datetime col-md-5" data-link-field="accidentTime">
+								<input class="form-control" size="20" type="text" value="" readonly>
+								<span class="input-group-addon myDateTimeIcon">
+									<span class="glyphicon glyphicon-remove"></span>
+								</span>
+								<span class="input-group-addon myDateTimeIcon">
+									<span class="glyphicon glyphicon-th"></span>
+								</span>
+							</div>
 						</div>
 						<input type="hidden" id="accidentTime" value="" />
 						<!-- </div> -->
@@ -335,130 +440,130 @@
 
 					<div class="col-md-12 itemBlock" style="display: none">
 						<label>
-							事發地點說明:
+							事發地點說明：
 							<input type="text" name="accidentLocation" id="accidentLocation" value="地點預設">
 						</label>
 					</div>
 
 					<div class="col-md-12 itemBlock">
-						<div class="col-md-3">
+						<div class="col-md-2">
 							<label>
-								請點擊事發地點:
+								事發地點：
 							</label>
 						</div>
-						<div class="col-md-9">
+						<div class="col-md-10">
+							<div class="col-md-12 itemBlockSub">
+								<input type="button" class="myButton" id="taipei" value="台北市">
+								<input type="button" class="myButton" id="taoyuan" value="桃園市">
+								<input type="button" class="myButton" id="taichung" value="台中市">
+								<input type="button" class="myButton" id="tainan" value="台南市">
+								<input type="button" class="myButton" id="kaohsiung" value="高雄市">
+								<input type="button" class="myButton" id="yilan" value="宜蘭縣">
+								<input type="button" class="myButton" id="taitung" value="台東縣">
+							</div>
 							<div id="map_canvas" style="width:600px; height:500px;"></div>
 						</div>
 					</div>
 
 					<div class="col-md-12 itemBlock">
-						<label>文章內容: </label>
-
-						<div id="standalone-container">
-							<div id="topic-toolbar-container">
-								<span class="ql-formats">
-									<select class="ql-font"></select>
-									<select class="ql-size"></select>
-								</span>
-								<span class="ql-formats">
-									<button class="ql-bold"></button>
-									<button class="ql-italic"></button>
-									<button class="ql-underline"></button>
-									<button class="ql-strike"></button>
-								</span>
-								<span class="ql-formats">
-									<select class="ql-color"></select>
-									<select class="ql-background"></select>
-								</span>
-								<span class="ql-formats">
-									<button class="ql-script" value="sub"></button>
-									<button class="ql-script" value="super"></button>
-								</span>
-								<span class="ql-formats">
-									<button class="ql-header" value="1"></button>
-									<button class="ql-header" value="2"></button>
-									<button class="ql-blockquote"></button>
-									<button class="ql-code-block"></button>
-								</span>
-								<span class="ql-formats">
-									<button class="ql-list" value="ordered"></button>
-									<button class="ql-list" value="bullet"></button>
-									<button class="ql-indent" value="-1"></button>
-									<button class="ql-indent" value="+1"></button>
-								</span>
-								<span class="ql-formats">
-									<button class="ql-direction" value="rtl"></button>
-									<select class="ql-align"></select>
-								</span>
-								<span class="ql-formats">
-									<button class="ql-link"></button>
-									<button class="ql-image"></button>
-									<button class="ql-video"></button>
-									<button class="ql-formula"></button>
-								</span>
-								<span class="ql-formats">
-									<button class="ql-clean"></button>
-								</span>
+						<div class="col-md-2">
+							<label>文章內容： </label>
+						</div>
+						<div class="col-md-10">
+							<div id="standalone-container">
+								<div id="topic-toolbar-container">
+									<span class="ql-formats">
+										<select class="ql-font"></select>
+										<select class="ql-size"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-bold"></button>
+										<button class="ql-italic"></button>
+										<button class="ql-underline"></button>
+										<button class="ql-strike"></button>
+									</span>
+									<span class="ql-formats">
+										<select class="ql-color"></select>
+										<select class="ql-background"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-script" value="sub"></button>
+										<button class="ql-script" value="super"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-header" value="1"></button>
+										<button class="ql-header" value="2"></button>
+										<button class="ql-blockquote"></button>
+										<button class="ql-code-block"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-list" value="ordered"></button>
+										<button class="ql-list" value="bullet"></button>
+										<button class="ql-indent" value="-1"></button>
+										<button class="ql-indent" value="+1"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-direction" value="rtl"></button>
+										<select class="ql-align"></select>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-link"></button>
+										<button class="ql-image"></button>
+										<button class="ql-video"></button>
+										<button class="ql-formula"></button>
+									</span>
+									<span class="ql-formats">
+										<button class="ql-clean"></button>
+									</span>
+								</div>
+								<div id="topic-editor-container"></div>
 							</div>
-							<div id="topic-editor-container"></div>
 						</div>
 					</div>
 
-				</div>
-				<!-- </fieldset> -->
-				<!-- </form> -->
-				<label>
-					<h4>影片：
-						<span id="videoURI" class="badge badge-light"></span>
-					</h4>
-					<form id="FileuploadForm">
-						<input type="file" class="form-control-file border" id="videoBean" name="videoFile" />
-					</form>
-				</label>
-				<br>
 
-
-				<div style="display: none;" class="container progress-body">
-					<div class="progress">
-						<div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%">
+					<!-- </fieldset> -->
+					<!-- </form> -->
+					<div class="col-md-12 itemBlock myVideoDiv">
+						<div class="col-md-2">
+							<label>影片：</label>
+						</div>
+						<div class="col-md-10">
+							<div class="col-md-12">
+								<span id="videoURI" class="badge badge-light"></span>
+							</div>
+							<div class="col-md-12">
+								<form id="FileuploadForm">
+									<input type="file" class="form-control-file border myInputFile" id="videoBean" name="videoFile" />
+								</form>
+							</div>
 						</div>
 					</div>
-					<div>
-						<span class="percentage">0%</span>
-						<br>
-						<span style="width: 100px; display: inline-block; text-align: right">上傳進度：</span>
-						<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-speed">0 M/S, 0/0M</span>
+
+
+					<div style="display: none" class="col-md-12 itemBlock myProgressDiv" >
+						<div style="display: none;" class="container progress-body">
+							<div class="progress">
+								<div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%">
+								</div>
+							</div>
+							<div>
+								<span class="percentage">0%</span>
+								<br>
+								<span style="width: 100px; display: inline-block; text-align: right">上傳進度：</span>
+								<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-speed">0 M/S, 0/0M</span>
+							</div>
+							<div>
+								<span style="width: 100px; display: inline-block; text-align: right">上傳狀態：</span>
+								<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-info">請選擇檔案並點擊上傳按鈕</span>
+							</div>
+						</div>
 					</div>
-					<div>
-						<span style="width: 100px; display: inline-block; text-align: right">上傳狀態：</span>
-						<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-info">請選擇檔案並點擊上傳按鈕</span>
+
+					<div class="col-md-12">
+						<input type="button" class="form-control btn btn-blue mySubmit" value="" id="submit" />
 					</div>
 				</div>
-				<hr>
-				<form>
-					<fieldset class="formField">
-						<hr>
-						<!-- <label>
-								<h4>狀態(管理員功能)： </h4>
-								<div class="form-check-inline">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="contentStatus" value="normal">Normal
-									</label>
-								</div>
-								<div class="form-check-inline">
-									<label class="form-check-label">
-										<input type="radio" class="form-check-input" name="contentStatus"
-											value="deleted">Deleted
-									</label>
-								</div>
-							</label><br>
-							<label>
-								<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
-							</label><br> -->
-						<hr>
-						<input type="button" class="form-control" value="submit" id="submit" />
-					</fieldset>
-				</form>
 				<!-- </div> -->
 
 

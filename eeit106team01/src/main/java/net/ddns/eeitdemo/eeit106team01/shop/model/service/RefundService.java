@@ -32,13 +32,13 @@ public class RefundService {
 	private PurchaseDAO purchaseDAO;
 
 	// Create Refunds
-	public RefundBean newRefund(ArrayList<PurchaseListBean> purchaseListBeans, RefundBean refund) {
-		if (purchaseListBeans != null && purchaseListBeans.size() > 0 && refund.isNotNull()) {
+	public RefundBean newRefund(List<PurchaseListBean> purchaseListBeans, RefundBean refund) {
+		if (purchaseListBeans != null && !purchaseListBeans.isEmpty() && refund.isNotNull()) {
 			// Create a refund
 			RefundBean newRefund = refundDAO.insertRefund(refund);
 			RefundListBean refundList;
 
-			ArrayList<Integer> productsPrice = new ArrayList<Integer>();
+			ArrayList<Integer> productsPrice = new ArrayList<>();
 			PurchaseBean purchaseBean = purchaseListBeans.get(0).getPurchaseId();
 			// Get PurchaseList want to be refund
 			for (PurchaseListBean purchaseList : purchaseListBeans) {
