@@ -12,32 +12,29 @@ var quillChat;
 
 
 // ----------append quill js&css
-var head = document.getElementsByTagName('head')[0];
-
-var quillJs1 = document.createElement('script');
-quillJs1.src = '/forum/quill/katex.min.js';
-
-var quillJs2 = document.createElement('script');
-quillJs2.src = '/forum/quill/highlight.min.js';
-
-var quillJs3 = document.createElement('script');
-quillJs3.src = '/forum/quill/quill.js';
-
-var quillCss1 = document.createElement('link');
-quillCss1.rel = 'stylesheet';
-quillCss1.type = 'text/css';
-quillCss1.href = '/forum/quill/quill.snow.css';
-
-var quillCss2 = document.createElement('link');
-quillCss2.rel = 'stylesheet';
-quillCss2.type = 'text/css';
-quillCss2.href = '/forum/quill/quill.bubble.css';
-
-head.appendChild(quillJs1);
-head.appendChild(quillJs2);
-head.appendChild(quillJs3);
-head.appendChild(quillCss1);
-head.appendChild(quillCss2);
+if (typeof Quill === 'undefined') {
+    console.log("Quill does not exist, start loading...");
+    var head = document.getElementsByTagName('head')[0];
+    var quillJs1 = document.createElement('script');
+    quillJs1.src = '/forum/quill/katex.min.js';
+    var quillJs2 = document.createElement('script');
+    quillJs2.src = '/forum/quill/highlight.min.js';
+    var quillJs3 = document.createElement('script');
+    quillJs3.src = '/forum/quill/quill.js';
+    var quillCss1 = document.createElement('link');
+    quillCss1.rel = 'stylesheet';
+    quillCss1.type = 'text/css';
+    quillCss1.href = '/forum/quill/quill.snow.css';
+    var quillCss2 = document.createElement('link');
+    quillCss2.rel = 'stylesheet';
+    quillCss2.type = 'text/css';
+    quillCss2.href = '/forum/quill/quill.bubble.css';
+    head.appendChild(quillJs1);
+    head.appendChild(quillJs2);
+    head.appendChild(quillJs3);
+    head.appendChild(quillCss1);
+    head.appendChild(quillCss2);
+}
 // ----------append quill js&css end
 
 
@@ -86,7 +83,9 @@ function onReceivePrivateMessage(id, msgBean) {
         id = msgBean.toUser;
         neonChat.pushMessage(id, msgBean.message, msgBean.fromUser, new Date(msgBean.sendTime), false, false);
     }
-    neonChat.renderMessages(id);
+    if (neonChatNowOpenId && neonChatNowOpenId == id) {
+        neonChat.renderMessages(id);
+    }
 }
 
 function showOldMessage(msgBeans, regionActive) {
@@ -353,7 +352,7 @@ $(document).ready(function () {
 
         + '<div class="chat-textarea">'
         + '<div id="standalone-container">'
-        + '<div id="toolbar-container">'
+        + '<div id="chat-toolbar-container">'
         + '<span class="ql-formats">'
         + '<select class="ql-font"></select>'
         + '<select class="ql-size"></select>'
@@ -398,7 +397,7 @@ $(document).ready(function () {
         + '<button class="ql-clean"></button>'
         + '</span>'
         + '</div>'
-        + '<div id="editor-container" style="height: 80px"></div>'
+        + '<div id="chat-editor-container" style="height: 80px"></div>'
         + '</div>'
 
         + '</div>'
@@ -496,7 +495,7 @@ $(document).ready(function () {
 
 
                 // Texarea
-                $("#editor-container").keydown(function (e) {
+                $("#chat-editor-container").keydown(function (e) {
                     if (e.keyCode == 13 && !e.shiftKey) {
                         e.preventDefault();
                         neonChat.submitMessage();
@@ -559,7 +558,7 @@ $(document).ready(function () {
 
             open: function ($user_link) {
                 this.close();
-                this.refreshUserIds();
+                // this.refreshUserIds();
 
                 if (typeof $user_link == 'string') {
                     $user_link = $($user_link);
@@ -623,6 +622,10 @@ $(document).ready(function () {
                 $conversation_window.hide().css({ top: 0, opacity: 0 });
 
                 $conversation_body.find('li.unread').removeClass('unread');
+
+                // Clear Now Open Chat Room ID
+
+                neonChatNowOpenId = null;
 
                 // Unbind Conversation Body Scroll Event
                 $conversation_body.unbind('scroll');
@@ -734,7 +737,7 @@ $(document).ready(function () {
 
             pushMessage: function (id, msg, from, time, fromOpponent, unread) {
                 if (id && msg) {
-                    this.refreshUserIds();
+                    // this.refreshUserIds();
 
                     var max_chat_history = this.getChatHistoryLength();
 
@@ -761,7 +764,7 @@ $(document).ready(function () {
 
             unshiftMessage: function (id, msg, from, time, fromOpponent, unread) {
                 if (id && msg) {
-                    this.refreshUserIds();
+                    // this.refreshUserIds();
 
                     var max_chat_history = this.getChatHistoryLength();
 
@@ -1053,7 +1056,7 @@ $(document).ready(function () {
             puffUnreadsAll: function () {
                 var total_unreads = this.countUnreadMessages();
                 var $navbarBadge = $("#chatBadge");
-                console.log($navbarBadge);
+                $navbarBadge.css("background", "red");
 
                 $chat_badge.html(total_unreads);
                 $chat_badge[total_unreads > 0 ? 'removeClass' : 'addClass']('is-hidden');
@@ -1128,7 +1131,7 @@ $(document).ready(function () {
                 if ($group && $group.length) {
                     var status = this.statuses[status],
                         $user = $('<a href="#"><span class="user-status ' + status.class + '"></span> <em>' + display_name + '</em></a>');
-                        $user.append('<span class="badge badge-info is-hidden">0</span>');
+                    $user.append('<span class="badge badge-info is-hidden">0</span>');
                     if (user_id) {
                         $user.attr('id', user_id);
                     }
@@ -1387,11 +1390,11 @@ $(document).ready(function () {
     let timeout = 10;
     window.setTimeout(function () {
         if (typeof Quill !== 'undefined') {
-            quillChat = new Quill('#editor-container', {
+            quillChat = new Quill('#chat-editor-container', {
                 modules: {
                     formula: true,
                     syntax: true,
-                    toolbar: '#toolbar-container'
+                    toolbar: '#chat-toolbar-container'
                 },
                 theme: 'snow'
             });
