@@ -175,8 +175,8 @@ public class ShopCrawlerTest {
 		if (fetchProductType == null) {
 			fetchProductType = "";
 			productType = fetchProductName;
-			
-		}else if (fetchProductType.equalsIgnoreCase("3C用品固定架%2F固定座")) {
+
+		} else if (fetchProductType.equalsIgnoreCase("3C用品固定架%2F固定座")) {
 			productType = "3C用品固定架&固定座";
 		} else {
 			productType = fetchProductType;
@@ -250,7 +250,7 @@ public class ShopCrawlerTest {
 		} catch (ParseException e) {
 			e.printStackTrace();
 		}
-		List<ProductBean> productBeans = productService.findProductsByUpdatedTime(startDay, endDay);
+		List<ProductBean> productBeans = productService.findProductsByUpdatedTime(null, null, startDay, endDay, null);
 		Iterator<ProductBean> iterator = productBeans.iterator();
 		while (iterator.hasNext()) {
 			productService.insertProductsSN(iterator.next().getId(), 3);
