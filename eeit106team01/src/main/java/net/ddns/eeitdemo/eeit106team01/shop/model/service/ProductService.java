@@ -80,7 +80,7 @@ public class ProductService {
 	public List<ProductBean> recommendProducts(String name) {
 		List<ProductBean> temp = productDAO.findProductsByName(name);
 		ProductBean thisOne = null;
-		for (int i = 0; i <= temp.size(); i++) { //
+		for (int i = 0; i < temp.size(); i++) { //
 			thisOne = temp.get(i); // 找出相同名字的bean
 			if (thisOne.getName().equalsIgnoreCase(name)) {
 				break;
