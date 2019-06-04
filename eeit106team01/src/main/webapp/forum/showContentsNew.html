@@ -18,8 +18,7 @@
     <!--input data-include property in any tag when window.onload-->
     <script src="/navbar/js/csi.min.js"></script>
 
-    <!-- include navbarCss when window.onload-->
-    <div data-include="/navbar/navbarCssInHeadTag.html"></div>
+    <script src="/navbar/js/navbar-init.js"></script>
 
     <!-- google map -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async
@@ -149,6 +148,7 @@
                     $(".main-content").prepend(topicVideo);
                     createVideoPlayer(topicBean.videoBean, topic.id + "player");
                 }
+                initMap();
             }
             if (contentBeans) {
                 noRepliedContents = [];
@@ -201,8 +201,17 @@
             let quillContainer = document.createElement("div");
             $(container).addClass("standalone-container");
             $(quillContainer).attr("id", "quillTopicContent" + topicBean.id);
+
+            let map = document.createElement("div");
+            $(map).width("100%");
+            $(map).height(300);
+            $(map).attr("id", "map_canvas");
+
             container.appendChild(quillContainer);
+
             content.appendChild(container);
+            content.appendChild(document.createElement("hr"));
+            content.appendChild(map);
 
             $(information).html(
                 "contentUpdateTime: " + new Date(topicBean.topicUpdateTime) +
@@ -487,6 +496,15 @@
         }
 
         var chatSidebarOpen = false;
+        function resizeWhenToggleChatSidebar() {
+            if (neonChat && !chatSidebarOpen) {
+                $(".page-container").width($(window).width() - 279);
+                chatSidebarOpen = true;
+            } else {
+                $(".page-container").width($(window).width());
+                chatSidebarOpen = false;
+            }
+        }
 
         document.addEventListener("DOMContentLoaded", function () {
             let contentContent = document.createElement("div");
@@ -499,22 +517,14 @@
             window.setTimeout(function () {
                 let chatToggleBtn = document.getElementById("toggleChatBtn");
                 if (chatToggleBtn) {
-                    chatToggleBtn.addEventListener("click", function () {
-                        // setTimeout(function () {
-                        if (neonChat && !chatSidebarOpen) {
-                            $(".page-container").width($(window).width() - 279);
-                            chatSidebarOpen = true;
-                        } else {
-                            $(".page-container").width($(window).width());
-                            chatSidebarOpen = false;
-                        }
-                        // }, 100);
-                    });
+                    chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+                    document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
                 } else {
                     window.setTimeout(arguments.callee, timeout);
                 }
             }, timeout);
         });
+
         function resizeWindow() {
             let navbarHeight = $("#bs-example-navbar-collapse-2").height();
             let topicVideoHeight = $(window).height();
@@ -532,44 +542,39 @@
         //-------------------------------------------------------------
         //顯示Google Map
         function initMap() {
-            // console.log("initMap ok");
+            console.log(document.getElementById("map_canvas"));
             let map = new google.maps.Map(document.getElementById("map_canvas"), {
                 zoom: 12
-                , center: { lat: topicBean.accidentLocationLongitude, lng: topicBean.accidentLocationLatitude }
+                , center: { lat: topicBean.accidentLocationLatitude, lng: topicBean.accidentLocationLongitude }
                 , scaleControl: true
                 , mapTypeControlOptions: { mapTypeIds: [] }
                 , gestureHandling: 'greedy'
             });
 
-            google.maps.event.addListener(map, 'click', function (event) {
-                //    console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
-                // $("#accidentLocationLatitude").html(event.latLng.lat());
-                // $("#accidentLocationLongitude").html(event.latLng.lng());
-                accidentLocationLatitude = event.latLng.lat();
-                accidentLocationLongitude = event.latLng.lng();
+            // google.maps.event.addListener(map, 'click', function (event) {
+            //    console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
+            // $("#accidentLocationLatitude").html(event.latLng.lat());
+            // $("#accidentLocationLongitude").html(event.latLng.lng());
 
-                if (marker != undefined) {
-                    marker.setMap(null);
-                }
-                var marker =
-                    new google.maps.Marker({
-                        position: {
-                            lat: topicBean.accidentLocationLongitude,
-                            lng: topicBean.accidentLocationLatitude
-                        }
-                        , map: map
-                        // , label: `${dataTopicList[i].id}`
-                        , animation: google.maps.Animation.BOUNCE    //for marker remove check
-                    });
-            });
+            var marker =
+                new google.maps.Marker({
+                    position: {
+                        lat: topicBean.accidentLocationLatitude,
+                        lng: topicBean.accidentLocationLongitude
+                    }
+                    , map: map
+                    // , label: `${dataTopicList[i].id}`
+                    , animation: google.maps.Animation.BOUNCE    //for marker remove check
+                });
+            // });
         }
-        window.onload = function () {
-            if (topicBean) {
-                console.log(topicBean.accidentLocationLongitude);
-                console.log(topicBean.accidentLocationLatitude);
-                initMap();
-            }
-        };
+        // window.onload = function () {
+        //     if (topicBean) {
+        //         console.log(topicBean.accidentLocationLongitude);
+        //         console.log(topicBean.accidentLocationLatitude);
+        //         initMap();
+        //     }
+        // };
     </script>
 </head>
 
@@ -581,7 +586,7 @@
 
         <!-- your page start -->
         <div class="main-content">
-            <div id="map_canvas" style="width:600px; height:500px;"></div>
+            <!-- <div id="map_canvas" style="width:600px; height:500px;"></div> -->
             <!-- <div id="tryForScrollbar">999</div>
             <script>
                 let str = "";
