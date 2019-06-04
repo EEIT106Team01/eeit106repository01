@@ -508,3 +508,54 @@ function addToCart() {
     //     });
     // }
 };
+
+
+//Review
+//
+$(function () {
+    generateCurrentFilterText();
+    console.log(reviewCount);
+});
+
+
+//TAGS
+let currentFilter = $(`#currentFilter`).text();
+let commentFilterCurrentStatus = $(`.comment-filters a[class='current']`).text();
+let reviewCount = $(`#reviewCount`).text();
+
+//Generate Current Filter Text
+function generateCurrentFilterText() {
+    $(`#currentFilter`).prepend(commentFilterCurrentStatus);
+};
+
+//Generate Reviews
+function generateReviews(productJson, memberJson) {
+    
+};
+// A Review
+/*
+<li>
+    <div class="comment-checkbox">
+		<div class="checkbox checkbox-replace">
+			<input type="checkbox">
+		</div>
+	</div>
+		<div class="comment-details">
+		    <div class="comment-head">
+				<a href="#">Ksenia Sawicka</a> commented on 
+                <a href="#">The Women of the Flames</a>
+			</div>
+				<p class="comment-text">Servants contempt as although addition dashwood is procured. 
+                Interest in yourself an do of numerous feelings cheerful confined.
+				</p>
+			<div class="comment-footer">
+				<div class="comment-time">Today - 21:05</div>
+            <div class="action-links">
+                <a href="#" class="approve"><i class="entypo-check"></i>Approve</a>
+                <a href="#" class="delete"><i class="entypo-cancel"></i>Delete</a>
+                <a href="javascript:;" onclick="jQuery('#modal-edit-comment').modal('show');" class="edit"><i class="entypo-pencil"></i>Edit</a>
+            </div>
+         </div>
+    </div>
+</li>
+*/

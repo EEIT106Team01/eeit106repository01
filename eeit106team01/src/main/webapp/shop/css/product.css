@@ -3,3 +3,17 @@
 .carousel-control.left {left:-25px;}
 
 .carousel-control.right {right:-25px;}
+
+.recIMG{
+    width: 100%;
+}
+.leftbtn{
+    /* position:absolute; */
+    /* left: -50% !important; */
+    /* top:-100% !important; */
+}
+.rightbtn{
+    /* position:absolute; */
+    /* left: 50% !important; */
+    /* top:100% !important; */
+}
