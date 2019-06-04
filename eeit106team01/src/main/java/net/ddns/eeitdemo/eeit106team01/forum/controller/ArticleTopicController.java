@@ -93,18 +93,18 @@ public class ArticleTopicController {
 		}
 	}
 
-//	@GetMapping(path = { "/articleTopics/{id}" }, produces = { "application/json" })
-//	public ResponseEntity<?> getTopic(@PathVariable(name = "id") int id) {
-//		System.out.println("getTopic method running");
-//		ArticleTopicCurrentBean findOne = articleTopicCurrentService.findByPrimaryKey(id);
-//		if (findOne != null) {
-//			return ResponseEntity.ok(findOne);
-//		} else {
-//			return ResponseEntity.notFound().build();
-//		}
-//	}
+	@GetMapping(path = { "/articleTopics/{id}" }, produces = { "application/json" })
+	public ResponseEntity<?> getTopic(@PathVariable(name = "id") int id) {
+		System.out.println("getTopic method running");
+		ArticleTopicCurrentBean findOne = articleTopicCurrentService.findByPrimaryKey(id);
+		if (findOne != null) {
+			return ResponseEntity.ok(findOne);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 	
-	@GetMapping(path = { "/articleTopics/{likeTopicHeader}" }, produces = { "application/json" })
+	@GetMapping(path = { "/queryarticleTopics/{likeTopicHeader}" }, produces = { "application/json" })
 	public ResponseEntity<?> getTopicByTopicHeader(@PathVariable String likeTopicHeader) {
 		System.out.println("getTopicByTopicHeader method running");
 		List<ArticleTopicCurrentBean> findResult = articleTopicCurrentService.findLikeTopicHeader(likeTopicHeader);
