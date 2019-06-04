@@ -98,8 +98,8 @@ public class ProductService {
 				maxPrice);
 	}
 
-	public List<ProductBean> findProductsByUpdatedTime(Date startDay, Date endDay) {
-		return productDAO.findProductsByUpdatedTimeDayBetween(startDay, endDay);
+	public List<ProductBean> findProductsByUpdatedTime(String dataName,String queryString,Date startDay, Date endDay,String brandType) {
+		return productDAO.findProductsByUpdatedTimeDayBetween(dataName,queryString,startDay, endDay,brandType);
 	}
 
 	public List<ProductBean> findProductsByName(String name) {

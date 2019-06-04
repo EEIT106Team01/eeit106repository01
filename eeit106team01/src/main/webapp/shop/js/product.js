@@ -224,11 +224,6 @@ function recommendTop(recommendData) {
         $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
         $("#item2").append("<div class='col-md-1'></div>" + recommendC2.join("") + "<div class='col-md-1'></div>")
     }
-   
-    //推薦商品輪播
-    $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
-    $("#item2").append("<div class='col-md-1'></div>" + recommendC2.join("") + "<div class='col-md-1'></div>")
-    console.log("recommendTop end")
 }
 
 function getAllType() {

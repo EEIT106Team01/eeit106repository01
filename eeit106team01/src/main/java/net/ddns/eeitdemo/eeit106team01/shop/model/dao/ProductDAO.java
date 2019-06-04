@@ -30,7 +30,7 @@ public interface ProductDAO {
 	abstract List<ProductBean> findProductsByNameBrandTypeAndOrderByPriceBetween(String byNameBrandType,
 			String queryString,String type, Integer minPrice, Integer maxPrice);
 
-	abstract List<ProductBean> findProductsByUpdatedTimeDayBetween(Date startDay, Date endDay);
+	abstract List<ProductBean> findProductsByUpdatedTimeDayBetween(String dataName,String queryString,Date startDay, Date endDay,String brandType);
 	
 	abstract List<ProductBean> findProductsByTypeName(String type,String name);
 
