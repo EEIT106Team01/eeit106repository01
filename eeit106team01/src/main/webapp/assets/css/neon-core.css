@@ -9658,7 +9658,7 @@ table {
 #chat .chat-conversation .conversation-body > li{
   /* margin: 10px; */
   /* padding: 0; */
-  border: 1px groove #343a45;
+  border: 2px groove #555f72;
   border-radius: 5px;
 }
 /* #chat .chat-conversation .conversation-body > li.odd > .time{
@@ -9698,7 +9698,7 @@ table {
 }
 #chat .chat-conversation .chat-textarea textarea {
   /* background: #343a45; */
-  border: 1px solid #343a45;
+  /* border: 15px solid #343a45; */
   color: #fff;
   max-height: 100px !important;
   padding-right: 35px;
@@ -9706,7 +9706,7 @@ table {
 }
 #chat .chat-conversation .chat-textarea #standalone-container {
   background: rgba(240, 240, 240);
-  border: 1px solid #343a45;
+  /* border: 10px solid #343a45; */
   color: rgba(0, 0, 0, 0.85);
   /* max-height: 100px !important;
   padding-right: 35px;
