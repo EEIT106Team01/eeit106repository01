@@ -38,26 +38,13 @@ function getProduct(id) {
             });
 
 
-            var name = productData.name;
-            function getRecommendProducts() {
-                $("#recommendTitle").text("你可能會喜歡")
-                $.ajax({
-                    url: "http://localhost:8080/products/recommend?name=" + name,
-                    method: "GET",
-                    dataType: "json",
-                    success: function (recommendData) {
-                        recommendTop(recommendData);
-                    }, error: function (jqXHR, textStatus, errorThrown) {
-                        console.log(textStatus)
-                    }
-                })
-            }
-            getRecommendProducts();
+            var type = productData.type;
+            console.log(type)
+            getRecommendProducts(type);
 
             function review() {
                 $("#reviewTitle").text("商品評價")
             }
-
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
@@ -65,6 +52,22 @@ function getProduct(id) {
     })
 }
 
+//推薦商品
+function getRecommendProducts(type) {
+    console.log("getRecommendProducts start")
+    $("#recommendTitle").text("你可能會喜歡")
+    $.ajax({
+        url: "http://localhost:8080/products/recommend?type=" + type,
+        method: "GET",
+        dataType: "json",
+        success: function (recommendData) {
+            recommendTop(recommendData);
+        }, error: function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
+    console.log("getRecommendProducts end")
+}
 
 function searchResult(productData) {
     var productImgArray = [];
@@ -144,6 +147,7 @@ function buy(productData) {
 }
 
 function recommendTop(recommendData) {
+    console.log("recommendTop start")
     var i = 0;
     var recommendName = [];
     var recommendPrice = [];
@@ -158,28 +162,73 @@ function recommendTop(recommendData) {
         i++;
     })
 
-    for (let k = 0; k < 5; k++) {
-        recommendC1.push(
-            '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
-            '<figure><img alt="" src=' + recommendImg[k] + '></figure>' +
-            '</div><div class="item-box-blog-body">' +
-            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 10) + "..." + '</h5></a></div>' +
-            '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
-            '</div></div></div>'
-        )
+    if(recommendData.length>=10){
+        for (let k = 0; k < 5; k++) {
+            recommendC1.push(
+                '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
+                '<figure><img alt="" src=' + recommendImg[k] + '></figure>' +
+                '</div><div class="item-box-blog-body">' +
+                '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 10) + "..." + '</h5></a></div>' +
+                '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
+                '</div></div></div>'
+            )
+        }
+        for (let q = 5; q < 10; q++) {
+            recommendC2.push('<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
+                '<figure><img alt="" src=' + recommendImg[q] + '></figure>' +
+                '</div><div class="item-box-blog-body">' +
+                '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[q].substr(0, 10) + "..." + '</h5></a></div>' +
+                '<div class="item-box-blog-text"><p>$' + recommendPrice[q] + '</p></div>' +
+                '</div></div></div>'
+            )
+        }
+
+        $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
+        $("#item2").append("<div class='col-md-1'></div>" + recommendC2.join("") + "<div class='col-md-1'></div>")
+
+    }else if(recommendData.length<=5){
+        for (let k = 0; k < recommendData.length; k++) {
+            recommendC1.push(
+                '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
+                '<figure><img alt="" src=' + recommendImg[k] + '></figure>' +
+                '</div><div class="item-box-blog-body">' +
+                '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 10) + "..." + '</h5></a></div>' +
+                '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
+                '</div></div></div>'
+            )
+        }
+
+        $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
+
+    }else if(5<recommendData.length<10){
+        for (let k = 0; k < 5; k++) {
+            recommendC1.push(
+                '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
+                '<figure><img alt="" src=' + recommendImg[k] + '></figure>' +
+                '</div><div class="item-box-blog-body">' +
+                '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 10) + "..." + '</h5></a></div>' +
+                '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
+                '</div></div></div>'
+            )
+        }
+        for (let q = 5; q < recommendData.length; q++) {
+            recommendC2.push('<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
+                '<figure><img alt="" src=' + recommendImg[q] + '></figure>' +
+                '</div><div class="item-box-blog-body">' +
+                '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[q].substr(0, 10) + "..." + '</h5></a></div>' +
+                '<div class="item-box-blog-text"><p>$' + recommendPrice[q] + '</p></div>' +
+                '</div></div></div>'
+            )
+        }
+        
+        $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
+        $("#item2").append("<div class='col-md-1'></div>" + recommendC2.join("") + "<div class='col-md-1'></div>")
     }
-    for (let q = 5; q < 10; q++) {
-        recommendC2.push('<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
-            '<figure><img alt="" src=' + recommendImg[q] + '></figure>' +
-            '</div><div class="item-box-blog-body">' +
-            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[q].substr(0, 10) + "..." + '</h5></a></div>' +
-            '<div class="item-box-blog-text"><p>$' + recommendPrice[q] + '</p></div>' +
-            '</div></div></div>'
-        )
-    }
+   
     //推薦商品輪播
     $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
     $("#item2").append("<div class='col-md-1'></div>" + recommendC2.join("") + "<div class='col-md-1'></div>")
+    console.log("recommendTop end")
 }
 
 function getAllType() {
