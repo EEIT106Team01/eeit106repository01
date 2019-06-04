@@ -35,6 +35,7 @@
     <script src="/forum/js/topic/yyyymmddhhiiDate.js"></script>
     <script src="/forum/js/topic/createTopicView.js"></script>
     <script src="/forum/js/topic/searchTopicAutocomplete.js"></script>
+    <script src="forum/js/topic/getUrlParameters.js"></script>
     <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.min.css">
 
     <style>
@@ -172,18 +173,6 @@
             }
         })
 
-        function getUrlParameters() {
-            let parameters = [];
-            let hash;
-            let hashes = window.location.href.slice(window.location.href.indexOf('?') + 1).split('&');
-            for (let i = 0; i < hashes.length; i++) {
-                hash = hashes[i].split('=');
-                parameters.push(hash[0]);
-                parameters[hash[0]] = hash[1];
-            }
-            return parameters;
-        }
-
         function getTopicList(begin, end, topicType, orderType, likeTopicHeader) {
             $.ajax({
                 url: `http://localhost:8080/articleTopics?begin=${begin}&end=${end}&topicType=${topicType}&orderType=${orderType}&likeTopicHeader=${likeTopicHeader}`,
@@ -298,7 +287,7 @@
             let currentSearchInput;
             let topicTypeAndSearchString = $(this).attr("class").substr(1);
             // console.log(topicTypeAndSearchString);
-            
+
             if (topicTypeAndSearchString.substr(topicTypeAndSearchString.indexOf('S')) == 'Search') {
                 // console.log("i am search");
                 currentTopicType = topicTypeAndSearchString.substr(0, topicTypeAndSearchString.indexOf('S'));
@@ -343,8 +332,10 @@
                 <div class="col-md-12 mySubTopicBlock">
                     <form>
                         排序依據：
-                        <label><input type="radio" name="orderTypeName" id="orderByTime" value="orderByTime" checked>更新時間</label>
-                        <label><input type="radio" name="orderTypeName" id="orderByLike" value="orderByLike">主題熱度</label>
+                        <label>
+                            <input type="radio" name="orderTypeName" id="orderByTime" value="orderByTime" checked>更新時間</label>
+                        <label>
+                            <input type="radio" name="orderTypeName" id="orderByLike" value="orderByLike">主題熱度</label>
                     </form>
                 </div>
                 <div class="col-md-12 mySubTopicBlock" id="requestTopicBlock">
