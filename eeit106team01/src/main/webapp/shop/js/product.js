@@ -1,5 +1,22 @@
-$(document).ready(function () {
+$(document).ready(function() {
     getProduct(takeUrlValue())
+    getAllType()
+        //cloudZoom
+    CloudZoom.quickStart();
+    // Initialize the slider.
+    $(function() {
+        $('#slider1').Thumbelina({
+            $bwdBut: $('#slider1 .left'),
+            $fwdBut: $('#slider1 .right')
+        });
+    });
+    //搜尋
+    $("#search").on("click", (function() {
+        insertKeyWord();
+        var productType = $("#searchType").val();
+        var productName = $("#searchName").val();
+        window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+    }))
 });
 
 function takeUrlValue() {
@@ -8,28 +25,69 @@ function takeUrlValue() {
     return temp[1]
 }
 
+//關鍵字新增
+function insertKeyWord() {
+    var KW = $("#searchName").val();
+    var keyWordInput = { keyword: KW }
+    $.ajax({
+        url: "http://localhost:8080/keyWord/insert",
+        method: "POST",
+        dataType: "json",
+        contentType: "application/json;charset=UTF-8",
+        data: JSON.stringify(keyWordInput),
+        success: function() {
+            console.log("keyWord input success")
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus)
+        }
+    })
+}
+
+//搜尋種類列表
+function getAllType() {
+    $.ajax({
+        url: "http://localhost:8080/search/data?dataName=type",
+        method: "GET",
+        dataType: "json",
+        cache: false,
+        success: function(typesData) {
+            var y = 0;
+            productTypeArray2 = [];
+            $.each(typesData, function() {
+                productTypeArray2.push("<option>" + typesData[y].data + "</option>")
+                y++
+            })
+            $("#searchType").empty().append("<option>All</option>" + productTypeArray2.join(""))
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+        }
+    })
+}
+
 //搜單件商品
 function getProduct(id) {
     $.ajax({
         url: "http://localhost:8080/product/" + id,
         method: "GET",
         dataType: "json",
-        success: function (productData) {
+        success: function(productData) {
 
             //產品圖片
-            $("#productImgDivButton").click(function () {
+            $("#productImgDivButton").click(function() {
                 productImgDiv(productData);
             });
             //產品資訊
             searchResult(productData)
-            //詳細規格
-            $("#productInformationButton").click(function () {
+                //詳細規格
+            $("#productInformationButton").click(function() {
                 productInformation(productData)
             });
             //庫存數量.購買/購物車按鈕    
             buy(productData);
 
-            $("#reviewResultButton").click(function () {
+            $("#reviewResultButton").click(function() {
                 review();
             });
 
@@ -40,7 +98,7 @@ function getProduct(id) {
                 $("#reviewTitle").text("商品評價")
             }
         },
-        error: function (jqXHR, textStatus, errorThrown) {
+        error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
         }
     })
@@ -77,7 +135,7 @@ function searchResult(productData) {
 //詳細規格
 function productInformation(productData) {
     var informationArray = [];
-    $.each(productData.information, function (key, val) {
+    $.each(productData.information, function(key, val) {
         informationArray.push("<tr><td>" + key + "</td><td>" + val + "</td></tr>");
     })
     $("#productInformation").html("");
@@ -95,9 +153,12 @@ function productInformation(productData) {
 //產品圖片
 function productImgDiv(productData) {
     var imgArray = [];
-    $.each(productData.informationImageLink, function (key, val) {
+    $.each(productData.informationImageLink, function(key, val) {
         imgArray.push(
-            '<img src=' + val + ' width="600" />'
+            '<div id="surround">' +
+            '<img src=' + val + ' width="600" class="cloudzoom"' +
+            'data-cloudzoom="zoomSizeMode:"image",autoInside: 550"/>' +
+            '</div>'
         )
     })
     $("#productImgDiv").html("");
@@ -133,14 +194,14 @@ function recommendTop(recommendData) {
     var recommendAll = [];
     var recommendC1 = [];
     var recommendC2 = [];
-    $.each(recommendData, function () {
+    $.each(recommendData, function() {
         recommendName.push(recommendData[i].name)
         recommendPrice.push(recommendData[i].price)
         recommendImg.push(recommendData[i].imageLink[0])
         i++;
     })
 
-    if(recommendData.length>=10){
+    if (recommendData.length >= 10) {
         for (let k = 0; k < 5; k++) {
             recommendC1.push(
                 // '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
@@ -150,49 +211,49 @@ function recommendTop(recommendData) {
                 // '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
                 // '</div></div></div>'
 
-                '<div class="col-md-2">'+
-                    '<div>'+
-                        '<div>'+
-                            '<div>'+
-                                '<span class="rec">推薦商品</span>'+
-                            '</div>' +
-                        '<img class="recIMG" src=' + recommendImg[k] + '/>' +
-                        '</div>'+
-                        '<div>' +
-                            '<div>'+
-                                '<a href="#" tabindex="0">'+
-                                    '<h5>' + recommendName[k].substr(0, 10) + "..." + '</h5>'+
-                                '</a>'+
-                            '</div>' +
-                            '<div>'+
-                                '<p>$' + recommendPrice[k] + '</p>'+
-                            '</div>' +
-                        '</div>'+
-                    '</div>'+
+                '<div class="col-md-2">' +
+                '<div>' +
+                '<div>' +
+                '<div>' +
+                '<span class="rec">推薦商品</span>' +
+                '</div>' +
+                '<img class="recIMG" src=' + recommendImg[k] + '/>' +
+                '</div>' +
+                '<div>' +
+                '<div>' +
+                '<a href="#" tabindex="0">' +
+                '<h5>' + recommendName[k].substr(0, 10) + "..." + '</h5>' +
+                '</a>' +
+                '</div>' +
+                '<div>' +
+                '<p>$' + recommendPrice[k] + '</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '</div>'
             )
         }
         for (let q = 5; q < 10; q++) {
             recommendC2.push(
-                '<div class="col-md-2">'+
-                    '<div>'+
-                        '<div>'+
-                            '<div>'+
-                                '<span class="rec">推薦商品</span>'+
-                            '</div>' +
-                        '<img class="recIMG" src=' + recommendImg[q] + '/>' +
-                        '</div>'+
-                        '<div>' +
-                            '<div>'+
-                                '<a href="#" tabindex="0">'+
-                                    '<h5>' + recommendName[q].substr(0, 10) + "..." + '</h5>'+
-                                '</a>'+
-                            '</div>' +
-                            '<div>'+
-                                '<p>$' + recommendPrice[q] + '</p>'+
-                            '</div>' +
-                        '</div>'+
-                    '</div>'+
+                '<div class="col-md-2">' +
+                '<div>' +
+                '<div>' +
+                '<div>' +
+                '<span class="rec">推薦商品</span>' +
+                '</div>' +
+                '<img class="recIMG" src=' + recommendImg[q] + '/>' +
+                '</div>' +
+                '<div>' +
+                '<div>' +
+                '<a href="#" tabindex="0">' +
+                '<h5>' + recommendName[q].substr(0, 10) + "..." + '</h5>' +
+                '</a>' +
+                '</div>' +
+                '<div>' +
+                '<p>$' + recommendPrice[q] + '</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '</div>'
             )
         }
@@ -200,84 +261,84 @@ function recommendTop(recommendData) {
         $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
         $("#item2").append("<div class='col-md-1'></div>" + recommendC2.join("") + "<div class='col-md-1'></div>")
 
-    }else if(recommendData.length<=5){
+    } else if (recommendData.length <= 5) {
         for (let k = 0; k < recommendData.length; k++) {
             recommendC1.push(
-                '<div class="col-md-2">'+
-                    '<div>'+
-                        '<div>'+
-                            '<div>'+
-                                '<span class="rec">推薦商品</span>'+
-                            '</div>' +
-                        '<img class="recIMG" src=' + recommendImg[k] + '/>' +
-                        '</div>'+
-                        '<div>' +
-                            '<div>'+
-                                '<a href="#" tabindex="0">'+
-                                    '<h5>' + recommendName[k].substr(0, 10) + "..." + '</h5>'+
-                                '</a>'+
-                            '</div>' +
-                            '<div>'+
-                                '<p>$' + recommendPrice[k] + '</p>'+
-                            '</div>' +
-                        '</div>'+
-                    '</div>'+
+                '<div class="col-md-2">' +
+                '<div>' +
+                '<div>' +
+                '<div>' +
+                '<span class="rec">推薦商品</span>' +
+                '</div>' +
+                '<img class="recIMG" src=' + recommendImg[k] + '/>' +
+                '</div>' +
+                '<div>' +
+                '<div>' +
+                '<a href="#" tabindex="0">' +
+                '<h5>' + recommendName[k].substr(0, 10) + "..." + '</h5>' +
+                '</a>' +
+                '</div>' +
+                '<div>' +
+                '<p>$' + recommendPrice[k] + '</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '</div>'
             )
         }
 
         $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
 
-    }else if(5<recommendData.length<10){
+    } else if (5 < recommendData.length < 10) {
         for (let k = 0; k < 5; k++) {
             recommendC1.push(
-                '<div class="col-md-2">'+
-                    '<div>'+
-                        '<div>'+
-                            '<div>'+
-                                '<span class="rec">推薦商品</span>'+
-                            '</div>' +
-                        '<img class="recIMG" src=' + recommendImg[k] + '/>' +
-                        '</div>'+
-                        '<div>' +
-                            '<div>'+
-                                '<a href="#" tabindex="0">'+
-                                    '<h5>' + recommendName[k].substr(0, 10) + "..." + '</h5>'+
-                                '</a>'+
-                            '</div>' +
-                            '<div>'+
-                                '<p>$' + recommendPrice[k] + '</p>'+
-                            '</div>' +
-                        '</div>'+
-                    '</div>'+
+                '<div class="col-md-2">' +
+                '<div>' +
+                '<div>' +
+                '<div>' +
+                '<span class="rec">推薦商品</span>' +
+                '</div>' +
+                '<img class="recIMG" src=' + recommendImg[k] + '/>' +
+                '</div>' +
+                '<div>' +
+                '<div>' +
+                '<a href="#" tabindex="0">' +
+                '<h5>' + recommendName[k].substr(0, 10) + "..." + '</h5>' +
+                '</a>' +
+                '</div>' +
+                '<div>' +
+                '<p>$' + recommendPrice[k] + '</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '</div>'
             )
         }
         for (let q = 5; q < recommendData.length; q++) {
-            recommendC2.push( 
-                '<div class="col-md-2">'+
-                    '<div>'+
-                        '<div>'+
-                            '<div>'+
-                                '<span class="rec">推薦商品</span>'+
-                            '</div>' +
-                        '<img class="recIMG" src=' + recommendImg[q] + '/>' +
-                        '</div>'+
-                        '<div>' +
-                            '<div>'+
-                                '<a href="#" tabindex="0">'+
-                                    '<h5>' + recommendName[q].substr(0, 10) + "..." + '</h5>'+
-                                '</a>'+
-                            '</div>' +
-                            '<div>'+
-                                '<p>$' + recommendPrice[q] + '</p>'+
-                            '</div>' +
-                        '</div>'+
-                    '</div>'+
+            recommendC2.push(
+                '<div class="col-md-2">' +
+                '<div>' +
+                '<div>' +
+                '<div>' +
+                '<span class="rec">推薦商品</span>' +
+                '</div>' +
+                '<img class="recIMG" src=' + recommendImg[q] + '/>' +
+                '</div>' +
+                '<div>' +
+                '<div>' +
+                '<a href="#" tabindex="0">' +
+                '<h5>' + recommendName[q].substr(0, 10) + "..." + '</h5>' +
+                '</a>' +
+                '</div>' +
+                '<div>' +
+                '<p>$' + recommendPrice[q] + '</p>' +
+                '</div>' +
+                '</div>' +
+                '</div>' +
                 '</div>'
             )
         }
-        
+
         $("#item1").append("<div class='col-md-1'></div>" + recommendC1.join("") + "<div class='col-md-1'></div>")
         $("#item2").append("<div class='col-md-1'></div>" + recommendC2.join("") + "<div class='col-md-1'></div>")
     }
@@ -290,9 +351,10 @@ function getRecommendProducts(type) {
         url: "http://localhost:8080/products/recommend?type=" + type,
         method: "GET",
         dataType: "json",
-        success: function (recommendData) {
+        success: function(recommendData) {
             recommendTop(recommendData);
-        }, error: function (jqXHR, textStatus, errorThrown) {
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
         }
     })

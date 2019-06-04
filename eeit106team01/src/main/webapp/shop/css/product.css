@@ -1,19 +1,76 @@
-.carousel-control.left,.carousel-control.right  {background:none;width:25px;}
+.carousel-control.left,
+.carousel-control.right {
+    background: none;
+    width: 25px;
+}
 
-.carousel-control.left {left:-25px;}
+.carousel-control.left {
+    left: -25px;
+}
 
-.carousel-control.right {right:-25px;}
+.carousel-control.right {
+    right: -25px;
+}
 
-.recIMG{
+.recIMG {
     width: 100%;
 }
-.leftbtn{
-    /* position:absolute; */
-    /* left: -50% !important; */
-    /* top:-100% !important; */
+
+.carousel-control.right {
+    left: 92% !important;
 }
-.rightbtn{
-    /* position:absolute; */
-    /* left: 50% !important; */
-    /* top:100% !important; */
+
+.carousel-control.left {
+    left: 8% !important;
+}
+
+.rec {
+    position: absolute;
+    left: 71%;
+    background-color: rgb(255, 0, 0);
+    color: aliceblue;
+    padding: 1px 5px;
+    font-size: 130%;
+}
+
+.search-bar {
+    margin: 10px;
+}
+
+
+/* couldZoom */
+
+
+/* div that surrounds Cloud Zoom image and content slider. */
+
+#surround {
+    width: 50%;
+    min-width: 256px;
+    max-width: 480px;
+}
+
+
+/* Image expands to width of surround */
+
+img.cloudzoom {
+    width: 100%;
+}
+
+
+/* CSS for slider - will expand to width of surround */
+
+#slider1 {
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 119px;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
+    position: relative;
+}
+
+
+/* 蓋掉版權 */
+
+.cloudzoom-blank div {
+    visibility: hidden !important;
 }
