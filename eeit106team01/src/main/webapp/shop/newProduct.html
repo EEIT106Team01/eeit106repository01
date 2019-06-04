@@ -9,92 +9,49 @@
     <meta name="description" content="Neon Admin Panel" />
     <meta name="author" content="" />
 
-
-    <link rel="icon" href="/assets/images/favicon.ico">
-
-    <!--input data-include property in any tag when window.onload-->
-    <script src="/navbar/js/csi.min.js"></script>
-
-    <script src="/navbar/js/navbar-init.js"></script>
-    <!-- chatroom -->
-    <script src="/chat/js/sockjs.min.js"></script>
-    <script src="/chat/js/stomp.min.js"></script>
-    <script src="/chat/js/chatroom-init.js"></script>
-
+    <link rel="icon" href="../assets/images/favicon.ico">
+    <link rel="stylesheet" href="../assets/css/bootstrap.css" />
     <link rel="stylesheet" href="css/newProduct.css" />
     <link rel="stylesheet" href="css/review.css" />
+
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
+
 </head>
 
 <body class="page-body">
+    <!-- drag and drop start  -->
+    <div class="row" id="div-draggable-events">
+        <div>
+            <!-- Card -->
+            <div id="draggable-events" class="card">
+
+                <!-- Card image -->
+                <div class="card-header p-2" id="card-shopping-cart">
+                    <span>
+                        <img class="card-img-top mr-1" src="img/cart.png" alt="Shopping Cart" />
+                        <span class="badge badge-warning align-middle pt-1">
+                            <p class="text-dark" id="card-shopping-cart-count">0</p>
+                        </span>
+                    </span>
+                </div>
+
+                <!--Accordion wrapper 1-->
+                <div class="accordion md-accordion text-center p-1" style="display: none" id="accordion-shopping-cart"
+                    role="tablist" aria-multiselectable="true">
+                </div>
+
+            </div>
+            <!-- Card -->
+        </div>
+    </div>
+    <!-- drag and drop end -->
+    
     <!-- include navbar when window.onload-->
     <div data-include="/navbar/navbarWhite.html"></div>
 
     <div class="page-container">
         <div class="main-content">
 
-            <!-- drag and drop start  -->
-            <div class="row" id="div-draggable-events">
-                <div>
-                    <!-- <div class="col-md-4"> -->
-                    <!-- Card -->
-                    <div id="draggable-events" class="card">
-                        <!-- Card image -->
-                        <div class="card-header p-2" id="card-shopping-cart">
-                            <span>
-                                <img class="card-img-top mr-1" src="img/cart.png" alt="Shopping Cart" />
-                                <span class="badge badge-warning align-middle pt-1">
-                                    <p class="text-dark" id="card-shopping-cart-count">0</p>
-                                </span>
-                            </span>
-                        </div>
-                        <!--Accordion wrapper 1-->
-                        <div class="accordion md-accordion text-center p-1" style="display: none" id="accordion-shopping-cart" role="tablist" aria-multiselectable="true">
-                        </div>
-
-                        <!-- Card image -->
-                        <!-- <div class="card-header p-2" id="card-discount">
-                        <span>
-                <img class="card-img-top mr-1" src="img/discount.png" alt="Discount" />
-                <span class="badge badge-secondary align-middle pt-1">
-                  <p class="text-light">0</p>
-                </span>
-                        </span>
-                    </div> -->
-
-                        <!--Accordion wrapper 2-->
-                        <!-- <div class="accordion md-accordion" style="display: none" id="accordion-discount" role="tablist" aria-multiselectable="true"></div> -->
-
-                        <!-- Card image -->
-                        <!-- <div class="card-header p-2" id="card-recommended">
-                        <span>
-                <img class="card-img-top mr-1" src="img/recommended.png" alt="Recommend" />
-                <span class="badge badge-secondary align-middle pt-1">
-                  <p class="text-light">0</p>
-                </span>
-                        </span>
-                    </div> -->
-
-                        <!--Accordion wrapper 3-->
-                        <!-- <div class="accordion md-accordion" style="display: none" id="accordion-recommended" role="tablist" aria-multiselectable="true"></div> -->
-
-                        <!-- Card image -->
-                        <!-- <div class="card-header p-2" id="card-customer-service">
-                        <span>
-                <img class="card-img-top mr-1" src="img/customer-service.png" alt="Customer Service" />
-                <span class="badge badge-danger align-middle pt-1">
-                  <p class="text-light">0</p>
-                </span>
-                        </span>
-                    </div> -->
-                        <!--Accordion wrapper 4-->
-                        <!-- <div class="accordion md-accordion" style="display: none" id="accordion-customer-service" role="tablist" aria-multiselectable="true"></div> -->
-
-                        <!-- Card content -->
-                    </div>
-                    <!-- Card -->
-                </div>
-            </div>
-            <!-- drag and drop end -->
 
             <div id="productItemPage" class="col-md-12">
                 <div id="productLeftInfo" class="col-md-6"></div>
@@ -105,20 +62,23 @@
 
             <div class="btn-group btn-group-justified" role="group" aria-label="Basic example">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#productInformation" aria-expanded="false"
-                        aria-controls="productInformation" id="productInformationButton">
+                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse"
+                        data-target="#productInformation" aria-expanded="false" aria-controls="productInformation"
+                        id="productInformationButton">
                         詳細資訊
                     </button>
                 </div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#productImgDiv" aria-expanded="false"
-                        aria-controls="productImgDiv" id="productImgDivButton">
+                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse"
+                        data-target="#productImgDiv" aria-expanded="false" aria-controls="productImgDiv"
+                        id="productImgDivButton">
                         產品圖片
                     </button>
                 </div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#reviewResult" aria-expanded="false"
-                        aria-controls="reviewResult" id="reviewResultButton">
+                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse"
+                        data-target="#reviewResult" aria-expanded="false" aria-controls="reviewResult"
+                        id="reviewResultButton">
                         商品評價
                     </button>
                 </div>
@@ -130,7 +90,7 @@
                 <!-- <p class=" text-dark" id="reviewTitle"></p> -->
             </div>
 
-            <!-- recomended -->
+            <!-- recommended -->
             <div id="recommendDiv" class="col-md-12">
                 <p class="text-dark col-md-12" id="recommendTitle"></p>
                 <div id="carousel-reviews" class="carousel slide" data-ride="carousel">
@@ -153,27 +113,27 @@
         </div>
     </div>
 
-    <script src="/assets/js/jquery-1.11.3.min.js"></script>
-    <!-- JavaScripts initializations and stuff -->
-    <!-- YW: this is important for navbar -->
-    <script src="/assets/js/neon-custom.js"></script>
-
     <!-- Bottom scripts (common) -->
-    <script src="/assets/js/gsap/TweenMax.min.js"></script>
-    <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
-    <script src="/assets/js/bootstrap.js"></script>
-    <script src="/assets/js/joinable.js"></script>
-    <script src="/assets/js/resizeable.js"></script>
-    <script src="/assets/js/neon-api.js"></script>
+    <script src="../assets/js/gsap/TweenMax.min.js"></script>
+    <script src="../assets/js/jquery-ui/js/jquery-ui-1.10.3.custom.js"></script>
+    <script src="../assets/js/bootstrap.js"></script>
+    <script src="../assets/js/joinable.js"></script>
+    <script src="../assets/js/resizeable.js"></script>
+    <script src="../assets/js/neon-api.js"></script>
 
     <!-- Imported scripts on this page -->
-    <!-- <script src="/assets/js/neon-chat.js"></script> -->
+    <script src="../assets/js/neon-chat.js"></script>
+
+    <!-- JavaScripts initializations and stuff -->
+    <script src="../assets/js/neon-custom.js"></script>
 
     <!-- Demo Settings -->
-    <script src="/assets/js/neon-demo.js"></script>
+    <script src="../assets/js/neon-demo.js"></script>
+
     <!-- script  src-->
     <script type="text/javascript " src="js/newProduct.js "></script>
     <script type="text/javascript " src="js/review.js "></script>
+
 </body>
 
 </html>
