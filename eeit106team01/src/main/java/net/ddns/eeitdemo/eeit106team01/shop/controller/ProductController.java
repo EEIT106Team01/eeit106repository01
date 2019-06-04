@@ -176,9 +176,9 @@ public class ProductController {
 	}
 	
 	@GetMapping(path = { "/products/recommend" }, produces = { "application/json" })
-	public ResponseEntity<?> getRecommendProducts(@RequestParam String name) {
-		if (name != null) {
-			List<ProductBean> result = productService.recommendProducts(name);
+	public ResponseEntity<?> getRecommendProducts(@RequestParam String type) {
+		if (type != null) {
+			List<ProductBean> result = productService.recommendProducts(type);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
