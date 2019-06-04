@@ -89,10 +89,11 @@ public class ProductController {
 
 	@GetMapping(path = { "/search/updatedTime" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductsByUpdatedTime(
+			@RequestParam String dataName,@RequestParam String queryString,@RequestParam(required = false) String brandType,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDay,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDay) {
 		if (startDay != null && endDay != null && startDay.equals(endDay) == false && startDay.compareTo(endDay) < 0) {
-			List<ProductBean> result = productService.findProductsByUpdatedTime(startDay, endDay);
+			List<ProductBean> result = productService.findProductsByUpdatedTime(dataName,queryString,startDay, endDay,brandType);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -176,9 +177,9 @@ public class ProductController {
 	}
 	
 	@GetMapping(path = { "/products/recommend" }, produces = { "application/json" })
-	public ResponseEntity<?> getRecommendProducts(@RequestParam String name) {
-		if (name != null) {
-			List<ProductBean> result = productService.recommendProducts(name);
+	public ResponseEntity<?> getRecommendProducts(@RequestParam String type) {
+		if (type != null) {
+			List<ProductBean> result = productService.recommendProducts(type);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}

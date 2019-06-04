@@ -15,6 +15,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
+import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 
 @Service
 @Transactional
@@ -77,22 +78,12 @@ public class ProductService {
 		return productDAO.findProducts();
 	}
 
-	public List<ProductBean> recommendProducts(String name) {
-		List<ProductBean> temp = productDAO.findProductsByName(name);
-		ProductBean thisOne = null;
-		for (int i = 0; i <= temp.size(); i++) { //
-			thisOne = temp.get(i); // 找出相同名字的bean
-			if (thisOne.getName().equalsIgnoreCase(name)) {
-				break;
-			}
-		}
-		if (thisOne.getName().equalsIgnoreCase(name)) {
-			ProductBean findOne = thisOne;
-			if (findOne != null) {
-				return this.getSession()
-						.createQuery("from ProductBean where type = :type order by totalSold desc", ProductBean.class)
-						.setParameter("type", findOne.getType()).setMaxResults(10).getResultList();
-			}
+	public List<ProductBean> recommendProducts(String type) {
+		List<ProductBean> temp = productDAO.findProductsByType(type);
+		if(NullChecker.isEmpty(temp) == false) {
+			return this.getSession()
+					.createQuery("from ProductBean where type = :type order by totalSold desc", ProductBean.class)
+					.setParameter("type", type).setMaxResults(10).getResultList();
 		}
 		return null;
 	}
@@ -107,8 +98,8 @@ public class ProductService {
 				maxPrice);
 	}
 
-	public List<ProductBean> findProductsByUpdatedTime(Date startDay, Date endDay) {
-		return productDAO.findProductsByUpdatedTimeDayBetween(startDay, endDay);
+	public List<ProductBean> findProductsByUpdatedTime(String dataName,String queryString,Date startDay, Date endDay,String brandType) {
+		return productDAO.findProductsByUpdatedTimeDayBetween(dataName,queryString,startDay, endDay,brandType);
 	}
 
 	public List<ProductBean> findProductsByName(String name) {
