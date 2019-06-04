@@ -231,13 +231,23 @@ public class ProductDAOImpl implements ProductDAO {
 	 * @return Between startDay and endDay
 	 */
 	@Override
-	public List<ProductBean> findProductsByUpdatedTimeDayBetween(Date startDay, Date endDay) {
+	public List<ProductBean> findProductsByUpdatedTimeDayBetween(String dataName,String queryString,Date startDay, Date endDay,String brandType) {
 		if (startDay != null && endDay != null && startDay.equals(endDay) == false && startDay.compareTo(endDay) < 0) {
 			try {
-				this.productsResutlt = this.getSession()
-						.createQuery("from ProductBean where updatedTime BETWEEN :startDay AND :endDay",
-								ProductBean.class)
-						.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();
+				if(dataName.equalsIgnoreCase("type")) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where type = :type and updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("type",queryString)
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();				
+				}else if(dataName.equalsIgnoreCase("brand")) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where brand = :brand and type = :type and updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("brand",queryString).setParameter("type",brandType)
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
+				}
+				
 			} catch (HibernateException e) {
 				throw new HibernateException(e.getMessage());
 			}
