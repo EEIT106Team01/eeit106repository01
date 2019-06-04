@@ -97,9 +97,7 @@ function productImgDiv(productData) {
     var imgArray = [];
     $.each(productData.informationImageLink, function (key, val) {
         imgArray.push(
-            // '<a href='+val+' class="cloud-zoom" rel="adjustX:10, smoothMove:3">'+ 
-            '<img src=' + val + ' width="600" class = "cloudzoom" />'
-            // '</a>'
+            '<img src=' + val + ' width="600" />'
         )
     })
     $("#productImgDiv").html("");
@@ -158,7 +156,7 @@ function recommendTop(recommendData) {
                             '<div>'+
                                 '<span class="rec">推薦商品</span>'+
                             '</div>' +
-                        '<img width="300px" src=' + recommendImg[k] + '/>' +
+                        '<img class="recIMG" src=' + recommendImg[k] + '/>' +
                         '</div>'+
                         '<div>' +
                             '<div>'+
@@ -182,7 +180,7 @@ function recommendTop(recommendData) {
                             '<div>'+
                                 '<span class="rec">推薦商品</span>'+
                             '</div>' +
-                        '<img width="250px" src=' + recommendImg[q] + '/>' +
+                        '<img class="recIMG" src=' + recommendImg[q] + '/>' +
                         '</div>'+
                         '<div>' +
                             '<div>'+
@@ -211,7 +209,7 @@ function recommendTop(recommendData) {
                             '<div>'+
                                 '<span class="rec">推薦商品</span>'+
                             '</div>' +
-                        '<img width="250px" src=' + recommendImg[k] + '/>' +
+                        '<img class="recIMG" src=' + recommendImg[k] + '/>' +
                         '</div>'+
                         '<div>' +
                             '<div>'+
@@ -239,7 +237,7 @@ function recommendTop(recommendData) {
                             '<div>'+
                                 '<span class="rec">推薦商品</span>'+
                             '</div>' +
-                        '<img width="250px" src=' + recommendImg[k] + '/>' +
+                        '<img class="recIMG" src=' + recommendImg[k] + '/>' +
                         '</div>'+
                         '<div>' +
                             '<div>'+
@@ -263,7 +261,7 @@ function recommendTop(recommendData) {
                             '<div>'+
                                 '<span class="rec">推薦商品</span>'+
                             '</div>' +
-                        '<img width="250px" src=' + recommendImg[q] + '/>' +
+                        '<img class="recIMG" src=' + recommendImg[q] + '/>' +
                         '</div>'+
                         '<div>' +
                             '<div>'+
