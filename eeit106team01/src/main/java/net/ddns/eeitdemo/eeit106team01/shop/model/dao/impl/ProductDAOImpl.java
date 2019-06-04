@@ -246,6 +246,11 @@ public class ProductDAOImpl implements ProductDAO {
 									ProductBean.class)
 							.setParameter("brand",queryString).setParameter("type",brandType)
 							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
+				}else if(NullChecker.isEmpty(dataName) == true && NullChecker.isEmpty(startDay) == false && NullChecker.isEmpty(endDay) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
 				}
 				
 			} catch (HibernateException e) {
