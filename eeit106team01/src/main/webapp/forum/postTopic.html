@@ -36,7 +36,6 @@
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
 	<script src="/forum/quill/quill.js"></script>
-	<script src="/forum/quill/quill.min.js"></script>
 
 	<!-- Theme included stylesheets -->
 	<link href="/forum/quill/quill.snow.css" rel="stylesheet">
@@ -54,8 +53,19 @@
 		}
 
 		.myTopicList {
-			max-width: 1036px;
+			/* max-width: 1036px; */
+			width: 58%;
 			margin: auto;
+		}
+
+		.itemBlock {
+			border-bottom: 1px solid #CCCCCC;
+			padding-bottom: 8px;
+			margin-bottom: 24px;
+		}
+
+		.buttonRegion.popover {
+			width: 800px;
 		}
 
 		body>#standalone-container {
@@ -63,7 +73,7 @@
 			max-width: 720px;
 		}
 
-		#editor-container {
+		#topic-editor-container {
 			height: 350px;
 		}
 	</style>
@@ -71,6 +81,7 @@
 	<script src="js/uploadVideo.js"></script>
 
 	<script>
+		console.log("init my script")
 		$(window).on('load', initMap);
 		let marker;
 		let accidentLocationLatitude;
@@ -198,11 +209,11 @@
 				showMeridian: 1
 			});
 			//<!-- Initialize Quill editor -->
-			quillTopic = new Quill('#editor-container', {
+			quillTopic = new Quill('#topic-editor-container', {
 				modules: {
 					formula: true,
 					syntax: true,
-					toolbar: '#toolbar-container'
+					toolbar: '#topic-toolbar-container'
 				},
 				theme: 'snow'
 			});
@@ -213,7 +224,7 @@
 			// console.log("initMap ok");
 			let map = new google.maps.Map(document.getElementById("map_canvas"), {
 				zoom: 12
-				, center: { lat: 25.033793, lng: 121.543427 }
+				, center: { lat: 25.044991025205064, lng: 121.53621722216803 }
 				, scaleControl: true
 				, mapTypeControlOptions: { mapTypeIds: [] }
 				, gestureHandling: 'greedy'
@@ -241,9 +252,8 @@
 					});
 			});
 		}
-
-
 	</script>
+
 </head>
 
 <body class="page-body" data-url="http://neon.dev">
@@ -262,40 +272,55 @@
 				<!-- <form> -->
 				<!-- <fieldset class="formField"> -->
 				<div class="col-md-12">
-					<div class="col-md-12">
-						<form>
+					<div class="col-md-12 itemBlock">
+						<div class="col-md-3">
 							文章類型:
-							<label>
-								<input type="radio" name="topicType" id="shareTopic" value="shareTopic">分享文</label>
-							<label>
-								<input type="radio" name="topicType" id="requestTopic" value="requestTopic">協尋文</label>
-						</form>
-					</div>
-
-					<div class="col-md-12">
-						<label>
-							標題:
-							<input type="text" name="topicHeader" id="topicHeader">
-						</label>
-					</div>
-
-					<div class="col-md-12">
-						地區分類:
-						<select name="topicRegion" id="topicRegion">
-							<option value="northernRegion">北部區域</option>
-							<option value="centralRegion">中部區域</option>
-							<option value="southernRegion">南部區域</option>
-							<option value="easternRegion">東部區域</option>
-						</select>
-						北部區域：包括臺北市、新北市、基隆市、新竹市、桃園市、新竹縣及宜蘭縣。 中部區域：包括臺中市、苗栗縣、彰化縣、南投縣及雲林縣。 南部區域：包括高雄市、臺南市、嘉義市、嘉義縣、屏東縣及澎湖縣。 東部區域：包括花蓮縣及臺東縣。
-					</div>
-
-					<div class="col-md-12">
-						<!-- <div class="form-group"> -->
-						<div class="col-md-2">
-							事故時間:
 						</div>
-						<div class="col-md-10 input-group date form_datetime col-md-5" data-link-field="accidentTime">
+						<div class="col-md-9">
+							<label>
+								<input type="radio" name="topicType" id="shareTopic" value="shareTopic">分享文
+							</label>
+							<label>
+								<input type="radio" name="topicType" id="requestTopic" value="requestTopic">協尋文
+							</label>
+						</div>
+					</div>
+
+					<div class="col-md-12 itemBlock">
+						<div class="col-md-3" for="topicHeader">
+							<label for="topicHeader">標題：</label>
+						</div>
+						<div class="col-md-9">
+							<input type="text" name="topicHeader" id="topicHeader">
+							<div class="col-md-12">標題不得為空</div>
+						</div>
+					</div>
+
+					<div class="col-md-12 itemBlock" style="display: none">
+						<div class="col-md-3">
+							地區分類:
+						</div>
+						<div class="col-md-9">
+							<select name="topicRegion" id="topicRegion">
+								<option value="northernRegion">北部區域</option>
+								<option value="centralRegion">中部區域</option>
+								<option value="southernRegion">南部區域</option>
+								<option value="easternRegion">東部區域</option>
+							</select>
+						</div>
+						<div class="col-md-10">
+							<button class="btn btn-default popover-default" id="buttonRegion" data-toggle="popover" data-trigger="hover" data-placement="right"
+							 data-content="北部區域：包括臺北市、新北市、基隆市、新竹市、桃園市、新竹縣及宜蘭縣。中部區域：包括臺中市、苗栗縣、彰化縣、南投縣及雲林縣。南部區域：包括高雄市、臺南市、嘉義市、嘉義縣、屏東縣及澎湖縣。東部區域：包括花蓮縣及臺東縣。"
+							 data-original-title="分區說明">各縣市分區</button>
+						</div>
+					</div>
+
+					<div class="col-md-12 itemBlock">
+						<!-- <div class="form-group"> -->
+						<div class="col-md-3">
+							事發時間:
+						</div>
+						<div class="col-md-9 input-group date form_datetime col-md-5" data-link-field="accidentTime">
 							<input class="form-control" size="16" type="text" value="" readonly>
 							<span class="input-group-addon">
 								<span class="glyphicon glyphicon-remove"></span>
@@ -308,66 +333,75 @@
 						<!-- </div> -->
 					</div>
 
-					<div class="col-md-12">
+					<div class="col-md-12 itemBlock" style="display: none">
 						<label>
-							事故地點說明:
-							<input type="text" name="accidentLocation" id="accidentLocation">
+							事發地點說明:
+							<input type="text" name="accidentLocation" id="accidentLocation" value="地點預設">
 						</label>
 					</div>
 
-					<label>
-						請在地圖中選取事故地點:
-					</label>
-					<div id="map_canvas" style="width:600px; height:500px;"></div>
-					<label>文章內容: </label>
-
-					<div id="standalone-container">
-						<div id="toolbar-container">
-							<span class="ql-formats">
-								<select class="ql-font"></select>
-								<select class="ql-size"></select>
-							</span>
-							<span class="ql-formats">
-								<button class="ql-bold"></button>
-								<button class="ql-italic"></button>
-								<button class="ql-underline"></button>
-								<button class="ql-strike"></button>
-							</span>
-							<span class="ql-formats">
-								<select class="ql-color"></select>
-								<select class="ql-background"></select>
-							</span>
-							<span class="ql-formats">
-								<button class="ql-script" value="sub"></button>
-								<button class="ql-script" value="super"></button>
-							</span>
-							<span class="ql-formats">
-								<button class="ql-header" value="1"></button>
-								<button class="ql-header" value="2"></button>
-								<button class="ql-blockquote"></button>
-								<button class="ql-code-block"></button>
-							</span>
-							<span class="ql-formats">
-								<button class="ql-list" value="ordered"></button>
-								<button class="ql-list" value="bullet"></button>
-								<button class="ql-indent" value="-1"></button>
-								<button class="ql-indent" value="+1"></button>
-							</span>
-							<span class="ql-formats">
-								<button class="ql-direction" value="rtl"></button>
-								<select class="ql-align"></select>
-							</span>
-							<span class="ql-formats">
-								<button class="ql-link"></button>
-								<button class="ql-image"></button>
-								<button class="ql-video"></button>
-								<button class="ql-formula"></button>
-							</span>
-							<span class="ql-formats">
-								<button class="ql-clean"></button>
-							</span>
+					<div class="col-md-12 itemBlock">
+						<div class="col-md-3">
+							<label>
+								請點擊事發地點:
+							</label>
 						</div>
-						<div id="editor-container"></div>
+						<div class="col-md-9">
+							<div id="map_canvas" style="width:600px; height:500px;"></div>
+						</div>
+					</div>
+
+					<div class="col-md-12 itemBlock">
+						<label>文章內容: </label>
+
+						<div id="standalone-container">
+							<div id="topic-toolbar-container">
+								<span class="ql-formats">
+									<select class="ql-font"></select>
+									<select class="ql-size"></select>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-bold"></button>
+									<button class="ql-italic"></button>
+									<button class="ql-underline"></button>
+									<button class="ql-strike"></button>
+								</span>
+								<span class="ql-formats">
+									<select class="ql-color"></select>
+									<select class="ql-background"></select>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-script" value="sub"></button>
+									<button class="ql-script" value="super"></button>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-header" value="1"></button>
+									<button class="ql-header" value="2"></button>
+									<button class="ql-blockquote"></button>
+									<button class="ql-code-block"></button>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-list" value="ordered"></button>
+									<button class="ql-list" value="bullet"></button>
+									<button class="ql-indent" value="-1"></button>
+									<button class="ql-indent" value="+1"></button>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-direction" value="rtl"></button>
+									<select class="ql-align"></select>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-link"></button>
+									<button class="ql-image"></button>
+									<button class="ql-video"></button>
+									<button class="ql-formula"></button>
+								</span>
+								<span class="ql-formats">
+									<button class="ql-clean"></button>
+								</span>
+							</div>
+							<div id="topic-editor-container"></div>
+						</div>
 					</div>
 
 				</div>
@@ -453,6 +487,7 @@
 
 	<!-- Demo Settings -->
 	<!-- <script src="/assets/js/neon-demo.js"></script> -->
+
 
 </body>
 

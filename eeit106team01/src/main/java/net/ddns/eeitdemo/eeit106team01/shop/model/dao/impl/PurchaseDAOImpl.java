@@ -563,4 +563,20 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 		return null;
 	}
 
+	@Override
+	public Integer findPurchaseIdCount() {
+		Integer result = null;
+		try {
+			result = Integer.valueOf(String.valueOf((Long) this.getSession()
+					.createQuery("select count(PurchaseID) from PurchaseBean").getSingleResult()));
+		} catch (HibernateException e) {
+			throw new HibernateException(e.getMessage());
+		}
+		if (result != null) {
+			return result;
+		} else {
+			return null;
+		}
+	}
+
 }

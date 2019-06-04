@@ -17,13 +17,19 @@
     <!--input data-include property in any tag when window.onload-->
     <script src="/navbar/js/csi.min.js"></script>
 
-    <script src="/navbar/js/navbar-init.js"></script>
+    <!-- include navbarCss when window.onload-->
+    <div data-include="/navbar/navbarCssInHeadTag.html"></div>
 
     <!-- chatroom -->
     <script src="/chat/js/sockjs.min.js"></script>
-	<script src="/chat/js/stomp.min.js"></script>
+    <script src="/chat/js/stomp.min.js"></script>
     <script src="/chat/js/chatroom-init.js"></script>
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const topic = urlParams.get("topic");
+        console.log("topic: " + topic);
 
+    </script>
 </head>
 
 <body class="page-body" data-url="http://neon.dev">
