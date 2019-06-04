@@ -8,6 +8,7 @@ let navCssArr = ["/assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.
     , "/assets/css/neon-theme.css"
     , "/assets/css/neon-forms.css"
     , "/assets/css/custom.css"
+    , "/navbar/css/notosanstc.css"
     , "/navbar/css/navbar.css"];
 
 for (let i = 0; i < navCssArr.length; i++) {
