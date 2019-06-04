@@ -163,7 +163,7 @@ function recommendTop(recommendData) {
             '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
             '<figure><img alt="" src=' + recommendImg[k] + '></figure>' +
             '</div><div class="item-box-blog-body">' +
-            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 25) + "..." + '</h5></a></div>' +
+            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 10) + "..." + '</h5></a></div>' +
             '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
             '</div></div></div>'
         )
@@ -172,7 +172,7 @@ function recommendTop(recommendData) {
         recommendC2.push('<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
             '<figure><img alt="" src=' + recommendImg[q] + '></figure>' +
             '</div><div class="item-box-blog-body">' +
-            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[q].substr(0, 25) + "..." + '</h5></a></div>' +
+            '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[q].substr(0, 10) + "..." + '</h5></a></div>' +
             '<div class="item-box-blog-text"><p>$' + recommendPrice[q] + '</p></div>' +
             '</div></div></div>'
         )
