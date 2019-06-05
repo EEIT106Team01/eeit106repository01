@@ -118,26 +118,26 @@ function addToCart() {
         $.each(element, function(key, val) {
           if (key.match(/^(name)$/) && val != null) {
             text.push(
-              "<span class='small text-justify'>品名: " + val.substr(0, 8) + "</span></br>"
+              "<div class='cart-text row'><span class='small'>品名: " + val.substr(0, 8) + "</span>"
             );
           } else if (key.match(/^(price)$/)) {
             text.push(
-              "<span class='small text-justify'>價錢: " + "$" + val + "</span></br>"
+              "<span class='small'>價錢: " + "$" + val + "</span>"
             );
           } else if (key.match(/^(quantity)$/)) {
-            text.push("<span class='small text-justify'>數量: " + val + "</span>");
+            text.push("<span class='small'>數量: " + val + "</span></div>");
           } else if (key.match(/^(id)$/)) {
             text.push(
               "<span class='hidden' id='" + val + "'>" + val + "</span>"
             );
             closeIcon.push(
-              "<span class='badge pull-right' onclick='deletePurchase(this)' id='" + val + "'><span class='fa fa-close'></span></span>"
+              "<span class='badge' onclick='deletePurchase(this)' id='" + val + "'><span class='fa fa-close'></span></span>"
             );
           } else if (key.match(/^(image)$/) && val != null) {
-            img.push("<img style='width:80px' src='" + val + "'></br>");
+            img.push("<img src='" + val + "'>");
           }
         });
-        $(closeIcon.join("")).appendTo("#accordion-shopping-cart img");
+        $(closeIcon.join("")).appendTo("#accordion-shopping-cart");
         $(img.join("")).appendTo("#accordion-shopping-cart");
         $(text.join("")).appendTo("#accordion-shopping-cart");
       });
