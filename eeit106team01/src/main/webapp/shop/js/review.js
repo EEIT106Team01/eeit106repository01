@@ -451,7 +451,8 @@ function addToCart() {
                         text.push("<p class='m-0 p-0''>" + "數量" + val + "</p>");
                     } else if (key.match(/^(id)$/)) {
                         text.push("<p class='d-none m-0 p-0' id='" + val + "'>" + val + "</p>");
-                        closeIcon.push("<span class='badge align-top mt-1' onclick='deletePurchase(this)' id='" + val + "'><span class='fa fa-close'></span></span>");
+                        closeIcon.push("<span class='badge badge-primary' onclick='deletePurchase(this)' id='" + val + "'>x</span>");
+                        // <span class='fa fa-close'></span>
                     } else if (key.match(/^(image)$/) && val != null) {
                         img.push("<img style='width:100px' src='" + val + "'>");
                     }
@@ -490,7 +491,6 @@ function addToCart() {
         }
 
         var result = cartLocalStorage.getItem(productId);
-        // alert(result);
     });
 
     // button click reload
