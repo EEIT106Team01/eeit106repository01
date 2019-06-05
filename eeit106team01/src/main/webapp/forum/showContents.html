@@ -154,6 +154,7 @@
                     createVideoPlayer(topicBean.videoBean, topic.id + "player");
                 }
                 initMap();
+                $(".content-content").append(createAd());
             }
             if (contentBeans) {
                 noRepliedContents = [];
@@ -524,6 +525,31 @@
                 "text-align": "center",
             });
             return container;
+        }
+
+        function createAd() {
+            let adBody = document.createElement("div");
+            $(adBody).css({
+                "background": "yellow",
+                "height": "200px",
+                "width": "80%",
+                "margin": "auto"
+            });
+            $.ajax({
+                method: "GET",
+                url: "/product/2",
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    $("#topic" + topic).after(adBody);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    let errorCode = jqXHR.status;
+                    console.log("errorCode: " + errorCode);
+                    if (errorCode == 404) {
+
+                    }
+                }
+            });
         }
 
         function getTopic() {
