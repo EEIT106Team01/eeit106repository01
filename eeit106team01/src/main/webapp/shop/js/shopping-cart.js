@@ -105,11 +105,7 @@ function addToCart() {
         });
       };
 
-      var purchaseButton = `<div class="card">
-                <a name="" id="purchaseButton" class="btn btn-transparent" href="#" role="button">
-                    <span class='fa fa-shopping-cart'> 去結帳</span>
-                </a>
-            </div>`;
+      // var purchaseButton = `<button type="button" class="btn btn-link"><span class='fa fa-shopping-cart'> 去結帳</span></button>`;
 
       jsonArray.forEach(element => {
         var text = [];
@@ -117,31 +113,35 @@ function addToCart() {
         var img = [];
         $.each(element, function(key, val) {
           if (key.match(/^(name)$/) && val != null) {
-            text.push(
-              "<div class='cart-text row'><span class='small'>品名: " + val.substr(0, 8) + "</span>"
-            );
+            text.push("<span>品名: " + val.substr(0, 10) + "</span></br>");
           } else if (key.match(/^(price)$/)) {
-            text.push(
-              "<span class='small'>價錢: " + "$" + val + "</span>"
-            );
+            text.push("<span>價錢: " + "$" + val + "</span></br>");
           } else if (key.match(/^(quantity)$/)) {
-            text.push("<span class='small'>數量: " + val + "</span></div>");
+            text.push("<span>數量: " + val + "</span>");
           } else if (key.match(/^(id)$/)) {
             text.push(
               "<span class='hidden' id='" + val + "'>" + val + "</span>"
             );
             closeIcon.push(
-              "<span class='badge' onclick='deletePurchase(this)' id='" + val + "'><span class='fa fa-close'></span></span>"
+              "<span class='badge' onclick='deletePurchase(this)' id='" +
+                val +
+                "'><span class='fa fa-close'></span></span>"
             );
           } else if (key.match(/^(image)$/) && val != null) {
             img.push("<img src='" + val + "'>");
           }
         });
-        $(closeIcon.join("")).appendTo("#accordion-shopping-cart");
-        $(img.join("")).appendTo("#accordion-shopping-cart");
-        $(text.join("")).appendTo("#accordion-shopping-cart");
+        $(
+          `<span class='row cart-product'>` +
+            `<span class='col-sm-4'>` +
+            closeIcon.join("") +
+            img.join("") +
+            `</span>` +
+            text.join("") +
+            `</span>`
+        ).appendTo("#accordion-shopping-cart .scrollable");
       });
-      $(purchaseButton).appendTo("#accordion-shopping-cart");
+      // $(purchaseButton).appendTo("#accordion-shopping-cart");
     }
   });
 
