@@ -15,7 +15,21 @@
     <link rel="stylesheet" href="css/product.css" />
     <link rel="stylesheet" href="css/review.css" />
 
+
+    <!-- Imported styles on this page -->
+    <link rel="stylesheet" href="../assets/js/selectboxit/jquery.selectBoxIt.css">
+    <link rel="stylesheet" href="../assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/css/neon-core.css">
+    <link rel="stylesheet" href="../assets/css/neon-theme.css">
+    <link rel="stylesheet" href="../assets/css/neon-forms.css">
+    <link rel="stylesheet" href="../assets/css/custom.css">
+
+    <!-- Imported scripts on this page -->
+    <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+
     <script src="../assets/js/jquery-1.11.3.min.js"></script>
+
     <script src="../navbar/js/csi.min.js"></script>
     <script src="../navbar/js/navbar-init.js"></script>
 
@@ -26,15 +40,15 @@
     <!-- Include Cloud Zoom JavaScript -->
     <script type="text/javascript"
         src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
-    <!-- Include Thumbelina CSS [這不一定需要試試看]-->
+    <!-- Include Thumbelina CSS -->
     <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css"
         rel="stylesheet" />
-    <!-- Include Thumbelina JavaScript [這不一定需要試試看] -->
+    <!-- Include Thumbelina JavaScript  -->
     <script type="text/javascript"
         src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
 </head>
 
-<body class="page-body">
+<body class="page-body" data-url="http://neon.dev">
 
     <!-- include navbar when window.onload-->
     <div data-include="../navbar/navbarWhite.html"></div>
@@ -127,18 +141,19 @@
                         產品圖片
                     </button>
                 </div>
-                <div class="btn-group">
+                <!-- <div class="btn-group">
                     <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse"
                         data-target="#reviewResult" aria-expanded="false" aria-controls="reviewResult"
                         id="reviewResultButton">
                         商品評價
                     </button>
-                </div>
+                </div> -->
             </div>
-            <div id="productInformation" class="col-md-12"></div>
-            <div id="productImgDiv" class="col-md-12"></div>
-            <div id="reviewResult" class="col-md-12">
-                <!-- <p class=" text-dark" id="reviewTitle"></p> -->
+            <div id="productInformation" class="col-md-12">
+            </div>
+            <div id="productImgDiv" class="col-md-12">
+            </div>
+            <div id="reviewResult" data-include="newReview.html" class="col-md-12">
             </div>
 
             <!-- recommended -->
@@ -184,8 +199,9 @@
     <script src="../assets/js/neon-demo.js"></script>
 
     <!-- script  src-->
-    <script type="text/javascript " src="js/product.js "></script>
-    <script type="text/javascript " src="js/shopping-cart.js "></script>
+    <script type="text/javascript " src="js/product.js"></script>
+    <script type="text/javascript " src="js/shopping-cart.js"></script>
+    <script type="text/javascript " src="js/review.js"></script>
 </body>
 
 </html>
