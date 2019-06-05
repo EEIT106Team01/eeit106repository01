@@ -73,6 +73,10 @@
 			margin-bottom: 8px;
 		}
 
+		.requiredIcon {
+			color: red;
+		}
+
 		/* .buttonRegion.popover {
 			width: 800px;
 		} */
@@ -247,6 +251,9 @@
 				return;
 			}
 			console.log("提交驗證 header: " + $("#topicHeader").val());
+			if(!$("#topicHeader").val()){
+				console.log("header empty");
+			}
 			console.log("提交驗證 date: " + new Date($("#accidentTime").val()));
 			console.log("提交驗證 date String: " + $("#accidentTime").val());
 			console.log("提交驗證 緯度: " + accidentLocationLatitude);
@@ -393,7 +400,7 @@
 					<div class="col-md-12 itemBlock">
 						<div class="col-md-2">
 							<label>
-								文章類型：
+								<span class="requiredIcon">*</span>文章類型：
 							</label>
 						</div>
 						<div class="col-md-10">
