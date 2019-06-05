@@ -76,18 +76,19 @@ public class ProductService {
 	}
 
 	public ProductBean getRandomProduct() {
-		List<ProductBean> products = productDAO.findProducts();
 		Random ran = new Random();
-
-		while(true) {
-			Integer id = ran.nextInt(products.size())+1;
-			Long ID = Long.valueOf(id);
-			ProductBean result = productDAO.findProductByProductId(ID);
-			System.out.println("id========================"+ID);
-			if(NullChecker.isEmpty(result) == false) {
-				return result;
+		List<ProductBean> products = productDAO.findProducts();
+		if(NullChecker.isEmpty(products) == false) {
+			while(true) {
+				Integer id = ran.nextInt(products.size())+1;
+				Long ID = Long.valueOf(id);
+				ProductBean result = productDAO.findProductByProductId(ID);
+				if(NullChecker.isEmpty(result) == false) {
+					return result;
+				}
 			}
 		}
+		return null;
 	}
 	
 	public List<ProductBean> findProducts() {
