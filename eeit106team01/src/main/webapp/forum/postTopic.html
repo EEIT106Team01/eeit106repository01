@@ -59,7 +59,7 @@
 			margin: auto;
 			height: 100%;
 			background-color: #ffffff;
-            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
 		}
 
 		.itemBlock {
@@ -192,12 +192,12 @@
 				$("#submit").val("送出協尋請求");
 				$(".myVideoDiv").css("display", "none");
 			}
-			$("#shareTopic").on("click", function () { 
-				$("#submit").val("分享影片資源"); 
+			$("#shareTopic").on("click", function () {
+				$("#submit").val("分享影片資源");
 				$(".myVideoDiv").css("display", "block");
 			});
-			$("#requestTopic").on("click", function () { 
-				$("#submit").val("送出協尋請求"); 
+			$("#requestTopic").on("click", function () {
+				$("#submit").val("送出協尋請求");
 				$(".myVideoDiv").css("display", "none");
 			});
 		});
@@ -232,12 +232,30 @@
 
 		// *
 		function submit() {
-			$("#submit").attr('disabled', true);
-			$(".itemBlock").attr('disabled', true);
+			// $("#submit").attr('disabled', true);
+			// $(".itemBlock").attr('disabled', true);
 			quillTopic.enable(false);
 			// $(".formField").attr("disabled", true);
-			$(".myVideoDiv").css("display", "block");
-			$(".myProgressDiv").css("display", "block");
+
+			if ($("input[name=topicType]:checked").val() == "shareTopic") {
+				console.log("這是分享文");
+				$(".myProgressDiv").css("display", "block");
+			} else if ($("input[name=topicType]:checked").val() == "requestTopic") {
+				console.log("這是協尋文");
+			} else {
+				console.log("impossible");
+				return;
+			}
+			console.log("提交驗證 header: " + $("#topicHeader").val());
+			console.log("提交驗證 date: " + new Date($("#accidentTime").val()));
+			console.log("提交驗證 date String: " + $("#accidentTime").val());
+			console.log("提交驗證 緯度: " + accidentLocationLatitude);
+			console.log("提交驗證 經度: " + accidentLocationLongitude);
+			console.log("提交驗證 內容: " + JSON.stringify(quillTopic.getContents()));
+			console.log("提交驗證 會員: " + memberBean);
+			console.log("提交驗證 影片: " + $("#videoBean").val());
+			return;
+
 			let newVideoBean = $("#videoBean").val();
 			if (newVideoBean == "") {
 				newVideoBean = null;
@@ -541,7 +559,7 @@
 					</div>
 
 
-					<div style="display: none" class="col-md-12 itemBlock myProgressDiv" >
+					<div style="display: none" class="col-md-12 itemBlock myProgressDiv">
 						<div style="display: none;" class="container progress-body">
 							<div class="progress">
 								<div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%">
