@@ -98,7 +98,7 @@
         let page = urlParams.get("page");
         let orderType = urlParams.get("orderType");
         if (!topic) {
-            location.replace("/");
+            location.href = "/";
         }
         if (!page || Number.isNaN(page)) {
             page = 1;
@@ -404,7 +404,7 @@
             replyBtn.style.float = "right";
             replyBtn.addEventListener("click", function () {
                 sessionStorage.setItem("contentBean", JSON.stringify(bean));
-                sessionStorage.setItem("contentPage", location.pathname);
+                sessionStorage.setItem("contentPage", location.pathname + "?topic=" + topic);
                 sessionStorage.setItem("replyType", replyType);
                 location.href = "/forum/postContent.html";
             })
@@ -418,7 +418,7 @@
             editBtn.style.float = "right";
             editBtn.addEventListener("click", function () {
                 sessionStorage.setItem("contentBean", JSON.stringify(bean));
-                sessionStorage.setItem("contentPage", location.pathname);
+                sessionStorage.setItem("contentPage", location.pathname + "?topic=" + topic);
                 if (beanType === "topic") {
                     location.href = "/forum/editTopic.html";
                 } else if (beanType === "content") {
@@ -550,15 +550,23 @@
                 success: function (data, textStatus, jqXHR) {
                     console.log(data);
                     let info = document.createElement("span");
+                    let ad = document.createElement("span");
                     adBody.style.background = "url('" + (data.imageLink[0]).replace(/\"/g, "") + "')";
                     $(info).text(data.name);
                     $(info).css({
                         "position": "absolute",
                         "left": "0px"
                     });
+                    $(ad).text("廣告");
+                    $(ad).css({
+                        "float": "right",
+                        "margin": 0,
+                        "margin-top": "170px"
+                    });
                     adBody.appendChild(info);
+                    adBody.appendChild(ad);
                     adBody.onclick = function () {
-                        location.replace("/shop/product.html?" + data.id)
+                        location.href = "/shop/product.html?" + data.id;
                     };
                     $("#topic" + topic).after(adBody);
                 },
