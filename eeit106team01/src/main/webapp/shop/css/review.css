@@ -25,14 +25,13 @@ h1 {
 
 #div-draggable-events {
   position: fixed;
-  top: 100px;
-  right: 100px;
+  z-index: 1000;
+  /* top: 100px; */
+  right: 30px;
 }
 
 #draggable-events {
-  width: 200px;
-  border: none;
-  background: transparent;
+  width: 330px;
 }
 
 #draggable-events div {
@@ -45,15 +44,26 @@ h1 {
 }
 
 #accordion-shopping-cart img {
-  width: 50px;
+  width: 80px;
   border-radius: 8px;
   border-width: 3px;
   border-style: outset;
   border-color: gray;
 }
 
-.cart-text{
-    font-size: 10px;
+.cart-product,
+.cart-product span {
+  padding: 0px;
+  margin: 0px;
+}
+
+.cart-product .badge {
+  background: transparent;
+}
+
+.cart-text {
+  float: left;
+  font-size: 15px;
 }
 
 .card-img-top {

@@ -60,6 +60,10 @@ margin: 3% 0% 0% 13%;
     cursor: pointer;
 }
 
+.productQuantityFont{
+    font-size: 25px;
+}
+
 #PageCon {height:35px;text-align:center}
 #PageShow ul{display:inline-block; margin:0 auto}
 #PageShow li{ list-style:none;float:left}
