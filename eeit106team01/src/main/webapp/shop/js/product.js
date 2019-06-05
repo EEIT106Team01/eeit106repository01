@@ -1,15 +1,6 @@
 $(document).ready(function() {
     getProduct(takeUrlValue())
     getAllType()
-        //cloudZoom
-    CloudZoom.quickStart();
-    // Initialize the slider.
-    $(function() {
-        $('#slider1').Thumbelina({
-            $bwdBut: $('#slider1 .left'),
-            $fwdBut: $('#slider1 .right')
-        });
-    });
     //搜尋
     $("#search").on("click", (function() {
         insertKeyWord();
@@ -80,7 +71,7 @@ function getProduct(id) {
             });
             //產品資訊
             searchResult(productData)
-                //詳細規格
+            //詳細規格
             $("#productInformationButton").click(function() {
                 productInformation(productData)
             });
@@ -94,9 +85,27 @@ function getProduct(id) {
             var type = productData.type;
             getRecommendProducts(type);
 
+            //breadcrumb
+            $("#typeBreadcrumb").append(
+                '<a href="http://localhost:8080/shop/search.html?type='+type+'">'+type+'</a>'
+            )
+            $("#productBreadcrumb").append(
+                '<a>'+productData.name+'</a>'
+            )
+
             function review() {
                 $("#reviewTitle").text("商品評價")
             }
+            //cloudZoom
+             CloudZoom.quickStart();
+            // Initialize the slider.
+            $(function() {
+                $('#slider1').Thumbelina({
+                 $bwdBut: $('#slider1 .left'),
+                 $fwdBut: $('#slider1 .right')
+             });
+    });
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
@@ -106,7 +115,7 @@ function getProduct(id) {
 //產品查詢結果
 function searchResult(productData) {
     var productImgArray = [];
-    productImgArray.push('<img src=' + productData.imageLink[0] + ' width="450">')
+    productImgArray.push('<img src=' + productData.imageLink[0] + 'style="border-radius:8px; border-width:5px; border-style:outset; border-color: gray;" class="cloudzoom image" alt="Cloud Zoom small image" id="zoom1" data-cloudzoom="zoomSizeMode:`image`,autoInside: 300">')
     $("#searchResult").html("");
     $("#productLeftInfo").append(productImgArray.join(""))
     $("#productRightInfo").append(
@@ -204,12 +213,6 @@ function recommendTop(recommendData) {
     if (recommendData.length >= 10) {
         for (let k = 0; k < 5; k++) {
             recommendC1.push(
-                // '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
-                // '<figure><img alt="" src=' + recommendImg[k] + '></figure>' +
-                // '</div><div class="item-box-blog-body">' +
-                // '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 10) + "..." + '</h5></a></div>' +
-                // '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
-                // '</div></div></div>'
 
                 '<div class="col-md-2">' +
                 '<div>' +
@@ -226,7 +229,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[k] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[k] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -250,7 +253,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[q] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[q] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -279,7 +282,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[k] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[k] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -307,7 +310,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[k] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[k] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -331,7 +334,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[q] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[q] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +

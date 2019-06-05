@@ -17,16 +17,47 @@
     width: 200px;
     padding: 5px 5px;
 }
-#searchTitle{
+/* #searchTitle{
     float: left;
-}
+} */
 
 #productQuantity{
     display: inline;
 }
 
-.page{
+.sortClass{
     float: right;
+}
+
+.btn-primary.btn-icon i{
+    background-color:#303641;
+}
+
+.btn-primary:hover{
+    border-color:#303641;
+    background-color:#303641;
+}
+.btn-primary{
+    padding-right:0px !important;
+    padding-left:0px !important;
+}
+
+#searchType{
+margin: 3% 0% 0% 13%;
+}
+
+.input-group{
+    margin: 3% 0% 2% 13%;
+}
+
+.dropdown-menu.dropdown-1{
+    background-color:#DDDDDD;
+    border-color:#DDDDDD;
+}
+
+.dropdown-menu.dropdown-1 li:hover{
+    background-color:#ffffff;
+    cursor: pointer;
 }
 
 #PageCon {height:35px;text-align:center}
