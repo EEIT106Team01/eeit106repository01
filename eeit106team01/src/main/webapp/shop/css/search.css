@@ -29,6 +29,31 @@
     float: right;
 }
 
+.btn-primary.btn-icon i{
+    background-color:#303641;
+}
+
+.btn-primary:hover{
+    border-color:#303641;
+    background-color:#303641;
+}
+.btn-primary{
+    padding-right:0px !important;
+    padding-left:0px !important;
+}
+
+#searchType{
+margin: 3% 0% 0% 13%;
+}
+
+.input-group{
+    margin: 3% 0% 2% 13%;
+}
+
+.btn-green{
+    background-color: peachpuff
+}
+
 #PageCon {height:35px;text-align:center}
 #PageShow ul{display:inline-block; margin:0 auto}
 #PageShow li{ list-style:none;float:left}

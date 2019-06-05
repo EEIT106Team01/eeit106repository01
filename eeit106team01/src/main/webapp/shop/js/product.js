@@ -80,7 +80,7 @@ function getProduct(id) {
             });
             //產品資訊
             searchResult(productData)
-                //詳細規格
+            //詳細規格
             $("#productInformationButton").click(function() {
                 productInformation(productData)
             });
@@ -204,12 +204,6 @@ function recommendTop(recommendData) {
     if (recommendData.length >= 10) {
         for (let k = 0; k < 5; k++) {
             recommendC1.push(
-                // '<div class="col-md-2"><div class="item-box-blog"><div class="item-box-blog-image"><div class="item-box-blog-date bg-danger"><span class="rec">推薦商品</span></div>' +
-                // '<figure><img alt="" src=' + recommendImg[k] + '></figure>' +
-                // '</div><div class="item-box-blog-body">' +
-                // '<div class="item-box-blog-heading"><a href="#" tabindex="0"><h5>' + recommendName[k].substr(0, 10) + "..." + '</h5></a></div>' +
-                // '<div class="item-box-blog-text"><p>$' + recommendPrice[k] + '</p></div>' +
-                // '</div></div></div>'
 
                 '<div class="col-md-2">' +
                 '<div>' +
@@ -226,7 +220,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[k] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[k] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -250,7 +244,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[q] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[q] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -279,7 +273,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[k] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[k] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -307,7 +301,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[k] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[k] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +
@@ -331,7 +325,7 @@ function recommendTop(recommendData) {
                 '</a>' +
                 '</div>' +
                 '<div>' +
-                '<p>$' + recommendPrice[q] + '</p>' +
+                '<p class="recPrice">$' + recommendPrice[q] + '</p>' +
                 '</div>' +
                 '</div>' +
                 '</div>' +

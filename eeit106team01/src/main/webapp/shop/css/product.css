@@ -33,6 +33,10 @@
     font-size: 130%;
 }
 
+.recPrice{
+    color: red !important;
+}
+
 .search-bar {
     margin: 10px;
 }

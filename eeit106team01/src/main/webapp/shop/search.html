@@ -109,19 +109,43 @@
                         <ul class="visible">
                             <li class="opened active has-sub">
                                 <a href="#">
+                                    <span class="title">關鍵字</span>
+                                </a>
+                                <ul class="visible">
+                                    <li>
+                                        <form>
+                                            <select class="form-control col-md-8" id="searchType"></select>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control col-md-8" name="search" id="searchName" placeholder="搜尋關鍵字">
+                                                <div class="input-group-btn col-md-4">
+                                                    <button class="btn btn-primary btn-icon" id="search" type="button">
+                                                        <i class="entypo-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </li>
+                                </ul>
+                                <a href="#">
                                     <span class="title">價錢</span>
                                 </a>
                                 <ul class="visible">
                                     <li>
                                         <form id="priceForm">
-                                            <p>最低：
-                                                <input type="text" name="minPrice" id="minPrice" placeholder="最低價錢">
-                                            </p>
-                                            <p>最高：
-                                                <input type="text" name="maxPrice" id="maxPrice" placeholder="最高價錢">
-                                                <button type="button" id="searchPriceByBrandBtn" class="searchPrice">搜尋</button>
-                                                <button type="button" id="searchPriceBytypeBtn" class="searchPrice">搜尋</button>
-                                            </p>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control col-md-8" name="minPrice" id="minPrice" placeholder="最低價錢">
+                                                <input type="text" class="form-control col-md-8" name="maxPrice" id="maxPrice" placeholder="最高價錢">
+                                                <div class="input-group-btn col-md-4" id="searchPriceBytypeBtnDiv">
+                                                    <button class="btn btn-primary btn-icon searchPrice" id="searchPriceBytypeBtn" type="button">
+                                                        <i class="entypo-search"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="input-group-btn col-md-4" id="searchPriceByBrandBtnDiv">
+                                                    <button class="btn btn-primary btn-icon searchPrice" id="searchPriceByBrandBtn" type="button">
+                                                        <i class="entypo-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
                                         </form>
                                     </li>
                                 </ul>
@@ -131,30 +155,26 @@
                                 <ul class="visible">
                                     <li>
                                         <form id="searchTimeForm">
-                                            <p>開始：
-                                                <input type="text" id="startDay" name="startDay" placeholder="開始時間">
-                                            </p>
-                                            <p>結束：
-                                                <input type="text" id="endDay" name="endDay" placeholder="結束時間">
-                                                <button type="button" id="searchTimeByTypeBtn">搜尋</button>
-                                                <button type="button" id="searchTimeByBrandBtn">搜尋</button>
-                                            </p>
+                                            <div class="input-group">
+                                                <input type="text" class="form-control col-md-8" name="startDay" id="startDay" placeholder="開始時間">
+                                                
+                                                <input type="text" class="form-control col-md-8" name="endDay" id="endDay" placeholder="結束時間">
+                                                <div class="input-group-btn col-md-4" id="searchTimeByTypeBtnDiv">
+                                                    <button class="btn btn-primary btn-icon searchPrice" id="searchTimeByTypeBtn" type="button">
+                                                        <i class="entypo-search"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="input-group-btn col-md-4" id="searchTimeByBrandBtnDiv">
+                                                    <button class="btn btn-primary btn-icon searchPrice" id="searchTimeByBrandBtn" type="button">
+                                                        <i class="entypo-search"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+
+
                                         </form>
                                     </li>
                                 </ul>
-                            </li>
-                        </ul>
-                    </li>
-                    <li class="has-sub">
-                        <a href="index.html">
-                            <i class="entypo-gauge"></i>
-                            <span class="title">品牌</span>
-                        </a>
-                        <ul>
-                            <li>
-                                <form id="brandForm">
-
-                                </form>
                             </li>
                         </ul>
                     </li>
@@ -166,6 +186,19 @@
                         <ul>
                             <li>
                                 <form id="typeForm">
+
+                                </form>
+                            </li>
+                        </ul>
+                    </li>
+                    <li class="has-sub">
+                        <a href="index.html">
+                            <i class="entypo-gauge"></i>
+                            <span class="title">品牌</span>
+                        </a>
+                        <ul>
+                            <li>
+                                <form id="brandForm">
 
                                 </form>
                             </li>
@@ -272,33 +305,33 @@
                         </div>
                     </div>
                     <div id="sortByTypeByMixpriceMaxprice">
-                            <div class="btn-group left-dropdown col-md-4">
-                                <button type="button" class="btn btn-green col-md-4">商品排序</button>
-                                <button type="button" class="btn btn-green dropdown-toggle col-md-2" data-toggle="dropdown">
-                                    <span class="caret"></span>
-                                </button>
-                                <ul class="dropdown-menu dropdown-green" role="menu">
-                                    <li>
-                                        <a id="sortSoldDescByTypeByMixpriceMaxprice">銷量高到低</a>
-                                    </li>
-                                    <li>
-                                        <a id="sortSoldAscByTypeByMixpriceMaxprice">銷量低到高</a>
-                                    </li>
-                                    <li>
-                                        <a id="sortPriceAscByTypeByMixpriceMaxprice">價格低到高</a>
-                                    </li>
-                                    <li>
-                                        <button id="sortPriceDescByTypeByMixpriceMaxprice">價格高到低</button>
-                                    </li>
-                                    </li>
-    
-                                    <li class="divider"></li>
-                                    <li>
-                                        <a id="sortDefultByBrand">預設</a>
-                                    </li>
-                                </ul>
-                            </div>
+                        <div class="btn-group left-dropdown col-md-4">
+                            <button type="button" class="btn btn-green col-md-4">商品排序</button>
+                            <button type="button" class="btn btn-green dropdown-toggle col-md-2" data-toggle="dropdown">
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-green" role="menu">
+                                <li>
+                                    <a id="sortSoldDescByTypeByMixpriceMaxprice">銷量高到低</a>
+                                </li>
+                                <li>
+                                    <a id="sortSoldAscByTypeByMixpriceMaxprice">銷量低到高</a>
+                                </li>
+                                <li>
+                                    <a id="sortPriceAscByTypeByMixpriceMaxprice">價格低到高</a>
+                                </li>
+                                <li>
+                                    <button id="sortPriceDescByTypeByMixpriceMaxprice">價格高到低</button>
+                                </li>
+                                </li>
+
+                                <li class="divider"></li>
+                                <li>
+                                    <a id="sortDefultByBrand">預設</a>
+                                </li>
+                            </ul>
                         </div>
+                    </div>
                     <!-- <div id="PageCon"></div> 顯示目前頁數-->
                     <div id="PageShow" style="text-align:center;margin-left: 15px;" class="col-md-6 page">
                         <ul id="PageShowUL"></ul>
