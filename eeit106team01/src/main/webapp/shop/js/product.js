@@ -124,10 +124,12 @@ function searchResult(productData) {
   productImgArray.push(
     "<img src=" +
       productData.imageLink[0] +
-      'style="border-radius:8px; border-width:5px; border-style:outset; border-color: gray;" class="cloudzoom image" alt="Cloud Zoom small image" id="zoom1" data-cloudzoom="zoomSizeMode:`image`,autoInside: 300">'
+      'style="border-radius:8px; border-width:5px; border-style:outset; border-color: gray;" class="cloudzoom image" alt="Cloud Zoom small image" id="zoom1" data-cloudzoom="zoomSizeMode:`image`,autoInside: 550">'
   );
   $("#searchResult").html("");
-  $("#productLeftInfo").append(productImgArray.join(""));
+  $("#productLeftInfo").append(
+    "<div id='surround'>" + productImgArray.join("") + "</div>"
+  );
   $("#productRightInfo").append(
     "<div id='productDiv'>" +
       "<hr>" +
@@ -245,7 +247,7 @@ function recommendTop(recommendData) {
           "<div>" +
           "<div>" +
           "<div>" +
-          '<span class="rec">推薦商品</span>' +
+          '<span class="rec"><img src="img/recommend-icon.png"></span>' +
           "</div>" +
           '<img class="recIMG" src=' +
           recommendImg[k] +
@@ -276,7 +278,7 @@ function recommendTop(recommendData) {
           "<div>" +
           "<div>" +
           "<div>" +
-          '<span class="rec">推薦商品</span>' +
+          '<span class="rec"><img src="img/recommend-icon.png"></span>' +
           "</div>" +
           '<img class="recIMG" src=' +
           recommendImg[q] +

@@ -55,6 +55,11 @@
 
 /* 產品--------------------------------------------- */
 .productImg{
+    border-radius: 8px;
+    border-width: 5px;
+    border-style: outset;
+    border-color: gray;
+    background-color: white;
     width: 200px
 }
 
