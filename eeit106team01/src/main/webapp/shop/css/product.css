@@ -1,188 +1,76 @@
-body {
-    font-family: 'Noto Sans TC', sans-serif;
-    background-color: white;
+.carousel-control.left,
+.carousel-control.right {
+    background: none;
+    width: 25px;
 }
 
-article {
-    width: 80%;
-    height: 100%;
-    float: left;
+.carousel-control.left {
+    left: -25px;
 }
 
-aside {
-    width: 20%;
-    float: right;
+.carousel-control.right {
+    right: -25px;
 }
 
-
-/* #informationTable {
-    width: 530px !important;
-} */
-
-#productImgDiv {
-    float: left;
-    margin: 15px;
-}
-
-#productRightInfo {
-    float: right;
-    /* width: 40%; */
-}
-
-#productLeftInfo {
-    /* width: 39%; */
-    float: left;
-}
-
-
-/* .btn-group {
-    display: block;
+.recIMG {
     width: 100%;
-} */
-
-
-/* .col-md-4 {
-    margin: 0px auto;
-} */
-
-
-/* #reviewTitle {
-    clear: both;
-} */
-
-
-/* 輪播 */
-
-.cta-100 {
-    margin-top: 100px;
-    padding-left: 8%;
-    padding-top: 7%;
 }
 
-.col-md-4 {
-    /* padding-bottom: 20px; */
+.carousel-control.right {
+    left: 92% !important;
 }
 
-.white {
-    /* color: #fff !important; */
+.carousel-control.left {
+    left: 8% !important;
 }
 
-.mt {
-    float: left;
-    margin-top: -20px;
-    padding-top: 20px;
+.rec {
+    position: absolute;
+    left: 71%;
+    background-color: rgb(255, 0, 0);
+    color: aliceblue;
+    padding: 1px 5px;
+    font-size: 130%;
 }
 
-.bg-blue-ui {
-    /* background-color: #708198 !important; */
-}
-
-figure img {
-    width: 300px;
-}
-
-#blogCarousel {
-    /* padding-bottom: 100px; */
-}
-
-.blog .carousel-indicators {
-    left: 0;
-    top: 105%;
-    /* height: 50%; */
-    margin-bottom: 100px;
+.search-bar {
+    margin: 10px;
 }
 
 
-/* The colour of the indicators */
+/* couldZoom */
 
-.carousel-control-prev-icon {
-    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3E%3C/svg%3E") !important;
-   }
-   
-   .carousel-control-next-icon {
-     background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3E%3Cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3E%3C/svg%3E") !important;
-   }
 
-.blog .carousel-indicators li {
-    background: #dadada;
-    border-radius: 50%;
-    /* width: 20px; */
-    height: 1px;
+/* div that surrounds Cloud Zoom image and content slider. */
+
+#surround {
+    width: 50%;
+    min-width: 256px;
+    max-width: 480px;
 }
 
-.blog .carousel-indicators .active {
-    background: black;
+
+/* Image expands to width of surround */
+
+img.cloudzoom {
+    width: 100%;
 }
 
-.item-carousel-blog-block {
-    outline: medium none;
-    /* padding: 15px; */
-}
 
-.item-box-blog {
-    border: 1px solid #dadada;
-    text-align: center;
-    z-index: 4;
-    padding: 20px;
-    width: 245px;
-    height: 360px;
-}
+/* CSS for slider - will expand to width of surround */
 
-.item-box-blog-image {
+#slider1 {
+    margin-left: 20px;
+    margin-right: 20px;
+    height: 119px;
+    border-top: 1px solid #aaa;
+    border-bottom: 1px solid #aaa;
     position: relative;
 }
 
-.item-box-blog-image figure img {
-    width: 100%;
-    height: auto;
-}
 
-.item-box-blog-date {
-    position: absolute;
-    z-index: 5;
-    padding: 4px 4px;
-    top: -20px;
-    right: -13px;
-    background-color: #2e2e2e;
-}
+/* 蓋掉版權 */
 
-.item-box-blog-date span {
-    color: #fff;
-    display: block;
-    text-align: center;
-    line-height: 1.2;
-}
-
-.item-box-blog-date span.mon {
-    font-size: 18px;
-}
-
-.item-box-blog-date span.day {
-    font-size: 16px;
-}
-
-.item-box-blog-body {
-    padding: 10px;
-}
-
-.item-heading-blog a h5 {
-    margin: 0;
-    line-height: 1;
-    text-decoration: none;
-    transition: color 0.3s;
-}
-
-.item-box-blog-heading a {
-    text-decoration: none;
-}
-
-.item-box-blog-text {
-    max-height: 100px;
-    overflow: hidden;
-}
-
-.mt-10 {
-    float: left;
-    margin-top: -10px;
-    padding-top: 10px;
+.cloudzoom-blank div {
+    visibility: hidden !important;
 }

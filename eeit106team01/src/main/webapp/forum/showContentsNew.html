@@ -13,22 +13,568 @@
     <link rel="icon" href="/assets/images/favicon.ico">
 
     <script src="/assets/js/jquery-1.11.3.min.js"></script>
+    <link rel="stylesheet" href="/forum/css/card.css">
 
     <!--input data-include property in any tag when window.onload-->
     <script src="/navbar/js/csi.min.js"></script>
 
-    <!-- include navbarCss when window.onload-->
-    <div data-include="/navbar/navbarCssInHeadTag.html"></div>
+    <script src="/navbar/js/navbar-init.js"></script>
+
+    <!-- google map -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAiREDDjOZrkP5eWTeVhK3xF7uVZr6MGp0" async
+        defer></script>
+
+    <!-- cookie -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <!-- plyr -->
+    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.3/plyr.css" />
+    <script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
+
+    <!-- quill -->
+    <script src="/forum/quill/highlight.min.js"></script>
+    <script src="/forum/quill/katex.min.js"></script>
+    <script src="/forum/quill/quill.js"></script>
+    <link rel="stylesheet" href="/forum/quill/quill.core.css">
+    <link rel="stylesheet" href="/forum/quill/quill.bubble.css">
+    <link rel="stylesheet" href="/forum/quill/quill.snow.css">
 
     <!-- chatroom -->
     <script src="/chat/js/sockjs.min.js"></script>
     <script src="/chat/js/stomp.min.js"></script>
     <script src="/chat/js/chatroom-init.js"></script>
+
+
+    <style>
+        .standalone-container {
+            /* margin: 0px auto; */
+            max-width: 720px;
+            border: 0px;
+        }
+
+        .card {
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
+        }
+
+        /* .card-header,
+        .card-body,
+        .card-footer {
+            border: 1px solid black; */
+        /* padding: 0;
+        } */
+
+        .main-content {
+            padding: 0 !important;
+            background: #dddddd8e !important;
+        }
+
+        .content-content {
+            padding: 0;
+            margin: 0 auto;
+            max-width: 80% !important;
+            background: white !important;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
+        }
+
+        .topicVideo {
+            align-content: center;
+            width: 100%;
+            min-width: 320px;
+            /* border: 0;
+            padding: 0;
+            margin: 0; */
+            /* max-height: 700px; */
+            background: black;
+        }
+
+        .topicVideo>.card-img-top {
+            /* max-width: 1280px; */
+            align-self: center;
+            /* max-height: 10%; */
+        }
+
+        .page-container {
+            width: 100%-280px;
+            ;
+        }
+    </style>
+
     <script>
         const urlParams = new URLSearchParams(window.location.search);
         const topic = urlParams.get("topic");
-        console.log("topic: " + topic);
 
+        var memberBean = Cookies.get("MemberBean");
+        console.log(Cookies.get("MemberBean"));
+        if (!memberBean) {
+            memberBean = null;
+        } else {
+            var memberBean = JSON.parse(Cookies.get("MemberBean"));
+            console.log(memberBean);
+        }
+
+        //Cookies.set("topicBean", {"id":2,"topicHeader":"哈哈我是標題","topicType":"shareTopic","topicRegion":"centralRegion","topicLikeNum":0,"topicLikeWho":null,"contentReplyNum":5,"topicCreateTime":"2019-05-21T05:37:03.476+0000","topicUpdateTime":"2019-05-21T05:37:03.476+0000","topicStatus":"normal","accidentTime":"2019-05-15T07:51:41.807+0000","accidentLocation":"9527","accidentLocationLongitude":121.5425343600541,"accidentLocationLatitude":25.01566986412309,"topicContent":"{\"ops\":[{\"insert\":\"哈哈哈我是內文\"}]}","topicContentUpdateTime":"2019-05-21T05:37:03.476+0000","pageViews":0,"updateMessage":"使用者發文","memberBean":{"id":1,"name":"pikachu"},"videoBean":{"id":1,"memberBean":{"id":1,"name":"pikachu"},"uploadTime":"2019-05-21T05:30:38.378+0000","videoStatus":"processing","videoURI":"1558416638378Incredibles 2 - Final Battle.mp4","thumbnailURI":"1558416638378Incredibles 2 - Final Battle.mp4.jpg","gifURI":"1558416638378Incredibles 2 - Final Battle.mp4.gif","videoLength":493.517,"updateMessage":"new insert: Generating thumbnail and gif completed."}});
+        // topicBean = localStorage.getItem("topicBean");
+        // if (!topicBean) {
+        //     location.href = "/index.html";
+        // }
+        var topicBean;
+
+        function getContents() {
+            $.ajax({
+                url: "/articleTopics/" + topicBean.id + "/articleContents?begin=1&end=100&orderType=orderByLike",
+                method: "GET",
+                dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    console.log(data);
+                    show(null, data);
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus);
+                }
+            })
+        }
+
+        var noRepliedContents;
+        var repliedContents;
+
+        function show(topicBean, contentBeans) {
+            if (topicBean) {
+                let topic = createTopic(topicBean);
+                $(".content-content").append(topic);
+                createShowContentQuill(topicBean.topicContent, "quillTopicContent" + topicBean.id);
+                if (topicBean.videoBean) {
+                    let topicVideo = createVideo(topicBean.videoBean, topic.id + "player");
+                    $(topicVideo).addClass("topicVideo");
+                    $(".main-content").prepend(topicVideo);
+                    createVideoPlayer(topicBean.videoBean, topic.id + "player");
+                }
+                initMap();
+            }
+            if (contentBeans) {
+                noRepliedContents = [];
+                repliedContents = [];
+                for (let i = 0; i < contentBeans.length; i++) {
+                    if (contentBeans[i].reply == null) {
+                        noRepliedContents.push(contentBeans[i]);
+                    } else {
+                        repliedContents.push(contentBeans[i]);
+                    }
+                }
+                for (let i = 0; i < noRepliedContents.length; i++) {
+                    let content = createContent(noRepliedContents[i]);
+                    $(".content-content").append(content);
+                    createShowContentQuill(noRepliedContents[i].contentContent, "quillContent" + noRepliedContents[i].id);
+                    if ((noRepliedContents[i].contentStatus !== "deleted")) {
+                        $(content).children(".card-body").append(createReplyBtn(noRepliedContents[i], "content"));
+                        if ((noRepliedContents[i].videoBean != null)) {
+                            $(content).children(".card-body").prepend(createVideo(noRepliedContents[i].videoBean, content.id + "player"));
+                            createVideoPlayer(noRepliedContents[i].videoBean, content.id + "player");
+                        }
+                    }
+                }
+                for (let i = 0; i < repliedContents.length; i++) {
+                    let content = createContent(repliedContents[i]);
+                    $("#content" + repliedContents[i].reply.id).append(content);
+                    createShowContentQuill(repliedContents[i].contentContent, "quillContent" + repliedContents[i].id);
+                    if ((repliedContents[i].contentStatus !== "deleted") && (repliedContents[i].videoBean != null)) {
+                        $(content).children(".card-body").prepend(createVideo(repliedContents[i].videoBean, content.id + "player"));
+                        createVideoPlayer(repliedContents[i].videoBean, content.id + "player");
+                    }
+                }
+            }
+            setTimeout(resizeWindow, 50);
+        }
+
+        function createTopic(topicBean) {
+            let card = document.createElement("div");
+            // let title = document.createElement("div");
+            let content = document.createElement("div");
+            let information = document.createElement("div");
+            let author = topicBean.memberBean.name;
+            $(content).html(
+                "<h2>[" + topicBean.topicType + "] " +
+                topicBean.topicHeader + "</h2>" +
+                "<dl><dt>作者</dt><dd>- " + author + "</dd><dl>"
+            );
+
+            let container = document.createElement("div");
+            let quillContainer = document.createElement("div");
+            $(container).addClass("standalone-container");
+            $(quillContainer).attr("id", "quillTopicContent" + topicBean.id);
+
+            let map = document.createElement("div");
+            $(map).width("100%");
+            $(map).height(300);
+            $(map).attr("id", "map_canvas");
+
+            container.appendChild(quillContainer);
+
+            content.appendChild(container);
+            content.appendChild(document.createElement("hr"));
+            content.appendChild(map);
+
+            $(information).html(
+                "contentUpdateTime: " + new Date(topicBean.topicUpdateTime) +
+                "<br>contentLikeNum: " + topicBean.topicLikeNum
+            );
+            card.className = "card";
+            // title.className = "card-header";
+            content.className = "card-body";
+            information.className = "card-footer";
+            card.id = "topic" + topicBean.id;
+            card.style.minWidth = "320px";
+            card.style.margin = "1%";
+            card.style.marginTop = "0";
+            if (
+                (topicBean.topicStatus !== "deleted") &&
+                (topicBean.memberBean) &&
+                (memberBean) &&
+                (topicBean.memberBean.id == memberBean.id)
+            ) {
+                content.appendChild(createEditBtn(topicBean, "topic"));
+            }
+            if (
+                (topicBean.topicStatus !== "deleted")
+            ) {
+                content.appendChild(createReplyBtn(topicBean, "topic"));
+            }
+            // card.appendChild(title);
+            card.appendChild(content);
+            card.appendChild(information);
+            return card;
+        }
+
+        function createContent(contentBean) {
+            let card = document.createElement("div");
+            // let title = document.createElement("div");
+            let content = document.createElement("div");
+            let information = document.createElement("div");
+            let author = contentBean.memberBean.name;
+            $(content).html(
+                "Re: " + contentBean.articleTopicCurrent.topicHeader +
+                "<dl><dt>作者</dt><dd>- " + author + "</dd><dl>"
+            );
+
+            let container = document.createElement("div");
+            let quillContainer = document.createElement("div");
+            $(container).addClass("standalone-container");
+            $(quillContainer).attr("id", "quillContent" + contentBean.id);
+            container.appendChild(quillContainer);
+            content.appendChild(container);
+
+            $(information).html(
+                "contentUpdateTime: " + new Date(contentBean.contentUpdateTime) +
+                "<br>"
+            );
+            card.id = "content" + contentBean.id;
+            card.className = "card";
+            // title.className = "card-header";
+            content.className = "card-body";
+            information.className = "card-footer";
+            card.style.width = "80%";
+            card.style.minWidth = "400px";
+            card.style.margin = "1%";
+            if (
+                (contentBean.contentStatus !== "deleted") &&
+                (contentBean.memberBean) &&
+                (memberBean) &&
+                (contentBean.memberBean.id == memberBean.id)
+            ) {
+                content.appendChild(createEditBtn(contentBean, "content"));
+            }
+            information.appendChild(createLikeImg(contentBean));
+            // card.appendChild(title);
+            card.appendChild(content);
+            card.appendChild(information);
+            return card;
+        }
+
+        function createShowContentQuill(deltaContent, elementId) {
+            var quillContent = new Quill('#' + elementId, {
+                readOnly: true,
+                theme: 'bubble'
+            });
+            quillContent.setContents(JSON.parse(deltaContent));
+        }
+
+        function createLikeImg(bean, replyType) {
+            let span = document.createElement("span");
+            let like = document.createElement("img");
+            let text = document.createElement("span");
+            let disLike = document.createElement("img");
+            like.src = "/storage/others/Like.png";
+            disLike.src = "/storage/others/Like.png";
+            like.width = "16";
+            disLike.width = "16";
+            $(disLike).css("transform", "rotate(180deg)");
+            $(text).text(bean.contentLikeNum);
+            $(text).css("margin", "1em");
+            let uri = "/articleTopics/" + bean.articleTopicCurrent.id + "/articleContents/" + bean.id;
+            if (memberBean && bean.contentLikeWho && bean.contentLikeWho[memberBean.id]) {
+                if (bean.contentLikeWho[memberBean.id] == "like") {
+                    $(disLike).css("filter", "grayscale(100%)");
+                    $(like).click(function () {
+                        $(like).attr("disabled", true);
+                        $(text).text($(text).text() - (1));
+                        $(like).css("filter", "grayscale(100%)");
+                        $(this).unbind();
+                        $.ajax({
+                            url: uri + "/dislike",
+                            method: "PUT"
+                        });
+                    })
+                } else if (bean.contentLikeWho[memberBean.id] == "dislike") {
+                    $(like).css("filter", "grayscale(100%)");
+                    $(disLike).click(function () {
+                        $(disLike).attr("disabled", true);
+                        $(text).text($(text).text() - (-1));
+                        $(disLike).css("filter", "grayscale(100%)");
+                        $(this).unbind();
+                        $.ajax({
+                            url: uri + "/like",
+                            method: "PUT"
+                        });
+                    })
+                }
+            } else {
+                $(like).css("filter", "grayscale(100%)");
+                $(disLike).css("filter", "grayscale(100%)");
+                $(like).click(function () {
+                    $(like).attr("disabled", true);
+                    $(disLike).attr("disabled", true);
+                    $(text).text($(text).text() - (-1));
+                    $(like).css("filter", "grayscale(0%)");
+                    $(this).unbind();
+                    $(disLike).unbind();
+                    $.ajax({
+                        url: uri + "/like",
+                        method: "PUT"
+                    });
+                })
+                $(disLike).click(function () {
+                    $(like).attr("disabled", true);
+                    $(disLike).attr("disabled", true);
+                    $(text).text($(text).text() - (1));
+                    $(disLike).css("filter", "grayscale(0%)");
+                    $(this).unbind();
+                    $(like).unbind();
+                    $.ajax({
+                        url: uri + "/dislike",
+                        method: "PUT"
+                    });
+                })
+            }
+            span.appendChild(like);
+            span.appendChild(text);
+            span.appendChild(disLike);
+            return span;
+        }
+
+        function createReplyBtn(bean, replyType) {
+            let replyBtn = document.createElement("button");
+            replyBtn.className = "btn btn-outline-secondary btn-sm";
+            replyBtn.textContent = "Reply";
+            replyBtn.style.float = "right";
+            replyBtn.addEventListener("click", function () {
+                sessionStorage.setItem("contentBean", JSON.stringify(bean));
+                sessionStorage.setItem("contentPage", location.pathname);
+                sessionStorage.setItem("replyType", replyType);
+                location.href = "/forum/postContent.html";
+            })
+            return replyBtn;
+        }
+
+        function createEditBtn(bean, beanType) {
+            let editBtn = document.createElement("button");
+            editBtn.className = "btn btn-outline-secondary btn-sm";
+            editBtn.textContent = "Edit";
+            editBtn.style.float = "right";
+            editBtn.addEventListener("click", function () {
+                sessionStorage.setItem("contentBean", JSON.stringify(bean));
+                sessionStorage.setItem("contentPage", location.pathname);
+                if (beanType === "topic") {
+                    location.href = "/forum/editTopic.html";
+                } else if (beanType === "content") {
+                    location.href = "/forum/editContent.html";
+                }
+            })
+            return editBtn;
+        }
+
+        function createVideo(videoBean, videoId) {
+            let videoCard = document.createElement("div");
+            let videoTop = document.createElement("div");
+            // let videoBottom = document.createElement("div");
+            let video = document.createElement("video");
+            let thumbnailURI = "/storage/others/no-image.png";
+            let videoURI = "/storage/videos/" + videoBean.videoURI;
+            if (videoBean.thumbnailURI != null && videoBean.thumbnailURI.length != 0) {
+                thumbnailURI = "/storage/jpgs/" + videoBean.thumbnailURI;
+            }
+            // videoBottom.className = "card-body";
+            // videoBottom.textContent = videoBean.videoURI.substr(0, 13);
+
+            video.id = videoId;
+            video.poster = thumbnailURI;
+            video.controls = true;
+            video.src = videoURI;
+            video.style.margin = "0";
+            video.style.border = "0";
+
+            videoCard.style.minWidth = "320px";
+            videoCard.style.margin = "0";
+            videoCard.style.border = "0";
+            videoCard.className = "card";
+
+            videoTop.style.margin = "0";
+            videoTop.style.border = "0";
+            videoTop.className = "card-img-top";
+
+            videoTop.appendChild(video);
+            videoCard.appendChild(videoTop);
+            // videoCard.appendChild(videoBottom);
+            return videoCard;
+        }
+        function createVideoPlayer(videoBean, videoId) {
+            let thumbnailURI = "/storage/others/no-image.png";
+            let gifURI = "/storage/others/no-image.png";
+            let videoURI = "/storage/videos/" + videoBean.videoURI;
+            if (videoBean.thumbnailURI != null && videoBean.thumbnailURI.length != 0) {
+                thumbnailURI = "/storage/jpgs/" + videoBean.thumbnailURI;
+            }
+            if (videoBean.gifURI != null && videoBean.gifURI.length != 0) {
+                gifURI = "/storage/gifs/" + videoBean.gifURI;
+            }
+            let player = new Plyr('#' + videoId);
+            player.on("playing", function () {
+                $(this).parent().parent().find(".plyr__controls").show();
+                $(this).parent().parent().find("button").show();
+            });
+            let hoverSetting = {
+                "duration": "fast",
+                "easing": "linear"
+            };
+            $(document.getElementById(videoId).nextElementSibling).hover(function () {
+                $(this).css("background-image", "url('" + gifURI + "')");
+                if (!player.playing) {
+                    $(this).parent().parent().find(".plyr__controls").hide(hoverSetting);
+                    $(this).parent().parent().find("button").hide(hoverSetting);
+                }
+            }, function () {
+                $(this).css("background-image", "url('" + thumbnailURI + "')");
+                if (!player.playing) {
+                    $(this).parent().parent().find(".plyr__controls").show(hoverSetting);
+                    $(this).parent().parent().find("button").show(hoverSetting);
+                }
+            });
+        }
+
+        function getTopic() {
+            if (topic != null) {
+                $.ajax({
+                    method: "GET",
+                    url: "/articleTopics/" + topic,
+                    dataType: "json",
+                    success: function (data, textStatus, jqXHR) {
+                        console.log(data);
+                        topicBean = data;
+                        document.title = data.topicHeader;
+                        show(data);
+                        if (data.contentReplyNum > 0) {
+                            getContents();
+                        }
+                    },
+                    error: function (jqXHR, textStatus, errorThrown) {
+                        let errorCode = jqXHR.status;
+                        console.log("errorCode: " + errorCode);
+                        if (errorCode == 404) {
+
+                        }
+                    }
+                });
+            }
+        }
+
+        var chatSidebarOpen = false;
+        function resizeWhenToggleChatSidebar() {
+            if (neonChat && !chatSidebarOpen) {
+                $(".page-container").width($(window).width() - 279);
+                chatSidebarOpen = true;
+            } else {
+                $(".page-container").width($(window).width());
+                chatSidebarOpen = false;
+            }
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let contentContent = document.createElement("div");
+            contentContent.className = "content-content";
+            document.getElementsByClassName("main-content")[0].appendChild(contentContent);
+            getTopic();
+            window.addEventListener("resize", resizeWindow);
+
+            let timeout = 10;
+            window.setTimeout(function () {
+                let chatToggleBtn = document.getElementById("toggleChatBtn");
+                if (chatToggleBtn) {
+                    chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+                    document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
+                } else {
+                    window.setTimeout(arguments.callee, timeout);
+                }
+            }, timeout);
+        });
+
+        function resizeWindow() {
+            let navbarHeight = $("#bs-example-navbar-collapse-2").height();
+            let topicVideoHeight = $(window).height();
+            console.log("$(window).height(): " + $(window).height());
+            if (navbarHeight >= 54 && navbarHeight <= 106) {
+                $(".page-container").css("margin-top", navbarHeight);
+                $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - navbarHeight) / 9 * 16));
+            } else {
+                $(".page-container").css("margin-top", 54);
+                $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - 54) / 9 * 16));
+            }
+        }
+
+
+        //-------------------------------------------------------------
+        //顯示Google Map
+        function initMap() {
+            console.log(document.getElementById("map_canvas"));
+            let map = new google.maps.Map(document.getElementById("map_canvas"), {
+                zoom: 12
+                , center: { lat: topicBean.accidentLocationLatitude, lng: topicBean.accidentLocationLongitude }
+                , scaleControl: true
+                , mapTypeControlOptions: { mapTypeIds: [] }
+                , gestureHandling: 'greedy'
+            });
+
+            // google.maps.event.addListener(map, 'click', function (event) {
+            //    console.log("Latitude: " + event.latLng.lat() + " " + ", longitude: " + event.latLng.lng());
+            // $("#accidentLocationLatitude").html(event.latLng.lat());
+            // $("#accidentLocationLongitude").html(event.latLng.lng());
+
+            var marker =
+                new google.maps.Marker({
+                    position: {
+                        lat: topicBean.accidentLocationLatitude,
+                        lng: topicBean.accidentLocationLongitude
+                    }
+                    , map: map
+                    // , label: `${dataTopicList[i].id}`
+                    , animation: google.maps.Animation.BOUNCE    //for marker remove check
+                });
+            // });
+        }
+        // window.onload = function () {
+        //     if (topicBean) {
+        //         console.log(topicBean.accidentLocationLongitude);
+        //         console.log(topicBean.accidentLocationLatitude);
+        //         initMap();
+        //     }
+        // };
     </script>
 </head>
 
@@ -40,16 +586,15 @@
 
         <!-- your page start -->
         <div class="main-content">
-
-            <div id="tryForScrollbar">999</div>
+            <!-- <div id="map_canvas" style="width:600px; height:500px;"></div> -->
+            <!-- <div id="tryForScrollbar">999</div>
             <script>
                 let str = "";
                 for (let i = 0; i < 50; i++) {
                     str += `<div><strong>${i}</strong></div>`;
                 }
                 $("#tryForScrollbar").html(str);
-            </script>
-
+            </script> -->
         </div>
         <!-- your page end -->
 

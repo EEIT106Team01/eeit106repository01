@@ -39,9 +39,9 @@ head.appendChild(quillCss2);
 
 
 function onSubmitMessage(id, msg, chatData) {
-    console.log(id);
-    console.log(msg);
-    console.log(chatData);
+    // console.log(id);
+    // console.log(msg);
+    // console.log(chatData);
     if (
         id === "north"
         || id === "middle"
@@ -93,7 +93,7 @@ function showOldMessage(msgBeans, regionActive) {
     for (let i = msgBeans.length - 1; i >= 0; i--) {
         let id = msgBeans[i].region;
         $("#" + id).attr("index", msgBeans[i].index);
-        console.log($("#" + id).attr("index"));
+        // console.log($("#" + id).attr("index"));
         for (let j = msgBeans[i].messages.length - 1; j >= 0; j--) {
             if (msgBeans[i].messages[j].name !== chatUsername) {
                 fromOpponent = true;
@@ -178,7 +178,7 @@ function checkUserExist() {
 }
 
 function getOld(id, index) {
-    console.log("getOld index: " + index);
+    // console.log("getOld index: " + index);
     if (id && index && index > 0) {
         if (
             id === "north"
@@ -219,10 +219,10 @@ function initRegionChat(region) {
 
 function workerInit() {
     worker.port.onmessage = function (e) {
-        console.log("getWorkerMessage: " + JSON.stringify(e.data));
+        // console.log("getWorkerMessage: " + JSON.stringify(e.data));
         if (e.data.command == "regionMessage") {
             var msgBean = JSON.parse(e.data.message);
-            console.log(msgBean);
+            // console.log(msgBean);
             if (Array.isArray(msgBean)) {
                 showOldMessage(msgBean);
             } else {
@@ -230,7 +230,7 @@ function workerInit() {
             }
         } else if (e.data.command == "privateMessage") {
             var msgBean = JSON.parse(e.data.message);
-            console.log(msgBean);
+            // console.log(msgBean);
             if (Array.isArray(msgBean)) {
                 showOldPrivateMessage(msgBean);
             } else {
@@ -238,7 +238,7 @@ function workerInit() {
             }
         } else if (e.data.command == "checkUser") {
             let id = e.data.message;
-            console.log(eval(id));
+            // console.log(eval(id));
             if (eval(id)) {
                 if (!$("#" + id).get(0)) {
                     neonChat.addUser("group-2", id, "online", false, id);
@@ -263,7 +263,7 @@ function workerInit() {
             }
         } else if (e.data.command == "getRegionActive") {
             var msgBean = JSON.parse(e.data.message);
-            console.log(msgBean);
+            // console.log(msgBean);
             if (Array.isArray(msgBean)) {
                 showOldMessage(msgBean, true);
             } else {
@@ -271,7 +271,7 @@ function workerInit() {
             }
         } else if (e.data.command == "getAllActiveMsg") {
             var msgBean = JSON.parse(e.data.message);
-            console.log(msgBean);
+            // console.log(msgBean);
             if (Array.isArray(msgBean)) {
                 showOldPrivateMessage(msgBean);
             } else {
@@ -409,6 +409,7 @@ $(document).ready(function () {
         + '<style>'
         + '#chat {'
         + 'font-size: 0.8em;'
+        + 'margin: 0;'
         + '}'
         + '</style>'
 
@@ -575,9 +576,9 @@ $(document).ready(function () {
                         let id = $user_link.attr('id');
                         let index = $user_link.attr('index');
                         if (id && index > 0) {
-                            console.log("$(this).scrollTop()");
-                            console.log(id);
-                            console.log("index: " + index);
+                            // console.log("$(this).scrollTop()");
+                            // console.log(id);
+                            // console.log("index: " + index);
                             getOld(id, --index);
                         }
                     }
@@ -1403,6 +1404,6 @@ $(document).ready(function () {
         }
     }, timeout);
 
-    console.log($(".badge"));
+    // console.log($(".badge"));
 
 });
