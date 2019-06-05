@@ -48,6 +48,15 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
+	@GetMapping(path = { "/randomProduct" }, produces = { "application/json" })
+	public ResponseEntity<?> getRandomProduct() {
+		ProductBean result = productService.getRandomProduct();
+		if (result != null) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.notFound().build();
+	}
+
 	@GetMapping(path = { "/products" }, produces = { "application/json" })
 	public ResponseEntity<?> getProducts() {
 		List<ProductBean> result = productService.findProducts();
@@ -88,14 +97,13 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/search/updatedTime" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductsByUpdatedTime(
-			@RequestParam(required = false) String dataName,
-			@RequestParam String queryString,
-			@RequestParam(required = false) String brandType,
+	public ResponseEntity<?> getProductsByUpdatedTime(@RequestParam(required = false) String dataName,
+			@RequestParam String queryString, @RequestParam(required = false) String brandType,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDay,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDay) {
 		if (startDay != null && endDay != null && startDay.equals(endDay) == false && startDay.compareTo(endDay) < 0) {
-			List<ProductBean> result = productService.findProductsByUpdatedTime(dataName,queryString,startDay, endDay,brandType);
+			List<ProductBean> result = productService.findProductsByUpdatedTime(dataName, queryString, startDay, endDay,
+					brandType);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -105,9 +113,10 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/search/brand" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand,@RequestParam(required = false) String type) {
+	public ResponseEntity<?> getProductsByBrand(@RequestParam String brand,
+			@RequestParam(required = false) String type) {
 		if (brand != null) {
-			List<ProductBean> result = productService.findProductsByBrand(brand,type);
+			List<ProductBean> result = productService.findProductsByBrand(brand, type);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -125,7 +134,7 @@ public class ProductController {
 				&& (minPrice != null) && (minPrice.intValue() >= 0) && (maxPrice != null)
 				&& (maxPrice.intValue() > 0)) {
 			List<ProductBean> result = productService.findProductsByNameBrandTypeAndOrderByPriceBetween(byNameBrandType,
-					queryString,type, minPrice, maxPrice);
+					queryString, type, minPrice, maxPrice);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -135,14 +144,14 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/search/TypeName" }, produces = { "application/json" })
-	public ResponseEntity<?> getProductsByName(@RequestParam String productType,@RequestParam String productName) {
+	public ResponseEntity<?> getProductsByName(@RequestParam String productType, @RequestParam String productName) {
 		if (productName != null && NullChecker.isEmpty(productType) == true) {
 			List<ProductBean> result = productService.findProductsByName(productName);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
 			return ResponseEntity.notFound().build();
-		}else if((productName != null && NullChecker.isEmpty(productType) == false)){
+		} else if ((productName != null && NullChecker.isEmpty(productType) == false)) {
 			List<ProductBean> result = productService.findProductsByTypeName(productType, productName);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
@@ -165,11 +174,10 @@ public class ProductController {
 	}
 
 	@GetMapping(path = { "/search/sort" }, produces = { "application/json" })
-	public ResponseEntity<?> findProductsSort(
-			@RequestParam String dataName,@RequestParam String queryString,
-			@RequestParam String type,@RequestParam String sort,@RequestParam(required = false) String brandType) {
-		if (dataName != null && queryString!=null && type!=null && sort!=null) {
-			List<ProductBean> result = productService.findProductsSort(dataName, queryString, type, sort,brandType);
+	public ResponseEntity<?> findProductsSort(@RequestParam String dataName, @RequestParam String queryString,
+			@RequestParam String type, @RequestParam String sort, @RequestParam(required = false) String brandType) {
+		if (dataName != null && queryString != null && type != null && sort != null) {
+			List<ProductBean> result = productService.findProductsSort(dataName, queryString, type, sort, brandType);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
@@ -177,7 +185,7 @@ public class ProductController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@GetMapping(path = { "/products/recommend" }, produces = { "application/json" })
 	public ResponseEntity<?> getRecommendProducts(@RequestParam String type) {
 		if (type != null) {
@@ -189,7 +197,7 @@ public class ProductController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@PutMapping(path = { "/products" }, consumes = { "application/json; charset=UTF-8" }, produces = {
 			"application/json" })
 	public ResponseEntity<?> putProduct(@RequestBody ProductBean productBean, BindingResult bindingResult) {

@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.shop.model.service;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Random;
 
 import javax.transaction.Transactional;
 
@@ -74,6 +75,21 @@ public class ProductService {
 		return productDAO.findProductByProductId(id);
 	}
 
+	public ProductBean getRandomProduct() {
+		List<ProductBean> products = productDAO.findProducts();
+		Random ran = new Random();
+
+		while(true) {
+			Integer id = ran.nextInt(products.size())+1;
+			Long ID = Long.valueOf(id);
+			ProductBean result = productDAO.findProductByProductId(ID);
+			System.out.println("id========================"+ID);
+			if(NullChecker.isEmpty(result) == false) {
+				return result;
+			}
+		}
+	}
+	
 	public List<ProductBean> findProducts() {
 		return productDAO.findProducts();
 	}
