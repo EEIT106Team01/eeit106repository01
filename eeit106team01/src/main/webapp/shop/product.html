@@ -16,114 +16,135 @@
     <link rel="stylesheet" href="css/review.css" />
 
     <script src="../assets/js/jquery-1.11.3.min.js"></script>
+    <script src="../navbar/js/csi.min.js"></script>
+    <script src="../navbar/js/navbar-init.js"></script>
+
 
     <!-- Include Cloud Zoom CSS -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css" rel="stylesheet" />
+    <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css"
+        rel="stylesheet" />
     <!-- Include Cloud Zoom JavaScript -->
-    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
+    <script type="text/javascript"
+        src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
     <!-- Include Thumbelina CSS [這不一定需要試試看]-->
-    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
+    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css"
+        rel="stylesheet" />
     <!-- Include Thumbelina JavaScript [這不一定需要試試看] -->
-    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
+    <script type="text/javascript"
+        src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
 </head>
 
 <body class="page-body">
-    <!-- drag and drop start  -->
-    <div class="row" id="div-draggable-events">
-        <div>
-            <!-- Card -->
-            <div id="draggable-events" class="card">
-
-                <!-- Card image -->
-                <div class="card-header p-2" id="card-shopping-cart">
-                    <span>
-                        <img class="card-img-top mr-1" src="img/cart.png" alt="Shopping Cart" />
-                        <span class="badge badge-warning align-middle pt-1">
-                            <p class="text-dark" id="card-shopping-cart-count">0</p>
-                        </span>
-                    </span>
-                </div>
-
-                <!--Accordion wrapper 1-->
-                <div class="accordion md-accordion text-center p-1" style="display: none" id="accordion-shopping-cart" role="tablist" aria-multiselectable="true">
-                </div>
-
-            </div>
-            <!-- Card -->
-        </div>
-    </div>
-    <!-- drag and drop end -->
 
     <!-- include navbar when window.onload-->
-    <div data-include="/navbar/navbarWhite.html"></div>
+    <div data-include="../navbar/navbarWhite.html"></div>
 
     <div class="page-container">
+
         <div class="main-content">
+
+            <!-- drag and drop start  -->
+            <div class="row" id="div-draggable-events">
+                <div>
+                    <!-- Card -->
+                    <div id="draggable-events" class="card">
+
+                        <!-- Card image -->
+                        <div class="card-header p-2" id="card-shopping-cart">
+                            <span>
+                                <img class="card-img-top mr-1" src="img/cart.png" alt="Shopping Cart" />
+                                <span class="badge badge-warning align-middle pt-1">
+                                    <p class="text-dark" id="card-shopping-cart-count">0</p>
+                                </span>
+                            </span>
+                        </div>
+
+                        <!--Accordion wrapper 1-->
+                        <div class="accordion md-accordion text-center p-1" style="display: none"
+                            id="accordion-shopping-cart" role="tablist" aria-multiselectable="true">
+                        </div>
+
+                    </div>
+                    <!-- Card -->
+                </div>
+            </div>
+            <!-- drag and drop end -->
+
             <!-- 排版用 -->
             <div class="col-md-4"></div>
 
             <form class="search-bar col-md-4">
                 <select class="form-control col-md-2" id="searchType"></select>
-                <div class="input-group"> <input type="text" class="form-control input-lg" name="search" id="searchName" placeholder="Search for something...">
-                    <div class="input-group-btn"> <button class="btn btn-lg btn-primary btn-icon" id="search" type="button">
-                Search 
-                <i class="entypo-search"></i> </button> </div>
+                <div class="input-group"> <input type="text" class="form-control input-lg" name="search" id="searchName"
+                        placeholder="Search for something...">
+                    <div class="input-group-btn"> <button class="btn btn-lg btn-primary btn-icon" id="search"
+                            type="button">
+                            Search
+                            <i class="entypo-search"></i> </button> </div>
                 </div>
             </form>
             <!-- 排版用 -->
-            <divclass="col-md-4">
-        </div>
-        <div id="productItemPage" class="col-md-10">
-            <div id="productLeftInfo" class="col-md-6"></div>
-            <div id="productRightInfo" class="col-md-6">
-                <div id="buy"></div>
+            <div class="col-md-4">
             </div>
-        </div>
+            <div id="productItemPage" class="col-md-10">
+                <div id="productLeftInfo" class="col-md-6"></div>
+                <div id="productRightInfo" class="col-md-6">
+                    <div id="buy"></div>
+                </div>
+            </div>
 
-        <div class="btn-group btn-group-justified" role="group" aria-label="Basic example">
-            <div class="btn-group">
-                <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#productInformation" aria-expanded="false" aria-controls="productInformation" id="productInformationButton">
+            <div class="btn-group btn-group-justified" role="group" aria-label="Basic example">
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse"
+                        data-target="#productInformation" aria-expanded="false" aria-controls="productInformation"
+                        id="productInformationButton">
                         詳細資訊
                     </button>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#productImgDiv" aria-expanded="false" aria-controls="productImgDiv" id="productImgDivButton">
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse"
+                        data-target="#productImgDiv" aria-expanded="false" aria-controls="productImgDiv"
+                        id="productImgDivButton">
                         產品圖片
                     </button>
-            </div>
-            <div class="btn-group">
-                <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#reviewResult" aria-expanded="false" aria-controls="reviewResult" id="reviewResultButton">
+                </div>
+                <div class="btn-group">
+                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse"
+                        data-target="#reviewResult" aria-expanded="false" aria-controls="reviewResult"
+                        id="reviewResultButton">
                         商品評價
                     </button>
+                </div>
             </div>
-        </div>
-        <div id="productInformation" class="col-md-12"></div>
-        <div id="productImgDiv" class="col-md-12"></div>
-        <div id="reviewResult" class="col-md-12">
-            <!-- <p class=" text-dark" id="reviewTitle"></p> -->
-        </div>
+            <div id="productInformation" class="col-md-12"></div>
+            <div id="productImgDiv" class="col-md-12"></div>
+            <div id="reviewResult" class="col-md-12">
+                <!-- <p class=" text-dark" id="reviewTitle"></p> -->
+            </div>
 
-        <!-- recommended -->
-        <div id="recommendDiv" class="col-md-12">
-            <p class="text-dark col-md-12" id="recommendTitle"></p>
-            <div id="carousel-reviews" class="carousel slide" data-ride="carousel">
-                <div class="carousel-inner col-md-8">
-                    <div class="item col-md-12 active" id="item1">
+            <!-- recommended -->
+            <div id="recommendDiv" class="col-md-12">
+                <p class="text-dark col-md-12" id="recommendTitle"></p>
+                <div id="carousel-reviews" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner col-md-8">
+                        <div class="item col-md-12 active" id="item1">
 
+                        </div>
+                        <div class="item col-md-12" id="item2">
+
+                        </div>
+                        <a class="left carousel-control leftbtn" href="#carousel-reviews" role="button"
+                            data-slide="prev">
+                            <span class="glyphicon glyphicon-chevron-left"></span>
+                        </a>
+                        <a class="right carousel-control rightbtn" href="#carousel-reviews" role="button"
+                            data-slide="next">
+                            <span class="glyphicon glyphicon-chevron-right"></span>
+                        </a>
                     </div>
-                    <div class="item col-md-12" id="item2">
-
-                    </div>
-                    <a class="left carousel-control leftbtn" href="#carousel-reviews" role="button" data-slide="prev">
-                        <span class="glyphicon glyphicon-chevron-left"></span>
-                    </a>
-                    <a class="right carousel-control rightbtn" href="#carousel-reviews" role="button" data-slide="next">
-                        <span class="glyphicon glyphicon-chevron-right"></span>
-                    </a>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 
     <!-- Bottom scripts (common) -->
