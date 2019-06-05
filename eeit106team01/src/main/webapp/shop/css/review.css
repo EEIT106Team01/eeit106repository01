@@ -1,72 +1,86 @@
 /* review */
 
 #image {
-    text-align: center;
-    width: 300px;
+  text-align: center;
+  width: 300px;
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
 .card-img-top {
-    background-color: black;
+  background-color: black;
 }
 
 #previewDiv img {
-    width: 300px;
+  width: 300px;
 }
 
 .container {
-    width: 900px;
+  width: 900px;
 }
 
-
-/* drag and drop */
+/* shopping-cart */
 
 #div-draggable-events {
-    position: fixed;
-    top: 100px;
-    right: 0px;
+  position: fixed;
+  top: 100px;
+  right: 100px;
 }
 
 #draggable-events {
-    width: 200px;
-    border: none;
-    background: transparent;
+  width: 200px;
+  border: none;
+  background: transparent;
 }
 
-#draggable-events div,
+#draggable-events div {
+  border: 0;
+}
+
 #draggable-events img {
-    background: transparent;
-    border: 0;
+  background: transparent;
+  border: 0;
+}
+
+#accordion-shopping-cart img {
+  width: 50px;
+  border-radius: 8px;
+  border-width: 3px;
+  border-style: outset;
+  border-color: gray;
+}
+
+.cart-text{
+    font-size: 10px;
 }
 
 .card-img-top {
-    width: 50px;
+  width: 50px;
 }
 
 .card-header {
-    text-align: center;
+  text-align: center;
 }
 
 .badge {
-    width: 23px;
-    height: 23px;
+  width: 23px;
+  height: 23px;
 }
 
 .badge p {
-    font-size: 15px;
+  font-size: 15px;
 }
 
 /* image mouseover color */
 
 .card-img-top {
-    filter: invert(40%);
-    -webkit-filter: invert(40%);
+  filter: invert(30%);
+  -webkit-filter: invert(30%);
 }
 
 .mouseover {
-    filter: invert(0%);
-    -webkit-filter: invert(0%);
+  filter: invert(0%);
+  -webkit-filter: invert(0%);
 }
