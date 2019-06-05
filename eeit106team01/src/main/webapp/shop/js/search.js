@@ -3,7 +3,7 @@ $(document).ready(function () {
     getAllType();
     getAllBrand(takeTypeUrlValue());
     userSearch();
-
+    
     $("#searchPriceByBrandBtnDiv").hide();
     $("#searchPriceBytypeBtn").on('click', (function () {
         $("#sortByBrandByMixpriceMaxprice").hide();

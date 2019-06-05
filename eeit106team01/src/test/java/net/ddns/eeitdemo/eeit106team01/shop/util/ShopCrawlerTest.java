@@ -177,7 +177,7 @@ public class ShopCrawlerTest {
 			productType = fetchProductName;
 
 		} else if (fetchProductType.equalsIgnoreCase("3C用品固定架%2F固定座")) {
-			productType = "3C用品固定架&固定座";
+			productType = "3C用品固定架和固定座";
 		} else {
 			productType = fetchProductType;
 		}

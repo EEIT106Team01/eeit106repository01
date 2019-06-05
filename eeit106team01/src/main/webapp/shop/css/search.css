@@ -17,15 +17,15 @@
     width: 200px;
     padding: 5px 5px;
 }
-#searchTitle{
+/* #searchTitle{
     float: left;
-}
+} */
 
 #productQuantity{
     display: inline;
 }
 
-.page{
+.sortClass{
     float: right;
 }
 
