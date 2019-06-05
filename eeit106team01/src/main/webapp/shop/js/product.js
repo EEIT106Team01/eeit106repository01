@@ -193,7 +193,11 @@ function productInformation(productData) {
 function productImgDiv(productData) {
   var imgArray = [];
   $.each(productData.informationImageLink, function(key, val) {
-    imgArray.push("<img src=" + val + ' width="800"/>');
+    imgArray.push(
+      '<span class="row"><span class="col-md-2"></span><img class="col-md-8" src=' +
+        val +
+        ' width="60%"/><span class="col-md-2"></span></span>'
+    );
   });
   $("#productImgDiv").html("");
   $("#productImgDiv").append(imgArray.join(""));
