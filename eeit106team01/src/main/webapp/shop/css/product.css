@@ -44,13 +44,18 @@
 
 /* couldZoom */
 
-
 /* div that surrounds Cloud Zoom image and content slider. */
 
 #surround {
     width: 50%;
     min-width: 256px;
     max-width: 480px;
+}
+
+#productLeftInfo {
+    width: 50%;
+    min-width: 256px;
+    max-width: 450px;
 }
 
 
