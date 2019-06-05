@@ -1,15 +1,6 @@
 $(document).ready(function() {
     getProduct(takeUrlValue())
     getAllType()
-        //cloudZoom
-    CloudZoom.quickStart();
-    // Initialize the slider.
-    $(function() {
-        $('#slider1').Thumbelina({
-            $bwdBut: $('#slider1 .left'),
-            $fwdBut: $('#slider1 .right')
-        });
-    });
     //搜尋
     $("#search").on("click", (function() {
         insertKeyWord();
@@ -97,6 +88,16 @@ function getProduct(id) {
             function review() {
                 $("#reviewTitle").text("商品評價")
             }
+            //cloudZoom
+             CloudZoom.quickStart();
+            // Initialize the slider.
+            $(function() {
+                $('#slider1').Thumbelina({
+                 $bwdBut: $('#slider1 .left'),
+                 $fwdBut: $('#slider1 .right')
+             });
+    });
+
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
@@ -106,7 +107,7 @@ function getProduct(id) {
 //產品查詢結果
 function searchResult(productData) {
     var productImgArray = [];
-    productImgArray.push('<img src=' + productData.imageLink[0] + ' width="450">')
+    productImgArray.push('<img src=' + productData.imageLink[0] + 'style="border-radius:8px; border-width:5px; border-style:outset; border-color: gray;" class="cloudzoom image" alt="Cloud Zoom small image" id="zoom1" data-cloudzoom="zoomSizeMode:`image`,autoInside: 300">')
     $("#searchResult").html("");
     $("#productLeftInfo").append(productImgArray.join(""))
     $("#productRightInfo").append(
