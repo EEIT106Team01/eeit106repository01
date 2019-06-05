@@ -40,6 +40,17 @@
     left:20%;
 }
 
+
+#tocifyDiv {
+    position: fixed;
+    top: 100px;
+    right: 5px;
+    text-align: center;
+    z-index: 1000;
+  }
+  #tocifyDiv ul{
+    display: inline-block;
+  }
 /* headerDIV--------------------------------------- */
 
 /* 產品--------------------------------------------- */
