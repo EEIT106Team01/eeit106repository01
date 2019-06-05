@@ -85,6 +85,14 @@ function getProduct(id) {
             var type = productData.type;
             getRecommendProducts(type);
 
+            //breadcrumb
+            $("#typeBreadcrumb").append(
+                '<a href="http://localhost:8080/shop/search.html?type='+type+'">'+type+'</a>'
+            )
+            $("#productBreadcrumb").append(
+                '<a>'+productData.name+'</a>'
+            )
+
             function review() {
                 $("#reviewTitle").text("商品評價")
             }
