@@ -50,8 +50,14 @@ margin: 3% 0% 0% 13%;
     margin: 3% 0% 2% 13%;
 }
 
-.btn-green{
-    background-color: peachpuff
+.dropdown-menu.dropdown-1{
+    background-color:#DDDDDD;
+    border-color:#DDDDDD;
+}
+
+.dropdown-menu.dropdown-1 li:hover{
+    background-color:#ffffff;
+    cursor: pointer;
 }
 
 #PageCon {height:35px;text-align:center}

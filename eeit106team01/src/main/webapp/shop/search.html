@@ -157,7 +157,7 @@
                                         <form id="searchTimeForm">
                                             <div class="input-group">
                                                 <input type="text" class="form-control col-md-8" name="startDay" id="startDay" placeholder="開始時間">
-                                                
+
                                                 <input type="text" class="form-control col-md-8" name="endDay" id="endDay" placeholder="結束時間">
                                                 <div class="input-group-btn col-md-4" id="searchTimeByTypeBtnDiv">
                                                     <button class="btn btn-primary btn-icon searchPrice" id="searchTimeByTypeBtn" type="button">
@@ -210,131 +210,126 @@
 
         <div class="main-content">
 
-            <div class="col-md-12" id="newProducts">
-
-            </div>
-            <div class="row" id="topProducts">
-
-            </div>
-
             <div class="col-md-12" id="searchTitle">
                 <sapn>共有
                     <h4 id="productQuantity" class="col-md-4"></h4>件商品</span>
-                    <div id="sortByType">
-                        <div class="btn-group left-dropdown col-md-4">
+                    <div class="col-md-12">
+                        <div id="sortByType">
+                            <div class="btn-group left-dropdown col-md-4">
 
-                            <button type="button" class="btn btn-green col-md-4">商品排序</button>
-                            <button type="button" class="btn btn-green dropdown-toggle col-md-2" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-green" role="menu">
-                                <li>
-                                    <button id="sortSoldDescByType">銷量高到低</button>
-                                </li>
-                                <li>
-                                    <a id="sortSoldAscByType">銷量低到高</a>
-                                </li>
-                                <li>
-                                    <a id="sortPriceAscByType">價格低到高</a>
-                                </li>
-                                <li>
-                                    <a id="sortPriceDescByType">價格高到低</a>
-                                </li>
-                                </li>
-                                <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByType">預設</a>
-                                </li>
-                            </ul>
+                                <button type="button" class="btn btn-default col-md-4">商品排序</button>
+                                <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-1" role="menu">
+                                    <li>
+                                        <a id="sortSoldDescByType">銷量高到低</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortSoldAscByType">銷量低到高</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortPriceAscByType">價格低到高</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortPriceDescByType">價格高到低</a>
+                                    </li>
+                                    </li>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a id="sortDefultByType">預設</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div id="sortByBrand">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-green col-md-4">商品排序</button>
-                            <button type="button" class="btn btn-green dropdown-toggle col-md-2" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-green" role="menu">
-                                <li>
-                                    <a id="sortSoldDescByBrand">銷量高到低</a>
-                                </li>
-                                <li>
-                                    <button id="sortSoldAscByBrand">銷量低到高</button>
-                                </li>
-                                <li>
-                                    <a id="sortPriceAscByBrand">價格低到高</a>
-                                </li>
-                                <li>
-                                    <a id="sortPriceDescByBrand">價格高到低</a>
-                                </li>
-                                </li>
+                        <div id="sortByBrand">
+                            <div class="btn-group left-dropdown col-md-4">
+                                <button type="button" class="btn btn-default col-md-4">商品排序</button>
+                                <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-1" role="menu">
+                                    <li>
+                                        <a id="sortSoldDescByBrand">銷量高到低</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortSoldAscByBrand">銷量低到高</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortPriceAscByBrand">價格低到高</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortPriceDescByBrand">價格高到低</a>
+                                    </li>
+                                    </li>
 
-                                <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByBrand">預設</a>
-                                </li>
-                            </ul>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a id="sortDefultByBrand">預設</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div id="sortByBrandByMixpriceMaxprice">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-green col-md-4">商品排序</button>
-                            <button type="button" class="btn btn-green dropdown-toggle col-md-2" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-green" role="menu">
-                                <li>
-                                    <a id="sortSoldDescByBrandByMixpriceMaxprice">銷量高到低</a>
-                                </li>
-                                <li>
-                                    <a id="sortSoldAscByBrandByMixpriceMaxprice">銷量低到高</a>
-                                </li>
-                                <li>
-                                    <button id="sortPriceAscByBrandByMixpriceMaxprice">價格低到高</button>
-                                </li>
-                                <li>
-                                    <a id="sortPriceDescByBrandByMixpriceMaxprice">價格高到低</a>
-                                </li>
-                                </li>
+                        <div id="sortByBrandByMixpriceMaxprice">
+                            <div class="btn-group left-dropdown col-md-4">
+                                <button type="button" class="btn btn-default col-md-4">商品排序</button>
+                                <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-1" role="menu">
+                                    <li>
+                                        <a id="sortSoldDescByBrandByMixpriceMaxprice">銷量高到低</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortSoldAscByBrandByMixpriceMaxprice">銷量低到高</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortPriceAscByBrandByMixpriceMaxprice">價格低到高</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortPriceDescByBrandByMixpriceMaxprice">價格高到低</a>
+                                    </li>
+                                    </li>
 
-                                <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByBrand">預設</a>
-                                </li>
-                            </ul>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a id="sortDefultByBrand">預設</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <div id="sortByTypeByMixpriceMaxprice">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-green col-md-4">商品排序</button>
-                            <button type="button" class="btn btn-green dropdown-toggle col-md-2" data-toggle="dropdown">
-                                <span class="caret"></span>
-                            </button>
-                            <ul class="dropdown-menu dropdown-green" role="menu">
-                                <li>
-                                    <a id="sortSoldDescByTypeByMixpriceMaxprice">銷量高到低</a>
-                                </li>
-                                <li>
-                                    <a id="sortSoldAscByTypeByMixpriceMaxprice">銷量低到高</a>
-                                </li>
-                                <li>
-                                    <a id="sortPriceAscByTypeByMixpriceMaxprice">價格低到高</a>
-                                </li>
-                                <li>
-                                    <button id="sortPriceDescByTypeByMixpriceMaxprice">價格高到低</button>
-                                </li>
-                                </li>
+                        <div id="sortByTypeByMixpriceMaxprice">
+                            <div class="btn-group left-dropdown col-md-4">
+                                <button type="button" class="btn btn-default col-md-4">商品排序</button>
+                                <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
+                                    <span class="caret"></span>
+                                </button>
+                                <ul class="dropdown-menu dropdown-1" role="menu">
+                                    <li>
+                                        <a id="sortSoldDescByTypeByMixpriceMaxprice">銷量高到低</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortSoldAscByTypeByMixpriceMaxprice">銷量低到高</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortPriceAscByTypeByMixpriceMaxprice">價格低到高</a>
+                                    </li>
+                                    <li>
+                                        <a id="sortPriceDescByTypeByMixpriceMaxprice">價格高到低</a>
+                                    </li>
+                                    </li>
 
-                                <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByBrand">預設</a>
-                                </li>
-                            </ul>
+                                    <li class="divider"></li>
+                                    <li>
+                                        <a id="sortDefultByBrand">預設</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    <!-- <div id="PageCon"></div> 顯示目前頁數-->
-                    <div id="PageShow" style="text-align:center;margin-left: 15px;" class="col-md-6 page">
-                        <ul id="PageShowUL"></ul>
+                        <!-- <div id="PageCon"></div> 顯示目前頁數-->
+                        <div id="PageShow" style="text-align:center;margin-left: 15px;" class="col-md-6 page">
+                            <ul id="PageShowUL"></ul>
+                        </div>
                     </div>
             </div>
             <div class="Products col-md-12" id="Products">
