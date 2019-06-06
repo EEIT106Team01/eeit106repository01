@@ -122,7 +122,7 @@ function addToCart() {
                 });
             };
 
-            let purchaseButton = `<button type="button" class="btn col-md-12" onclick="location.href='` + urlDomain + `shop/purchase.html'"` + `'><span class='fa fa-shopping-cart'> 去結帳</span></button>`;
+            let purchaseButton = `<button type="button" class="btn col-md-12" onclick="location.href='` + urlDomain + `shop/purchase.html'"` + `'><span class='fa fa-shopping-cart'></span>去結帳</button>`;
             let productUrl = urlDomain + `shop/product.html?`;
 
             jsonArray.forEach(element => {

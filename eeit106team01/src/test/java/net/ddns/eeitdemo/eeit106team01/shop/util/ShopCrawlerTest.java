@@ -181,7 +181,7 @@ public class ShopCrawlerTest {
 		} else {
 			productType = fetchProductType;
 		}
-
+		
 		ShopCrawler crawler = new ShopCrawler();
 
 		// @formatter:off
