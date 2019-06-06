@@ -243,6 +243,18 @@ public class ProductDAOImpl implements ProductDAO {
 									ProductBean.class)
 							.setParameter("brand",queryString).setParameter("type",brandType)
 							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
+				}else if(dataName.equalsIgnoreCase("name")) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where name like :name and updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("name","%"+queryString+"%")
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
+				}else if(dataName.equalsIgnoreCase("name") && NullChecker.isEmpty(brandType) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where name like :name and type = :type and updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("name","%"+queryString+"%").setParameter("type",brandType)
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
 				}else {
 					this.productsResutlt = this.getSession()
 							.createQuery("from ProductBean where updatedTime BETWEEN :startDay AND :endDay",

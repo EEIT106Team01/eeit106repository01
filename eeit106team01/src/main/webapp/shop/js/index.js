@@ -215,7 +215,7 @@ function getMightLikeProduct(type) {
             })
 
             var products = [];
-            var top = 10;
+            var top = 5;
             for (var i = 0; i < top; i++) {
                 products.push(
                     '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
@@ -264,7 +264,7 @@ function getTop10Type1() {
             })
 
             var products = [];
-            var top = 10;
+            var top = 5;
             for (var i = 0; i < top; i++) {
                 products.push(
                     '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
@@ -304,7 +304,7 @@ function getTop10Type2() {
             })
 
             var products = [];
-            var top = 10;
+            var top = 5;
             for (var i = 0; i < top; i++) {
                 products.push(
                     '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
@@ -344,7 +344,7 @@ function getTop10Type3() {
             })
 
             var products = [];
-            var top = 10;
+            var top = 5;
             for (var i = 0; i < top; i++) {
                 products.push(
                     '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
