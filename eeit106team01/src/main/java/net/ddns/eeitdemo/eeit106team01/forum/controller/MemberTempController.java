@@ -91,7 +91,7 @@ public class MemberTempController {
 		}
 	}
 
-	@PostMapping(path = { "/login" }, produces = { "application/json" })
+	@PostMapping(path = { "/forumlogin" }, produces = { "application/json" })
 	public ResponseEntity<?> login(@RequestParam String name, @RequestParam String password, HttpSession httpSession,
 			HttpServletResponse response) throws JsonProcessingException {
 		System.out.println("login method running");
@@ -115,10 +115,10 @@ public class MemberTempController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@GetMapping(path = { "/logout" }, produces = { "application/json" })
+	@GetMapping(path = { "/forumlogout" }, produces = { "application/json" })
 	public ResponseEntity<?> logout(HttpSession httpSession, HttpServletRequest request, HttpServletResponse response)
 			throws JsonProcessingException {
-		System.out.println("logout method running");
+		System.err.println("logout method running");
 //		httpSession.invalidate();
 		httpSession.removeAttribute("MemberBean");
 
