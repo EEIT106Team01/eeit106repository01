@@ -20,7 +20,7 @@ public class VideoBean {
 	private Integer id;
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "member_id")
-	private MemberBean memberBean;
+	private MemberTempBean memberBean;
 	private java.util.Date uploadTime;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String videoStatus;
@@ -38,7 +38,7 @@ public class VideoBean {
 		super();
 	}
 
-	public VideoBean(MemberBean memberBean, Date uploadTime, String videoStatus, String videoURI, String thumbnailURI,
+	public VideoBean(MemberTempBean memberBean, Date uploadTime, String videoStatus, String videoURI, String thumbnailURI,
 			String gifURI, Double videoLength, String updateMessage) {
 		super();
 		this.memberBean = memberBean;
@@ -59,11 +59,11 @@ public class VideoBean {
 		this.id = id;
 	}
 
-	public MemberBean getMemberBean() {
+	public MemberTempBean getMemberBean() {
 		return memberBean;
 	}
 
-	public void setMemberBean(MemberBean memberBean) {
+	public void setMemberBean(MemberTempBean memberBean) {
 		this.memberBean = memberBean;
 	}
 

@@ -43,14 +43,19 @@
 
 #tocifyDiv {
     position: fixed;
-    top: 100px;
-    right: 5px;
+    /* bottom: 100%; */
+    right: 87%;
     text-align: center;
-    z-index: 1000;
+    z-index: 99999;
+    font-size: 14px;
 }
 
 #tocifyDiv ul {
-    display: inline-block;
+     display: inline-block;
+}
+
+.tocify.fixed {
+    top:100px !important;
 }
 
 li {
@@ -116,11 +121,6 @@ li {
 #left-area {
     /* width: 20%; */
     float: left;
-}
-
-#left-area {
-    /* width: 80%; */
-    /* float: right;; */
 }
 
 #productsQuantity {

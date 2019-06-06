@@ -18,4 +18,8 @@ for (let i = 0; i < navCssArr.length; i++) {
     navCss.href = navCssArr[i];
     head.appendChild(navCss);
 }
+let navJs01 = document.createElement('script');
+navJs01.src = '/navbar/js/navbar-initjs.js';
+
+head.appendChild(navJs01);
 //include css End

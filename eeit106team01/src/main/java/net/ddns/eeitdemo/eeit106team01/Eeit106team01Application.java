@@ -26,11 +26,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMessageBean;
-import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
-import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
 import net.ddns.eeitdemo.eeit106team01.member.model.entity.DatetimeGranterEntity;
@@ -68,6 +66,8 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.TopSearchBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.PrivateMessageBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMessageBean;
 
 @SpringBootApplication
 @EnableAutoConfiguration(exclude = { HibernateJpaAutoConfiguration.class,
@@ -131,7 +131,7 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(ArticleContentCurrentBean.class);
 		builder.addAnnotatedClass(ArticleTopicCurrentBean.class);
 		builder.addAnnotatedClass(VideoBean.class);
-		builder.addAnnotatedClass(MemberBean.class);
+		builder.addAnnotatedClass(MemberTempBean.class);
 
 		// Chat
 		builder.addAnnotatedClass(RegionMessageBean.class);

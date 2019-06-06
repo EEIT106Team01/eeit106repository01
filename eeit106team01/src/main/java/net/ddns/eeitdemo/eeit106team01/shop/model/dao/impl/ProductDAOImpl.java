@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,7 +19,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
-@Transactional
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired
@@ -245,6 +242,18 @@ public class ProductDAOImpl implements ProductDAO {
 							.createQuery("from ProductBean where brand = :brand and type = :type and updatedTime BETWEEN :startDay AND :endDay",
 									ProductBean.class)
 							.setParameter("brand",queryString).setParameter("type",brandType)
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
+				}else if(dataName.equalsIgnoreCase("name")) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where name like :name and updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("name","%"+queryString+"%")
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
+				}else if(dataName.equalsIgnoreCase("name") && NullChecker.isEmpty(brandType) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where name like :name and type = :type and updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("name","%"+queryString+"%").setParameter("type",brandType)
 							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
 				}else {
 					this.productsResutlt = this.getSession()

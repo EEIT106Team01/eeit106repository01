@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoService;
 import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
@@ -77,7 +77,7 @@ public class VideoController {
 						os.write(bytes, 0, len);
 					}
 				}
-				MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+				MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 				VideoBean videoBean = new VideoBean();
 				videoBean.setUploadTime(new java.util.Date(uploadTime));
 				videoBean.setVideoURI(outFile.getName());

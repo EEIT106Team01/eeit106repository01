@@ -25,11 +25,11 @@
         defer></script>
 
     <!-- cookie -->
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="/js/js.cookie.min.js"></script>
 
     <!-- plyr -->
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.3/plyr.css" />
-    <script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
+    <link rel="stylesheet" href="/css/plyr.css" />
+    <script src="/js/plyr.polyfilled.js"></script>
 
     <!-- quill -->
     <script src="/forum/quill/highlight.min.js"></script>
@@ -160,6 +160,8 @@
                 $(".content-content").append(createAd());
             }
             if (contentBeans) {
+                $(".content-content").append("<hr>");
+                $(".content-content").append(createChangeOrderBtn());
                 noRepliedContents = [];
                 repliedContents = [];
                 for (let i = 0; i < contentBeans.length; i++) {
@@ -192,6 +194,7 @@
                     }
                 }
                 $(".content-content").append(createChangePageBtn());
+                $('[data-toggle="popover"]').popover();
             }
             setTimeout(resizeWindow, 50);
         }
@@ -203,8 +206,8 @@
             let information = document.createElement("div");
 
             let mbIcon;
-            if (topicBean.memberBean.icon) {
-                mbIcon = topicBean.memberBean.icon;
+            if (topicBean.memberBean.image) {
+                mbIcon = topicBean.memberBean.image;
             } else {
                 mbIcon = "/navbar/images/pepe.jpg";
             }
@@ -234,7 +237,7 @@
             let updateTime = new Date(topicBean.topicUpdateTime);
             $(information).html(
                 "更新時間: " + updateTime.toLocaleDateString() + updateTime.toLocaleTimeString() +
-                "<br>contentLikeNum: " + topicBean.topicLikeNum
+                "<br>"
             );
             card.className = "card";
             // title.className = "card-header";
@@ -257,6 +260,7 @@
             ) {
                 information.appendChild(createReplyBtn(topicBean, "topic"));
             }
+            information.appendChild(createLikeImg(topicBean, "topic"));
             // card.appendChild(title);
             card.appendChild(content);
             card.appendChild(information);
@@ -309,7 +313,7 @@
             ) {
                 information.appendChild(createEditBtn(contentBean, "content"));
             }
-            information.appendChild(createLikeImg(contentBean));
+            information.appendChild(createLikeImg(contentBean, "content"));
             // card.appendChild(title);
             card.appendChild(content);
             card.appendChild(information);
@@ -325,71 +329,130 @@
         }
 
         function createLikeImg(bean, replyType) {
+            let likeWho;
+            let likeNum;
+            let uri;
+            if (replyType == "content") {
+                likeWho = bean.contentLikeWho;
+                likeNum = bean.contentLikeNum;
+                uri = "/articleTopics/" + bean.articleTopicCurrent.id + "/articleContents/" + bean.id;
+            } else if (replyType == "topic") {
+                likeWho = topicBean.topicLikeWho;
+                likeNum = topicBean.topicLikeNum;
+                uri = "/articleTopics/" + topicBean.id;
+            }
             let span = document.createElement("span");
             let like = document.createElement("img");
             let text = document.createElement("span");
             let disLike = document.createElement("img");
-            like.src = "/storage/others/Like.png";
-            disLike.src = "/storage/others/Like.png";
+            like.src = "/forum/icon/like.png";
+            disLike.src = "/forum/icon/like.png";
             like.width = "16";
             disLike.width = "16";
+            let likeList = [];
+            let dislikeList = [];
+            if (likeWho) {
+                $.each(likeWho, function (key, value) {
+                    if (value.startsWith("like")) {
+                        likeList.push(value.substr(value.indexOf("||") + 2));
+                    } else if (value.startsWith("dislike")) {
+                        dislikeList.push(value.substr(value.indexOf("||") + 2));
+                    }
+                });
+            }
             $(disLike).css("transform", "rotate(180deg)");
-            $(text).text(bean.contentLikeNum);
+            $(text).text(likeNum);
             $(text).css("margin", "1em");
-            let uri = "/articleTopics/" + bean.articleTopicCurrent.id + "/articleContents/" + bean.id;
-            if (memberBean && bean.contentLikeWho && bean.contentLikeWho[memberBean.id]) {
-                if (bean.contentLikeWho[memberBean.id] == "like") {
+            $(like).attr({
+                "data-toggle": "popover",
+                "data-trigger": "hover",
+                "data-content": likeList,
+                "title": "喜歡這篇文",
+                "data-placement": "bottom"
+            });
+            $(disLike).attr({
+                "data-toggle": "popover",
+                "data-trigger": "hover",
+                "data-content": dislikeList,
+                "title": "不喜歡這篇文",
+                "data-placement": "bottom"
+            });
+            if (memberBean) {
+                if (likeWho && likeWho[memberBean.id]) {
+                    if (likeWho[memberBean.id].startsWith("like")) {
+                        $(disLike).css("filter", "grayscale(100%)");
+                        $(like).click(function () {
+                            $(like).attr("disabled", true);
+                            $(text).text($(text).text() - (1));
+                            $(like).css("filter", "grayscale(100%)");
+                            $(this).unbind("click");
+                            $.ajax({
+                                url: uri + "/dislike",
+                                method: "PUT"
+                            });
+                            let newList = jQuery.grep(likeList, function (value) {
+                                return value != memberBean.name;
+                            });
+                            if (newList.length == 0) {
+                                newList = " ";
+                            }
+                            $(this).attr("data-content", newList);
+                        })
+                    } else if (likeWho[memberBean.id].startsWith("dislike")) {
+                        $(like).css("filter", "grayscale(100%)");
+                        $(disLike).click(function () {
+                            $(disLike).attr("disabled", true);
+                            $(text).text($(text).text() - (-1));
+                            $(disLike).css("filter", "grayscale(100%)");
+                            $(this).unbind("click");
+                            $.ajax({
+                                url: uri + "/like",
+                                method: "PUT"
+                            });
+                            let newList = jQuery.grep(dislikeList, function (value) {
+                                return value != memberBean.name;
+                            });
+                            if (newList.length == 0) {
+                                newList = " ";
+                            }
+                            $(this).attr("data-content", newList);
+                        })
+                    }
+                } else {
+                    $(like).css("filter", "grayscale(100%)");
                     $(disLike).css("filter", "grayscale(100%)");
                     $(like).click(function () {
                         $(like).attr("disabled", true);
-                        $(text).text($(text).text() - (1));
-                        $(like).css("filter", "grayscale(100%)");
-                        $(this).unbind();
-                        $.ajax({
-                            url: uri + "/dislike",
-                            method: "PUT"
-                        });
-                    })
-                } else if (bean.contentLikeWho[memberBean.id] == "dislike") {
-                    $(like).css("filter", "grayscale(100%)");
-                    $(disLike).click(function () {
                         $(disLike).attr("disabled", true);
                         $(text).text($(text).text() - (-1));
-                        $(disLike).css("filter", "grayscale(100%)");
-                        $(this).unbind();
+                        $(like).css("filter", "grayscale(0%)");
+                        $(this).unbind("click");
+                        $(disLike).unbind("click");
                         $.ajax({
                             url: uri + "/like",
                             method: "PUT"
                         });
+                        likeList.push(memberBean.name);
+                        $(this).attr("data-content", likeList);
+                    })
+                    $(disLike).click(function () {
+                        $(like).attr("disabled", true);
+                        $(disLike).attr("disabled", true);
+                        $(text).text($(text).text() - (1));
+                        $(disLike).css("filter", "grayscale(0%)");
+                        $(this).unbind("click");
+                        $(like).unbind("click");
+                        $.ajax({
+                            url: uri + "/dislike",
+                            method: "PUT"
+                        });
+                        dislikeList.push(memberBean.name);
+                        $(this).attr("data-content", dislikeList);
                     })
                 }
             } else {
                 $(like).css("filter", "grayscale(100%)");
                 $(disLike).css("filter", "grayscale(100%)");
-                $(like).click(function () {
-                    $(like).attr("disabled", true);
-                    $(disLike).attr("disabled", true);
-                    $(text).text($(text).text() - (-1));
-                    $(like).css("filter", "grayscale(0%)");
-                    $(this).unbind();
-                    $(disLike).unbind();
-                    $.ajax({
-                        url: uri + "/like",
-                        method: "PUT"
-                    });
-                })
-                $(disLike).click(function () {
-                    $(like).attr("disabled", true);
-                    $(disLike).attr("disabled", true);
-                    $(text).text($(text).text() - (1));
-                    $(disLike).css("filter", "grayscale(0%)");
-                    $(this).unbind();
-                    $(like).unbind();
-                    $.ajax({
-                        url: uri + "/dislike",
-                        method: "PUT"
-                    });
-                })
             }
             span.appendChild(like);
             span.appendChild(text);
@@ -513,7 +576,7 @@
             for (let i = 1; i <= pageNumber; i++) {
                 let btn = document.createElement("li");
                 let pageLink = document.createElement("a");
-                pageLink.href = location.pathname + "?topic=" + topic + "&page=" + i;
+                pageLink.href = location.pathname + "?topic=" + topic + "&page=" + i + "&orderType=" + orderType;
                 pageLink.textContent = i;
                 btn.appendChild(pageLink);
                 pagination.appendChild(btn);
@@ -536,6 +599,7 @@
                 "position": "relative",
                 "height": "200px",
                 "width": "80%",
+                "min-width": "400px",
                 "margin": "auto",
                 "overflow-y": "hidden",
                 "cursor": "pointer",
@@ -548,7 +612,6 @@
                 url: "/randomProduct",
                 dataType: "json",
                 success: function (data, textStatus, jqXHR) {
-                    console.log(data);
                     let info = document.createElement("span");
                     let ad = document.createElement("span");
                     adBody.style.background = "url('" + (data.imageLink[0]).replace(/\"/g, "") + "')";
@@ -580,6 +643,30 @@
             });
         }
 
+        function createChangeOrderBtn() {
+            let btn = document.createElement("button");
+            let text;
+            let type;
+            if (orderType == "orderByLike") {
+                text = "依時間排序";
+                type = "orderByTime";
+            } else if (orderType == "orderByTime") {
+                text = "依喜歡排序";
+                type = "orderByLike";
+            }
+            btn.textContent = text;
+            btn.onclick = function () {
+                location.href = location.pathname + "?topic=" + topic + "&page=" + page + "&orderType=" + type;
+            };
+            btn.className = "btn btn-white btn-sm";
+            $(btn).css({
+                "float": "right",
+                "margin": "1%"
+            });
+
+            return btn;
+        }
+
         function getTopic() {
             if (topic != null) {
                 $.ajax({
@@ -605,55 +692,55 @@
                 });
             }
         }
-
-        var chatSidebarOpen = false;
-        function resizeWhenToggleChatSidebar() {
-            if (neonChat && !chatSidebarOpen) {
-                $(".page-container").width($(window).width() - 279);
-                chatSidebarOpen = true;
-            } else {
-                $(".page-container").width($(window).width());
-                chatSidebarOpen = false;
-            }
-        }
+        // var chatSidebarOpen = false;
+        // function resizeWhenToggleChatSidebar() {
+        //     if (neonChat && !chatSidebarOpen) {
+        //         $(".main-content").css("width", ($(".page-container").width() - 279));
+        //         chatSidebarOpen = true;
+        //     } else {
+        //         $(".main-content").css("width", "100%");
+        //         chatSidebarOpen = false;
+        //     }
+        // }
 
         document.addEventListener("DOMContentLoaded", function () {
             let contentContent = document.createElement("div");
             contentContent.className = "content-content";
             document.getElementsByClassName("main-content")[0].appendChild(contentContent);
             getTopic();
-            window.addEventListener("resize", resizeWindow);
+            // window.addEventListener("resize", resizeWindow);
 
-            let timeout = 10;
-            window.setTimeout(function () {
-                let chatToggleBtn = document.getElementById("toggleChatBtn");
-                if (chatToggleBtn) {
-                    chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
-                    document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
-                } else {
-                    window.setTimeout(arguments.callee, timeout);
-                }
-            }, timeout);
+            // let timeout = 10;
+            // window.setTimeout(function () {
+            //     let chatToggleBtn = document.getElementById("toggleChatBtn");
+            //     if (chatToggleBtn) {
+            //         chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+            //         document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
+            //     } else {
+            //         window.setTimeout(arguments.callee, timeout);
+            //     }
+            // }, timeout);
         });
 
-        function resizeWindow() {
-            let navbarHeight = $("#bs-example-navbar-collapse-2").height();
-            let topicVideoHeight = $(window).height();
-            console.log("$(window).height(): " + $(window).height());
-            if (navbarHeight >= 54 && navbarHeight <= 106) {
-                $(".page-container").css("margin-top", navbarHeight);
-                $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - navbarHeight) / 9 * 16));
-            } else {
-                $(".page-container").css("margin-top", 54);
-                $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - 54) / 9 * 16));
-            }
-        }
+        // function resizeWindow() {
+        //     let navbarHeight = $("#bs-example-navbar-collapse-2").height();
+        //     let topicVideoHeight = $(window).height();
+        //     if (navbarHeight >= 54 && navbarHeight <= 106) {
+        //         $(".page-container").css("margin-top", navbarHeight);
+        //         $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - navbarHeight) / 9 * 16));
+        //     } else {
+        //         $(".page-container").css("margin-top", 54);
+        //         $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - 54) / 9 * 16));
+        //     }
+        //     if (neonChat && chatSidebarOpen) {
+        //         $(".main-content").css("width", ($(".page-container").width() - 279));
+        //     }
+        // }
 
 
         //-------------------------------------------------------------
         //顯示Google Map
         function initMap() {
-            console.log(document.getElementById("map_canvas"));
             let map = new google.maps.Map(document.getElementById("map_canvas"), {
                 zoom: 12
                 , center: { lat: topicBean.accidentLocationLatitude, lng: topicBean.accidentLocationLongitude }

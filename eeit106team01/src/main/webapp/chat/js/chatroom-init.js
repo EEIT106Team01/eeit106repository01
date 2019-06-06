@@ -1,10 +1,9 @@
 var chatUsername;
-if (typeof thisname !== "undefined") {
-    chatUsername = thisname;
-} else {
-    chatUsername = "pikachu";
-}
-
+// if (typeof thisname !== "undefined") {
+//     chatUsername = thisname;
+// } else {
+//     chatUsername = "pikachu";
+// }
 
 var neonChat;
 
@@ -37,6 +36,11 @@ head.appendChild(quillCss2);
 // }
 // ----------append quill js&css end
 
+// ----------append cookie js
+var cookieJs = document.createElement('script');
+cookieJs.src = '/js/js.cookie.min.js';
+head.appendChild(cookieJs);
+// ----------append cookie js end
 
 function onSubmitMessage(id, msg, chatData) {
     // console.log(id);
@@ -239,7 +243,7 @@ function workerInit() {
         } else if (e.data.command == "checkUser") {
             let id = e.data.message;
             // console.log(eval(id));
-            if (eval(id)) {
+            if (id) {
                 if (!$("#" + id).get(0)) {
                     neonChat.addUser("group-2", id, "online", false, id);
                     neonChat.refreshUserIds();
@@ -1372,38 +1376,84 @@ $(document).ready(function () {
     })(jQuery, window);
     //----------------------------------------
 
-    if (worker == null) {
-        worker = new SharedWorker("/chat/js/websocket-worker.js");
-        console.log("initworker")
-        workerInit();
+    window.addEventListener("resize", resizeWindow);
+
+    var memberBean = Cookies.get("MemberBean");
+    console.log(Cookies.get("MemberBean"));
+    if (memberBean) {
+        initChat();
     }
 
-    $("#checkUser").keydown(function (e) {
-        if (e.keyCode == 13 && !e.shiftKey) {
-            e.preventDefault();
-            checkUserExist();
-            return false;
-        } else if (e.keyCode == 27) {
-            $(this).val("");
+    function initChat() {
+        memberBean = JSON.parse(Cookies.get("MemberBean"));
+        chatUsername = memberBean.name;
+        if (worker == null) {
+            worker = new SharedWorker("/chat/js/websocket-worker.js");
+            console.log("initworker")
+            workerInit();
         }
-    });
 
-    let timeout = 10;
-    window.setTimeout(function () {
-        if (typeof Quill !== 'undefined') {
-            quillChat = new Quill('#chat-editor-container', {
-                modules: {
-                    formula: true,
-                    syntax: true,
-                    toolbar: '#chat-toolbar-container'
-                },
-                theme: 'snow'
-            });
-        } else {
-            window.setTimeout(arguments.callee, timeout);
-        }
-    }, timeout);
+        $("#checkUser").keydown(function (e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                checkUserExist();
+                return false;
+            } else if (e.keyCode == 27) {
+                $(this).val("");
+            }
+        });
 
-    // console.log($(".badge"));
+        let timeout = 10;
+        window.setTimeout(function () {
+            if (typeof Quill !== 'undefined') {
+                quillChat = new Quill('#chat-editor-container', {
+                    modules: {
+                        formula: true,
+                        syntax: true,
+                        toolbar: '#chat-toolbar-container'
+                    },
+                    theme: 'snow'
+                });
+            } else {
+                window.setTimeout(arguments.callee, timeout);
+            }
+        }, timeout);
 
+        // console.log($(".badge"));
+
+        window.setTimeout(function () {
+            let chatToggleBtn = document.getElementById("toggleChatBtn");
+            if (chatToggleBtn) {
+                chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+                document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
+            } else {
+                window.setTimeout(arguments.callee, timeout);
+            }
+        }, timeout);
+    }
 });
+
+var chatSidebarOpen = false;
+function resizeWhenToggleChatSidebar() {
+    if (neonChat && !chatSidebarOpen) {
+        $(".main-content").css("width", ($(".page-container").width() - 279));
+        chatSidebarOpen = true;
+    } else {
+        $(".main-content").css("width", "100%");
+        chatSidebarOpen = false;
+    }
+}
+function resizeWindow() {
+    let navbarHeight = $("#bs-example-navbar-collapse-2").height();
+    let topicVideoHeight = $(window).height();
+    if (navbarHeight >= 54 && navbarHeight <= 106) {
+        $(".page-container").css("margin-top", navbarHeight);
+        $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - navbarHeight) / 9 * 16));
+    } else {
+        $(".page-container").css("margin-top", 54);
+        $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - 54) / 9 * 16));
+    }
+    if (neonChat && chatSidebarOpen) {
+        $(".main-content").css("width", ($(".page-container").width() - 279));
+    }
+}

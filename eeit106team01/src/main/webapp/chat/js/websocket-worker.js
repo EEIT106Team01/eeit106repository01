@@ -115,6 +115,8 @@ onconnect = function (e) {
                     subscribeSouth.splice(subscribeSouth.indexOf(this), 1);
                     subscribeEast.splice(subscribeEast.indexOf(this), 1);
                     console.log(ports);
+                } else if (e.data.command == "logout") {
+                    self.close();
                 }
             }
             ports.push(e.ports[i]);

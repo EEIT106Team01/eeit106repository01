@@ -11,6 +11,8 @@
 
     <script src="/assets/js/jquery-1.11.3.min.js"></script>
 
+    <!-- cookie -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <!--input data-include property in any tag when window.onload-->
     <script src="/navbar/js/csi.min.js"></script>
 
@@ -34,7 +36,7 @@
     <script src="/forum/js/topic/yyyymmddhhiiDate.js"></script>
     <script src="/forum/js/topic/createTopicView.js"></script>
     <script src="/forum/js/topic/searchTopicAutocomplete.js"></script>
-    <script src="forum/js/topic/getUrlParameters.js"></script>
+    <script src="/forum/js/topic/getUrlParameters.js"></script>
     <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.min.css">
 
     <style>
@@ -149,6 +151,13 @@
     </style>
 
     <script>
+        let memberBean = Cookies.get("MemberBean");
+        console.log("CookieMember: " + memberBean);
+        if (memberBean != undefined) {
+            memberBean = JSON.parse(Cookies.get("MemberBean"));
+        }
+        console.log(memberBean);
+
         let startPosition = 1;
         let maxResult = 8;
         let currentOrderType = "orderByTime";

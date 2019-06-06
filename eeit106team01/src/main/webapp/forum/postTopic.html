@@ -45,6 +45,7 @@
 	<link href="/assets/js/icheck/skins/square/_all.css" rel="stylesheet">
 	<script src="/forum/js/topic/yyyymmddhhiiDate.js"></script>
 	<script src="/forum/js/topic/getUrlParameters.js"></script>
+	<script src="/forum/js/uploadVideo.js"></script>
 
 	<style>
 		.main-content * {
@@ -77,6 +78,12 @@
 			color: red;
 		}
 
+		.errorMessage {
+			display: none;
+			font-size: 16px;
+			color: #cc2424;
+		}
+
 		/* .buttonRegion.popover {
 			width: 800px;
 		} */
@@ -84,10 +91,8 @@
 		.myHeaderInput {
 			background-color: #eee;
 			border-radius: 3px;
-		}
-
-		.myDivDateTimePicker div input {
-			border: 1px solid #AAAAAA;
+			border-width: 1px;
+			border-color: #AAAAAA;
 		}
 
 		.myDivDateTimePicker input {
@@ -143,8 +148,6 @@
 		}
 	</style>
 
-	<script src="js/uploadVideo.js"></script>
-
 	<script>
 		let map;
 		let marker;
@@ -154,11 +157,11 @@
 		let memberBean = Cookies.get("MemberBean");
 		// console.log("CookieMember: " + memberBean);
 		if (!memberBean) {
-			sessionStorage.setItem("previousPage", location.pathname);
+			sessionStorage.setItem("previousPage", location.pathname + location.search);
 			location.href = "/forum/login.html";
 		}
 		memberBean = JSON.parse(Cookies.get("MemberBean"));
-		// console.log(memberBean);
+		console.log(memberBean);
 
 		$(window).on('load', function () {
 			initMap();
@@ -187,11 +190,16 @@
 
 		$(document).ready(function () {
 			let selectedTopicType = getUrlParameters().t;
-			if (selectedTopicType == "share") {
+
+			if (selectedTopicType == undefined) {
+				selectedTopicType = "share";
+			}
+
+			if (selectedTopicType.substr(0, 5) == "share") {
 				$("#shareTopic").attr("checked", true);
 				$("#submit").val("分享影片資源");
 				$(".myVideoDiv").css("display", "block");
-			} else if (selectedTopicType == "help") {
+			} else if (selectedTopicType.substr(0, 4) == "help") {
 				$("#requestTopic").attr("checked", true);
 				$("#submit").val("送出協尋請求");
 				$(".myVideoDiv").css("display", "none");
@@ -204,6 +212,13 @@
 				$("#submit").val("送出協尋請求");
 				$(".myVideoDiv").css("display", "none");
 			});
+
+			$("#topicHeader").on("input", headerToggleCss);
+			$("#accidentTimeCheck").on("change", dateTimeToggleCss);
+			$("#map_canvas").on("click", locationToggleCss);
+			$("#topic-editor-container").on("input", contentToggleCss);
+			$("#videoBean").on("change", videoToggleCss);
+
 		});
 
 		function insertTopic(newTopicBean) {
@@ -215,13 +230,13 @@
 				dataType: "json",
 				success: function (data, textStatus, jqXHR) {
 					console.log("success");
-					console.log("回傳值 : " + data);
+					console.log("回傳值 : ");
+					console.log(data);
 					// console.log("textStatus : " + textStatus);
 					// console.log("jqXHR : " + jqXHR);
 					// sessionStorage.removeItem("contentBean");
 					// sessionStorage.removeItem("contentPage");
-					// location.href = contentPage;
-					// location.href = ;
+					location.href = "/forum/showContents.html?topic=" + data.id;
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log("error");
@@ -238,34 +253,63 @@
 		function submit() {
 			// $("#submit").attr('disabled', true);
 			// $(".itemBlock").attr('disabled', true);
-			quillTopic.enable(false);
+			// quillTopic.enable(false);
 			// $(".formField").attr("disabled", true);
+
+			let inputErrorExist = false;
+			let newVideoBean = $("#videoBean").val();
 
 			if ($("input[name=topicType]:checked").val() == "shareTopic") {
 				console.log("這是分享文");
 				$(".myProgressDiv").css("display", "block");
+				if (!$("#videoBean").val()) {
+					videoValidationCss();
+					inputErrorExist = true;
+				}
 			} else if ($("input[name=topicType]:checked").val() == "requestTopic") {
 				console.log("這是協尋文");
+				newVideoBean = null;
 			} else {
 				console.log("impossible");
 				return;
 			}
-			console.log("提交驗證 header: " + $("#topicHeader").val());
-			if(!$("#topicHeader").val()){
-				console.log("header empty");
-			}
-			console.log("提交驗證 date: " + new Date($("#accidentTime").val()));
-			console.log("提交驗證 date String: " + $("#accidentTime").val());
-			console.log("提交驗證 緯度: " + accidentLocationLatitude);
-			console.log("提交驗證 經度: " + accidentLocationLongitude);
-			console.log("提交驗證 內容: " + JSON.stringify(quillTopic.getContents()));
-			console.log("提交驗證 會員: " + memberBean);
-			console.log("提交驗證 影片: " + $("#videoBean").val());
-			return;
 
-			let newVideoBean = $("#videoBean").val();
-			if (newVideoBean == "") {
-				newVideoBean = null;
+			if ((!$("#topicHeader").val()) || ($("#topicHeader").val().trim().length == 0)) {
+				headerValidationCss();
+				inputErrorExist = true;
+			}
+			if (!$("#accidentTime").val()) {
+				dateTimePickerValidationCss();
+				inputErrorExist = true;
+			}
+			if (!(accidentLocationLatitude && accidentLocationLongitude)) {
+				locationValidationCss();
+				inputErrorExist = true;
+			}
+			if (quillTopic.getContents().ops[0].insert.trim().length == 0) {
+				contentValidationCss();
+				inputErrorExist = true;
+			}
+
+
+			// console.log("提交驗證 header: " + $("#topicHeader").val());
+			// console.log("提交驗證 date: " + new Date($("#accidentTime").val()));
+			// console.log("提交驗證 date String: " + $("#accidentTime").val());
+			// console.log("提交驗證 緯度: " + accidentLocationLatitude);
+			// console.log("提交驗證 經度: " + accidentLocationLongitude);
+			// console.log("提交驗證 內容: " + JSON.stringify(quillTopic.getContents()));
+			// console.log(quillTopic.getContents().ops[0].insert);
+			// console.log("提交驗證 會員: " + memberBean);
+			// console.log("提交驗證 影片: " + $("#videoBean").val());
+			if (inputErrorExist) {
+				location.href = "#";
+				console.log("有錯誤");
+				return;
+			}
+
+			
+			if((!memberBean) || (memberBean == undefined)){
+				alert("沒登入?");
 			}
 			let newTopicBean = {
 				topicHeader: $("#topicHeader").val(),
@@ -377,6 +421,64 @@
 					});
 			});
 		}
+
+		//toggleValidationCss
+		function headerToggleCss() {
+			if ((!$(this).val()) || ($(this).val().trim().length == 0)) {
+				$("#topicHeader").css({ "border-color": "#cc2424" });
+				$("#errorMessageHeader").css({ display: "block" });
+			} else {
+				$("#topicHeader").css({ "border-color": "#AAAAAA" });
+				$("#errorMessageHeader").css({ display: "none" });
+			}
+		}
+		function dateTimeToggleCss() {
+			if (!$("#accidentTime").val()) {
+				$(".myDivDateTimePicker input").css({ "border-color": "#cc2424" });
+				$(".myDateTimeIcon").css({ "border-color": "#cc2424" });
+				$("#errorMessageDateTime").css({ display: "block" });
+			} else {
+				$(".myDivDateTimePicker input").css({ "border-color": "#AAAAAA" });
+				$(".myDateTimeIcon").css({ "border-color": "#AAAAAA" });
+				$("#errorMessageDateTime").css({ display: "none" });
+			}
+		}
+		function locationToggleCss() {
+			$("#errorMessageLocation").css({ display: "none" });
+		}
+		function contentToggleCss() {
+			$("#errorMessageContent").css({ display: "none" });
+		}
+		function videoToggleCss() {
+			if (!$(this).val()) {
+				$(".myInputFile").css({ "border-color": "#cc2424" });
+				$("#errorMessageVideo").css({ display: "block" });
+			} else {
+				$(".myInputFile").css({ "border-color": "#AAAAAA" });
+				$("#errorMessageVideo").css({ display: "none" });
+			}
+		}
+
+		//validation
+		function headerValidationCss() {
+			$("#topicHeader").css({ "border-color": "#cc2424" });
+			$("#errorMessageHeader").css({ display: "block" });
+		}
+		function dateTimePickerValidationCss() {
+			$(".myDivDateTimePicker input").css({ "border-color": "#cc2424" });
+			$(".myDateTimeIcon").css({ "border-color": "#cc2424" });
+			$("#errorMessageDateTime").css({ display: "block" });
+		}
+		function locationValidationCss() {
+			$("#errorMessageLocation").css({ display: "block" });
+		}
+		function contentValidationCss() {
+			$("#errorMessageContent").css({ display: "block" });
+		}
+		function videoValidationCss() {
+			$(".myInputFile").css({ "border-color": "#cc2424" });
+			$("#errorMessageVideo").css({ display: "block" });
+		}
 	</script>
 
 </head>
@@ -415,11 +517,17 @@
 
 					<div class="col-md-12 itemBlock">
 						<div class="col-md-2" for="topicHeader">
-							<label for="topicHeader">標題：</label>
+							<label for="topicHeader">
+								<span class="requiredIcon">*</span>標題：
+							</label>
 						</div>
 						<div class="col-md-10">
 							<input type="text" class="myHeaderInput" name="topicHeader" id="topicHeader" autocomplete="off">
+							<div class="col-md-12 errorMessage" id="errorMessageHeader">
+								請輸入標題
+							</div>
 						</div>
+						</form>
 					</div>
 
 					<div class="col-md-12 itemBlock" style="display: none">
@@ -445,18 +553,21 @@
 						<!-- <div class="form-group"> -->
 						<div class="col-md-2">
 							<label>
-								事發時間：
+								<span class="requiredIcon">*</span>事發時間：
 							</label>
 						</div>
 						<div class="col-md-10 myDivDateTimePicker">
 							<div class="input-group date form_datetime col-md-5" data-link-field="accidentTime">
-								<input class="form-control" size="20" type="text" value="" readonly>
+								<input class="form-control" id="accidentTimeCheck" size="20" type="text" value="" readonly>
 								<span class="input-group-addon myDateTimeIcon">
 									<span class="glyphicon glyphicon-remove"></span>
 								</span>
 								<span class="input-group-addon myDateTimeIcon">
 									<span class="glyphicon glyphicon-th"></span>
 								</span>
+							</div>
+							<div class="col-md-12 errorMessage" id="errorMessageDateTime">
+								請輸入時間
 							</div>
 						</div>
 						<input type="hidden" id="accidentTime" value="" />
@@ -473,7 +584,7 @@
 					<div class="col-md-12 itemBlock">
 						<div class="col-md-2">
 							<label>
-								事發地點：
+								<span class="requiredIcon">*</span>事發地點：
 							</label>
 						</div>
 						<div class="col-md-10">
@@ -486,62 +597,72 @@
 								<input type="button" class="myButton" id="yilan" value="宜蘭縣">
 								<input type="button" class="myButton" id="taitung" value="台東縣">
 							</div>
+							<div class="col-md-12 errorMessage" id="errorMessageLocation">
+								請點擊地圖
+							</div>
 							<div id="map_canvas" style="width:600px; height:500px;"></div>
 						</div>
 					</div>
 
 					<div class="col-md-12 itemBlock">
 						<div class="col-md-2">
-							<label>文章內容： </label>
+							<label>
+								<span class="requiredIcon">*</span>文章內容：
+							</label>
 						</div>
 						<div class="col-md-10">
-							<div id="standalone-container">
-								<div id="topic-toolbar-container">
-									<span class="ql-formats">
-										<select class="ql-font"></select>
-										<select class="ql-size"></select>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-bold"></button>
-										<button class="ql-italic"></button>
-										<button class="ql-underline"></button>
-										<button class="ql-strike"></button>
-									</span>
-									<span class="ql-formats">
-										<select class="ql-color"></select>
-										<select class="ql-background"></select>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-script" value="sub"></button>
-										<button class="ql-script" value="super"></button>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-header" value="1"></button>
-										<button class="ql-header" value="2"></button>
-										<button class="ql-blockquote"></button>
-										<button class="ql-code-block"></button>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-list" value="ordered"></button>
-										<button class="ql-list" value="bullet"></button>
-										<button class="ql-indent" value="-1"></button>
-										<button class="ql-indent" value="+1"></button>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-direction" value="rtl"></button>
-										<select class="ql-align"></select>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-link"></button>
-										<button class="ql-image"></button>
-										<button class="ql-video"></button>
-										<button class="ql-formula"></button>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-clean"></button>
-									</span>
+							<div class="col-md-12 errorMessage" id="errorMessageContent">
+								請輸入內容
+							</div>
+							<div class="col-md-12">
+								<div id="standalone-container">
+									<div id="topic-toolbar-container">
+										<span class="ql-formats">
+											<select class="ql-font"></select>
+											<select class="ql-size"></select>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-bold"></button>
+											<button class="ql-italic"></button>
+											<button class="ql-underline"></button>
+											<button class="ql-strike"></button>
+										</span>
+										<span class="ql-formats">
+											<select class="ql-color"></select>
+											<select class="ql-background"></select>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-script" value="sub"></button>
+											<button class="ql-script" value="super"></button>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-header" value="1"></button>
+											<button class="ql-header" value="2"></button>
+											<button class="ql-blockquote"></button>
+											<button class="ql-code-block"></button>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-list" value="ordered"></button>
+											<button class="ql-list" value="bullet"></button>
+											<button class="ql-indent" value="-1"></button>
+											<button class="ql-indent" value="+1"></button>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-direction" value="rtl"></button>
+											<select class="ql-align"></select>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-link"></button>
+											<button class="ql-image"></button>
+											<button class="ql-video"></button>
+											<button class="ql-formula"></button>
+										</span>
+										<span class="ql-formats">
+											<button class="ql-clean"></button>
+										</span>
+									</div>
+									<div id="topic-editor-container"></div>
 								</div>
-								<div id="topic-editor-container"></div>
 							</div>
 						</div>
 					</div>
@@ -551,7 +672,9 @@
 					<!-- </form> -->
 					<div class="col-md-12 itemBlock myVideoDiv">
 						<div class="col-md-2">
-							<label>影片：</label>
+							<label>
+								<span class="requiredIcon">*</span>影片：
+							</label>
 						</div>
 						<div class="col-md-10">
 							<div class="col-md-12">
@@ -561,6 +684,9 @@
 								<form id="FileuploadForm">
 									<input type="file" class="form-control-file border myInputFile" id="videoBean" name="videoFile" />
 								</form>
+							</div>
+							<div class="col-md-12 errorMessage" id="errorMessageVideo">
+								請選擇影片
 							</div>
 						</div>
 					</div>
