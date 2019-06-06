@@ -5,8 +5,6 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-import javax.transaction.Transactional;
-
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -21,7 +19,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @Repository
-@Transactional
 public class ProductDAOImpl implements ProductDAO {
 
 	@Autowired

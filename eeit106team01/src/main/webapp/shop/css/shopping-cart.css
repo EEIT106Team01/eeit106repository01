@@ -27,6 +27,11 @@
     border-color: gray;
 }
 
+#accordion-shopping-cart button {
+    background-color: transparent;
+    font-size: 25px;
+}
+
 .cart-product,
 .cart-product span {
     padding: 0px;
