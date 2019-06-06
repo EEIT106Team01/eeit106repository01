@@ -1,72 +1,24 @@
 /* review */
 
 #image {
-    text-align: center;
-    width: 300px;
+  text-align: center;
+  width: 300px;
 }
 
 h1 {
-    text-align: center;
+  text-align: center;
 }
 
 .card-img-top {
-    background-color: black;
+  background-color: black;
 }
 
 #previewDiv img {
-    width: 300px;
+  width: 300px;
 }
 
 .container {
-    width: 900px;
+  width: 900px;
 }
 
-
-/* drag and drop */
-
-#div-draggable-events {
-    position: fixed;
-    top: 100px;
-    right: 0px;
-}
-
-#draggable-events {
-    width: 200px;
-    border: none;
-    background: transparent;
-}
-
-#draggable-events div,
-#draggable-events img {
-    background: transparent;
-    border: 0;
-}
-
-.card-img-top {
-    width: 50px;
-}
-
-.card-header {
-    text-align: center;
-}
-
-.badge {
-    width: 23px;
-    height: 23px;
-}
-
-.badge p {
-    font-size: 15px;
-}
-
-/* image mouseover color */
-
-.card-img-top {
-    filter: invert(40%);
-    -webkit-filter: invert(40%);
-}
-
-.mouseover {
-    filter: invert(0%);
-    -webkit-filter: invert(0%);
-}
+/* new review */
