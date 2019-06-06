@@ -41,17 +41,22 @@
     left: 20%;
 }
 
-/* #tocifyDiv {
+#tocifyDiv {
     position: fixed;
-    top: 300px !important;
-    right: 500px;
+    /* bottom: 100%; */
+    right: 87%;
     text-align: center;
-    z-index: 1000;
+    z-index: 99999;
+    font-size: 14px;
 }
 
 #tocifyDiv ul {
      display: inline-block;
-} */
+}
+
+.tocify.fixed {
+    top:100px !important;
+}
 
 li {
     list-style-type: none;

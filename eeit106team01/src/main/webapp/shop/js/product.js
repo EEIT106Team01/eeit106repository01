@@ -12,6 +12,7 @@ $(document).ready(function () {
       "&productType=" +
       productType;
   });
+
 });
 
 function takeUrlValue() {
@@ -89,7 +90,11 @@ function getProduct(id) {
 
       var type = productData.type;
       getRecommendProducts(type);
-
+      //type存入localStorage
+      if(localStorage.hasOwnProperty('type')){
+        localStorage.removeItem("type");
+      }
+      localStorage.setItem("type",type)
       //breadcrumb
       $("#typeBreadcrumb").append(
         '<a href="http://localhost:8080/shop/search.html?type=' +
