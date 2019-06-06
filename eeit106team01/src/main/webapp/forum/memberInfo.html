@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>註冊</title>
+    <title>個人資料</title>
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
 
@@ -26,39 +26,64 @@
     <script src="/chat/js/chatroom-init.js"></script>
 
     <!-- my -->
-    <!-- <script src="/forum/js/topic/yyyymmddhhiiDate.js"></script> -->
+    <script src="/forum/js/topic/yyyymmddhhiiDate.js"></script>
     <!-- <script src="/forum/js/topic/getUrlParameters.js"></script> -->
     <!-- <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.min.css"> -->
 
     <style>
-        .myRegister {
+        .myMemberInfo {
             width: 60%;
             margin: auto;
         }
 
+        #imagePreview {
+            width: 300px;
+        }
     </style>
     <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            $("#register").click(register);
+        let memberBean = Cookies.get("MemberBean");
+        console.log("CookieMember: " + memberBean);
+        if (memberBean != undefined) {
+            memberBean = JSON.parse(Cookies.get("MemberBean"));
+        }
+        console.log(memberBean);
 
+        document.addEventListener("DOMContentLoaded", function () {
+            $("#memberUpdate").click(memberUpdate);
+            $("#imageInput").change(function () {
+                readURL(this);
+            });
+
+            // datetimepicker
+			// let twoYearsAgo = new Date();
+			// twoYearsAgo.setMonth(twoYearsAgo.getMonth() - 24);
+			// console.log(twoYearsAgo.yyyymmddhhii());
+			// console.log(new Date().yyyymmddhhii());
+			$('#myDatePicker').datetimepicker({
+                // format: "yyyy-mm-dd hh:ii",
+                format: 'mm/dd/yyyy',
+				// startDate: twoYearsAgo.yyyymmddhhii(),
+				endDate: new Date().yyyymmddhhii(),
+				weekStart: 1,	//week start from Mon
+				todayBtn: 1,
+				autoclose: 1,
+				todayHighlight: 1,
+				startView: 2,
+				forceParse: 0,
+				showMeridian: 1
+			});
         })
 
-        function register() {
-            let memberName = $("#memberName").serialize().substr(11);
-            let memberPassword = $("#memberPassword").serialize().substr(15);
-            let memberPasswordCheck = $("#memberPasswordCheck").serialize().substr(20);
+        function memberUpdate() {
+            let memberImage = $("#imageInput").val();
+            let memberBirth = $("#memberBirth").serialize().substr(12);
             let memberEmail = $("#memberEmail").val();
-            console.log(memberName);
-            console.log(memberPassword);
-            console.log(memberPasswordCheck);
+            console.log(memberImage);
+            console.log(memberBirth);
             console.log(memberEmail);
-            if (memberPassword !== memberPasswordCheck) {
-                alert("確認密碼錯誤，請輸入相同密碼");
-                return;
-            }
             let registerData = {
-                name: memberName,
-                password: memberPassword,
+                image: memberImage,
+                birth: memberBirth,
                 email: memberEmail
             };
             return;
@@ -86,7 +111,15 @@
             });
         }
 
-
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function (e) {
+                    $("#imagePreview").attr('src', e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
     </script>
 </head>
 
@@ -97,32 +130,33 @@
     <div class="page-container">
         <div class="main-content">
 
-            <div class="myRegister">
+            <div class="myMemberInfo">
                 <div class="col-md-12">
-                    <h1>註冊</h1>
+                    <h1>個人資料：</h1>
                 </div>
                 <div class="col-md-12">
                     <div class="col-md-12">
-                        <label>帳號：(將作為您的使用者名稱)</label>
+                        <label>個人頭像：</label>
                     </div>
                     <div class="col-md-12">
-                        <input type="text" name="memberName" id="memberName" placeholder="請輸入帳號">
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-12">
-                        <label>密碼：</label>
-                    </div>
-                    <div class="col-md-12">
-                        <input type="password" name="memberPassword" id="memberPassword" placeholder="請輸入密碼">
+                        <form action="/somewhere/to/upload" enctype="multipart/form-data">
+                            <input type="file" id="imageInput" accept="image/gif, image/jpeg, image/png" />
+                            <img id="imagePreview" src="/navbar/images/notLogin.jpg" />
+                        </form>
                     </div>
                 </div>
                 <div class="col-md-12">
                     <div class="col-md-12">
-                        <label>確認密碼：</label>
+                        <label>生日：</label>
                     </div>
                     <div class="col-md-12">
-                        <input type="password" name="memberPasswordCheck" id="memberPasswordCheck" placeholder="請再一次輸入密碼">
+                        <input type="text" name="memberBirth" id="memberBirth" placeholder="請輸入生日">
+                        <div class="input-group date" id="myDatePicker" data-provide="datepicker">
+                            <input type="text" class="form-control">
+                            <div class="input-group-addon">
+                                <span class="glyphicon glyphicon-th"></span>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12">
@@ -133,9 +167,8 @@
                         <input type="text" name="memberEmail" id="memberEmail" placeholder="請輸入有效信箱">
                     </div>
                 </div>
-
                 <div class="col-md-12">
-                    <input type="button" value="註冊" id="register" />
+                    <input type="button" value="修改" id="memberUpdate" />
                 </div>
             </div>
         </div>

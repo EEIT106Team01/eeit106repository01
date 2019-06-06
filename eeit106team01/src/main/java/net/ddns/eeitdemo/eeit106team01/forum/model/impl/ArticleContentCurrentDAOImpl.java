@@ -2,10 +2,9 @@ package net.ddns.eeitdemo.eeit106team01.forum.model.impl;
 
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.query.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -56,15 +55,14 @@ public class ArticleContentCurrentDAOImpl implements ArticleContentCurrentDAO {
 		return null;
 	}
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public List<ArticleContentCurrentBean> queryList(String hql, int startPosition, int maxResult) {
-		Query query = getSession().createQuery(hql, ArticleContentCurrentBean.class);
-		if ((startPosition != 0) && (maxResult != 0)) {
+		Query<ArticleContentCurrentBean> query = getSession().createQuery(hql, ArticleContentCurrentBean.class);
+		if ((startPosition >= 0) && (maxResult != 0)) {
 			query.setFirstResult(startPosition);
 			query.setMaxResults(maxResult);
 		}
-		return query.getResultList();
+		return query.list();
 	}
 
 	@Override

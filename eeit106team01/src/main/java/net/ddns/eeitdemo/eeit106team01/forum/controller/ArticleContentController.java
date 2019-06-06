@@ -157,7 +157,7 @@ public class ArticleContentController {
 //		從httpSession抓出MemberBean資訊
 		MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 		Integer memberId = memberBean.getId();
-		Map<Integer, String> result = articleContentCurrentService.contentWhoLike(contentId, memberId, likeOrDislike.toLowerCase());
+		Map<Integer, String> result = articleContentCurrentService.contentWhoLike(contentId, memberId, memberBean.getName(), likeOrDislike.toLowerCase());
 		if (result != null) {
 			return ResponseEntity.ok(result);
 		}

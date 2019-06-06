@@ -55,12 +55,12 @@
     text-align: center;
 }
 
-.badge {
+#draggable-events .badge {
     width: 23px;
     height: 23px;
 }
 
-.badge p {
+#draggable-events .badge p {
     font-size: 15px;
 }
 
