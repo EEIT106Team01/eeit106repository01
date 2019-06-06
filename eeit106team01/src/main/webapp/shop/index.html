@@ -9,49 +9,33 @@
     <meta name="description" content="Neon Admin Panel" />
     <meta name="author" content="" />
 
-    <link rel="icon" href="/assets/images/favicon.ico">
+    <!-- Imported styles on this page -->
+    <link rel="stylesheet" href="../assets/css/font-icons/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="../assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
+    <link rel="stylesheet" href="../assets/css/bootstrap.css">
+    <link rel="stylesheet" href="../assets/css/neon-core.css">
+    <link rel="stylesheet" href="../assets/css/neon-theme.css">
+    <link rel="stylesheet" href="../assets/css/neon-forms.css">
+    <link rel="stylesheet" href="../assets/css/custom.css">
 
-    <!--input data-include property in any tag when window.onload-->
-    <script src="/navbar/js/csi.min.js"></script>
-
-    <script src="/navbar/js/navbar-init.js"></script>
-    <!-- chatroom -->
-    <script src="/chat/js/sockjs.min.js"></script>
-    <script src="/chat/js/stomp.min.js"></script>
-    <script src="/chat/js/chatroom-init.js"></script>
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
 </head>
 
 <body class="page-body">
+
     <!-- include navbar when window.onload-->
     <div data-include="/navbar/navbarWhite.html"></div>
 
     <div class="page-container">
-
         <!-- your page start -->
-        <div class="main-content">
-
-            <!-- <div id="tocifyDiv">
-                        <div id="toc" class="tocify" style="width: 50px;">
-                            <ul id="tocify-header0" class="tocify-header nav nav-list">
-                                <li class="tocify-item active" data-unique="search" style="cursor: pointer;">
-                                    <a></a>
-                                </li>
-                            </ul>
-                            <ul id="tocify-header" class="tocify-header nav nav-list">
-                                <li class="tocify-item" data-unique="searchTitle" style="cursor: pointer;">
-                                    <a>
-                                        <i class="fa fa-chevron-circle-up"></i>TOP</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div> -->
+        <div class="main-content tocify-content">
 
             <div id="headerDiv">
                 <span id="title" class="col-md-4">
                     <img src="img/FaDaTtsai.png" class="titleIimg1">
                 </span>
-                <div class="col-md-8 search">
+                <div class="col-md-8 search" data-unique="search">
                     <div class="col-md-12">
                         <form id="searchForm">
                             <select class="form-control col-md-2" id="searchType"></select>
@@ -67,7 +51,8 @@
                     </div>
                 </div>
             </div>
-            <div class="main-content tocify-content">
+
+            <div>
                 <div id="left-area" class="col-md-2">
                     <div id="productsQuantity">
 
@@ -77,9 +62,47 @@
 
                         </ul>
                     </div>
+
+                    
+                    <div id="tocifyDiv">
+                            <div id="toc" class="tocify" style="width: 70px;">
+                                <ul id="tocify-header0" class="tocify-header nav nav-list">
+                                    <li class="tocify-item" data-unique="productsTop10Div" style="cursor: pointer;">
+                                        <a>排行</a>
+                                    </li>
+                                </ul>
+                                <ul id="tocify-header1" class="tocify-header nav nav-list">
+                                    <li class="tocify-item" data-unique="newUpdateProductDiv" style="cursor: pointer;">
+                                        <a>NEW</a>
+                                    </li>
+                                </ul>
+                    
+                                <ul id="tocify-header2" class="tocify-header nav nav-list">
+                                    <li class="tocify-item" data-unique="top10Product1" style="cursor: pointer;">
+                                        <a>行車紀錄</a>
+                                    </li>
+                                </ul>
+                                <ul id="tocify-header3" class="tocify-header nav nav-list">
+                                    <li class="tocify-item" data-unique="top10Product2" style="cursor: pointer;">
+                                        <a>安全帽</a>
+                                    </li>
+                                </ul>
+                                <ul id="tocify-header4" class="tocify-header nav nav-list">
+                                    <li class="tocify-item" data-unique="top10Product3" style="cursor: pointer;">
+                                        <a>導航</a>
+                                    </li>
+                                </ul>
+                                <ul id="tocify-header5" class="tocify-header nav nav-list">
+                                    <li class="tocify-item active" data-unique="search" style="cursor: pointer;">
+                                        <a>
+                                            <i class="fa fa-chevron-circle-up"></i>TOP</a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+
                 </div>
                 <div id="right-area" class="col-md-10">
-
 
                     <div id="adWall" class="carousel slide col-md-8" data-ride="carousel">
                         <ol class="carousel-indicators">
@@ -112,7 +135,7 @@
                         </a>
                     </div>
                     <div class="col-md-4">
-                        <img src="img/member.png" width="50%" style="position: absolute;right:0%;" />
+                        <img src="img/member.png" width="50%" style="position: absolute;right:-5%;top:15%" />
                         <span>VIP好康 : </span>
                         <ul style="display:inline;">
                             <li style="text-indent : 2em;">
@@ -125,7 +148,7 @@
 
                         <img src="img/vip.jpg" width="100%" style="position: absolute;top:90px" />
                     </div>
-
+                    <div data-unique="productsTop10Div"></div>
                     <div class="col-md-12" id="productsTop10Div">
                         <div class="classification">
                             <hr>
@@ -135,8 +158,8 @@
                                 </a> -->
                         </div>
                         <div id="productsTop10"></div>
-
                     </div>
+                    <div data-unique="newUpdateProductDiv"></div>
                     <div class="col-md-12" id="newUpdateProductDiv">
                         <div class="classification">
                             <hr>
@@ -147,33 +170,36 @@
                         </div>
                         <div id="newUpdateProduct"></div>
                     </div>
+                    <div data-unique="top10Product1"></div>
                     <div class="col-md-12">
                         <div class="classification">
                             <hr>
                             <span>行車紀錄器</spanp>
-                            <a id="top10Product1A">
-                                <span class="more">更多同種類商品</span>
-                            </a>
+                                <a id="top10Product1A">
+                                    <span class="more">更多同種類商品</span>
+                                </a>
                         </div>
                         <div id="top10Product1"></div>
                     </div>
+                    <div  data-unique="top10Product2"></div>
                     <div class="col-md-12">
                         <div class="classification">
                             <hr>
                             <span>安全帽</spanp>
                                 <a id="top10Product2A">
                                     <span class="more">更多同種類商品</span>
-                            </a>
+                                </a>
                         </div>
                         <div id="top10Product2"></div>
                     </div>
-                    <div class="col-md-12" id="ProductTop10ByTypeDiv">
+                    <div data-unique="top10Product3"></div>
+                    <div class="col-md-12">
                         <div class="classification">
                             <hr>
                             <span>衛星導航</spanp>
                                 <a id="top10Product3A">
                                     <span class="more">更多同種類商品</span>
-                            </a>
+                                </a>
                         </div>
                         <div id="top10Product3"></div>
                     </div>
@@ -183,27 +209,47 @@
         <!-- your page end -->
     </div>
 
-
-    <script src="/assets/js/jquery-1.11.3.min.js"></script>
-    <!-- JavaScripts initializations and stuff -->
-    <!-- YW: this is important for navbar -->
-    <script src="/assets/js/neon-custom.js"></script>
+    <!-- Imported styles on this page -->
+    <link rel="stylesheet" href="../assets/js/selectboxit/jquery.selectBoxIt.css">
 
     <!-- Bottom scripts (common) -->
-    <script src="/assets/js/gsap/TweenMax.min.js"></script>
-    <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
-    <script src="/assets/js/bootstrap.js"></script>
-    <script src="/assets/js/joinable.js"></script>
-    <script src="/assets/js/resizeable.js"></script>
-    <script src="/assets/js/neon-api.js"></script>
+    <script src="../assets/js/gsap/TweenMax.min.js"></script>
+    <script src="../assets/js/jquery-ui/js/jquery-ui-1.10.3.custom.js"></script>
+    <script src="../assets/js/bootstrap.js"></script>
+    <script src="../assets/js/joinable.js"></script>
+    <script src="../assets/js/resizeable.js"></script>
+    <script src="../assets/js/neon-api.js"></script>
 
     <!-- Imported scripts on this page -->
-    <!-- <script src="/assets/js/neon-chat.js"></script> -->
+    <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+    <script src="../assets/js/neon-chat.js"></script>
+
+    <!-- JavaScripts initializations and stuff -->
+    <script src="../assets/js/neon-custom.js"></script>
 
     <!-- Demo Settings -->
-    <script src="/assets/js/neon-demo.js"></script>
+    <script src="../assets/js/neon-demo.js"></script>
+
+    <!-- Include Cloud Zoom -->
+    <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
+
+    <!-- Include Thumbelina  -->
+    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
+    <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+
+    <!-- NavBar -->
+    <script src="../navbar/js/csi.min.js"></script>
+    <script src="../navbar/js/navbar-init.js"></script>
+
+    <!-- Imported scripts on this page -->
+    <script src="/assets/js/tocify/jquery.tocify.min.js"></script>
+    <!-- <script src="/assets/js/neon-chat.js"></script> -->
+
     <link rel="stylesheet" href="css/index.css">
     <script async src="js/index.js"></script>
+
 </body>
 
 </html>
