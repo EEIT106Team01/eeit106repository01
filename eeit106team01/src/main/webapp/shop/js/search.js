@@ -80,10 +80,15 @@ $(document).ready(function () {
 
     var typeUrl = takeTypeUrlValue();
     var typedecodeURI = decodeURIComponent(typeUrl)
-    $("#typeBreadcrumb").append(
-        '<a href="http://localhost:8080/shop/search.html?type='+typeUrl+'">'+typedecodeURI+'</a>'
-    )
-
+    if(typeof (typeUrl) == "undefined"){
+        $("#typeBreadcrumb").append(
+            '<a>搜尋結果</a>'
+        )
+    }else{
+        $("#typeBreadcrumb").append(
+            '<a href="http://localhost:8080/shop/search.html?type='+typeUrl+'">'+typedecodeURI+'</a>'
+        )
+    }
     $("#startDay").datepicker({ format: 'yyyy-mm-dd' });
     $("#endDay").datepicker({ format: 'yyyy-mm-dd' });
 })

@@ -23,8 +23,12 @@ function findAllFromLocalStorage() {
         keys = Object.keys(localStorage),
         i = keys.length;
     while (i--) {
-        let jsonObject = JSON.parse(localStorage.getItem(keys[i]));
-        jsonArray.push(jsonObject);
+        if (isNaN(keys[i])) {
+            console.log(`There are ` + i + ` NaN.`);
+        } else {
+            let jsonObject = JSON.parse(localStorage.getItem(keys[i]));
+            jsonArray.push(jsonObject);
+        }
     };
     return jsonArray;
 };

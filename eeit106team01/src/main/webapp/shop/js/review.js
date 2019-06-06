@@ -391,6 +391,34 @@ function generateReviewCounts(count) {
     $(`#reviewCount`).text(count);
 };
 
+// Generate Rating Star
+function generateRatingStar(rating) {
+    let ratingFloat = parseFloat(rating);
+    if (rating == 0) {
+        return `<span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span>`
+    } else if (rating > 0 && rating < 1) {
+        return `<span class='fa fa-star-half-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span>`
+    } else if (rating == 1) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span>`
+    } else if (rating > 1 && rating < 2) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star-half-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span>`
+    } else if (rating == 2) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span>`
+    } else if (rating > 2 && rating < 3) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star-half-o'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span>`
+    } else if (rating == 3) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star-o'></span><span class='fa fa-star-o'></span>`
+    } else if (rating > 3 && rating < 4) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star-half-o'></span><span class='fa fa-star-o'></span>`
+    } else if (rating == 4) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star-o'></span>`
+    } else if (rating > 4 && rating < 5) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star-half-o'></span>`
+    } else if (rating == 5) {
+        return `<span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span><span class='fa fa-star'></span>`
+    }
+}
+
 // New Review
 function generateReview(productPageUrl, reviewId, comment, updateTime, rating, image, productId, productName, purchaseListId, purchaseListSerialNumber, memberId, currentMemberId) {
 
@@ -405,7 +433,7 @@ function generateReview(productPageUrl, reviewId, comment, updateTime, rating, i
             <span style="display:none;"><span id="purchaseListId">` + purchaseListId + `</span><span id="purchaseListSerialNumber">` + purchaseListSerialNumber + `</span><span id="memberId">` + memberId + `</span></span>
             <div class="comment-head"> 
                 <a href="memberProfile">MemberId: ` + memberId + `</a> 給予
-                <a href="` + productPageUrl + productId + `">` + productName + `</a> </div> 
+                <a href="` + productPageUrl + productId + `">` + productName + `</a>` + ` ` + generateRatingStar(rating) + ` ` + `<span id='review-edit-badge'>` + rating + `分` + `</span></div> 
                 <p class="comment-text">` + comment + ` </p> 
                 <div class="comment-footer"> 
                 <div class="comment-time">` + updateTime + `</div> 

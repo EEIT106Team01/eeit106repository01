@@ -1,24 +1,35 @@
 /* review */
 
 #image {
-  text-align: center;
-  width: 300px;
+    text-align: center;
+    width: 300px;
 }
 
 h1 {
-  text-align: center;
+    text-align: center;
 }
 
 .card-img-top {
-  background-color: black;
+    background-color: black;
 }
 
 #previewDiv img {
-  width: 300px;
+    width: 300px;
 }
 
 .container {
-  width: 900px;
+    width: 900px;
 }
 
+
 /* new review */
+
+#review-edit-badge {
+    background-color: transparent !important;
+    /* width: 23px; */
+    /* height: 20px; */
+}
+
+#review-edit-badge p {
+    font-size: 15px;
+}
