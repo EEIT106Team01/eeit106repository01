@@ -1,6 +1,8 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -156,6 +158,33 @@ public class ArticleTopicCurrentService {
 			findOne.setContentReplyNum(findOne.getContentReplyNum() + 1);
 			articleTopicCurrentDAO.update(findOne);
 		}
+	}
+	
+	public Map<Integer, String> contentWhoLike(int id, int memberId, String likeOrDislike) {
+		ArticleTopicCurrentBean articleTopicCurrentBean = this.findByPrimaryKey(id);
+		int likeNumber = 0;
+		if (likeOrDislike.equals("like")) {
+			likeNumber = 1;
+		} else if (likeOrDislike.equals("dislike")) {
+			likeNumber = -1;
+		}
+		HashMap<Integer, String> likeWho = null;
+		if (articleTopicCurrentBean != null) {
+			likeWho = articleTopicCurrentBean.getTopicLikeWho();
+			if (likeWho != null) {
+				if (likeWho.containsKey(memberId)) {
+					likeWho.remove(memberId);
+				} else {
+					likeWho.put(memberId, likeOrDislike);
+				}
+			} else {
+				likeWho = new HashMap<Integer, String>();
+				likeWho.put(memberId, likeOrDislike);
+			}
+			articleTopicCurrentBean.setTopicLikeWho(likeWho);
+			articleTopicCurrentBean.setTopicLikeNum(articleTopicCurrentBean.getTopicLikeNum() + likeNumber);
+		}
+		return likeWho;
 	}
 	
 	public boolean delete(int id) {

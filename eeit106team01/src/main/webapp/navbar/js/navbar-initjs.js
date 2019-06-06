@@ -18,12 +18,13 @@ let checkNavbar = setInterval(function () {
             $("#login").css({display: "none"});
             // $("#logout").css({display: "block"});
             // $("#userDropdownMenu").css({display: "block"});
-            $("#navbarUserImage").attr("src","/navbar/images/pepe.jpg");
+            $("#navbarUserImage").attr("src","/navbar/images/notLogin.jpg");
         } else {
             // $("#login").css({display: "block"});
             $("#logout").css({display: "none"});
             $("#userDropdownMenu").css({display: "none"});
-            $("#navbarUsername").text("請先登入");
+            $("#navbarUserImage").css({display: "none"});
+            $("#navbarUsername").text("");
         }
 
         $("#logout").on("click",function(){
