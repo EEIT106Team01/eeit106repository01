@@ -35,13 +35,8 @@ public class ArticleContentCurrentService {
 
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
-//<<<<<<< HEAD
-//			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
-//			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
-//=======
 			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
 			MemberTempBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
-//>>>>>>> branch 'master' of https://github.com/EEIT106Team01/eeit106repository01.git
 			bean.setArticleTopicCurrent(articleTopicCurrentBean);
 			bean.setMemberBean(memberBean);
 			if (bean.getVideoBean() != null && bean.getVideoBean().getId() != null) {

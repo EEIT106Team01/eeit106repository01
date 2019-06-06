@@ -206,8 +206,8 @@
             let information = document.createElement("div");
 
             let mbIcon;
-            if (topicBean.memberBean.icon) {
-                mbIcon = topicBean.memberBean.icon;
+            if (topicBean.memberBean.image) {
+                mbIcon = topicBean.memberBean.image;
             } else {
                 mbIcon = "/navbar/images/pepe.jpg";
             }
@@ -675,17 +675,16 @@
                 });
             }
         }
-
-        var chatSidebarOpen = false;
-        function resizeWhenToggleChatSidebar() {
-            if (neonChat && !chatSidebarOpen) {
-                $(".page-container").width($(window).width() - 279);
-                chatSidebarOpen = true;
-            } else {
-                $(".page-container").width($(window).width());
-                chatSidebarOpen = false;
-            }
-        }
+        // var chatSidebarOpen = false;
+        // function resizeWhenToggleChatSidebar() {
+        //     if (neonChat && !chatSidebarOpen) {
+        //         $(".main-content").css("width", ($(".page-container").width() - 279));
+        //         chatSidebarOpen = true;
+        //     } else {
+        //         $(".main-content").css("width", "100%");
+        //         chatSidebarOpen = false;
+        //     }
+        // }
 
         document.addEventListener("DOMContentLoaded", function () {
             let contentContent = document.createElement("div");
@@ -694,16 +693,16 @@
             getTopic();
             // window.addEventListener("resize", resizeWindow);
 
-            let timeout = 10;
-            window.setTimeout(function () {
-                let chatToggleBtn = document.getElementById("toggleChatBtn");
-                if (chatToggleBtn) {
-                    chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
-                    document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
-                } else {
-                    window.setTimeout(arguments.callee, timeout);
-                }
-            }, timeout);
+            // let timeout = 10;
+            // window.setTimeout(function () {
+            //     let chatToggleBtn = document.getElementById("toggleChatBtn");
+            //     if (chatToggleBtn) {
+            //         chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+            //         document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
+            //     } else {
+            //         window.setTimeout(arguments.callee, timeout);
+            //     }
+            // }, timeout);
         });
 
         // function resizeWindow() {
@@ -715,6 +714,9 @@
         //     } else {
         //         $(".page-container").css("margin-top", 54);
         //         $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - 54) / 9 * 16));
+        //     }
+        //     if (neonChat && chatSidebarOpen) {
+        //         $(".main-content").css("width", ($(".page-container").width() - 279));
         //     }
         // }
 

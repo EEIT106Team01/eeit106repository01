@@ -1406,8 +1406,28 @@ $(document).ready(function () {
 
     // console.log($(".badge"));
     window.addEventListener("resize", resizeWindow);
+
+    window.setTimeout(function () {
+        let chatToggleBtn = document.getElementById("toggleChatBtn");
+        if (chatToggleBtn) {
+            chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+            document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
+        } else {
+            window.setTimeout(arguments.callee, timeout);
+        }
+    }, timeout);
 });
 
+var chatSidebarOpen = false;
+function resizeWhenToggleChatSidebar() {
+    if (neonChat && !chatSidebarOpen) {
+        $(".main-content").css("width", ($(".page-container").width() - 279));
+        chatSidebarOpen = true;
+    } else {
+        $(".main-content").css("width", "100%");
+        chatSidebarOpen = false;
+    }
+}
 function resizeWindow() {
     let navbarHeight = $("#bs-example-navbar-collapse-2").height();
     let topicVideoHeight = $(window).height();
@@ -1417,5 +1437,8 @@ function resizeWindow() {
     } else {
         $(".page-container").css("margin-top", 54);
         $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - 54) / 9 * 16));
+    }
+    if (neonChat && chatSidebarOpen) {
+        $(".main-content").css("width", ($(".page-container").width() - 279));
     }
 }
