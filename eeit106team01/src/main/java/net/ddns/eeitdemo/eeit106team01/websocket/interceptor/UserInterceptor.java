@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.chat.interceptor;
+package net.ddns.eeitdemo.eeit106team01.websocket.interceptor;
 
 import java.util.LinkedList;
 import java.util.Map;
@@ -11,7 +11,7 @@ import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
 import org.springframework.messaging.support.MessageHeaderAccessor;
 
-import net.ddns.eeitdemo.eeit106team01.chat.model.User;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.User;
 
 public class UserInterceptor implements ChannelInterceptor {
 

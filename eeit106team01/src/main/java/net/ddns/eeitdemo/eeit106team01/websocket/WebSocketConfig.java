@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.chat;
+package net.ddns.eeitdemo.eeit106team01.websocket;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.messaging.simp.config.ChannelRegistration;
@@ -7,7 +7,7 @@ import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBr
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 
-import net.ddns.eeitdemo.eeit106team01.chat.interceptor.UserInterceptor;
+import net.ddns.eeitdemo.eeit106team01.websocket.interceptor.UserInterceptor;
 
 @Configuration
 @EnableWebSocketMessageBroker

@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.chat.model.impl;
+package net.ddns.eeitdemo.eeit106team01.websocket.model.impl;
 
 import java.util.List;
 
@@ -9,8 +9,8 @@ import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
-import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageDAO;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMessageBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMessageDAO;
 
 @Repository
 public class RegionMessageDAOImpl implements RegionMessageDAO {

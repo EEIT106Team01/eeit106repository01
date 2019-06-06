@@ -38,7 +38,7 @@ head.appendChild(quillCss2);
 
 // ----------append cookie js
 var cookieJs = document.createElement('script');
-cookieJs.src = '/js/js.cookie.min.j';
+cookieJs.src = '/js/js.cookie.min.js';
 head.appendChild(cookieJs);
 // ----------append cookie js end
 
@@ -243,7 +243,7 @@ function workerInit() {
         } else if (e.data.command == "checkUser") {
             let id = e.data.message;
             // console.log(eval(id));
-            if (eval(id)) {
+            if (id) {
                 if (!$("#" + id).get(0)) {
                     neonChat.addUser("group-2", id, "online", false, id);
                     neonChat.refreshUserIds();

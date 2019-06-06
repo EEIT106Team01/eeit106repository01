@@ -237,7 +237,7 @@
             let updateTime = new Date(topicBean.topicUpdateTime);
             $(information).html(
                 "更新時間: " + updateTime.toLocaleDateString() + updateTime.toLocaleTimeString() +
-                "<br>contentLikeNum: " + topicBean.topicLikeNum
+                "<br>"
             );
             card.className = "card";
             // title.className = "card-header";
@@ -260,6 +260,7 @@
             ) {
                 information.appendChild(createReplyBtn(topicBean, "topic"));
             }
+            information.appendChild(createLikeImg(topicBean, "topic"));
             // card.appendChild(title);
             card.appendChild(content);
             card.appendChild(information);
@@ -312,7 +313,7 @@
             ) {
                 information.appendChild(createEditBtn(contentBean, "content"));
             }
-            information.appendChild(createLikeImg(contentBean));
+            information.appendChild(createLikeImg(contentBean, "content"));
             // card.appendChild(title);
             card.appendChild(content);
             card.appendChild(information);
@@ -328,18 +329,30 @@
         }
 
         function createLikeImg(bean, replyType) {
+            let likeWho;
+            let likeNum;
+            let uri;
+            if (replyType == "content") {
+                likeWho = bean.contentLikeWho;
+                likeNum = bean.contentLikeNum;
+                uri = "/articleTopics/" + bean.articleTopicCurrent.id + "/articleContents/" + bean.id;
+            } else if (replyType == "topic") {
+                likeWho = topicBean.topicLikeWho;
+                likeNum = topicBean.topicLikeNum;
+                uri = "/articleTopics/" + topicBean.id;
+            }
             let span = document.createElement("span");
             let like = document.createElement("img");
             let text = document.createElement("span");
             let disLike = document.createElement("img");
-            like.src = "/storage/others/Like.png";
-            disLike.src = "/storage/others/Like.png";
+            like.src = "/forum/icon/like.png";
+            disLike.src = "/forum/icon/like.png";
             like.width = "16";
             disLike.width = "16";
             let likeList = [];
             let dislikeList = [];
-            if (bean.contentLikeWho) {
-                $.each(bean.contentLikeWho, function (key, value) {
+            if (likeWho) {
+                $.each(likeWho, function (key, value) {
                     if (value.startsWith("like")) {
                         likeList.push(value.substr(value.indexOf("||") + 2));
                     } else if (value.startsWith("dislike")) {
@@ -348,7 +361,7 @@
                 });
             }
             $(disLike).css("transform", "rotate(180deg)");
-            $(text).text(bean.contentLikeNum);
+            $(text).text(likeNum);
             $(text).css("margin", "1em");
             $(like).attr({
                 "data-toggle": "popover",
@@ -364,78 +377,82 @@
                 "title": "不喜歡這篇文",
                 "data-placement": "bottom"
             });
-            let uri = "/articleTopics/" + bean.articleTopicCurrent.id + "/articleContents/" + bean.id;
-            if (memberBean && bean.contentLikeWho && bean.contentLikeWho[memberBean.id]) {
-                if (bean.contentLikeWho[memberBean.id].startsWith("like")) {
+            if (memberBean) {
+                if (likeWho && likeWho[memberBean.id]) {
+                    if (likeWho[memberBean.id].startsWith("like")) {
+                        $(disLike).css("filter", "grayscale(100%)");
+                        $(like).click(function () {
+                            $(like).attr("disabled", true);
+                            $(text).text($(text).text() - (1));
+                            $(like).css("filter", "grayscale(100%)");
+                            $(this).unbind("click");
+                            $.ajax({
+                                url: uri + "/dislike",
+                                method: "PUT"
+                            });
+                            let newList = jQuery.grep(likeList, function (value) {
+                                return value != memberBean.name;
+                            });
+                            if (newList.length == 0) {
+                                newList = " ";
+                            }
+                            $(this).attr("data-content", newList);
+                        })
+                    } else if (likeWho[memberBean.id].startsWith("dislike")) {
+                        $(like).css("filter", "grayscale(100%)");
+                        $(disLike).click(function () {
+                            $(disLike).attr("disabled", true);
+                            $(text).text($(text).text() - (-1));
+                            $(disLike).css("filter", "grayscale(100%)");
+                            $(this).unbind("click");
+                            $.ajax({
+                                url: uri + "/like",
+                                method: "PUT"
+                            });
+                            let newList = jQuery.grep(dislikeList, function (value) {
+                                return value != memberBean.name;
+                            });
+                            if (newList.length == 0) {
+                                newList = " ";
+                            }
+                            $(this).attr("data-content", newList);
+                        })
+                    }
+                } else {
+                    $(like).css("filter", "grayscale(100%)");
                     $(disLike).css("filter", "grayscale(100%)");
                     $(like).click(function () {
                         $(like).attr("disabled", true);
-                        $(text).text($(text).text() - (1));
-                        $(like).css("filter", "grayscale(100%)");
-                        $(this).unbind("click");
-                        $.ajax({
-                            url: uri + "/dislike",
-                            method: "PUT"
-                        });
-                        let newList = jQuery.grep(likeList, function (value) {
-                            return value != memberBean.name;
-                        });
-                        if (newList.length == 0) {
-                            newList = " ";
-                        }
-                        $(this).attr("data-content", newList);
-                    })
-                } else if (bean.contentLikeWho[memberBean.id].startsWith("dislike")) {
-                    $(like).css("filter", "grayscale(100%)");
-                    $(disLike).click(function () {
                         $(disLike).attr("disabled", true);
                         $(text).text($(text).text() - (-1));
-                        $(disLike).css("filter", "grayscale(100%)");
+                        $(like).css("filter", "grayscale(0%)");
                         $(this).unbind("click");
+                        $(disLike).unbind("click");
                         $.ajax({
                             url: uri + "/like",
                             method: "PUT"
                         });
-                        let newList = jQuery.grep(dislikeList, function (value) {
-                            return value != memberBean.name;
+                        likeList.push(memberBean.name);
+                        $(this).attr("data-content", likeList);
+                    })
+                    $(disLike).click(function () {
+                        $(like).attr("disabled", true);
+                        $(disLike).attr("disabled", true);
+                        $(text).text($(text).text() - (1));
+                        $(disLike).css("filter", "grayscale(0%)");
+                        $(this).unbind("click");
+                        $(like).unbind("click");
+                        $.ajax({
+                            url: uri + "/dislike",
+                            method: "PUT"
                         });
-                        if (newList.length == 0) {
-                            newList = " ";
-                        }
-                        $(this).attr("data-content", newList);
+                        dislikeList.push(memberBean.name);
+                        $(this).attr("data-content", dislikeList);
                     })
                 }
             } else {
                 $(like).css("filter", "grayscale(100%)");
                 $(disLike).css("filter", "grayscale(100%)");
-                $(like).click(function () {
-                    $(like).attr("disabled", true);
-                    $(disLike).attr("disabled", true);
-                    $(text).text($(text).text() - (-1));
-                    $(like).css("filter", "grayscale(0%)");
-                    $(this).unbind("click");
-                    $(disLike).unbind("click");
-                    $.ajax({
-                        url: uri + "/like",
-                        method: "PUT"
-                    });
-                    likeList.push(memberBean.name);
-                    $(this).attr("data-content", likeList);
-                })
-                $(disLike).click(function () {
-                    $(like).attr("disabled", true);
-                    $(disLike).attr("disabled", true);
-                    $(text).text($(text).text() - (1));
-                    $(disLike).css("filter", "grayscale(0%)");
-                    $(this).unbind("click");
-                    $(like).unbind("click");
-                    $.ajax({
-                        url: uri + "/dislike",
-                        method: "PUT"
-                    });
-                    dislikeList.push(memberBean.name);
-                    $(this).attr("data-content", dislikeList);
-                })
             }
             span.appendChild(like);
             span.appendChild(text);

@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.chat.controller;
+package net.ddns.eeitdemo.eeit106team01.websocket.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
@@ -12,14 +12,14 @@ import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 
-import net.ddns.eeitdemo.eeit106team01.chat.model.ConnectionsHandler;
-import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMessageBean;
-import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMessageService;
-import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMsg;
-import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
-import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageService;
-import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMsg;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.ConnectionsHandler;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.PrivateMessageBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.PrivateMessageService;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.PrivateMsg;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMessageBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMessageService;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMsg;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 
 @EnableScheduling

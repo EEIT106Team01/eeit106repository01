@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.chat.model;
+package net.ddns.eeitdemo.eeit106team01.websocket.model;
 
 import java.security.Principal;
 

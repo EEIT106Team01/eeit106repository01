@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.chat.model;
+package net.ddns.eeitdemo.eeit106team01.websocket.model;
 
 import java.security.Principal;
 import java.util.Collections;
@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.messaging.SessionConnectedEvent;
 import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
-import net.ddns.eeitdemo.eeit106team01.chat.controller.ChatController;
+import net.ddns.eeitdemo.eeit106team01.websocket.controller.ChatController;
 
 @Component
 public class ConnectionsHandler {

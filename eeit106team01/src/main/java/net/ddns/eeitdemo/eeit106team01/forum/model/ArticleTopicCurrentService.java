@@ -160,7 +160,7 @@ public class ArticleTopicCurrentService {
 		}
 	}
 	
-	public Map<Integer, String> contentWhoLike(int id, int memberId, String likeOrDislike) {
+	public Map<Integer, String> contentWhoLike(int id, int memberId, String memberName, String likeOrDislike) {
 		ArticleTopicCurrentBean articleTopicCurrentBean = this.findByPrimaryKey(id);
 		int likeNumber = 0;
 		if (likeOrDislike.equals("like")) {
@@ -175,11 +175,11 @@ public class ArticleTopicCurrentService {
 				if (likeWho.containsKey(memberId)) {
 					likeWho.remove(memberId);
 				} else {
-					likeWho.put(memberId, likeOrDislike);
+					likeWho.put(memberId, likeOrDislike + "||" + memberName);
 				}
 			} else {
 				likeWho = new HashMap<Integer, String>();
-				likeWho.put(memberId, likeOrDislike);
+				likeWho.put(memberId, likeOrDislike + "||" + memberName);
 			}
 			articleTopicCurrentBean.setTopicLikeWho(likeWho);
 			articleTopicCurrentBean.setTopicLikeNum(articleTopicCurrentBean.getTopicLikeNum() + likeNumber);

@@ -26,6 +26,7 @@ let checkNavbar = setInterval(function () {
             $("#navbarUserImage").css({ display: "none" });
             $("#navbarUsername").text("");
             $("#toggleChatBtn").css({ display: "none" });
+            $("#notiDrop").css({ display: "none" });
         }
 
         $("#logout").on("click", function () {
@@ -42,6 +43,9 @@ let checkNavbar = setInterval(function () {
                     "command": "logout"
                 });
             }
+        });
+        $("#login").on("click", function () {
+            sessionStorage.setItem("previousPage", location.pathname + location.search);
         });
     }
 }, 100);
