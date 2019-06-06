@@ -44,7 +44,7 @@ public class ArticleContentCurrentBean {
 //	memberPK
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "member_id")
-	private MemberBean memberBean;
+	private MemberTempBean memberBean;
 
 //	vedioPK
 	@OneToOne(cascade = CascadeType.ALL)
@@ -57,7 +57,7 @@ public class ArticleContentCurrentBean {
 
 	public ArticleContentCurrentBean(Integer contentLikeNum, Integer contentReplyNum, Date contentCreateTime,
 			Date contentUpdateTime, String contentStatus, String contentContent, String updateMessage,
-			ArticleTopicCurrentBean articleTopicCurrent, ArticleContentCurrentBean reply, MemberBean memberBean,
+			ArticleTopicCurrentBean articleTopicCurrent, ArticleContentCurrentBean reply, MemberTempBean memberBean,
 			VideoBean videoBean) {
 		super();
 		this.contentLikeNum = contentLikeNum;
@@ -161,11 +161,11 @@ public class ArticleContentCurrentBean {
 		this.reply = reply;
 	}
 
-	public MemberBean getMemberBean() {
+	public MemberTempBean getMemberBean() {
 		return memberBean;
 	}
 
-	public void setMemberBean(MemberBean memberBean) {
+	public void setMemberBean(MemberTempBean memberBean) {
 		this.memberBean = memberBean;
 	}
 

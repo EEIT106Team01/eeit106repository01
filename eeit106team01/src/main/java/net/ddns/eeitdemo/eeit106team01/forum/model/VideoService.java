@@ -29,7 +29,7 @@ public class VideoService {
 
 	public VideoBean insert(VideoBean videoBean) throws Exception {
 		if (videoBean != null) {
-			MemberBean memberBean = memberBeanService.findByPrimaryKey(videoBean.getMemberBean().getId());
+			MemberTempBean memberBean = memberBeanService.findByPrimaryKey(videoBean.getMemberBean().getId());
 			videoBean.setMemberBean(memberBean);
 		}
 		VideoBean result = videoDAO.insert(videoBean);
@@ -43,7 +43,7 @@ public class VideoService {
 	public VideoBean update(VideoBean videoBean) {
 		VideoBean vb = this.findByPrimaryKey(videoBean.getId());
 		if (vb != null) {
-			MemberBean memberBean = memberBeanService.findByPrimaryKey(videoBean.getMemberBean().getId());
+			MemberTempBean memberBean = memberBeanService.findByPrimaryKey(videoBean.getMemberBean().getId());
 			vb.setMemberBean(memberBean);
 			if (videoBean.getVideoURI() != null && videoBean.getVideoURI().length() != 0) {
 				vb.setVideoURI(videoBean.getVideoURI());

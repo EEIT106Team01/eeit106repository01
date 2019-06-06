@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentService;
-import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 
 @RestController
 public class ArticleContentController {
@@ -64,7 +64,7 @@ public class ArticleContentController {
 				return ResponseEntity.badRequest().body(errors);
 			}
 //			從session抓出MemberBean資訊
-			MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+			MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 			
 			if ((articleContentCurrentBean.getMemberBean() == null)
 					|| (articleContentCurrentBean.getMemberBean().getId() == null)
@@ -123,7 +123,7 @@ public class ArticleContentController {
 				return ResponseEntity.noContent().header("errorMsg", errors.toString()).build();
 			}
 //			從httpSession抓出MemberBean資訊
-			MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+			MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 			if ((articleContentCurrentBean.getMemberBean() == null)
 					|| (articleContentCurrentBean.getMemberBean().getId() == null)
 //					檢查修文者ID與session中ID是否一致
@@ -155,7 +155,7 @@ public class ArticleContentController {
 			HttpSession httpSession
 			) {
 //		從httpSession抓出MemberBean資訊
-		MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+		MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 		Integer memberId = memberBean.getId();
 		Map<Integer, String> result = articleContentCurrentService.contentWhoLike(contentId, memberId, likeOrDislike.toLowerCase());
 		if (result != null) {

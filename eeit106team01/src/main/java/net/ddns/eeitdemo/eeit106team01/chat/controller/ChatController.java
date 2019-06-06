@@ -19,7 +19,7 @@ import net.ddns.eeitdemo.eeit106team01.chat.model.PrivateMsg;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMessageService;
 import net.ddns.eeitdemo.eeit106team01.chat.model.RegionMsg;
-import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 
 @EnableScheduling
@@ -191,7 +191,7 @@ public class ChatController {
 	@MessageMapping("/checkUser")
 	public void checkUser(PrivateMsg privateMsg, Principal user) {
 		if (privateMsg != null && user != null) {
-			MemberBean mb = memberBeanService.findByName(privateMsg.getMessage());
+			MemberTempBean mb = memberBeanService.findByName(privateMsg.getMessage());
 			if (mb != null) {
 				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", mb.getName());
 			} else {

@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>註冊</title>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script> -->
+
+    <link rel="icon" href="/assets/images/favicon.ico">
+
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
+
+    <!-- cookie -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <!--input data-include property in any tag when window.onload-->
+    <script src="/navbar/js/csi.min.js"></script>
+
+    <!-- navbar-->
+    <script src="/navbar/js/navbar-init.js"></script>
+    <!-- chatroom -->
+    <script src="/chat/js/sockjs.min.js"></script>
+    <script src="/chat/js/stomp.min.js"></script>
+    <script src="/chat/js/chatroom-init.js"></script>
+
+    <!-- my -->
+    <!-- <script src="/forum/js/topic/yyyymmddhhiiDate.js"></script> -->
+    <!-- <script src="/forum/js/topic/getUrlParameters.js"></script> -->
+    <!-- <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.min.css"> -->
+
+    <style>
+        .myRegister {
+            width: 60%;
+            margin: auto;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            $("#register").click(register);
+        })
+
+        function register() {
+            let memberName = $("#memberName").serialize().substr(11);
+            let memberPassword = $("#memberPassword").serialize().substr(15);
+            let memberPasswordCheck = $("#memberPasswordCheck").serialize().substr(20);
+            let memberBirth = $("#memberBirth").serialize().substr(12);
+            let memberEmail = $("#memberEmail").val();
+            console.log(memberName);
+            console.log(memberPassword);
+            console.log(memberPasswordCheck);
+            console.log(memberBirth);
+            console.log(memberEmail);
+            if (memberPassword !== memberPasswordCheck) {
+                alert("確認密碼錯誤，請輸入相同密碼");
+                return;
+            }
+            let registerData = {
+                name: memberName,
+                password: memberPassword,
+                birth: memberBirth,
+                email: memberEmail
+            };
+            // return;
+            $.ajax({
+                url: "/memberTemps",
+                method: "POST",
+                data: JSON.stringify(registerData),
+				contentType: "application/json; charset=UTF-8",
+				dataType: "json",
+                success: function (data, textStatus, jqXHR) {
+                    console.log("success");
+                    console.log("回傳值 : " + data);
+                    console.log("cookie: " + Cookies.get("MemberBean"));
+                    let redirect = sessionStorage.getItem("previousPage");
+                    console.log(redirect);
+                    if (!redirect) {
+                        redirect = "/index.html";
+                    }
+                    location.href = redirect;
+                },
+                error: function (data, textStatus, jqXHR) {
+                    console.log("error");
+                    console.log(textStatus);
+                }
+            });
+        }
+    </script>
+</head>
+
+<body class="page-body" data-url="http://neon.dev">
+    <!-- include navbar when window.onload-->
+    <div data-include="/navbar/navbarWhite.html"></div>
+
+    <div class="page-container">
+        <div class="main-content">
+
+            <div class="myRegister">
+                <div class="col-md-12">
+                    <h1>註冊</h1>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label>帳號：(將作為您的使用者名稱)</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" name="memberName" id="memberName" placeholder="請輸入帳號">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label>密碼：</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="password" name="memberPassword" id="memberPassword" placeholder="請輸入密碼">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label>確認密碼：</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="password" name="memberPasswordCheck" id="memberPasswordCheck" placeholder="請再一次輸入密碼">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label>生日：</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" name="memberBirth" id="memberBirth" placeholder="請輸入生日">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="col-md-12">
+                        <label>信箱：</label>
+                    </div>
+                    <div class="col-md-12">
+                        <input type="text" name="memberEmail" id="memberEmail" placeholder="請輸入有效信箱">
+                    </div>
+                </div>
+
+                <div class="col-md-12">
+                    <input type="button" value="register" id="register" />
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- JavaScripts initializations and stuff -->
+    <!-- YW: this is important for navbar -->
+    <script src="/assets/js/neon-custom.js"></script>
+
+    <!-- Bottom scripts (common) -->
+    <script src="/assets/js/gsap/TweenMax.min.js"></script>
+    <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/joinable.js"></script>
+    <script src="/assets/js/resizeable.js"></script>
+    <script src="/assets/js/neon-api.js"></script>
+
+    <!-- Imported scripts on this page -->
+    <!-- <script src="/assets/js/neon-chat.js"></script> -->
+
+    <!-- Demo Settings -->
+    <!-- <script src="/assets/js/neon-demo.js"></script> -->
+
+</body>
+
+</html>

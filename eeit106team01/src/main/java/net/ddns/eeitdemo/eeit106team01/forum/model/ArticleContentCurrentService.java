@@ -36,7 +36,7 @@ public class ArticleContentCurrentService {
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
 			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
-			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
+			MemberTempBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
 			bean.setArticleTopicCurrent(articleTopicCurrentBean);
 			bean.setMemberBean(memberBean);
 			if (bean.getVideoBean()!=null && bean.getVideoBean().getId()!=null) {

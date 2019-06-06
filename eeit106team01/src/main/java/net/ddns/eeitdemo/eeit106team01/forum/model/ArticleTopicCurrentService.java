@@ -56,7 +56,7 @@ public class ArticleTopicCurrentService {
 	public ArticleTopicCurrentBean insert(ArticleTopicCurrentBean bean) {
 		if (bean != null) {
 			System.err.println("before select memberBean");
-			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId().intValue());
+			MemberTempBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId().intValue());
 			System.err.println("after select memberBean");
 			
 			bean.setMemberBean(memberBean);

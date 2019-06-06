@@ -22,6 +22,17 @@ body {
     margin-top: 52px;
 }
 
+.navbar-right .dropdown-menu {
+    /* left: auto; */
+    left: 0;
+    right: 0;
+}
+
+.profile-info.dropdown .dropdown-menu > li > a {
+    /* min-width: 210px; */
+    min-width: 160px;
+}
+
 .myImg-center{
     position: absolute;
     top: 3px;
