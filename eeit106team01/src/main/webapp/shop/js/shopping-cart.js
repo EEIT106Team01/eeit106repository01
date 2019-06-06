@@ -78,7 +78,11 @@ function allStorage() {
         keys = Object.keys(localStorage),
         i = keys.length;
     while (i--) {
-        values.push(localStorage.getItem(keys[i]));
+        if (isNaN(keys[i])) {
+            console.log(`There are ` + i + ` NaN.`);
+        } else {
+            values.push(localStorage.getItem(keys[i]));
+        }
     }
     return values;
 }
