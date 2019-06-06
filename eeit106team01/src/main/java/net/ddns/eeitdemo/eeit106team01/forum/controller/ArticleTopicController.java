@@ -276,6 +276,22 @@ public class ArticleTopicController {
 		return ResponseEntity.notFound().build();
 	}
 
+	@PutMapping(path = { "/articleTopics/{id}/{likeOrDislike}" }, produces = { "application/json" })
+	public ResponseEntity<?> ContentWhoLike(
+			@PathVariable Integer id,
+			@PathVariable String likeOrDislike,
+			HttpSession httpSession
+			) {
+//		從httpSession抓出MemberBean資訊
+		MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
+		Integer memberId = memberBean.getId();
+		Map<Integer, String> result = articleTopicCurrentService.contentWhoLike(id, memberId, likeOrDislike.toLowerCase());
+		if (result != null) {
+			return ResponseEntity.ok(result);
+		}
+		return ResponseEntity.notFound().build();
+	}
+	
 	@DeleteMapping(path = { "/articleTopics/{id}" })
 	public ResponseEntity<?> deleteTopic(@PathVariable(name = "id") int id) {
 		System.out.println("deleteTopic method running");
