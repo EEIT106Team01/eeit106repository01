@@ -1,10 +1,9 @@
 var chatUsername;
-if (typeof thisname !== "undefined") {
-    chatUsername = thisname;
-} else {
-    chatUsername = "pikachu";
-}
-
+// if (typeof thisname !== "undefined") {
+//     chatUsername = thisname;
+// } else {
+//     chatUsername = "pikachu";
+// }
 
 var neonChat;
 
@@ -37,6 +36,11 @@ head.appendChild(quillCss2);
 // }
 // ----------append quill js&css end
 
+// ----------append cookie js
+var cookieJs = document.createElement('script');
+cookieJs.src = '/js/js.cookie.min.j';
+head.appendChild(cookieJs);
+// ----------append cookie js end
 
 function onSubmitMessage(id, msg, chatData) {
     // console.log(id);
@@ -1372,50 +1376,61 @@ $(document).ready(function () {
     })(jQuery, window);
     //----------------------------------------
 
-    if (worker == null) {
-        worker = new SharedWorker("/chat/js/websocket-worker.js");
-        console.log("initworker")
-        workerInit();
-    }
-
-    $("#checkUser").keydown(function (e) {
-        if (e.keyCode == 13 && !e.shiftKey) {
-            e.preventDefault();
-            checkUserExist();
-            return false;
-        } else if (e.keyCode == 27) {
-            $(this).val("");
-        }
-    });
-
-    let timeout = 10;
-    window.setTimeout(function () {
-        if (typeof Quill !== 'undefined') {
-            quillChat = new Quill('#chat-editor-container', {
-                modules: {
-                    formula: true,
-                    syntax: true,
-                    toolbar: '#chat-toolbar-container'
-                },
-                theme: 'snow'
-            });
-        } else {
-            window.setTimeout(arguments.callee, timeout);
-        }
-    }, timeout);
-
-    // console.log($(".badge"));
     window.addEventListener("resize", resizeWindow);
 
-    window.setTimeout(function () {
-        let chatToggleBtn = document.getElementById("toggleChatBtn");
-        if (chatToggleBtn) {
-            chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
-            document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
-        } else {
-            window.setTimeout(arguments.callee, timeout);
+    var memberBean = Cookies.get("MemberBean");
+    console.log(Cookies.get("MemberBean"));
+    if (memberBean) {
+        initChat();
+    }
+
+    function initChat() {
+        memberBean = JSON.parse(Cookies.get("MemberBean"));
+        chatUsername = memberBean.name;
+        if (worker == null) {
+            worker = new SharedWorker("/chat/js/websocket-worker.js");
+            console.log("initworker")
+            workerInit();
         }
-    }, timeout);
+
+        $("#checkUser").keydown(function (e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                checkUserExist();
+                return false;
+            } else if (e.keyCode == 27) {
+                $(this).val("");
+            }
+        });
+
+        let timeout = 10;
+        window.setTimeout(function () {
+            if (typeof Quill !== 'undefined') {
+                quillChat = new Quill('#chat-editor-container', {
+                    modules: {
+                        formula: true,
+                        syntax: true,
+                        toolbar: '#chat-toolbar-container'
+                    },
+                    theme: 'snow'
+                });
+            } else {
+                window.setTimeout(arguments.callee, timeout);
+            }
+        }, timeout);
+
+        // console.log($(".badge"));
+
+        window.setTimeout(function () {
+            let chatToggleBtn = document.getElementById("toggleChatBtn");
+            if (chatToggleBtn) {
+                chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+                document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
+            } else {
+                window.setTimeout(arguments.callee, timeout);
+            }
+        }, timeout);
+    }
 });
 
 var chatSidebarOpen = false;

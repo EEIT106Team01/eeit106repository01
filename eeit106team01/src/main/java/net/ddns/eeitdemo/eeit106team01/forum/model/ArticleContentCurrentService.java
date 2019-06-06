@@ -132,7 +132,6 @@ public class ArticleContentCurrentService {
 				+ "' and accb.reply is null order by accb.contentCreateTime asc";
 		List<ArticleContentCurrentBean> notRepliedContents = articleContentCurrentDAO.queryList(hql, startPosition - 1,
 				maxResult);
-		System.err.println(notRepliedContents.size());
 		if (!notRepliedContents.isEmpty()) {
 			String idString = "accb.reply.id ='";
 			for (ArticleContentCurrentBean noRepliedContent : notRepliedContents) {
