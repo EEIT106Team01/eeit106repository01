@@ -49,7 +49,7 @@ public class ArticleTopicCurrentBean {
 //	memberPK
 	@ManyToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "member_id")
-	private MemberBean memberBean;
+	private MemberTempBean memberBean;
 
 //	vedioPK
 	@OneToOne(cascade = CascadeType.ALL)
@@ -64,7 +64,7 @@ public class ArticleTopicCurrentBean {
 			HashMap<Integer, String> topicLikeWho, Integer contentReplyNum, Date topicCreateTime, Date topicUpdateTime,
 			String topicStatus, Date accidentTime, String accidentLocation, Double accidentLocationLongitude,
 			Double accidentLocationLatitude, String topicContent, Date topicContentUpdateTime, Integer pageViews,
-			String updateMessage, MemberBean memberBean, VideoBean videoBean) {
+			String updateMessage, MemberTempBean memberBean, VideoBean videoBean) {
 		super();
 		this.topicHeader = topicHeader;
 		this.topicType = topicType;
@@ -243,11 +243,11 @@ public class ArticleTopicCurrentBean {
 		this.updateMessage = updateMessage;
 	}
 
-	public MemberBean getMemberBean() {
+	public MemberTempBean getMemberBean() {
 		return memberBean;
 	}
 
-	public void setMemberBean(MemberBean memberBean) {
+	public void setMemberBean(MemberTempBean memberBean) {
 		this.memberBean = memberBean;
 	}
 

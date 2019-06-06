@@ -78,15 +78,32 @@ function allStorage() {
         keys = Object.keys(localStorage),
         i = keys.length;
     while (i--) {
-        values.push(localStorage.getItem(keys[i]));
+        if (isNaN(keys[i])) {
+            console.log(`There are ` + i + ` NaN.`);
+        } else {
+            values.push(localStorage.getItem(keys[i]));
+        }
     }
     return values;
+}
+
+//get count from cart(localStorage)
+function cartStorageCount() {
+    var count = 0,
+        keys = Object.keys(localStorage),
+        i = keys.length;
+    while (i--) {
+        if (isNaN(keys[i])) {} else {
+            count += 1;
+        }
+    }
+    return count;
 }
 
 //add to cart(localStorage)
 function addToCart() {
     var cartLocalStorage = localStorage;
-    var cartLocalStorageCount = localStorage.length;
+    var cartLocalStorageCount = cartStorageCount();
 
     $(document).ready(function() {
         $("#card-shopping-cart-count").text(cartLocalStorageCount);
@@ -105,7 +122,7 @@ function addToCart() {
                 });
             };
 
-            let purchaseButton = `<button type="button" class="btn btn-block"><span class='fa fa-shopping-cart'> 去結帳</span></button>`;
+            let purchaseButton = `<button type="button" class="btn col-md-12" onclick='newPurchase()'><span class='fa fa-shopping-cart'> 去結帳</span></button>`;
             let productUrl = urlDomain + `shop/product.html?`;
 
             jsonArray.forEach(element => {
@@ -135,15 +152,15 @@ function addToCart() {
                         img.push("<img src='" + val + "'>");
                     }
                 });
-                $(`<a href="` + productUrl + id.join("") + `">` +
-                    `<span class='row cart-product'>` +
+                $(`<span class='row cart-product'>` +
                     `<span class='col-sm-4'>` +
                     closeIcon.join("") +
                     img.join("") +
                     `</span>` +
+                    `<a href="` + productUrl + id.join("") + `">` +
                     text.join("") +
-                    `</span>` +
-                    `</a>`
+                    `</a>` +
+                    `</span>`
                 ).appendTo("#accordion-shopping-cart .scrollable");
             });
 

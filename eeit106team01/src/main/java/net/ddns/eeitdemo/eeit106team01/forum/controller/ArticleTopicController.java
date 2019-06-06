@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentService;
-import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 
 @RestController
 public class ArticleTopicController {
@@ -167,7 +167,7 @@ public class ArticleTopicController {
 			}
 		}
 		
-		MemberBean memberBean = (MemberBean) httpSession.getAttribute("MemberBean");
+		MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 		if((requestbody.getMemberBean() == null)
 				|| requestbody.getMemberBean().getId() == null
 				|| requestbody.getMemberBean().getId().intValue() != memberBean.getId().intValue()) {

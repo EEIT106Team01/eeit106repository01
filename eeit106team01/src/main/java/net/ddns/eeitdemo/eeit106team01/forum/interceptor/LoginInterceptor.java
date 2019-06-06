@@ -6,7 +6,7 @@ import javax.servlet.http.HttpServletResponse;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 
-import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 
 @Component
 public class LoginInterceptor implements HandlerInterceptor {
@@ -17,7 +17,7 @@ public class LoginInterceptor implements HandlerInterceptor {
 		if (request.getMethod().equalsIgnoreCase("get")) {
 			return true;
 		} else {
-			MemberBean memberBean = (MemberBean) request.getSession().getAttribute("MemberBean");
+			MemberTempBean memberBean = (MemberTempBean) request.getSession().getAttribute("MemberBean");
 			if (memberBean != null) {
 				return true;
 			} else {
