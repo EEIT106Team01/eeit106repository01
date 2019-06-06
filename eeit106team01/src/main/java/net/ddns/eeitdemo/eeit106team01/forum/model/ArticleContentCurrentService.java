@@ -14,7 +14,7 @@ public class ArticleContentCurrentService {
 
 	@Autowired
 	private ArticleContentCurrentDAO articleContentCurrentDAO;
-	@Autowired 
+	@Autowired
 	private ArticleTopicCurrentDAO articleTopicCurrentDAO;
 	@Autowired
 	private MemberBeanService memberBeanService;
@@ -24,7 +24,7 @@ public class ArticleContentCurrentService {
 	public ArticleContentCurrentBean findByPrimaryKey(int id) {
 		return articleContentCurrentDAO.findByPrimaryKey(id);
 	};
-	
+
 	public ArticleContentCurrentBean findByPrimaryKeyAsProxy(int id) {
 		return articleContentCurrentDAO.findByPrimaryKeyAsProxy(id);
 	};
@@ -35,15 +35,16 @@ public class ArticleContentCurrentService {
 
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
-			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
+			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO
+					.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
 			MemberBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
 			bean.setArticleTopicCurrent(articleTopicCurrentBean);
 			bean.setMemberBean(memberBean);
-			if (bean.getVideoBean()!=null && bean.getVideoBean().getId()!=null) {
+			if (bean.getVideoBean() != null && bean.getVideoBean().getId() != null) {
 				VideoBean videoBean = videoService.findByPrimaryKey(bean.getVideoBean().getId());
 				bean.setVideoBean(videoBean);
 			}
-			if (bean.getReply()!=null && bean.getReply().getId()!=null) {
+			if (bean.getReply() != null && bean.getReply().getId() != null) {
 				ArticleContentCurrentBean reply = articleContentCurrentDAO.findByPrimaryKey(bean.getReply().getId());
 				bean.setReply(reply);
 			}
@@ -93,10 +94,8 @@ public class ArticleContentCurrentService {
 					if (bean.getVideoBean().getId() == -1) {
 //						Video ID設為-1為上移除與影片的關聯
 						findOne.setVideoBean(null);
-					} else if (
-							(findOne.getVideoBean() == null) ||
-							(bean.getVideoBean().getId() != findOne.getVideoBean().getId())
-							) {
+					} else if ((findOne.getVideoBean() == null)
+							|| (bean.getVideoBean().getId() != findOne.getVideoBean().getId())) {
 //						Video ID不同時為上傳新影片
 						System.err.println(bean.getVideoBean().getId());
 						bean.getVideoBean().setMemberBean(findOne.getMemberBean());
@@ -121,7 +120,8 @@ public class ArticleContentCurrentService {
 				idString = idString + noRepliedContent.getId() + "' or accb.reply.id ='";
 			}
 			idString = idString.substring(0, idString.length() - 20);
-			String hql2 = "from ArticleContentCurrentBean accb where " + idString + " order by accb.contentLikeNum desc, accb.contentCreateTime asc";
+			String hql2 = "from ArticleContentCurrentBean accb where " + idString
+					+ " order by accb.contentLikeNum desc, accb.contentCreateTime asc";
 			List<ArticleContentCurrentBean> repliedContents = articleContentCurrentDAO.queryList(hql2, 0, 0);
 			notRepliedContents.addAll(repliedContents);
 		}
@@ -130,9 +130,10 @@ public class ArticleContentCurrentService {
 
 	public List<ArticleContentCurrentBean> findByTime(int id, int startPosition, int maxResult) {
 		String hql = "from ArticleContentCurrentBean accb where accb.articleTopicCurrent.id ='" + id
-				+ "' and accb.reply =null order by accb.contentCreateTime asc";
+				+ "' and accb.reply is null order by accb.contentCreateTime asc";
 		List<ArticleContentCurrentBean> notRepliedContents = articleContentCurrentDAO.queryList(hql, startPosition - 1,
 				maxResult);
+		System.err.println(notRepliedContents.size());
 		if (!notRepliedContents.isEmpty()) {
 			String idString = "accb.reply.id ='";
 			for (ArticleContentCurrentBean noRepliedContent : notRepliedContents) {
@@ -140,14 +141,15 @@ public class ArticleContentCurrentService {
 				idString = idString + noRepliedContent.getId() + "' or accb.reply.id ='";
 			}
 			idString = idString.substring(0, idString.length() - 20);
-			String hql2 = "from ArticleContentCurrentBean accb where " + idString + " order by accb.contentCreateTime asc";
+			String hql2 = "from ArticleContentCurrentBean accb where " + idString
+					+ " order by accb.contentCreateTime asc";
 			List<ArticleContentCurrentBean> repliedContents = articleContentCurrentDAO.queryList(hql2, 0, 0);
 			notRepliedContents.addAll(repliedContents);
 		}
 		return notRepliedContents;
 	}
 
-	public Map<Integer, String> contentWhoLike(int id, int memberId, String likeOrDislike) {
+	public Map<Integer, String> contentWhoLike(int id, int memberId, String memberName, String likeOrDislike) {
 		ArticleContentCurrentBean articleContentCurrentBean = this.findByPrimaryKey(id);
 		int likeNumber = 0;
 		if (likeOrDislike.equals("like")) {
@@ -162,11 +164,11 @@ public class ArticleContentCurrentService {
 				if (likeWho.containsKey(memberId)) {
 					likeWho.remove(memberId);
 				} else {
-					likeWho.put(memberId, likeOrDislike);
+					likeWho.put(memberId, likeOrDislike + "||" + memberName);
 				}
 			} else {
 				likeWho = new HashMap<Integer, String>();
-				likeWho.put(memberId, likeOrDislike);
+				likeWho.put(memberId, likeOrDislike + "||" + memberName);
 			}
 			articleContentCurrentBean.setContentLikeWho(likeWho);
 			articleContentCurrentBean.setContentLikeNum(articleContentCurrentBean.getContentLikeNum() + likeNumber);

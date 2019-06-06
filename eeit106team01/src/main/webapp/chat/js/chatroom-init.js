@@ -1405,5 +1405,17 @@ $(document).ready(function () {
     }, timeout);
 
     // console.log($(".badge"));
-
+    window.addEventListener("resize", resizeWindow);
 });
+
+function resizeWindow() {
+    let navbarHeight = $("#bs-example-navbar-collapse-2").height();
+    let topicVideoHeight = $(window).height();
+    if (navbarHeight >= 54 && navbarHeight <= 106) {
+        $(".page-container").css("margin-top", navbarHeight);
+        $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - navbarHeight) / 9 * 16));
+    } else {
+        $(".page-container").css("margin-top", 54);
+        $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - 54) / 9 * 16));
+    }
+}
