@@ -66,6 +66,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.TopSearchBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationBean;
 import net.ddns.eeitdemo.eeit106team01.websocket.model.PrivateMessageBean;
 import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMessageBean;
 
@@ -136,6 +137,9 @@ public class Eeit106team01Application {
 		// Chat
 		builder.addAnnotatedClass(RegionMessageBean.class);
 		builder.addAnnotatedClass(PrivateMessageBean.class);
+		
+		// Notification
+		builder.addAnnotatedClass(NotificationBean.class);
 		
 		//Member
 		builder.addAnnotatedClasses(TextGranterEntity.class,

@@ -9,9 +9,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.stereotype.Controller;
 
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 import net.ddns.eeitdemo.eeit106team01.websocket.model.ConnectionsHandler;
 import net.ddns.eeitdemo.eeit106team01.websocket.model.PrivateMessageBean;
@@ -20,9 +20,8 @@ import net.ddns.eeitdemo.eeit106team01.websocket.model.PrivateMsg;
 import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMessageBean;
 import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMessageService;
 import net.ddns.eeitdemo.eeit106team01.websocket.model.RegionMsg;
-import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 
-@EnableScheduling
+//@EnableScheduling
 @Controller
 public class ChatController {
 	private final SimpMessagingTemplate messagingTemplate;

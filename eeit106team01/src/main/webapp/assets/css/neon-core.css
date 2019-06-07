@@ -12182,3 +12182,8 @@ body.page-fade-only-init > .page-container {
     right: 0;
   }
 }
+/* noti unread */
+.notifications.dropdown .dropdown-menu > li > ul > li .unread {
+  color: black;
+  font-weight: bold;
+}

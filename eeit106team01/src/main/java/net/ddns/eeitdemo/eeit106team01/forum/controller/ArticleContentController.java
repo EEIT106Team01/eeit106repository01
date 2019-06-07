@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.forum.controller;
 
+import java.awt.Color;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -24,15 +25,20 @@ import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.controller.NotificationController;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationMsg;
 
 @RestController
 public class ArticleContentController {
 
 	@Autowired
 	private ArticleContentCurrentService articleContentCurrentService;
-	
+
 	@Autowired
 	private ArticleTopicCurrentService articleTopicCurrentService;
+
+	@Autowired
+	private NotificationController notificationController;
 
 	@GetMapping(path = { "/articleTopics/{id}/articleContents" }, produces = { "application/json" })
 	public ResponseEntity<?> getContentList(@PathVariable Integer id, @RequestParam Integer begin,
@@ -53,7 +59,8 @@ public class ArticleContentController {
 	@PostMapping(path = { "/articleTopics/{id}/articleContents" }, consumes = { "application/json" }, produces = {
 			"application/json" })
 	public ResponseEntity<?> postContent(@PathVariable Integer id,
-			@RequestBody ArticleContentCurrentBean articleContentCurrentBean, BindingResult bindingResult, HttpSession httpSession) {
+			@RequestBody ArticleContentCurrentBean articleContentCurrentBean, BindingResult bindingResult,
+			HttpSession httpSession) {
 		if ((id != null && id.intValue() != 0) && (articleContentCurrentBean != null)) {
 			if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 				Map<String, String> errors = new HashMap<String, String>();
@@ -65,12 +72,11 @@ public class ArticleContentController {
 			}
 //			從session抓出MemberBean資訊
 			MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
-			
+
 			if ((articleContentCurrentBean.getMemberBean() == null)
 					|| (articleContentCurrentBean.getMemberBean().getId() == null)
 //					檢查回文者ID與session中ID是否一致
-					|| (articleContentCurrentBean.getMemberBean().getId() != memberBean.getId())
-					) {
+					|| (articleContentCurrentBean.getMemberBean().getId() != memberBean.getId())) {
 				return ResponseEntity.noContent().build();
 			}
 
@@ -89,31 +95,47 @@ public class ArticleContentController {
 				articleContentCurrentBean.setMemberBean(memberBean);
 				ArticleContentCurrentBean result = articleContentCurrentService.insert(articleContentCurrentBean);
 				if (result != null) {
+					NotificationMsg notificationMsg = new NotificationMsg();
+					String url = "/forum/showContents.html?topic=" + id;
+					notificationMsg.setMessage("您的文章被回應了");
+					notificationMsg.setUrl(url);
+					notificationMsg.setIcon("entypo-reply");
+					notificationMsg.setColor(Color.green);
 					if (result.getReply() == null) {
 						articleTopicCurrentService.increaseContentReplyNum(result.getArticleTopicCurrent().getId());
+						String repliedName = result.getArticleTopicCurrent().getMemberBean().getName();
+						if (!memberBean.getName().equals(repliedName)) {
+							int page = result.getArticleTopicCurrent().getContentReplyNum() + 1;
+							if (page % 10 > 0) {
+								page = page / 10 + 1;
+							} else {
+								page = page / 10;
+							}
+							notificationMsg.setUrl(url + "&page=" + page);
+							notificationController.sendNotificationToUser(repliedName, notificationMsg);
+						}
+					} else {
+						String repliedName = result.getReply().getMemberBean().getName();
+						if (!memberBean.getName().equals(repliedName)) {
+							notificationController.sendNotificationToUser(repliedName, notificationMsg);
+						}
 					}
-					return ResponseEntity.created(URI.create("articleTopics/" + id + "/articleContents/" + result.getId()))
+					return ResponseEntity
+							.created(URI.create("articleTopics/" + id + "/articleContents/" + result.getId()))
 							.body(result);
 				}
 			}
 		}
 		return ResponseEntity.noContent().build();
 	}
-	
-	@PutMapping(path = { "/articleTopics/{id}/articleContents/{contentId}" }, consumes = { "application/json; charset=UTF-8" }, produces = {
-	"application/json" })
-	public ResponseEntity<?> updateContent(
-			@PathVariable Integer id,
-			@PathVariable Integer contentId,
-			@RequestBody ArticleContentCurrentBean articleContentCurrentBean,
-			BindingResult bindingResult,
-			HttpSession httpSession
-			){
-		if (
-				(id != null && id.intValue() != 0) && 
-				(contentId != null && contentId.intValue() != 0) &&
-				(articleContentCurrentBean != null)
-				) {
+
+	@PutMapping(path = { "/articleTopics/{id}/articleContents/{contentId}" }, consumes = {
+			"application/json; charset=UTF-8" }, produces = { "application/json" })
+	public ResponseEntity<?> updateContent(@PathVariable Integer id, @PathVariable Integer contentId,
+			@RequestBody ArticleContentCurrentBean articleContentCurrentBean, BindingResult bindingResult,
+			HttpSession httpSession) {
+		if ((id != null && id.intValue() != 0) && (contentId != null && contentId.intValue() != 0)
+				&& (articleContentCurrentBean != null)) {
 			if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 				Map<String, String> errors = new HashMap<String, String>();
 				List<ObjectError> bindingErrors = bindingResult.getAllErrors();
@@ -127,18 +149,15 @@ public class ArticleContentController {
 			if ((articleContentCurrentBean.getMemberBean() == null)
 					|| (articleContentCurrentBean.getMemberBean().getId() == null)
 //					檢查修文者ID與session中ID是否一致
-					|| (articleContentCurrentBean.getMemberBean().getId() != memberBean.getId())
-					) {
+					|| (articleContentCurrentBean.getMemberBean().getId() != memberBean.getId())) {
 				return ResponseEntity.notFound().build();
 			}
-			
-			if (
-					(id == articleContentCurrentBean.getArticleTopicCurrent().getId()) &&
-					(contentId == articleContentCurrentBean.getId())					
-					) {
+
+			if ((id == articleContentCurrentBean.getArticleTopicCurrent().getId())
+					&& (contentId == articleContentCurrentBean.getId())) {
 //				將MemberBean與修文關聯
 				articleContentCurrentBean.setMemberBean(memberBean);
-				ArticleContentCurrentBean result = articleContentCurrentService.update(articleContentCurrentBean);				
+				ArticleContentCurrentBean result = articleContentCurrentService.update(articleContentCurrentBean);
 				if (result != null) {
 					return ResponseEntity.ok(result);
 				}
@@ -146,38 +165,31 @@ public class ArticleContentController {
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
-	@PutMapping(path = { "/articleTopics/{id}/articleContents/{contentId}/{likeOrDislike}" }, produces = { "application/json" })
-	public ResponseEntity<?> ContentWhoLike(
-			@PathVariable Integer id,
-			@PathVariable Integer contentId,
-			@PathVariable String likeOrDislike,
-			HttpSession httpSession
-			) {
+
+	@PutMapping(path = { "/articleTopics/{id}/articleContents/{contentId}/{likeOrDislike}" }, produces = {
+			"application/json" })
+	public ResponseEntity<?> ContentWhoLike(@PathVariable Integer id, @PathVariable Integer contentId,
+			@PathVariable String likeOrDislike, HttpSession httpSession) {
 //		從httpSession抓出MemberBean資訊
 		MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 		Integer memberId = memberBean.getId();
-		Map<Integer, String> result = articleContentCurrentService.contentWhoLike(contentId, memberId, memberBean.getName(), likeOrDislike.toLowerCase());
+		Map<Integer, String> result = articleContentCurrentService.contentWhoLike(contentId, memberId,
+				memberBean.getName(), likeOrDislike.toLowerCase());
 		if (result != null) {
 			return ResponseEntity.ok(result);
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@DeleteMapping(path = { "/articleTopics/{id}/articleContents/{contentId}" }, produces = { "application/json" })
-	public ResponseEntity<?> deleteContent(
-			@PathVariable Integer id,
-			@PathVariable Integer contentId
-			){
-		if (
-				(id != null && id.intValue() != 0) &&
-				(contentId != null && contentId.intValue() != 0)
-				) {
+	public ResponseEntity<?> deleteContent(@PathVariable Integer id, @PathVariable Integer contentId) {
+		if ((id != null && id.intValue() != 0) && (contentId != null && contentId.intValue() != 0)) {
 			ArticleContentCurrentBean result = articleContentCurrentService.findByPrimaryKey(contentId);
 			if (result != null && !result.getContentStatus().equalsIgnoreCase("deleted")) {
 				result.setContentStatus("deleted");
-				result.setContentContent("{\"ops\":[{\"attributes\":{\"italic\":true},\"insert\":\"此文章已被刪除\"},{\"insert\":\"\\n\"}]}");
-				
+				result.setContentContent(
+						"{\"ops\":[{\"attributes\":{\"italic\":true},\"insert\":\"此文章已被刪除\"},{\"insert\":\"\\n\"}]}");
+
 				if ((result = articleContentCurrentService.update(result)) != null) {
 					return ResponseEntity.ok(result);
 				}
