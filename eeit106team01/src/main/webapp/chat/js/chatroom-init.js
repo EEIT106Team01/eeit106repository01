@@ -327,18 +327,18 @@ function showActiveNotification(notiMsgBean) {
     notification.index = notiMsgBean.index;
     if (msgs) {
         for (let i = 0; i < msgs.length; i++) {
-            notification.prependNotification(msgs[i].message, msgs[i].url, msgs[i].sendTime, msgs[i].icon, msgs[i].color, false);
+            notification.prependNotification(msgs[i].message, msgs[i].url, msgs[i].sendTime, msgs[i].icon, msgs[i].color.rgb, false);
         }
     }
     if (unreadMsgs) {
         for (let i = 0; i < unreadMsgs.length; i++) {
-            notification.prependNotification(unreadMsgs[i].message, unreadMsgs[i].url, unreadMsgs[i].sendTime, unreadMsgs[i].icon, unreadMsgs[i].color, true);
+            notification.prependNotification(unreadMsgs[i].message, unreadMsgs[i].url, unreadMsgs[i].sendTime, unreadMsgs[i].icon, unreadMsgs[i].color.rgb, true);
         }
     }
 }
 function showNotificationMsg(notiMsg) {
     console.log(notiMsg);
-    notification.prependNotification(notiMsg[i].message, notiMsg[i].url, notiMsg[i].sendTime, notiMsg[i].icon, notiMsg[i].color, true);
+    notification.prependNotification(notiMsg[i].message, notiMsg[i].url, notiMsg[i].sendTime, notiMsg[i].icon, notiMsg[i].color.rgb, true);
 }
 function clearOfflineNotification() {
     worker.port.postMessage({
@@ -1444,11 +1444,14 @@ $(document).ready(function () {
             }
             $a.attr("href", url);
             $message.text(message);
-            sendTime = timeDifference(new Date(), new Date(sendTime));
+            if (typeof sendTime === "string") {
+                sendTime = new Date(sendTime);
+            }
+            sendTime = timeDifference(new Date(), sendTime);
             $sendTime.text(sendTime);
             if (color) {
                 $i.css({
-                    "background-color": color,
+                    "background-color": toColor(color),
                     "color": "#fff"
                 });
             }
@@ -1623,4 +1626,13 @@ function timeDifference(current, previous) {
     } else {
         return 'approximately ' + Math.round(elapsed / msPerYear) + ' years ago';
     }
+}
+
+function toColor(num) {
+    num >>>= 0;
+    var b = num & 0xFF,
+        g = (num & 0xFF00) >>> 8,
+        r = (num & 0xFF0000) >>> 16,
+        a = ((num & 0xFF000000) >>> 24) / 255;
+    return "rgba(" + [r, g, b, a].join(",") + ")";
 }
