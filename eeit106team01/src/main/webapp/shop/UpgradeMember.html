@@ -9,16 +9,20 @@
     <meta name="description" content="Neon Admin Panel" />
     <meta name="author" content="" />
 
+    <!-- Imported styles on this page -->
+    <link rel="stylesheet" href="../assets/css/font-icons/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="../assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
+    <!-- <link rel="stylesheet" href="../assets/css/bootstrap.css"> -->
+    <link rel="stylesheet" href="../assets/css/neon-core.css">
+    <link rel="stylesheet" href="../assets/css/neon-theme.css">
+    <link rel="stylesheet" href="../assets/css/neon-forms.css">
+    <link rel="stylesheet" href="../assets/css/custom.css">
 
-    <link rel="icon" href="/assets/images/favicon.ico">
-    <script src="/assets/js/jquery-1.11.3.min.js"></script>
-    <!--input data-include property in any tag when window.onload-->
-    <script src="/navbar/js/csi.min.js"></script>
-    <script src="/navbar/js/navbar-init.js"></script>
-    <!-- chatroom -->
-    <script src="/chat/js/sockjs.min.js"></script>
-	<script src="/chat/js/stomp.min.js"></script>
-    <script src="/chat/js/chatroom-init.js"></script>
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
+
+
+    <!-- Custom Style -->
+    <link rel="stylesheet" href="css/upgradeMember.css" />
 
 </head>
 
@@ -30,31 +34,76 @@
 
         <!-- your page start -->
         <div class="main-content">
-
+            <div id="memberDiv" class="col-md-10">
+                <p class="col-md-12" style="text-align: center;font-size: 500%"><i class="fa fa-user-plus"></i> 加入/
+                    <span style="color: brown">升級</span>會員
+                </p>
+                <hr style="width: 100%; color: black; height: 1px; background-color:black;">
+                <div class="memberSelect">
+                    <div class="col-md-6 ordinaryMember">
+                        <h4 style="font-size: 200%;color: #B8860B">普通會員<span class="memberSpan">(免入會費)</span></h4>
+                        <a href=""><img src="img/ordinaryMember.jpg"></a>
+                        <div class="memberUl">
+                            <ul>
+                                <li>
+                                    論壇：發文﹑留言﹑點讚
+                                </li>
+                                <li>
+                                    商城：購物
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="col-md-6 vipmember">
+                        <h4 style="font-size: 200% ;color: 	#FFD700">VIP會員<span class="memberSpan">(會費:$888/永久)</span></h4>
+                        <a href=""><img src="img/vipmember.jpg"></a>
+                        <div class="memberUl">
+                            <ul>
+                                <li>
+                                    享有一般會員的所有功能
+                                </li>
+                                <li>
+                                    論壇：觀看高清影片
+                                </li>
+                                <li>
+                                    商城：結帳再九折
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
         <!-- your page end -->
     </div>
 
-    <script src="/assets/js/jquery-1.11.3.min.js"></script>
-    <!-- JavaScripts initializations and stuff -->
-    <!-- YW: this is important for navbar -->
-    <script src="/assets/js/neon-custom.js"></script>
-
-    <!-- Bottom scripts (common) -->
-    <script src="/assets/js/gsap/TweenMax.min.js"></script>
-    <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
-    <script src="/assets/js/bootstrap.js"></script>
-    <script src="/assets/js/joinable.js"></script>
-    <script src="/assets/js/resizeable.js"></script>
-    <script src="/assets/js/neon-api.js"></script>
-
     <!-- Imported scripts on this page -->
-    <!-- <script src="/assets/js/neon-chat.js"></script> -->
+    <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+    <script src="../assets/js/neon-chat.js"></script>
+
+    <!-- JavaScripts initializations and stuff -->
+    <script src="../assets/js/neon-custom.js"></script>
 
     <!-- Demo Settings -->
-    <script src="/assets/js/neon-demo.js"></script>
-    <link rel="stylesheet" href="css/index.css">
-    <script async src="js/index.js"></script>
+    <script src="../assets/js/neon-demo.js"></script>
+
+    <!-- Include Cloud Zoom -->
+    <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
+
+    <!-- Include Thumbelina  -->
+    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
+    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
+    <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+
+    <!-- NavBar -->
+    <script src="../navbar/js/csi.min.js"></script>
+    <script src="../navbar/js/navbar-init.js"></script>
+
+    <!-- Imported scripts on this page -->
+    <script src="/assets/js/tocify/jquery.tocify.min.js"></script>
+    <!-- <script src="/assets/js/neon-chat.js"></script> -->
+
 </body>
 
 </html>
