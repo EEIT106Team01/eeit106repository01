@@ -182,13 +182,20 @@ public class ProductDAOImpl implements ProductDAO {
 		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(queryString) == false
 				&& minPrice != null && minPrice >= 0 && maxPrice != null && maxPrice >= minPrice) {
 			try {
-				if (byNameBrandType.equalsIgnoreCase("name")) {
+				if (byNameBrandType.equalsIgnoreCase("name") && NullChecker.isEmpty(type) == true) {
 					this.productsResutlt = this.getSession()
 							.createQuery(
 									"from ProductBean where name like :name and price between :minPrice and :maxPrice",
 									ProductBean.class)
 							.setParameter("name", "%" + queryString + "%").setParameter("minPrice", minPrice)
 							.setParameter("maxPrice", maxPrice).getResultList();
+				}else if (byNameBrandType.equalsIgnoreCase("name") && NullChecker.isEmpty(type) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery(
+									"from ProductBean where name like :name and type = :type price between :minPrice and :maxPrice",
+									ProductBean.class)
+							.setParameter("name", "%" + queryString + "%").setParameter("type",type)
+							.setParameter("minPrice", minPrice).setParameter("maxPrice", maxPrice).getResultList();
 				} else if (byNameBrandType.equalsIgnoreCase("brand") && NullChecker.isEmpty(type) == false) {
 					this.productsResutlt = this.getSession()
 							.createQuery(
