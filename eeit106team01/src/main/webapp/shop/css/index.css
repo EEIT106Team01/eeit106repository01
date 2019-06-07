@@ -51,11 +51,11 @@
 }
 
 #tocifyDiv ul {
-     display: inline-block;
+    display: inline-block;
 }
 
 .tocify.fixed {
-    top:100px !important;
+    top: 100px !important;
 }
 
 li {
@@ -68,7 +68,11 @@ li {
 
 /* 產品--------------------------------------------- */
 
-.productImg{
+#article {
+    margin-top: 2%
+}
+
+.productImg {
     border-radius: 8px;
     border-width: 5px;
     border-style: outset;
