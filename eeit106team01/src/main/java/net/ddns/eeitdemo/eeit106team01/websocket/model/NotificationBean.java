@@ -15,10 +15,64 @@ public class NotificationBean {
 	private Integer id;
 	private String name;
 	@Column(columnDefinition = "varbinary(max)")
-	private ArrayList<Notification> messages;
+	private ArrayList<NotificationMsg> messages;
 	@Column(columnDefinition = "varbinary(max)")
-	private ArrayList<Notification> offlineMessages;
+	private ArrayList<NotificationMsg> offlineMessages;
 	@Column(name = "indexs")
 	private Integer index;
 	private String status;
+
+	public NotificationBean() {
+		this.messages = new ArrayList<NotificationMsg>();
+		this.offlineMessages = new ArrayList<NotificationMsg>();
+		this.status = "active";
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public ArrayList<NotificationMsg> getMessages() {
+		return messages;
+	}
+
+	public void setMessages(ArrayList<NotificationMsg> messages) {
+		this.messages = messages;
+	}
+
+	public ArrayList<NotificationMsg> getOfflineMessages() {
+		return offlineMessages;
+	}
+
+	public void setOfflineMessages(ArrayList<NotificationMsg> offlineMessages) {
+		this.offlineMessages = offlineMessages;
+	}
+
+	public Integer getIndex() {
+		return index;
+	}
+
+	public void setIndex(Integer index) {
+		this.index = index;
+	}
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
 }

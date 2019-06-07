@@ -9,6 +9,8 @@ var neonChat;
 
 var quillChat;
 
+var notification;
+
 
 // ----------append quill js&css
 // if (typeof Quill === 'undefined') {
@@ -296,13 +298,55 @@ function workerInit() {
                     "command": "closing"
                 });
             });
+            //-------------Notification
+            worker.port.postMessage({
+                "command": "getActiveNotification",
+            });
+            //-------------Notification end
         }
+        //-------------Notification
+        else if (e.data.command == "getActiveNotification") {
+            let notiMsgBean = JSON.parse(e.data.message);
+            showActiveNotification(notiMsgBean);
+        } else if (e.data.command == "notificationMsg") {
+            let notiMsg = JSON.parse(e.data.message);
+            showNotificationMsg(notiMsg);
+        }
+        //-------------Notification end
     }
     worker.port.postMessage({
         "command": "connect",
         "chatUsername": chatUsername
     });
 }
+//-------------Notification
+function showActiveNotification(notiMsgBean) {
+    console.log(notiMsgBean);
+    let msgs = notiMsgBean.messages;
+    let unreadMsgs = notiMsgBean.offlineMessages;
+    notification.index = notiMsgBean.index;
+    if (msgs) {
+        for (let i = 0; i < msgs.length; i++) {
+            notification.prependNotification(msgs[i].message, msgs[i].url, msgs[i].sendTime, msgs[i].icon, msgs[i].color, false);
+        }
+    }
+    if (unreadMsgs) {
+        for (let i = 0; i < unreadMsgs.length; i++) {
+            notification.prependNotification(unreadMsgs[i].message, unreadMsgs[i].url, unreadMsgs[i].sendTime, unreadMsgs[i].icon, unreadMsgs[i].color, true);
+        }
+    }
+}
+function showNotificationMsg(notiMsg) {
+    console.log(notiMsg);
+    notification.prependNotification(notiMsg[i].message, notiMsg[i].url, notiMsg[i].sendTime, notiMsg[i].icon, notiMsg[i].color, true);
+}
+function clearOfflineNotification() {
+    worker.port.postMessage({
+        "command": "clearOfflineNotification"
+    });
+}
+
+//-------------Notification end
 
 var worker = null;
 
@@ -1375,6 +1419,107 @@ $(document).ready(function () {
 
     })(jQuery, window);
     //----------------------------------------
+    //-------------Notification
+    notification = {
+        notiBox: null,
+        unreadBadge: null,
+        notiList: null,
+        unreads: 0,
+        init: function (notiBox) {
+            this.notiBox = notiBox;
+            $(this.notiBox).find(".dropdown-menu").css("left", "auto");
+            this.notiList = $(this.notiBox).find(".dropdown-menu-list").get(0);
+            this.unreadBadge = $(this.notiBox).find(".badge").get(0);
+            console.log("noti init");
+        },
+
+        createNotification: function (message, url, sendTime, icon, color, unread) {
+            let $li = $("<li></li>");
+            let $a = $("<a></a>");
+            let $i = $("<i></i>");
+            let $message = $("<span></span>");
+            let $sendTime = $("<span></span>");
+            if (!url) {
+                url = "#";
+            }
+            $a.attr("href", url);
+            $message.text(message);
+            sendTime = timeDifference(new Date(), new Date(sendTime));
+            $sendTime.text(sendTime);
+            if (color) {
+                $i.css({
+                    "background-color": color,
+                    "color": "#fff"
+                });
+            }
+            if (unread) {
+                $message.addClass("unread");
+                this.unreads++;
+            }
+            $i.addClass("pull-right");
+            if (!icon) {
+                icon = "fa fa-tripadvisor";
+            }
+            $i.addClass(icon);
+            $message.addClass("line");
+            $sendTime.addClass("line small");
+            $a.append($i, $message, $sendTime);
+            $li.append($a);
+            $li.click(function () {
+                clearOfflineNotification();
+            });
+            return $li;
+        },
+
+        appendNotification: function (message, url, sendTime, icon, color, unread) {
+            $(this.notiList).append(this.createNotification(message, url, sendTime, icon, color, unread));
+            this.updateUnreadBadge();
+        },
+
+        prependNotification: function (message, url, sendTime, icon, color, unread) {
+            $(this.notiList).prepend(this.createNotification(message, url, sendTime, icon, color, unread));
+            this.updateUnreadBadge();
+        },
+
+        updateUnreadBadge: function () {
+            if (this.unreads == 0) {
+                $(this.unreadBadge).css("display", "none");
+            } else {
+                $(this.unreadBadge).css("display", "inline");
+                $(this.unreadBadge).css("background-color", "red");
+                $(this.unreadBadge).text(this.unreads);
+            }
+            $(this.notiBox).find("strong").text(this.unreads);
+        },
+
+        clearUnread: function () {
+            this.unreads = 0;
+            this.updateUnreadBadge();
+            $(this.notiList).find("span").removeClass("unread");
+        },
+
+        clearAllNotification: function () {
+            $(this.notiList).html("");
+        }
+    };
+
+
+    window.setTimeout(function () {
+        let notiDrop = document.getElementById("notiDrop");
+        if (notiDrop) {
+            notification.init(notiDrop);
+            notification.clearAllNotification();
+            $("#notiDrop").find("a.pull-right").click(function () {
+                notification.clearUnread();
+                clearOfflineNotification();
+            });
+            // notification.prependNotification("我是很長很長很長很長很長很長很長很長很長很長很長很長很長的訊息", null, "30 seconds ago", null, "green", true);
+        } else {
+            window.setTimeout(arguments.callee, 10);
+        }
+    }, 10);
+
+    //-------------Notification end
 
     window.addEventListener("resize", resizeWindow);
 
@@ -1455,5 +1600,27 @@ function resizeWindow() {
     }
     if (neonChat && chatSidebarOpen) {
         $(".main-content").css("width", ($(".page-container").width() - 279));
+    }
+}
+
+function timeDifference(current, previous) {
+    var msPerMinute = 60 * 1000;
+    var msPerHour = msPerMinute * 60;
+    var msPerDay = msPerHour * 24;
+    var msPerMonth = msPerDay * 30;
+    var msPerYear = msPerDay * 365;
+    var elapsed = current - previous;
+    if (elapsed < msPerMinute) {
+        return Math.round(elapsed / 1000) + ' seconds ago';
+    } else if (elapsed < msPerHour) {
+        return Math.round(elapsed / msPerMinute) + ' minutes ago';
+    } else if (elapsed < msPerDay) {
+        return Math.round(elapsed / msPerHour) + ' hours ago';
+    } else if (elapsed < msPerMonth) {
+        return 'approximately ' + Math.round(elapsed / msPerDay) + ' days ago';
+    } else if (elapsed < msPerYear) {
+        return 'approximately ' + Math.round(elapsed / msPerMonth) + ' months ago';
+    } else {
+        return 'approximately ' + Math.round(elapsed / msPerYear) + ' years ago';
     }
 }
