@@ -27,10 +27,10 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.StorageService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoService;
 import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
-import net.ddns.eeitdemo.eeit106team01.model.StorageService;
 
 @RestController
 public class VideoController {
@@ -83,6 +83,7 @@ public class VideoController {
 				videoBean.setVideoURI(outFile.getName());
 				videoBean.setVideoStatus("processing");
 				videoBean.setVideoLength(ffu.getVideoDuration(outFile));
+				videoBean.setOriginResolution(ffu.getVideoResolution(outFile));
 				videoBean.setUpdateMessage("new insert");
 				videoBean.setMemberBean(memberBean);
 				try {
@@ -168,27 +169,42 @@ public class VideoController {
 	class ProcessVideo implements Runnable {
 		private File outFile;
 		private VideoBean videoBean;
-		
+
 		public ProcessVideo(File outFile, VideoBean videoBean) {
 			this.outFile = outFile;
 			this.videoBean = videoBean;
 		}
-		
+
 		@Override
 		public void run() {
-			try {
-				File outFileJpg = storageService.createFile("jpgs/" + outFile.getName() + ".jpg");
-				File outFileGif = storageService.createFile("gifs/" + outFile.getName() + ".gif");
-				ffu.generateThumbnail(outFile, outFileJpg, -1);
-				ffu.generateDefaultGifCut(outFile, outFileGif);
+			synchronized (ffu) {
+				try {
+					File outFileJpg = storageService.createFile("jpgs/" + outFile.getName() + ".jpg");
+					File outFileGif = storageService.createFile("gifs/" + outFile.getName() + ".gif");
+					File spriteFolder = storageService.createDirectory("videos/" + outFile.getName().substring(0, outFile.getName().indexOf(".")));
+					System.err.println("開始執行FFmpeg產生預覽圖");
+					ffu.generateThumbnail(outFile, outFileJpg, -1);
+					ffu.generateDefaultGifCut(outFile, outFileGif);
+					File vtt = ffu.generateSpritesAndVTT(outFile, spriteFolder);
 
-				videoBean.setThumbnailURI(outFileJpg.getName());
-				videoBean.setGifURI(outFileGif.getName());
-				videoBean.setUpdateMessage("new insert: Generating thumbnail and gif completed.");
-				videoService.update(videoBean);
-			} catch (IOException e) {
-				System.out.println(e.getMessage());
-				e.printStackTrace();
+					videoBean.setThumbnailURI(outFileJpg.getName());
+					videoBean.setGifURI(outFileGif.getName());
+					videoBean.setVttURI(vtt.getParentFile().getName() + "/" + vtt.getName());
+					System.err.println("vttURI: " + videoBean.getVttURI());
+					videoBean.setUpdateMessage("new insert: Generating thumbnail and gif completed.");
+					videoBean.setVideoStatus("previewok");
+					videoService.update(videoBean);
+					
+					System.err.println("開始執行FFmpeg產生480p");
+					File video480p =  storageService.createFile("videos/480p" + outFile.getName());
+					ffu.convertVideoToMp4(outFile, video480p, 480);
+					videoBean.setUpdateMessage("Generate 480p done.");
+					videoBean.setVideoStatus("ok");
+					videoService.update(videoBean);
+				} catch (IOException e) {
+					System.out.println(e.getMessage());
+					e.printStackTrace();
+				}
 			}
 		}
 	}

@@ -1,4 +1,4 @@
-package net.ddns.eeitdemo.eeit106team01.model;
+package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +8,8 @@ import org.springframework.core.io.Resource;
 public interface StorageService {
 
 	public File createFile(String filePath) throws IOException;
+	
+	public File createDirectory(String filePath) throws IOException;
 
 	public File load(String filePath);
 

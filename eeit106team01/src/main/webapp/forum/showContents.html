@@ -496,6 +496,7 @@
             let videoTop = document.createElement("div");
             // let videoBottom = document.createElement("div");
             let video = document.createElement("video");
+            // let source = document.createElement("source");
             let thumbnailURI = "/storage/others/no-image.png";
             let videoURI = "/storage/videos/" + videoBean.videoURI;
             if (videoBean.thumbnailURI != null && videoBean.thumbnailURI.length != 0) {
@@ -507,9 +508,11 @@
             video.id = videoId;
             video.poster = thumbnailURI;
             video.controls = true;
-            video.src = videoURI;
+            // video.src = videoURI;
             video.style.margin = "0";
             video.style.border = "0";
+
+            // source.src = videoURI;
 
             videoCard.style.minWidth = "320px";
             videoCard.style.margin = "0";
@@ -519,6 +522,13 @@
             videoTop.style.margin = "0";
             videoTop.style.border = "0";
             videoTop.className = "card-img-top";
+
+            // video.appendChild(source);
+            // if (videoBean.videoStatus == "ok") {
+            //     let source480 = document.createElement("source");
+            //     source480.src = "/storage/videos/480p" + videoBean.videoURI;;
+            //     video.appendChild(source480);
+            // }
 
             videoTop.appendChild(video);
             videoCard.appendChild(videoTop);
@@ -535,28 +545,64 @@
             if (videoBean.gifURI != null && videoBean.gifURI.length != 0) {
                 gifURI = "/storage/gifs/" + videoBean.gifURI;
             }
-            let player = new Plyr('#' + videoId);
-            player.on("playing", function () {
-                $(this).parent().parent().find(".plyr__controls").show();
-                $(this).parent().parent().find("button").show();
+            let plyrSetting;
+            if ((videoBean.videoStatus === "ok") || (videoBean.videoStatus === "previewok")) {
+                plyrSetting = {
+                    previewThumbnails: {
+                        enabled: true,
+                        src: "/storage/videos/" + videoBean.vttURI
+                    }
+                }
+            }
+            let player = new Plyr('#' + videoId, plyrSetting);
+            player.on("playing", function (e) {
+                // $(this).find(".plyr__controls").show();
+                // $(this).find("button").show();
             });
             let hoverSetting = {
                 "duration": "fast",
                 "easing": "linear"
             };
-            $(document.getElementById(videoId).nextElementSibling).hover(function () {
-                $(this).css("background-image", "url('" + gifURI + "')");
-                if (!player.playing) {
-                    $(this).parent().parent().find(".plyr__controls").hide(hoverSetting);
-                    $(this).parent().parent().find("button").hide(hoverSetting);
-                }
-            }, function () {
-                $(this).css("background-image", "url('" + thumbnailURI + "')");
-                if (!player.playing) {
-                    $(this).parent().parent().find(".plyr__controls").show(hoverSetting);
-                    $(this).parent().parent().find("button").show(hoverSetting);
-                }
+            player.on("mouseover", function (e) {
+                player.poster = gifURI;
+                // if (!player.playing) {
+                //     $(this).find(".plyr__controls").hide();
+                //     $(this).find("button").hide();
+                // }
             });
+            player.on("mouseout", function (e) {
+                player.poster = thumbnailURI;
+                // if (!player.playing) {
+                //     $(this).find(".plyr__controls").show();
+                //     $(this).find("button").show();
+                // }
+            });
+            let height = videoBean.originResolution;
+            if (height) {
+                height = height.split("x")[1];
+            } else {
+                height = 1080;
+            }
+            let sources = [];
+            let origin = {
+                src: "/storage/videos/" + videoBean.videoURI,
+                type: "video/mp4",
+                size: height
+            }
+            sources.push(origin);
+            if (videoBean.videoStatus == "ok") {
+                sources.push({
+                    src: "/storage/videos/480p" + videoBean.videoURI,
+                    type: "video/mp4",
+                    size: 480,
+                });
+            }
+            player.source = {
+                type: 'video',
+                title: 'Example title',
+                sources: sources
+            }
+            console.log(player);
         }
 
         function createChangePageBtn() {

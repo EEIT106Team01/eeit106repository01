@@ -33,6 +33,8 @@ public class VideoBean {
 	private Double videoLength;
 	@Column(columnDefinition = "nvarchar(255)")
 	private String updateMessage;
+	private String vttURI;
+	private String originResolution;
 
 	public VideoBean() {
 		super();
@@ -121,5 +123,34 @@ public class VideoBean {
 
 	public void setUpdateMessage(String updateMessage) {
 		this.updateMessage = updateMessage;
+	}
+
+
+	/**
+	 * @return the vttURI
+	 */
+	public String getVttURI() {
+		return vttURI;
+	}
+
+	/**
+	 * @param vttURI the vttURI to set
+	 */
+	public void setVttURI(String vttURI) {
+		this.vttURI = vttURI;
+	}
+
+	/**
+	 * @return the originResolution
+	 */
+	public String getOriginResolution() {
+		return originResolution;
+	}
+
+	/**
+	 * @param originResolution the originResolution to set
+	 */
+	public void setOriginResolution(String originResolution) {
+		this.originResolution = originResolution;
 	}
 }

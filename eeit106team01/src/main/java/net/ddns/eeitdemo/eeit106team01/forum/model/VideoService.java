@@ -68,6 +68,12 @@ public class VideoService {
 			if (videoBean.getGifURI() != null && videoBean.getGifURI().length() != 0) {
 				vb.setGifURI(videoBean.getGifURI());
 			}
+			if (videoBean.getVttURI() != null && videoBean.getVttURI().length() != 0) {
+				vb.setVttURI(videoBean.getVttURI());
+			}
+			if (videoBean.getOriginResolution() != null && videoBean.getOriginResolution().length() != 0) {
+				vb.setOriginResolution(videoBean.getOriginResolution());
+			}
 			return videoDAO.update(vb);
 		}
 		return null;
