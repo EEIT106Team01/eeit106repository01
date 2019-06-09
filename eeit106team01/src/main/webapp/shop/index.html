@@ -39,8 +39,9 @@
                     <div class="col-md-12">
                         <form id="searchForm">
                             <select class="form-control col-md-2" id="searchType"></select>
-                            <input type="text" class="form-control input-lg col-md-8" placeholder="請輸入關鍵字" id="searchName">
-                            <button class="btn btn-primary" type="button" id="search">Go!</button>
+                            <input type="text" class="form-control input-lg col-md-8" placeholder="請輸入關鍵字" id="searchName" name="searchName">
+                            <button class="btn btn-primary" type="button" id="search">搜尋</button>
+                            <label for="searchName"></label>
                         </form>
                     </div>
                     <div class="col-md-12" id="keyWordDiv">
@@ -268,6 +269,9 @@
     <!-- Imported scripts on this page -->
     <script src="/assets/js/tocify/jquery.tocify.min.js"></script>
     <!-- <script src="/assets/js/neon-chat.js"></script> -->
+
+    <!-- jQuery Validation Plugin -->
+    <script async src="js/jquery.validate.js"></script>
 
     <link rel="stylesheet" href="css/index.css">
     <script async src="js/index.js"></script>

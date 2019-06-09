@@ -34,6 +34,8 @@
     <script async src="js/search.js"></script>
     <!-- <script src="assets/js/jquery-1.11.3.min.js"></script> -->
 
+
+
 </head>
 
 <body class="page-body">
@@ -110,16 +112,17 @@
                                 </a>
                                 <ul class="visible">
                                     <li>
-                                        <form>
+                                        <form id="searchForm">
                                             <select class="form-control col-md-8" id="searchType"></select>
                                             <div class="input-group">
-                                                <input type="text" class="form-control col-md-8" name="search" id="searchName" placeholder="搜尋關鍵字">
+                                                <input type="text" class="form-control col-md-8 search" name="searchName" id="searchName" placeholder="搜尋關鍵字">
                                                 <div class="input-group-btn col-md-4">
                                                     <button class="btn btn-primary btn-icon" id="search" type="button">
                                                         <i class="entypo-search"></i>
                                                     </button>
                                                 </div>
                                             </div>
+                                            <label for="searchName"></label>
                                         </form>
                                     </li>
                                 </ul>
@@ -132,6 +135,7 @@
                                             <div class="input-group">
                                                 <input type="text" class="form-control col-md-8" name="minPrice" id="minPrice" placeholder="最低價錢">
                                                 <input type="text" class="form-control col-md-8" name="maxPrice" id="maxPrice" placeholder="最高價錢">
+
                                                 <div class="input-group-btn col-md-4" id="searchPriceBytypeBtnDiv">
                                                     <button class="btn btn-primary btn-icon searchPrice" id="searchPriceBytypeBtn" type="button">
                                                         <i class="entypo-search"></i>
@@ -153,6 +157,8 @@
                                                     </button>
                                                 </div>
                                             </div>
+                                            <label for="minPrice"></label>
+                                            <label for="maxPrice"></label>
                                         </form>
                                     </li>
                                 </ul>
@@ -163,9 +169,9 @@
                                     <li>
                                         <form id="searchTimeForm">
                                             <div class="input-group">
-                                                <input type="text" class="form-control col-md-8" name="startDay" id="startDay" placeholder="開始時間">
+                                                <input type="text" class="form-control col-md-8 time" name="startDay" id="startDay" placeholder="開始時間">
 
-                                                <input type="text" class="form-control col-md-8" name="endDay" id="endDay" placeholder="結束時間">
+                                                <input type="text" class="form-control col-md-8 time" name="endDay" id="endDay" placeholder="結束時間">
                                                 <div class="input-group-btn col-md-4" id="searchTimeByTypeBtnDiv">
                                                     <button class="btn btn-primary btn-icon searchPrice" id="searchTimeByTypeBtn" type="button">
                                                         <i class="entypo-search"></i>
@@ -187,8 +193,8 @@
                                                     </button>
                                                 </div>
                                             </div>
-
-
+                                            <label for="startDay"></label>
+                                            <label for="endDay"></label>
                                         </form>
                                     </li>
                                 </ul>
@@ -522,6 +528,9 @@
 
     <!-- Demo Settings -->
     <script src="/assets/js/neon-demo.js"></script>
+
+    <!-- jQuery Validation Plugin -->
+    <script async src="js/jquery.validate.js"></script>
 
 </body>
 
