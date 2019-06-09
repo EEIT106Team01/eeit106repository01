@@ -42,4 +42,38 @@ public class MemberBeanService {
 		return null;
 	};
 
+	public MemberTempBean updateIgnoreNullColumn(MemberTempBean bean) {
+		MemberTempBean findOne = findByPrimaryKey(bean.getId());
+		if (findOne != null) {
+			if (bean.getName() != null) {
+				findOne.setName(bean.getName());
+			}
+			if (bean.getPassword() != null) {
+				findOne.setPassword(bean.getPassword());
+			}
+			if (bean.getImage() != null) {
+				findOne.setImage(bean.getImage());
+			}
+			if (bean.getEmail() != null) {
+				findOne.setEmail(bean.getEmail());
+			}
+			if (bean.getBirth() != null) {
+				findOne.setBirth(bean.getBirth());
+			}
+			if (bean.getLevel() != null) {
+				findOne.setLevel(bean.getLevel());
+			}
+			if (bean.getLevelTime() != null) {
+				findOne.setLevelTime(bean.getLevelTime());
+			}
+			if (bean.getMemberCreateTime() != null) {
+				//不應該在這修改
+//				findOne.setMemberCreateTime(bean.getMemberCreateTime());
+			}
+			
+			return memberTempDAO.update(findOne);
+		}
+		return null;
+	};
+	
 }

@@ -1,8 +1,8 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
-import java.sql.Blob;
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -17,7 +17,8 @@ public class MemberTempBean {
 	private Integer id;
 	private String name;
 	private String password;
-	private Blob image;
+	@Column(columnDefinition = "varchar(max)")
+	private String image;
 	private String email;
 	private java.util.Date birth;
 	private String level;
@@ -36,7 +37,7 @@ public class MemberTempBean {
 		super();
 	}
 	
-	public MemberTempBean(String name, String password, Blob image, String email, Date birth, String level, Date levelTime,
+	public MemberTempBean(String name, String password, String image, String email, Date birth, String level, Date levelTime,
 			Date memberCreateTime) {
 		super();
 		this.name = name;
@@ -67,10 +68,10 @@ public class MemberTempBean {
 	public void setPassword(String password) {
 		this.password = password;
 	}
-	public Blob getImage() {
+	public String getImage() {
 		return image;
 	}
-	public void setImage(Blob image) {
+	public void setImage(String image) {
 		this.image = image;
 	}
 	public String getEmail() {

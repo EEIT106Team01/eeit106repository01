@@ -18,6 +18,19 @@ body {
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
 }
 
+/* .myNavBarGroup nav {
+    max-height: 53px;
+} */
+
+/* .myNavBarRow {
+    max-height: 53px;
+} */
+
+/* .myUserInforA {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+} */
+
 .page-container {
     margin-top: 52px;
 }
@@ -35,13 +48,13 @@ body {
 
 .myImg-center{
     position: absolute;
-    top: 3px;
+    /* top: 3px; */
+    top: calc(50% - 22px);
     left: 3px;
 }     
 
 .myImg-left{
     position: absolute;
-    top: 3px;
     left: -40px;
 }    
 

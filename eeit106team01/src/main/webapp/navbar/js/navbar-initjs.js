@@ -14,13 +14,28 @@ let checkNavbar = setInterval(function () {
             console.log("username: " + username);
             if (username && (username != undefined)) {
                 $("#navbarUsername").text(username);
+            } else {
+                console.log("No username???");
             }
+            $.ajax({
+                url: "/getMemberTempsImages/" + navbarMemberBean.id,
+                type: "GET",
+                success: function (memberImageData) {
+                    if (navbarMemberBean.id == memberImageData.id) {
+                        if (memberImageData.image) {
+                            console.log("get memberImage ok");
+                            $("#navbarUserImage").attr("src", memberImageData.image);
+                        } else {
+                            console.log("no memberImage in this member");
+                            $("#navbarUserImage").attr("src", "/navbar/images/notLogin.jpg");
+                        }
+                        let imgHeight = document.getElementById('navbarUserImage').clientHeight;
+                        $("#navbarUserImage").css({ top: `calc(50% - ${imgHeight / 2}px)` });
+                    }
+                }
+            });
             $("#login").css({ display: "none" });
-            // $("#logout").css({display: "block"});
-            // $("#userDropdownMenu").css({display: "block"});
-            $("#navbarUserImage").attr("src", "/navbar/images/notLogin.jpg");
         } else {
-            // $("#login").css({display: "block"});
             $("#logout").css({ display: "none" });
             $("#userDropdownMenu").css({ display: "none" });
             $("#navbarUserImage").css({ display: "none" });
@@ -48,4 +63,4 @@ let checkNavbar = setInterval(function () {
             sessionStorage.setItem("previousPage", location.pathname + location.search);
         });
     }
-}, 100);
+}, 50);
