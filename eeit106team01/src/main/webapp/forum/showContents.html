@@ -25,11 +25,11 @@
         defer></script>
 
     <!-- cookie -->
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="/js/js.cookie.min.js"></script>
 
     <!-- plyr -->
-    <link rel="stylesheet" href="https://cdn.plyr.io/3.5.3/plyr.css" />
-    <script src="https://cdn.plyr.io/3.5.3/plyr.polyfilled.js"></script>
+    <link rel="stylesheet" href="/css/plyr.css" />
+    <script src="/js/plyr.polyfilled.js"></script>
 
     <!-- quill -->
     <script src="/forum/quill/highlight.min.js"></script>
@@ -237,7 +237,7 @@
             let updateTime = new Date(topicBean.topicUpdateTime);
             $(information).html(
                 "更新時間: " + updateTime.toLocaleDateString() + updateTime.toLocaleTimeString() +
-                "<br>contentLikeNum: " + topicBean.topicLikeNum
+                "<br>"
             );
             card.className = "card";
             // title.className = "card-header";
@@ -260,6 +260,7 @@
             ) {
                 information.appendChild(createReplyBtn(topicBean, "topic"));
             }
+            information.appendChild(createLikeImg(topicBean, "topic"));
             // card.appendChild(title);
             card.appendChild(content);
             card.appendChild(information);
@@ -312,7 +313,7 @@
             ) {
                 information.appendChild(createEditBtn(contentBean, "content"));
             }
-            information.appendChild(createLikeImg(contentBean));
+            information.appendChild(createLikeImg(contentBean, "content"));
             // card.appendChild(title);
             card.appendChild(content);
             card.appendChild(information);
@@ -328,18 +329,30 @@
         }
 
         function createLikeImg(bean, replyType) {
+            let likeWho;
+            let likeNum;
+            let uri;
+            if (replyType == "content") {
+                likeWho = bean.contentLikeWho;
+                likeNum = bean.contentLikeNum;
+                uri = "/articleTopics/" + bean.articleTopicCurrent.id + "/articleContents/" + bean.id;
+            } else if (replyType == "topic") {
+                likeWho = topicBean.topicLikeWho;
+                likeNum = topicBean.topicLikeNum;
+                uri = "/articleTopics/" + topicBean.id;
+            }
             let span = document.createElement("span");
             let like = document.createElement("img");
             let text = document.createElement("span");
             let disLike = document.createElement("img");
-            like.src = "/storage/others/Like.png";
-            disLike.src = "/storage/others/Like.png";
+            like.src = "/forum/icon/like.png";
+            disLike.src = "/forum/icon/like.png";
             like.width = "16";
             disLike.width = "16";
             let likeList = [];
             let dislikeList = [];
-            if (bean.contentLikeWho) {
-                $.each(bean.contentLikeWho, function (key, value) {
+            if (likeWho) {
+                $.each(likeWho, function (key, value) {
                     if (value.startsWith("like")) {
                         likeList.push(value.substr(value.indexOf("||") + 2));
                     } else if (value.startsWith("dislike")) {
@@ -348,7 +361,7 @@
                 });
             }
             $(disLike).css("transform", "rotate(180deg)");
-            $(text).text(bean.contentLikeNum);
+            $(text).text(likeNum);
             $(text).css("margin", "1em");
             $(like).attr({
                 "data-toggle": "popover",
@@ -364,78 +377,82 @@
                 "title": "不喜歡這篇文",
                 "data-placement": "bottom"
             });
-            let uri = "/articleTopics/" + bean.articleTopicCurrent.id + "/articleContents/" + bean.id;
-            if (memberBean && bean.contentLikeWho && bean.contentLikeWho[memberBean.id]) {
-                if (bean.contentLikeWho[memberBean.id].startsWith("like")) {
+            if (memberBean) {
+                if (likeWho && likeWho[memberBean.id]) {
+                    if (likeWho[memberBean.id].startsWith("like")) {
+                        $(disLike).css("filter", "grayscale(100%)");
+                        $(like).click(function () {
+                            $(like).attr("disabled", true);
+                            $(text).text($(text).text() - (1));
+                            $(like).css("filter", "grayscale(100%)");
+                            $(this).unbind("click");
+                            $.ajax({
+                                url: uri + "/dislike",
+                                method: "PUT"
+                            });
+                            let newList = jQuery.grep(likeList, function (value) {
+                                return value != memberBean.name;
+                            });
+                            if (newList.length == 0) {
+                                newList = " ";
+                            }
+                            $(this).attr("data-content", newList);
+                        })
+                    } else if (likeWho[memberBean.id].startsWith("dislike")) {
+                        $(like).css("filter", "grayscale(100%)");
+                        $(disLike).click(function () {
+                            $(disLike).attr("disabled", true);
+                            $(text).text($(text).text() - (-1));
+                            $(disLike).css("filter", "grayscale(100%)");
+                            $(this).unbind("click");
+                            $.ajax({
+                                url: uri + "/like",
+                                method: "PUT"
+                            });
+                            let newList = jQuery.grep(dislikeList, function (value) {
+                                return value != memberBean.name;
+                            });
+                            if (newList.length == 0) {
+                                newList = " ";
+                            }
+                            $(this).attr("data-content", newList);
+                        })
+                    }
+                } else {
+                    $(like).css("filter", "grayscale(100%)");
                     $(disLike).css("filter", "grayscale(100%)");
                     $(like).click(function () {
                         $(like).attr("disabled", true);
-                        $(text).text($(text).text() - (1));
-                        $(like).css("filter", "grayscale(100%)");
-                        $(this).unbind("click");
-                        $.ajax({
-                            url: uri + "/dislike",
-                            method: "PUT"
-                        });
-                        let newList = jQuery.grep(likeList, function (value) {
-                            return value != memberBean.name;
-                        });
-                        if (newList.length == 0) {
-                            newList = " ";
-                        }
-                        $(this).attr("data-content", newList);
-                    })
-                } else if (bean.contentLikeWho[memberBean.id].startsWith("dislike")) {
-                    $(like).css("filter", "grayscale(100%)");
-                    $(disLike).click(function () {
                         $(disLike).attr("disabled", true);
                         $(text).text($(text).text() - (-1));
-                        $(disLike).css("filter", "grayscale(100%)");
+                        $(like).css("filter", "grayscale(0%)");
                         $(this).unbind("click");
+                        $(disLike).unbind("click");
                         $.ajax({
                             url: uri + "/like",
                             method: "PUT"
                         });
-                        let newList = jQuery.grep(dislikeList, function (value) {
-                            return value != memberBean.name;
+                        likeList.push(memberBean.name);
+                        $(this).attr("data-content", likeList);
+                    })
+                    $(disLike).click(function () {
+                        $(like).attr("disabled", true);
+                        $(disLike).attr("disabled", true);
+                        $(text).text($(text).text() - (1));
+                        $(disLike).css("filter", "grayscale(0%)");
+                        $(this).unbind("click");
+                        $(like).unbind("click");
+                        $.ajax({
+                            url: uri + "/dislike",
+                            method: "PUT"
                         });
-                        if (newList.length == 0) {
-                            newList = " ";
-                        }
-                        $(this).attr("data-content", newList);
+                        dislikeList.push(memberBean.name);
+                        $(this).attr("data-content", dislikeList);
                     })
                 }
             } else {
                 $(like).css("filter", "grayscale(100%)");
                 $(disLike).css("filter", "grayscale(100%)");
-                $(like).click(function () {
-                    $(like).attr("disabled", true);
-                    $(disLike).attr("disabled", true);
-                    $(text).text($(text).text() - (-1));
-                    $(like).css("filter", "grayscale(0%)");
-                    $(this).unbind("click");
-                    $(disLike).unbind("click");
-                    $.ajax({
-                        url: uri + "/like",
-                        method: "PUT"
-                    });
-                    likeList.push(memberBean.name);
-                    $(this).attr("data-content", likeList);
-                })
-                $(disLike).click(function () {
-                    $(like).attr("disabled", true);
-                    $(disLike).attr("disabled", true);
-                    $(text).text($(text).text() - (1));
-                    $(disLike).css("filter", "grayscale(0%)");
-                    $(this).unbind("click");
-                    $(like).unbind("click");
-                    $.ajax({
-                        url: uri + "/dislike",
-                        method: "PUT"
-                    });
-                    dislikeList.push(memberBean.name);
-                    $(this).attr("data-content", dislikeList);
-                })
             }
             span.appendChild(like);
             span.appendChild(text);
@@ -479,6 +496,7 @@
             let videoTop = document.createElement("div");
             // let videoBottom = document.createElement("div");
             let video = document.createElement("video");
+            // let source = document.createElement("source");
             let thumbnailURI = "/storage/others/no-image.png";
             let videoURI = "/storage/videos/" + videoBean.videoURI;
             if (videoBean.thumbnailURI != null && videoBean.thumbnailURI.length != 0) {
@@ -490,9 +508,11 @@
             video.id = videoId;
             video.poster = thumbnailURI;
             video.controls = true;
-            video.src = videoURI;
+            // video.src = videoURI;
             video.style.margin = "0";
             video.style.border = "0";
+
+            // source.src = videoURI;
 
             videoCard.style.minWidth = "320px";
             videoCard.style.margin = "0";
@@ -502,6 +522,13 @@
             videoTop.style.margin = "0";
             videoTop.style.border = "0";
             videoTop.className = "card-img-top";
+
+            // video.appendChild(source);
+            // if (videoBean.videoStatus == "ok") {
+            //     let source480 = document.createElement("source");
+            //     source480.src = "/storage/videos/480p" + videoBean.videoURI;;
+            //     video.appendChild(source480);
+            // }
 
             videoTop.appendChild(video);
             videoCard.appendChild(videoTop);
@@ -518,28 +545,64 @@
             if (videoBean.gifURI != null && videoBean.gifURI.length != 0) {
                 gifURI = "/storage/gifs/" + videoBean.gifURI;
             }
-            let player = new Plyr('#' + videoId);
-            player.on("playing", function () {
-                $(this).parent().parent().find(".plyr__controls").show();
-                $(this).parent().parent().find("button").show();
+            let plyrSetting;
+            if ((videoBean.videoStatus === "ok") || (videoBean.videoStatus === "previewok")) {
+                plyrSetting = {
+                    previewThumbnails: {
+                        enabled: true,
+                        src: "/storage/videos/" + videoBean.vttURI
+                    }
+                }
+            }
+            let player = new Plyr('#' + videoId, plyrSetting);
+            player.on("playing", function (e) {
+                // $(this).find(".plyr__controls").show();
+                // $(this).find("button").show();
             });
             let hoverSetting = {
                 "duration": "fast",
                 "easing": "linear"
             };
-            $(document.getElementById(videoId).nextElementSibling).hover(function () {
-                $(this).css("background-image", "url('" + gifURI + "')");
-                if (!player.playing) {
-                    $(this).parent().parent().find(".plyr__controls").hide(hoverSetting);
-                    $(this).parent().parent().find("button").hide(hoverSetting);
-                }
-            }, function () {
-                $(this).css("background-image", "url('" + thumbnailURI + "')");
-                if (!player.playing) {
-                    $(this).parent().parent().find(".plyr__controls").show(hoverSetting);
-                    $(this).parent().parent().find("button").show(hoverSetting);
-                }
+            player.on("mouseover", function (e) {
+                player.poster = gifURI;
+                // if (!player.playing) {
+                //     $(this).find(".plyr__controls").hide();
+                //     $(this).find("button").hide();
+                // }
             });
+            player.on("mouseout", function (e) {
+                player.poster = thumbnailURI;
+                // if (!player.playing) {
+                //     $(this).find(".plyr__controls").show();
+                //     $(this).find("button").show();
+                // }
+            });
+            let height = videoBean.originResolution;
+            if (height) {
+                height = height.split("x")[1];
+            } else {
+                height = 1080;
+            }
+            let sources = [];
+            let origin = {
+                src: "/storage/videos/" + videoBean.videoURI,
+                type: "video/mp4",
+                size: height
+            }
+            sources.push(origin);
+            if (videoBean.videoStatus == "ok") {
+                sources.push({
+                    src: "/storage/videos/480p" + videoBean.videoURI,
+                    type: "video/mp4",
+                    size: 480,
+                });
+            }
+            player.source = {
+                type: 'video',
+                title: 'Example title',
+                sources: sources
+            }
+            console.log(player);
         }
 
         function createChangePageBtn() {

@@ -182,13 +182,20 @@ public class ProductDAOImpl implements ProductDAO {
 		if (NullChecker.isEmpty(byNameBrandType) == false && NullChecker.isEmpty(queryString) == false
 				&& minPrice != null && minPrice >= 0 && maxPrice != null && maxPrice >= minPrice) {
 			try {
-				if (byNameBrandType.equalsIgnoreCase("name")) {
+				if (byNameBrandType.equalsIgnoreCase("name") && NullChecker.isEmpty(type) == true) {
 					this.productsResutlt = this.getSession()
 							.createQuery(
 									"from ProductBean where name like :name and price between :minPrice and :maxPrice",
 									ProductBean.class)
 							.setParameter("name", "%" + queryString + "%").setParameter("minPrice", minPrice)
 							.setParameter("maxPrice", maxPrice).getResultList();
+				}else if (byNameBrandType.equalsIgnoreCase("name") && NullChecker.isEmpty(type) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery(
+									"from ProductBean where name like :name and type = :type price between :minPrice and :maxPrice",
+									ProductBean.class)
+							.setParameter("name", "%" + queryString + "%").setParameter("type",type)
+							.setParameter("minPrice", minPrice).setParameter("maxPrice", maxPrice).getResultList();
 				} else if (byNameBrandType.equalsIgnoreCase("brand") && NullChecker.isEmpty(type) == false) {
 					this.productsResutlt = this.getSession()
 							.createQuery(
@@ -243,6 +250,19 @@ public class ProductDAOImpl implements ProductDAO {
 									ProductBean.class)
 							.setParameter("brand",queryString).setParameter("type",brandType)
 							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
+				}else if(dataName.equalsIgnoreCase("name") &&  NullChecker.isEmpty(brandType) == true) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where name like :name and updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("name","%"+queryString+"%")
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
+				}else if(dataName.equalsIgnoreCase("name") && NullChecker.isEmpty(brandType) == false) {
+					this.productsResutlt = this.getSession()
+							.createQuery("from ProductBean where name like :name and type = :type and updatedTime BETWEEN :startDay AND :endDay",
+									ProductBean.class)
+							.setParameter("name","%"+queryString+"%").setParameter("type",brandType)
+							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();	
+							System.out.println("name type day===========================================");
 				}else {
 					this.productsResutlt = this.getSession()
 							.createQuery("from ProductBean where updatedTime BETWEEN :startDay AND :endDay",

@@ -1,14 +1,15 @@
 var chatUsername;
-if (typeof thisname !== "undefined") {
-    chatUsername = thisname;
-} else {
-    chatUsername = "pikachu";
-}
-
+// if (typeof thisname !== "undefined") {
+//     chatUsername = thisname;
+// } else {
+//     chatUsername = "pikachu";
+// }
 
 var neonChat;
 
 var quillChat;
+
+var notification;
 
 
 // ----------append quill js&css
@@ -37,6 +38,11 @@ head.appendChild(quillCss2);
 // }
 // ----------append quill js&css end
 
+// ----------append cookie js
+var cookieJs = document.createElement('script');
+cookieJs.src = '/js/js.cookie.min.js';
+head.appendChild(cookieJs);
+// ----------append cookie js end
 
 function onSubmitMessage(id, msg, chatData) {
     // console.log(id);
@@ -239,7 +245,7 @@ function workerInit() {
         } else if (e.data.command == "checkUser") {
             let id = e.data.message;
             // console.log(eval(id));
-            if (eval(id)) {
+            if (id) {
                 if (!$("#" + id).get(0)) {
                     neonChat.addUser("group-2", id, "online", false, id);
                     neonChat.refreshUserIds();
@@ -292,13 +298,55 @@ function workerInit() {
                     "command": "closing"
                 });
             });
+            //-------------Notification
+            worker.port.postMessage({
+                "command": "getActiveNotification",
+            });
+            //-------------Notification end
         }
+        //-------------Notification
+        else if (e.data.command == "getActiveNotification") {
+            let notiMsgBean = JSON.parse(e.data.message);
+            showActiveNotification(notiMsgBean);
+        } else if (e.data.command == "notificationMsg") {
+            let notiMsg = JSON.parse(e.data.message);
+            showNotificationMsg(notiMsg);
+        }
+        //-------------Notification end
     }
     worker.port.postMessage({
         "command": "connect",
         "chatUsername": chatUsername
     });
 }
+//-------------Notification
+function showActiveNotification(notiMsgBean) {
+    console.log(notiMsgBean);
+    let msgs = notiMsgBean.messages;
+    let unreadMsgs = notiMsgBean.offlineMessages;
+    notification.index = notiMsgBean.index;
+    if (msgs) {
+        for (let i = 0; i < msgs.length; i++) {
+            notification.prependNotification(msgs[i].message, msgs[i].url, msgs[i].sendTime, msgs[i].icon, msgs[i].color.rgb, false);
+        }
+    }
+    if (unreadMsgs) {
+        for (let i = 0; i < unreadMsgs.length; i++) {
+            notification.prependNotification(unreadMsgs[i].message, unreadMsgs[i].url, unreadMsgs[i].sendTime, unreadMsgs[i].icon, unreadMsgs[i].color.rgb, true);
+        }
+    }
+}
+function showNotificationMsg(notiMsg) {
+    console.log(notiMsg);
+    notification.prependNotification(notiMsg[i].message, notiMsg[i].url, notiMsg[i].sendTime, notiMsg[i].icon, notiMsg[i].color.rgb, true);
+}
+function clearOfflineNotification() {
+    worker.port.postMessage({
+        "command": "clearOfflineNotification"
+    });
+}
+
+//-------------Notification end
 
 var worker = null;
 
@@ -1371,51 +1419,166 @@ $(document).ready(function () {
 
     })(jQuery, window);
     //----------------------------------------
+    //-------------Notification
+    notification = {
+        notiBox: null,
+        unreadBadge: null,
+        notiList: null,
+        unreads: 0,
+        init: function (notiBox) {
+            this.notiBox = notiBox;
+            $(this.notiBox).find(".dropdown-menu").css("left", "auto");
+            this.notiList = $(this.notiBox).find(".dropdown-menu-list").get(0);
+            this.unreadBadge = $(this.notiBox).find(".badge").get(0);
+            console.log("noti init");
+        },
 
-    if (worker == null) {
-        worker = new SharedWorker("/chat/js/websocket-worker.js");
-        console.log("initworker")
-        workerInit();
-    }
-
-    $("#checkUser").keydown(function (e) {
-        if (e.keyCode == 13 && !e.shiftKey) {
-            e.preventDefault();
-            checkUserExist();
-            return false;
-        } else if (e.keyCode == 27) {
-            $(this).val("");
-        }
-    });
-
-    let timeout = 10;
-    window.setTimeout(function () {
-        if (typeof Quill !== 'undefined') {
-            quillChat = new Quill('#chat-editor-container', {
-                modules: {
-                    formula: true,
-                    syntax: true,
-                    toolbar: '#chat-toolbar-container'
-                },
-                theme: 'snow'
+        createNotification: function (message, url, sendTime, icon, color, unread) {
+            let $li = $("<li></li>");
+            let $a = $("<a></a>");
+            let $i = $("<i></i>");
+            let $message = $("<span></span>");
+            let $sendTime = $("<span></span>");
+            if (!url) {
+                url = "#";
+            }
+            $a.attr("href", url);
+            $message.text(message);
+            if (typeof sendTime === "string") {
+                sendTime = new Date(sendTime);
+            }
+            sendTime = timeDifference(new Date(), sendTime);
+            $sendTime.text(sendTime);
+            if (color) {
+                $i.css({
+                    "background-color": toColor(color),
+                    "color": "#fff"
+                });
+            }
+            if (unread) {
+                $message.addClass("unread");
+                this.unreads++;
+            }
+            $i.addClass("pull-right");
+            if (!icon) {
+                icon = "fa fa-tripadvisor";
+            }
+            $i.addClass(icon);
+            $message.addClass("line");
+            $sendTime.addClass("line small");
+            $a.append($i, $message, $sendTime);
+            $li.append($a);
+            $li.click(function () {
+                clearOfflineNotification();
             });
-        } else {
-            window.setTimeout(arguments.callee, timeout);
-        }
-    }, timeout);
+            return $li;
+        },
 
-    // console.log($(".badge"));
+        appendNotification: function (message, url, sendTime, icon, color, unread) {
+            $(this.notiList).append(this.createNotification(message, url, sendTime, icon, color, unread));
+            this.updateUnreadBadge();
+        },
+
+        prependNotification: function (message, url, sendTime, icon, color, unread) {
+            $(this.notiList).prepend(this.createNotification(message, url, sendTime, icon, color, unread));
+            this.updateUnreadBadge();
+        },
+
+        updateUnreadBadge: function () {
+            if (this.unreads == 0) {
+                $(this.unreadBadge).css("display", "none");
+            } else {
+                $(this.unreadBadge).css("display", "inline");
+                $(this.unreadBadge).css("background-color", "red");
+                $(this.unreadBadge).text(this.unreads);
+            }
+            $(this.notiBox).find("strong").text(this.unreads);
+        },
+
+        clearUnread: function () {
+            this.unreads = 0;
+            this.updateUnreadBadge();
+            $(this.notiList).find("span").removeClass("unread");
+        },
+
+        clearAllNotification: function () {
+            $(this.notiList).html("");
+        }
+    };
+
+
+    window.setTimeout(function () {
+        let notiDrop = document.getElementById("notiDrop");
+        if (notiDrop) {
+            notification.init(notiDrop);
+            notification.clearAllNotification();
+            $("#notiDrop").find("a.pull-right").click(function () {
+                notification.clearUnread();
+                clearOfflineNotification();
+            });
+            // notification.prependNotification("我是很長很長很長很長很長很長很長很長很長很長很長很長很長的訊息", null, "30 seconds ago", null, "green", true);
+        } else {
+            window.setTimeout(arguments.callee, 10);
+        }
+    }, 10);
+
+    //-------------Notification end
+
     window.addEventListener("resize", resizeWindow);
 
-    window.setTimeout(function () {
-        let chatToggleBtn = document.getElementById("toggleChatBtn");
-        if (chatToggleBtn) {
-            chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
-            document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
-        } else {
-            window.setTimeout(arguments.callee, timeout);
+    var memberBean = Cookies.get("MemberBean");
+    console.log(Cookies.get("MemberBean"));
+    if (memberBean) {
+        initChat();
+    }
+
+    function initChat() {
+        memberBean = JSON.parse(Cookies.get("MemberBean"));
+        chatUsername = memberBean.name;
+        if (worker == null) {
+            worker = new SharedWorker("/chat/js/websocket-worker.js");
+            console.log("initworker")
+            workerInit();
         }
-    }, timeout);
+
+        $("#checkUser").keydown(function (e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                checkUserExist();
+                return false;
+            } else if (e.keyCode == 27) {
+                $(this).val("");
+            }
+        });
+
+        let timeout = 10;
+        window.setTimeout(function () {
+            if (typeof Quill !== 'undefined') {
+                quillChat = new Quill('#chat-editor-container', {
+                    modules: {
+                        formula: true,
+                        syntax: true,
+                        toolbar: '#chat-toolbar-container'
+                    },
+                    theme: 'snow'
+                });
+            } else {
+                window.setTimeout(arguments.callee, timeout);
+            }
+        }, timeout);
+
+        // console.log($(".badge"));
+
+        window.setTimeout(function () {
+            let chatToggleBtn = document.getElementById("toggleChatBtn");
+            if (chatToggleBtn) {
+                chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+                document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
+            } else {
+                window.setTimeout(arguments.callee, timeout);
+            }
+        }, timeout);
+    }
 });
 
 var chatSidebarOpen = false;
@@ -1441,4 +1604,35 @@ function resizeWindow() {
     if (neonChat && chatSidebarOpen) {
         $(".main-content").css("width", ($(".page-container").width() - 279));
     }
+}
+
+function timeDifference(current, previous) {
+    var msPerMinute = 60 * 1000;
+    var msPerHour = msPerMinute * 60;
+    var msPerDay = msPerHour * 24;
+    var msPerMonth = msPerDay * 30;
+    var msPerYear = msPerDay * 365;
+    var elapsed = current - previous;
+    if (elapsed < msPerMinute) {
+        return Math.round(elapsed / 1000) + ' seconds ago';
+    } else if (elapsed < msPerHour) {
+        return Math.round(elapsed / msPerMinute) + ' minutes ago';
+    } else if (elapsed < msPerDay) {
+        return Math.round(elapsed / msPerHour) + ' hours ago';
+    } else if (elapsed < msPerMonth) {
+        return 'approximately ' + Math.round(elapsed / msPerDay) + ' days ago';
+    } else if (elapsed < msPerYear) {
+        return 'approximately ' + Math.round(elapsed / msPerMonth) + ' months ago';
+    } else {
+        return 'approximately ' + Math.round(elapsed / msPerYear) + ' years ago';
+    }
+}
+
+function toColor(num) {
+    num >>>= 0;
+    var b = num & 0xFF,
+        g = (num & 0xFF00) >>> 8,
+        r = (num & 0xFF0000) >>> 16,
+        a = ((num & 0xFF000000) >>> 24) / 255;
+    return "rgba(" + [r, g, b, a].join(",") + ")";
 }

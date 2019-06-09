@@ -56,6 +56,11 @@ function subsribe() {
     subscribeRegion("middle");
     subscribeRegion("south");
     subscribeRegion("east");
+    //-------------Notification
+    stompClient.subscribe('/user/topic/notificationMsg', function (response) {
+        sendMessageBack("notificationMsg", response.body);
+    });
+    //-------------Notification end
 }
 
 function subscribeRegion(region) {
@@ -115,7 +120,16 @@ onconnect = function (e) {
                     subscribeSouth.splice(subscribeSouth.indexOf(this), 1);
                     subscribeEast.splice(subscribeEast.indexOf(this), 1);
                     console.log(ports);
+                } else if (e.data.command == "logout") {
+                    self.close();
                 }
+                //-------------Notification
+                else if (e.data.command == "getActiveNotification") {
+                    getActiveNotification(e);
+                } else if (e.data.command == "clearOfflineNotification") {
+                    clearOfflineNotification(e);
+                }
+                //-------------Notification end
             }
             ports.push(e.ports[i]);
         }
@@ -164,3 +178,21 @@ function getOnlineUsers(e) {
 function checkUser(e) {
     stompClient.send("/checkUser", {}, e.data.message);
 }
+
+//-------------Notification
+function getActiveNotification(e) {
+    let activeNotificationSubscribe = stompClient.subscribe('/user/topic/getActiveNotification', function (response) {
+        console.log(e);
+        e.srcElement.postMessage({
+            "command": "getActiveNotification",
+            "message": response.body
+        });
+        activeNotificationSubscribe.unsubscribe();
+    });
+    stompClient.send("/getActiveNotification", {});
+}
+
+function clearOfflineNotification(e) {
+    stompClient.send("/clearOfflineNotification", {});
+}
+//-------------Notification end

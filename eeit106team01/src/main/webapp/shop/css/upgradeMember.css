@@ -1,0 +1,28 @@
+#memberDiv {
+    position: relative;
+    right: -10%;
+    border-image-source: url(../img/clipart-stars-border.png);
+    border-image-slice: 20;
+    border-image-width: 1em;
+    border-image-repeat: stretch;
+}
+
+#memberDiv .memberSelect {
+    position: absolute;
+    right: -10%;
+    margin-top: 10%;
+}
+
+.memberSpan {
+    color: brown;
+    font-size: 20px;
+    font-style: italic;
+}
+
+#memberDiv img {
+    width: 80%;
+}
+
+.memberUl {
+    margin-top: 5%
+}

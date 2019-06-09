@@ -7,7 +7,7 @@ import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
-import net.ddns.eeitdemo.eeit106team01.model.StorageService;
+import net.ddns.eeitdemo.eeit106team01.forum.model.StorageService;
 
 /**
  * 
@@ -37,6 +37,7 @@ public class StorageServiceImpl implements StorageService {
 	 * @param filePath File path, must include the file name.
 	 * @return The created file.
 	 */
+	@Override
 	public File createFile(String filePath) throws IOException {
 		if (filePath.startsWith("/") || filePath.startsWith("\\")) {
 			filePath = filePath.substring(1);
@@ -48,10 +49,28 @@ public class StorageServiceImpl implements StorageService {
 	}
 	
 	/**
+	 * Create directory with specific path.<br>
+	 * If directory exist, will not override it.
+	 * @param filePath directory path.
+	 * @return The created directory.
+	 */
+	@Override
+	public File createDirectory(String filePath) throws IOException {
+		if (filePath.startsWith("/") || filePath.startsWith("\\")) {
+			filePath = filePath.substring(1);
+		}
+		File file = new File(STORAGE_PATH + filePath);
+		file.mkdirs();
+		file.createNewFile();
+		return file;
+	}
+	
+	/**
 	 * Load file with specific path.
 	 * @param filePath File path.
 	 * @return Null if file not exist.
 	 */
+	@Override
 	public File load(String filePath) {
 		if (filePath.startsWith("/") || filePath.startsWith("\\")) {
 			filePath = filePath.substring(1);
@@ -69,6 +88,7 @@ public class StorageServiceImpl implements StorageService {
 	 * @param filePath File path.
 	 * @return Null if file not exist.
 	 */
+	@Override
 	public Resource loadAsResource(String filePath) {
 		if (filePath.startsWith("/") || filePath.startsWith("\\")) {
 			filePath = filePath.substring(1);
@@ -86,6 +106,7 @@ public class StorageServiceImpl implements StorageService {
 	 * @param filePath File path.
 	 * @return True if and only if the file or directory is successfully deleted; false otherwise.
 	 */
+	@Override
 	public boolean delete(String filePath) {
 		return new File(STORAGE_PATH + filePath).delete();
 	}

@@ -34,19 +34,16 @@ public class ArticleTopicController {
 
 	@Autowired
 	private ArticleTopicCurrentService articleTopicCurrentService;
-	
+
 	@GetMapping(path = { "/articleTopics" }, produces = { "application/json" })
-	public ResponseEntity<?> getTopicList(
-			@RequestParam(required = false) Integer begin,
-			@RequestParam(required = false) Integer end,
-			@RequestParam(required = false) String topicType,	//requestTopic shareTopic
-			@RequestParam(required = false) String orderType,	//orderByTime orderByLike
+	public ResponseEntity<?> getTopicList(@RequestParam(required = false) Integer begin,
+			@RequestParam(required = false) Integer end, @RequestParam(required = false) String topicType, // requestTopic
+																											// shareTopic
+			@RequestParam(required = false) String orderType, // orderByTime orderByLike
 			@RequestParam(required = false) String likeTopicHeader,
-			@RequestParam(required = false) Double lowerLatitude,
-			@RequestParam(required = false) Double upperLatitude,
+			@RequestParam(required = false) Double lowerLatitude, @RequestParam(required = false) Double upperLatitude,
 			@RequestParam(required = false) Double lowerLongitude,
-			@RequestParam(required = false) Double upperLongitude
-			) {
+			@RequestParam(required = false) Double upperLongitude) {
 		System.out.println("getTopicList method running");
 		System.out.println("begin: " + begin);
 		System.out.println("end: " + end);
@@ -57,34 +54,36 @@ public class ArticleTopicController {
 		System.out.println("upperLatitude: " + upperLatitude);
 		System.out.println("lowerLongitude: " + lowerLongitude);
 		System.out.println("upperLongitude: " + upperLongitude);
-		
-		//orderColumn:  orderByLike: topicLikeNum    orderByTime: topicUpdateTime
-		
+
+		// orderColumn: orderByLike: topicLikeNum orderByTime: topicUpdateTime
+
 		List<ArticleTopicCurrentBean> findRange = null;
-		if((begin != null) && (end != null) && (("shareTopic".equals(topicType)) || ("requestTopic".equals(topicType))) &&
-			(lowerLatitude == null) && (upperLatitude == null) && 
-			(lowerLongitude == null) && (upperLongitude == null)) {
-			if("orderByTime".equals(orderType)) {
-				if(("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {					
-					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicUpdateTime", null);
-				}else {
-					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicUpdateTime", likeTopicHeader);
+		if ((begin != null) && (end != null) && (("shareTopic".equals(topicType)) || ("requestTopic".equals(topicType)))
+				&& (lowerLatitude == null) && (upperLatitude == null) && (lowerLongitude == null)
+				&& (upperLongitude == null)) {
+			if ("orderByTime".equals(orderType)) {
+				if (("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {
+					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicUpdateTime",
+							null);
+				} else {
+					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicUpdateTime",
+							likeTopicHeader);
 				}
-			}else if("orderByLike".equals(orderType)) {
-				if(("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {
-					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicLikeNum", null);					
-				}else {
-					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicLikeNum", likeTopicHeader);
+			} else if ("orderByLike".equals(orderType)) {
+				if (("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {
+					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicLikeNum", null);
+				} else {
+					findRange = articleTopicCurrentService.findByLastRange(begin, end, topicType, "topicLikeNum",
+							likeTopicHeader);
 				}
 			}
-		} else if ((begin == null) && (end == null) && 
-				(("".equals(orderType)) || (orderType == null)) &&
-				(("".equals(likeTopicHeader)) || (likeTopicHeader == null)) &&
-				(lowerLatitude != null) && (upperLatitude != null) && 
-				(lowerLongitude != null) && (upperLongitude != null)){
-			findRange = articleTopicCurrentService.findByCoordinateRange(lowerLatitude, upperLatitude, lowerLongitude, upperLongitude);
+		} else if ((begin == null) && (end == null) && (("".equals(orderType)) || (orderType == null))
+				&& (("".equals(likeTopicHeader)) || (likeTopicHeader == null)) && (lowerLatitude != null)
+				&& (upperLatitude != null) && (lowerLongitude != null) && (upperLongitude != null)) {
+			findRange = articleTopicCurrentService.findByCoordinateRange(lowerLatitude, upperLatitude, lowerLongitude,
+					upperLongitude);
 		}
-		
+
 		if (findRange != null) {
 //			System.err.println(findRange.get(0).toString());
 			return ResponseEntity.ok(findRange);
@@ -103,7 +102,7 @@ public class ArticleTopicController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@GetMapping(path = { "/queryarticleTopics/{likeTopicHeader}" }, produces = { "application/json" })
 	public ResponseEntity<?> getTopicByTopicHeader(@PathVariable String likeTopicHeader) {
 		System.out.println("getTopicByTopicHeader method running");
@@ -114,7 +113,7 @@ public class ArticleTopicController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@GetMapping(path = { "/autocomplete/{inputString}" }, produces = { "application/json" })
 	public ResponseEntity<?> searchAutocompleteTopicHeader(@PathVariable String inputString) {
 		System.out.println("searchAutocompleteTopicHeader method running");
@@ -125,39 +124,38 @@ public class ArticleTopicController {
 			return ResponseEntity.ok().build();
 		}
 	}
-	
+
 	@GetMapping(path = { "/countTopics" })
-	public ResponseEntity<?> countTopics(
-			@RequestParam(required = false) String topicType,	//requestTopic shareTopic
-			@RequestParam(required = false) String likeTopicHeader
-			) {
+	public ResponseEntity<?> countTopics(@RequestParam(required = false) String topicType, // requestTopic shareTopic
+			@RequestParam(required = false) String likeTopicHeader) {
 		System.out.println("countTopics method running");
 		System.out.println("topicType: " + topicType);
 		System.out.println("likeTopicHeader: " + likeTopicHeader);
 		Long countResult = null;
-		if(("shareTopic".equals(topicType)) || ("requestTopic".equals(topicType))) {
-			if(("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {
+		if (("shareTopic".equals(topicType)) || ("requestTopic".equals(topicType))) {
+			if (("".equals(likeTopicHeader)) || (likeTopicHeader == null)) {
 				countResult = articleTopicCurrentService.findTopicNum(topicType, null);
-			}else {				
+			} else {
 				countResult = articleTopicCurrentService.findTopicNum(topicType, likeTopicHeader);
 			}
 		}
 		System.err.println("countResult: " + countResult);
-		if (countResult != null) {				
+		if (countResult != null) {
 			return ResponseEntity.ok(countResult);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@PostMapping(path = { "/articleTopics" }, consumes = { "application/json" }, produces = { "application/json" })
-	public ResponseEntity<?> postTopic(@RequestBody ArticleTopicCurrentBean requestbody, BindingResult bindingResult, HttpSession httpSession) {
+	public ResponseEntity<?> postTopic(@RequestBody ArticleTopicCurrentBean requestbody, BindingResult bindingResult,
+			HttpSession httpSession) {
 		System.out.println("postTopic method running");
 		System.out.println(requestbody.toString());
 		Map<String, String> errors = new HashMap<String, String>();
-		
-		if(bindingResult != null) {
-			if(bindingResult.hasFieldErrors()) {
+
+		if (bindingResult != null) {
+			if (bindingResult.hasFieldErrors()) {
 				System.out.println("postTopic binding error");
 				List<ObjectError> bindingErrors = bindingResult.getAllErrors();
 				for (ObjectError bindingError : bindingErrors) {
@@ -166,79 +164,77 @@ public class ArticleTopicController {
 				return ResponseEntity.badRequest().body(errors);
 			}
 		}
-		
+
 		MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
-		if((requestbody.getMemberBean() == null)
-				|| requestbody.getMemberBean().getId() == null
+		if ((requestbody.getMemberBean() == null) || requestbody.getMemberBean().getId() == null
 				|| requestbody.getMemberBean().getId().intValue() != memberBean.getId().intValue()) {
 //			errors.put("loginError", "請先登入");
 			System.err.println("請先登入");
 		}
-		
-		if(requestbody.getTopicHeader() != null) {
-			if(requestbody.getTopicHeader().length() == 0) {
+
+		if (requestbody.getTopicHeader() != null) {
+			if (requestbody.getTopicHeader().length() == 0) {
 				errors.put("topicHeaderError", "請輸入標題");
 			}
 		}
-		
-		if("shareTopic".equals(requestbody.getTopicType())) {
+
+		if ("shareTopic".equals(requestbody.getTopicType())) {
 //			if(requestbody.getVideoBean() == null) {
 //				errors.put("videoBeanError", "分享文請上傳影片");
 //			}
-		} else if("requestTopic".equals(requestbody.getTopicType())) {
+		} else if ("requestTopic".equals(requestbody.getTopicType())) {
 //			if(requestbody.getVideoBean() != null) {
 //				errors.put("videoBeanError", "協尋文請誤上傳影片");
 //			}
 		} else {
 			errors.put("topicTypeError", "請輸入主題類型");
 		}
-		
 
-		if(!("northernRegion".equals(requestbody.getTopicRegion())
+		if (!("northernRegion".equals(requestbody.getTopicRegion())
 				|| "centralRegion".equals(requestbody.getTopicRegion())
 				|| "southernRegion".equals(requestbody.getTopicRegion())
 				|| "easternRegion".equals(requestbody.getTopicRegion()))) {
 			errors.put("topicRegionError", "請輸入主題地區分類");
 		}
-		
-		if(requestbody.getAccidentTime() != null) {
+
+		if (requestbody.getAccidentTime() != null) {
 			Calendar inputCalendar = Calendar.getInstance();
-		    Calendar nowCalendar = Calendar.getInstance();
-		    inputCalendar.setTime(requestbody.getAccidentTime());
-		    nowCalendar.setTime(new java.util.Date());
-		    int n = 0;  
-		    while (!inputCalendar.after(nowCalendar)) { // 循環對比，直到相等，n就是想要的結果
-		    	n++;
-	            inputCalendar.add(Calendar.MONTH, 1);   // 比較月份，月份+1
-	        }
-		    System.out.println("相差的月份: " + n);
-		    if (n > 24) {
-		    	errors.put("accidentTimeError", "請輸入兩年內的時間");
-		    	return ResponseEntity.badRequest().body(errors);
-		    }
+			Calendar nowCalendar = Calendar.getInstance();
+			inputCalendar.setTime(requestbody.getAccidentTime());
+			nowCalendar.setTime(new java.util.Date());
+			int n = 0;
+			while (!inputCalendar.after(nowCalendar)) { // 循環對比，直到相等，n就是想要的結果
+				n++;
+				inputCalendar.add(Calendar.MONTH, 1); // 比較月份，月份+1
+			}
+			System.out.println("相差的月份: " + n);
+			if (n > 24) {
+				errors.put("accidentTimeError", "請輸入兩年內的時間");
+				return ResponseEntity.badRequest().body(errors);
+			}
 		}
-			
-		if(requestbody.getAccidentLocation() != null) {
-			if(requestbody.getAccidentLocation().length() == 0) {
+
+		if (requestbody.getAccidentLocation() != null) {
+			if (requestbody.getAccidentLocation().length() == 0) {
 				errors.put("accidentLocationError", "請輸入事故地點說明");
 			}
 		}
-		
-		if((requestbody.getAccidentLocationLatitude() == null)
+
+		if ((requestbody.getAccidentLocationLatitude() == null)
 				|| (requestbody.getAccidentLocationLongitude() == null)) {
 			errors.put("accidentLocationCoordinateError", "請在地圖中選取事故地點");
 		}
-		
-		if(requestbody.getTopicContent() != null) {
-			if(requestbody.getTopicContent().length() == 0) {
+
+		if (requestbody.getTopicContent() != null) {
+			if (requestbody.getTopicContent().length() == 0) {
 				errors.put("topicContentError", "請輸入文章內容");
 			}
 		}
-		
-		if(!errors.isEmpty()) {
+
+		if (!errors.isEmpty()) {
 			return ResponseEntity.badRequest().body(errors);
 		}
-		
+
 		java.util.Date nowDate = new java.util.Date();
 		requestbody.setTopicLikeNum(0);
 		requestbody.setContentReplyNum(0);
@@ -248,7 +244,7 @@ public class ArticleTopicController {
 		requestbody.setTopicContentUpdateTime(nowDate);
 		requestbody.setPageViews(0);
 		requestbody.setUpdateMessage("使用者發文");
-		
+
 		ArticleTopicCurrentBean insertResult = articleTopicCurrentService.insert(requestbody);
 		if (insertResult != null) {
 			return ResponseEntity
@@ -277,32 +273,30 @@ public class ArticleTopicController {
 	}
 
 	@PutMapping(path = { "/articleTopics/{id}/{likeOrDislike}" }, produces = { "application/json" })
-	public ResponseEntity<?> ContentWhoLike(
-			@PathVariable Integer id,
-			@PathVariable String likeOrDislike,
-			HttpSession httpSession
-			) {
+	public ResponseEntity<?> ContentWhoLike(@PathVariable Integer id, @PathVariable String likeOrDislike,
+			HttpSession httpSession) {
 //		從httpSession抓出MemberBean資訊
 		MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 		Integer memberId = memberBean.getId();
-		Map<Integer, String> result = articleTopicCurrentService.contentWhoLike(id, memberId, likeOrDislike.toLowerCase());
+		Map<Integer, String> result = articleTopicCurrentService.contentWhoLike(id, memberId, memberBean.getName(),
+				likeOrDislike.toLowerCase());
 		if (result != null) {
 			return ResponseEntity.ok(result);
 		}
 		return ResponseEntity.notFound().build();
 	}
-	
+
 	@DeleteMapping(path = { "/articleTopics/{id}" })
 	public ResponseEntity<?> deleteTopic(@PathVariable(name = "id") int id) {
 		System.out.println("deleteTopic method running");
 //		boolean deleteResult = articleTopicCurrentService.delete(id);
 		ArticleTopicCurrentBean findOne = articleTopicCurrentService.findByPrimaryKey(id);
 		ArticleTopicCurrentBean deleteResult = null;
-		if(findOne != null && !"deleted".equals(findOne.getTopicStatus()) ) {
+		if (findOne != null && !"deleted".equals(findOne.getTopicStatus())) {
 			findOne.setTopicStatus("deleted");
 			deleteResult = articleTopicCurrentService.updateIgnoreNullColumn(findOne);
 		}
-		
+
 		if (deleteResult != null) {
 			return ResponseEntity.ok().build();
 		} else {
