@@ -465,9 +465,9 @@ function getProductsByPrice() {
         cache: false,
         success: function(priceData) {
             console.log("getProductsByPrice() star")
-            console.log("getProductQuantity() star")
+
             getProductQuantity(priceData)
-            console.log("getProductQuantity() end")
+
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
@@ -523,7 +523,7 @@ function getProductsByPrice() {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByPrice() end")
                     } else if (page == total) {
@@ -535,7 +535,7 @@ function getProductsByPrice() {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByPrice() end")
                     } else {
@@ -547,7 +547,7 @@ function getProductsByPrice() {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByPrice() end")
                     }
@@ -557,6 +557,19 @@ function getProductsByPrice() {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -636,9 +649,9 @@ function getProductsByPriceByType(type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -648,9 +661,9 @@ function getProductsByPriceByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -660,15 +673,28 @@ function getProductsByPriceByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -680,10 +706,10 @@ function getProductsByType(type) {
         dataType: "json",
         cache: false,
         success: function(typeData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
+
+
             getProductQuantity(typeData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -700,14 +726,14 @@ function getProductsByType(type) {
                 productsId.push(typeData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
+
 
             var pageSize = typeData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
+
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -734,9 +760,9 @@ function getProductsByType(type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
+
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -744,14 +770,14 @@ function getProductsByType(type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
+
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -760,11 +786,11 @@ function getProductsByType(type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -773,17 +799,30 @@ function getProductsByType(type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -808,9 +847,9 @@ function getProductsByPriceByBrand(brand, type) {
         cache: false,
         success: function(priceData) {
             console.log("getProductsByPriceByBrand() star")
-            console.log("getProductQuantity() star")
+
             getProductQuantity(priceData)
-            console.log("getProductQuantity() end")
+
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
@@ -866,7 +905,7 @@ function getProductsByPriceByBrand(brand, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByPriceByBrand() end")
                     } else if (page == total) {
@@ -878,7 +917,7 @@ function getProductsByPriceByBrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByPriceByBrand() end")
                     } else {
@@ -890,7 +929,7 @@ function getProductsByPriceByBrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByPriceByBrand() end")
                     }
@@ -900,6 +939,19 @@ function getProductsByPriceByBrand(brand, type) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -913,9 +965,9 @@ function getProductsByBrand(brand, type) {
         cache: false,
         success: function(brandData) {
             console.log("getProductsByBrand() star")
-            console.log("getProductQuantity() star")
+
             getProductQuantity(brandData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -973,7 +1025,7 @@ function getProductsByBrand(brand, type) {
                             console.log("page 1 i<=onePageProducts-1 push end")
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByBrand() end")
                     } else if (page == total) {
@@ -984,9 +1036,9 @@ function getProductsByBrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByBrand() end")
                     } else {
@@ -997,9 +1049,9 @@ function getProductsByBrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByBrand() end")
                     }
@@ -1008,6 +1060,19 @@ function getProductsByBrand(brand, type) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -1020,9 +1085,9 @@ function search(searchResult) {
         dataType: "json",
         cache: false,
         success: function(searchData) {
-            console.log("getProductQuantity() star")
+
             getProductQuantity(searchData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -1080,7 +1145,7 @@ function search(searchResult) {
                             console.log("page 1 i<=onePageProducts-1 push end")
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByBrand() end")
                     } else if (page == total) {
@@ -1091,9 +1156,9 @@ function search(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByBrand() end")
                     } else {
@@ -1104,9 +1169,9 @@ function search(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByBrand() end")
                     }
@@ -1114,7 +1179,20 @@ function search(searchResult) {
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
+
         }
     })
 }
@@ -1192,9 +1270,9 @@ function getProductsByPriceByName(name) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -1204,9 +1282,9 @@ function getProductsByPriceByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -1216,15 +1294,28 @@ function getProductsByPriceByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -1301,9 +1392,9 @@ function getProductsByPriceByNameByType(name, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -1313,9 +1404,9 @@ function getProductsByPriceByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -1325,15 +1416,28 @@ function getProductsByPriceByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -1430,6 +1534,19 @@ function sortPriceDescBytype(type) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -1441,10 +1558,10 @@ function sortPriceAscBytype(type) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
+
+
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -1461,14 +1578,14 @@ function sortPriceAscBytype(type) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
+
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
+
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -1495,9 +1612,9 @@ function sortPriceAscBytype(type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
+
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -1505,14 +1622,14 @@ function sortPriceAscBytype(type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
+
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -1521,11 +1638,11 @@ function sortPriceAscBytype(type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -1534,17 +1651,30 @@ function sortPriceAscBytype(type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -1556,10 +1686,10 @@ function sortPriceDescBybrand(brand, type) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
+
+
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -1576,14 +1706,14 @@ function sortPriceDescBybrand(brand, type) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
+
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
+
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -1610,9 +1740,9 @@ function sortPriceDescBybrand(brand, type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
+
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -1620,14 +1750,14 @@ function sortPriceDescBybrand(brand, type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
+
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -1636,11 +1766,11 @@ function sortPriceDescBybrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -1649,17 +1779,30 @@ function sortPriceDescBybrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -1672,9 +1815,9 @@ function sortPriceAscBybrand(brand, type) {
         cache: false,
         success: function(sortData) {
             console.log("sortPriceAscBybrand() star")
-            console.log("getProductQuantity() star")
+
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -1691,14 +1834,14 @@ function sortPriceAscBybrand(brand, type) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
+
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
+
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -1725,9 +1868,9 @@ function sortPriceAscBybrand(brand, type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
+
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -1735,14 +1878,14 @@ function sortPriceAscBybrand(brand, type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
+
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -1751,11 +1894,11 @@ function sortPriceAscBybrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -1764,9 +1907,9 @@ function sortPriceAscBybrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("sortPriceAscBybrand() end")
                     }
@@ -1775,6 +1918,19 @@ function sortPriceAscBybrand(brand, type) {
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -1786,10 +1942,10 @@ function sortPriceDescByname(name) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
+
+
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -1806,14 +1962,13 @@ function sortPriceDescByname(name) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
+
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -1827,8 +1982,6 @@ function sortPriceDescByname(name) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination -onclick")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         console.log("page 1 pageSize < onePageProducts star")
@@ -1840,9 +1993,9 @@ function sortPriceDescByname(name) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
+
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -1850,14 +2003,14 @@ function sortPriceDescByname(name) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
+
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -1866,11 +2019,11 @@ function sortPriceDescByname(name) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -1879,17 +2032,30 @@ function sortPriceDescByname(name) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -1901,10 +2067,8 @@ function sortPriceAscByname(name) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
+
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
 
             var productsName = [];
             var productsPrice = [];
@@ -1921,14 +2085,12 @@ function sortPriceAscByname(name) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -1943,7 +2105,6 @@ function sortPriceAscByname(name) {
                     console.log("twbsPagination -onclick")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
 
-
                     var products = [];
                     if (page == 1) {
                         console.log("page 1 pageSize < onePageProducts star")
@@ -1955,9 +2116,9 @@ function sortPriceAscByname(name) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
+
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -1965,14 +2126,14 @@ function sortPriceAscByname(name) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
+
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -1981,11 +2142,11 @@ function sortPriceAscByname(name) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -1994,17 +2155,30 @@ function sortPriceAscByname(name) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -2016,10 +2190,8 @@ function sortSoldDescBytype(type) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
+
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
 
             var productsName = [];
             var productsPrice = [];
@@ -2036,14 +2208,12 @@ function sortSoldDescBytype(type) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -2057,8 +2227,6 @@ function sortSoldDescBytype(type) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination -onclick")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         console.log("page 1 pageSize < onePageProducts star")
@@ -2070,9 +2238,9 @@ function sortSoldDescBytype(type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
+
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -2080,14 +2248,14 @@ function sortSoldDescBytype(type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
+
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -2096,11 +2264,11 @@ function sortSoldDescBytype(type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -2109,17 +2277,30 @@ function sortSoldDescBytype(type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -2131,10 +2312,10 @@ function sortSoldAscBytype(type) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
+
+
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -2151,14 +2332,14 @@ function sortSoldAscBytype(type) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
+
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
+
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -2185,9 +2366,9 @@ function sortSoldAscBytype(type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
+
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -2195,14 +2376,13 @@ function sortSoldAscBytype(type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
+
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -2211,11 +2391,9 @@ function sortSoldAscBytype(type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -2224,17 +2402,30 @@ function sortSoldAscBytype(type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -2246,10 +2437,7 @@ function sortSoldDescBybrand(brand, type) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
 
             var productsName = [];
             var productsPrice = [];
@@ -2266,14 +2454,12 @@ function sortSoldDescBybrand(brand, type) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -2287,8 +2473,6 @@ function sortSoldDescBybrand(brand, type) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination -onclick")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         console.log("page 1 pageSize < onePageProducts star")
@@ -2300,9 +2484,7 @@ function sortSoldDescBybrand(brand, type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -2310,14 +2492,13 @@ function sortSoldDescBybrand(brand, type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
                         }
 
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -2326,11 +2507,9 @@ function sortSoldDescBybrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -2339,17 +2518,28 @@ function sortSoldDescBybrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -2361,10 +2551,7 @@ function sortSoldAscBybrand(brand, type) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
 
             var productsName = [];
             var productsPrice = [];
@@ -2381,14 +2568,13 @@ function sortSoldAscBybrand(brand, type) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
+
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -2402,8 +2588,6 @@ function sortSoldAscBybrand(brand, type) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination -onclick")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         console.log("page 1 pageSize < onePageProducts star")
@@ -2415,9 +2599,7 @@ function sortSoldAscBybrand(brand, type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -2425,14 +2607,10 @@ function sortSoldAscBybrand(brand, type) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
                         }
-
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -2441,11 +2619,8 @@ function sortSoldAscBybrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -2454,17 +2629,27 @@ function sortSoldAscBybrand(brand, type) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -2476,11 +2661,7 @@ function sortSoldDescByname(name) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
-
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
@@ -2496,14 +2677,12 @@ function sortSoldDescByname(name) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -2517,8 +2696,6 @@ function sortSoldDescByname(name) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination -onclick")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         console.log("page 1 pageSize < onePageProducts star")
@@ -2530,9 +2707,7 @@ function sortSoldDescByname(name) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -2540,14 +2715,10 @@ function sortSoldDescByname(name) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
                         }
-
                         var result = products.join("")
                             // $(".Products").html("");
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -2556,11 +2727,8 @@ function sortSoldDescByname(name) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -2569,17 +2737,30 @@ function sortSoldDescByname(name) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
+
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -2591,11 +2772,7 @@ function sortSoldAscByname(name) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("getProductsByType() star")
-            console.log("getProductQuantity() star")
             getProductQuantity(sortData)
-            console.log("getProductQuantity() end")
-
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
@@ -2611,14 +2788,12 @@ function sortSoldAscByname(name) {
                 productsId.push(sortData[y].id);
                 y++;
             })
-            console.log("取資料塞入array")
 
             var pageSize = sortData.length;
             var onePageProducts = 40;
             var total = Math.ceil(pageSize / onePageProducts);
             var remain = pageSize % onePageProducts;
 
-            console.log("計算頁數 開始")
             $('#PageShowUL').empty().removeData("twbs-pagination").unbind('page').twbsPagination({
                 totalPages: total,
                 visiblePages: pageSize > 5 ? 5 : pageSize,
@@ -2632,8 +2807,6 @@ function sortSoldAscByname(name) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination -onclick")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         console.log("page 1 pageSize < onePageProducts star")
@@ -2645,9 +2818,8 @@ function sortSoldAscByname(name) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 pageSize < onePageProducts end")
                         } else {
-                            console.log("page 1 i<=onePageProducts-1 star")
+
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
                                     '<div class="productsDiv border"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"></div>' +
@@ -2655,14 +2827,9 @@ function sortSoldAscByname(name) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 end")
                         }
-
                         var result = products.join("")
-                            // $(".Products").html("");
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -2671,11 +2838,8 @@ function sortSoldAscByname(name) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -2684,17 +2848,27 @@ function sortSoldAscByname(name) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -2756,8 +2930,6 @@ function getSortDescByPriceByType(type) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -2778,9 +2950,7 @@ function getSortDescByPriceByType(type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -2790,9 +2960,9 @@ function getSortDescByPriceByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -2802,15 +2972,28 @@ function getSortDescByPriceByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -2869,8 +3052,6 @@ function getSortAscByPriceByType(type) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -2891,9 +3072,8 @@ function getSortAscByPriceByType(type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -2903,9 +3083,8 @@ function getSortAscByPriceByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -2915,15 +3094,28 @@ function getSortAscByPriceByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3004,9 +3196,9 @@ function geSortDescBySoldByType(type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3016,9 +3208,9 @@ function geSortDescBySoldByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3028,15 +3220,28 @@ function geSortDescBySoldByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3117,9 +3322,9 @@ function getSortAscBySoldByType(type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3129,9 +3334,9 @@ function getSortAscBySoldByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3141,15 +3346,28 @@ function getSortAscBySoldByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3229,9 +3447,9 @@ function getSortAscBySoldBybrand(brand, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3241,9 +3459,9 @@ function getSortAscBySoldBybrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3253,15 +3471,28 @@ function getSortAscBySoldBybrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3340,9 +3571,9 @@ function getSortDescBySoldBybrand(brand, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3352,9 +3583,9 @@ function getSortDescBySoldBybrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3364,15 +3595,28 @@ function getSortDescBySoldBybrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3451,9 +3695,9 @@ function getSortAscByPriceByBrandBybrand(brand, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3463,9 +3707,9 @@ function getSortAscByPriceByBrandBybrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3475,15 +3719,28 @@ function getSortAscByPriceByBrandBybrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3562,9 +3819,9 @@ function getSortDescByPriceBybrand(brand, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3574,9 +3831,9 @@ function getSortDescByPriceBybrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3586,15 +3843,26 @@ function getSortDescByPriceBybrand(brand, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3675,9 +3943,7 @@ function getSortDescByPriceByName(name) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3687,9 +3953,7 @@ function getSortDescByPriceByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3699,15 +3963,26 @@ function getSortDescByPriceByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3766,8 +4041,6 @@ function getSortAscByPriceByName(name) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -3788,9 +4061,7 @@ function getSortAscByPriceByName(name) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3800,9 +4071,7 @@ function getSortAscByPriceByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3812,15 +4081,26 @@ function getSortAscByPriceByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3879,8 +4159,6 @@ function getSortDescBySoldByName(name) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -3901,9 +4179,7 @@ function getSortDescBySoldByName(name) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -3913,9 +4189,7 @@ function getSortDescBySoldByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -3925,15 +4199,26 @@ function getSortDescBySoldByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -3992,8 +4277,6 @@ function getSortAscBySoldByName(name) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -4014,9 +4297,7 @@ function getSortAscBySoldByName(name) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -4026,9 +4307,7 @@ function getSortAscBySoldByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4038,15 +4317,26 @@ function getSortAscBySoldByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4059,10 +4349,7 @@ function getSortDescByPriceByNameByType(searchResult) {
         dataType: "json",
         cache: false,
         success: function(searchData) {
-            console.log("getProductQuantity() star")
             getProductQuantity(searchData)
-            console.log("getProductQuantity() end")
-
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
@@ -4095,9 +4382,7 @@ function getSortDescByPriceByNameByType(searchResult) {
                 next: "下一頁",
                 last: "頁尾",
                 onPageClick: function(event, page) {
-                    console.log("twbsPagination")
-                        //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
+                    //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -4108,7 +4393,6 @@ function getSortDescByPriceByNameByType(searchResult) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<pageSize push end")
                         } else {
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
@@ -4117,12 +4401,9 @@ function getSortDescByPriceByNameByType(searchResult) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 push end")
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -4131,11 +4412,8 @@ function getSortDescByPriceByNameByType(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4144,17 +4422,27 @@ function getSortDescByPriceByNameByType(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4167,9 +4455,9 @@ function getSortAscByPriceByNameByType(searchResult) {
         dataType: "json",
         cache: false,
         success: function(searchData) {
-            console.log("getProductQuantity() star")
+
             getProductQuantity(searchData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -4216,7 +4504,6 @@ function getSortAscByPriceByNameByType(searchResult) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<pageSize push end")
                         } else {
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
@@ -4225,12 +4512,9 @@ function getSortAscByPriceByNameByType(searchResult) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 push end")
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -4239,11 +4523,8 @@ function getSortAscByPriceByNameByType(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4252,17 +4533,27 @@ function getSortAscByPriceByNameByType(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4275,9 +4566,9 @@ function getSortAscBySoldByNameByType(searchResult) {
         dataType: "json",
         cache: false,
         success: function(searchData) {
-            console.log("getProductQuantity() star")
+
             getProductQuantity(searchData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -4336,7 +4627,7 @@ function getSortAscBySoldByNameByType(searchResult) {
                             console.log("page 1 i<=onePageProducts-1 push end")
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
                         console.log("getProductsByBrand() end")
                     } else if (page == total) {
@@ -4347,11 +4638,8 @@ function getSortAscBySoldByNameByType(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4360,17 +4648,27 @@ function getSortAscBySoldByNameByType(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4383,9 +4681,9 @@ function getSortDescBySoldByNameByType(searchResult) {
         dataType: "json",
         cache: false,
         success: function(searchData) {
-            console.log("getProductQuantity() star")
+
             getProductQuantity(searchData)
-            console.log("getProductQuantity() end")
+
 
             var productsName = [];
             var productsPrice = [];
@@ -4419,9 +4717,7 @@ function getSortDescBySoldByNameByType(searchResult) {
                 next: "下一頁",
                 last: "頁尾",
                 onPageClick: function(event, page) {
-                    console.log("twbsPagination")
-                        //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
+                    //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -4432,7 +4728,6 @@ function getSortDescBySoldByNameByType(searchResult) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<pageSize push end")
                         } else {
                             for (var i = 0; i <= onePageProducts - 1; i++) {
                                 products.push(
@@ -4441,12 +4736,9 @@ function getSortDescBySoldByNameByType(searchResult) {
                                     '</div>'
                                 )
                             }
-                            console.log("page 1 i<=onePageProducts-1 push end")
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -4455,11 +4747,8 @@ function getSortDescBySoldByNameByType(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page end push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4468,17 +4757,27 @@ function getSortDescBySoldByNameByType(searchResult) {
                                 '</div>'
                             )
                         }
-                        console.log("page else push end")
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByBrand() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4533,10 +4832,7 @@ function getSortAscByPriceByNameByType(name, type) {
                 next: "下一頁",
                 last: "頁尾",
                 onPageClick: function(event, page) {
-                    console.log("twbsPagination")
-                        //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
+                    //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -4557,9 +4853,7 @@ function getSortAscByPriceByNameByType(name, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -4569,9 +4863,7 @@ function getSortAscByPriceByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4581,15 +4873,26 @@ function getSortAscByPriceByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4668,9 +4971,9 @@ function getSortDescByPriceByNameByType(name, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -4680,9 +4983,9 @@ function getSortDescByPriceByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4692,15 +4995,28 @@ function getSortDescByPriceByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4779,9 +5095,9 @@ function getSortDescBySoldByNameByType(name, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -4791,9 +5107,9 @@ function getSortDescBySoldByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4803,15 +5119,28 @@ function getSortDescBySoldByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4890,9 +5219,9 @@ function getSortAscBySoldByNameByType(name, type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -4902,9 +5231,9 @@ function getSortAscBySoldByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -4914,15 +5243,28 @@ function getSortAscBySoldByNameByType(name, type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -4996,9 +5338,9 @@ function getProductsByUpdateTimeByType(type) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
+
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -5008,9 +5350,8 @@ function getProductsByUpdateTimeByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
+
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -5020,15 +5361,26 @@ function getProductsByUpdateTimeByType(type) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -5079,8 +5431,6 @@ function getProductsByUpdateTimeByBrand(type, brand) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -5101,9 +5451,7 @@ function getProductsByUpdateTimeByBrand(type, brand) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -5113,9 +5461,7 @@ function getProductsByUpdateTimeByBrand(type, brand) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -5125,15 +5471,26 @@ function getProductsByUpdateTimeByBrand(type, brand) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -5183,8 +5540,6 @@ function getProductsByUpdateTimeByName(name) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -5205,9 +5560,7 @@ function getProductsByUpdateTimeByName(name) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -5217,9 +5570,7 @@ function getProductsByUpdateTimeByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -5229,15 +5580,26 @@ function getProductsByUpdateTimeByName(name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
@@ -5287,8 +5649,6 @@ function getProductsByUpdateTimeByNameByType(type, name) {
                 onPageClick: function(event, page) {
                     console.log("twbsPagination")
                         //    $('#PageCon').text('第' + page+'頁'); 顯示目前頁數
-
-
                     var products = [];
                     if (page == 1) {
                         if (pageSize < onePageProducts) {
@@ -5309,9 +5669,7 @@ function getProductsByUpdateTimeByNameByType(type, name) {
                             }
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else if (page == total) {
                         for (var i = (page - 1) * onePageProducts; i <= (page - 1) * onePageProducts + remain - 1; i++) {
                             products.push(
@@ -5321,9 +5679,7 @@ function getProductsByUpdateTimeByNameByType(type, name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     } else {
                         for (var i = (page - 1) * onePageProducts; i <= page * onePageProducts - 1; i++) {
                             products.push(
@@ -5333,15 +5689,26 @@ function getProductsByUpdateTimeByNameByType(type, name) {
                             )
                         }
                         var result = products.join("")
-                        console.log("append")
                         $(".Products").empty().append(result)
-                        console.log("getProductsByPriceByType() end")
                     }
                 }
             });
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            if (jqXHR.status == 404 || errorThrown == 'Not Found') {
+                console.log('There was a 404 error.');
+                $(".main-content").empty().append(
+                    '<div class="page-error-404">' +
+                    '<div class="error-symbol">' +
+                    '<i class="entypo-attention"></i>' +
+                    '</div>' +
+                    '<div class="error-text">' +
+                    '<h2>404</h2>' +
+                    '<p>沒有符合條件的商品!</p>' +
+                    '</div>'
+                )
+            }
         }
     })
 }
