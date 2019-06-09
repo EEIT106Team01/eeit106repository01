@@ -39,6 +39,10 @@
         #imagePreview {
             width: 300px;
         }
+
+        .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-bottom {
+            top: 246.9px !important;
+        }
     </style>
     <script>
         let memberBean = Cookies.get("MemberBean");
@@ -55,37 +59,28 @@
             });
 
             // datetimepicker
-			// let twoYearsAgo = new Date();
-			// twoYearsAgo.setMonth(twoYearsAgo.getMonth() - 24);
-			// console.log(twoYearsAgo.yyyymmddhhii());
-			// console.log(new Date().yyyymmddhhii());
-			$('#myDatePicker').datetimepicker({
-                // format: "yyyy-mm-dd hh:ii",
-                format: 'mm/dd/yyyy',
-				// startDate: twoYearsAgo.yyyymmddhhii(),
-				endDate: new Date().yyyymmddhhii(),
-				weekStart: 1,	//week start from Mon
-				todayBtn: 1,
-				autoclose: 1,
-				todayHighlight: 1,
-				startView: 2,
-				forceParse: 0,
-				showMeridian: 1
-			});
+            // let twoYearsAgo = new Date();
+            // twoYearsAgo.setMonth(twoYearsAgo.getMonth() - 24);
+            // console.log(twoYearsAgo.yyyymmddhhii());
+            // console.log(new Date().yyyymmddhhii());
+
         })
 
         function memberUpdate() {
             let memberImage = $("#imageInput").val();
-            let memberBirth = $("#memberBirth").serialize().substr(12);
+            let memberBirth = $("#memberBirth").val();
             let memberEmail = $("#memberEmail").val();
             console.log(memberImage);
             console.log(memberBirth);
             console.log(memberEmail);
             let registerData = {
-                image: memberImage,
                 birth: memberBirth,
                 email: memberEmail
             };
+            if((memberImage != "") && (memberImage.trim().length != 0)){
+                console.log("有圖");
+                uploadFile();
+            }
             return;
             $.ajax({
                 url: "/memberTemps",
@@ -120,6 +115,25 @@
                 reader.readAsDataURL(input.files[0]);
             }
         }
+
+        function uploadFile() {
+            var formData = new FormData(document.getElementById("imageUploadForm"));
+            $.ajax({
+                url: "/memberTempsImage",
+                type: "POST",
+                enctype: 'multipart/form-data',
+                data: formData,
+                cache: false,
+                processData: false,
+                contentType: false,
+                success: function (response) {
+                    console.log("WOW upload ok");
+                },
+                error: function (jqXHR, textStatus, errorMessage) {
+                    console.log(errorMessage); // Optional
+                }
+            });
+        }
     </script>
 </head>
 
@@ -139,8 +153,8 @@
                         <label>個人頭像：</label>
                     </div>
                     <div class="col-md-12">
-                        <form action="/somewhere/to/upload" enctype="multipart/form-data">
-                            <input type="file" id="imageInput" accept="image/gif, image/jpeg, image/png" />
+                        <form id="imageUploadForm">
+                            <input type="file" id="imageInput" name="imageInput" accept="image/gif, image/jpeg, image/png" />
                             <img id="imagePreview" src="/navbar/images/notLogin.jpg" />
                         </form>
                     </div>
@@ -150,11 +164,12 @@
                         <label>生日：</label>
                     </div>
                     <div class="col-md-12">
-                        <input type="text" name="memberBirth" id="memberBirth" placeholder="請輸入生日">
-                        <div class="input-group date" id="myDatePicker" data-provide="datepicker">
-                            <input type="text" class="form-control">
+                        <div class="input-group col-md-12">
+                            <input type="text" name="memberBirth" id="memberBirth" class="form-control datepicker" data-format="yyyy-mm-dd" placeholder="請選擇日期">
                             <div class="input-group-addon">
-                                <span class="glyphicon glyphicon-th"></span>
+                                <a href="#">
+                                    <i class="entypo-calendar"></i>
+                                </a>
                             </div>
                         </div>
                     </div>
@@ -190,6 +205,7 @@
     <!-- Imported scripts on this page -->
     <!-- <script src="/assets/js/neon-chat.js"></script> -->
 
+    <script src="/assets/js/bootstrap-datepicker.js"></script>
     <!-- Demo Settings -->
     <!-- <script src="/assets/js/neon-demo.js"></script> -->
 

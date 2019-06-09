@@ -1,7 +1,9 @@
 package net.ddns.eeitdemo.eeit106team01.forum.controller;
 
+import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.Charset;
+import java.sql.Blob;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -11,8 +13,10 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import javax.sql.rowset.serial.SerialBlob;
 
 import org.apache.catalina.util.URLEncoder;
+import org.hibernate.Hibernate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -141,6 +146,7 @@ public class MemberTempController {
 			if ("MemberBean".equals(cookies[i].getName())) {
 				cookies[i].setMaxAge(0);
 				response.addCookie(cookies[i]);
+				return ResponseEntity.ok().build();
 			}
 		}
 
@@ -149,9 +155,19 @@ public class MemberTempController {
 //		String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
 //		Cookie memberBeanCookie = new Cookie("MemberBean", encodeJson);
 //		response.addCookie(memberBeanCookie);
+		
+		return ResponseEntity.notFound().build();
+	}
+	
+	@PostMapping(path = { "/memberTempsImage" }, produces = { "application/json" })
+	public ResponseEntity<?> uploadImage(@RequestParam("imageInput") MultipartFile imageFile, HttpSession httpSession) throws IOException {
+		System.out.println("uploadImage method running");
+		
+//		Blob b = new SerialBlob(b)
+		
+//		imageFile.getInputStream();
+		
 		return ResponseEntity.ok().build();
-
-//		return ResponseEntity.notFound().build();
 	}
 
 }
