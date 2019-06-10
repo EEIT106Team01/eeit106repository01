@@ -12187,3 +12187,11 @@ body.page-fade-only-init > .page-container {
   color: black;
   font-weight: bold;
 }
+@keyframes fadeOut {
+  from {color: black}
+  to {color: grey}
+}
+.notifications.dropdown .dropdown-menu > li > ul > li .fadeout {
+  color: black;
+  animation: fadeOut 3s forwards;
+}
