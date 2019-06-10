@@ -97,6 +97,7 @@ public class ArticleTopicController {
 		System.out.println("getTopic method running");
 		ArticleTopicCurrentBean findOne = articleTopicCurrentService.findByPrimaryKey(id);
 		if (findOne != null) {
+			articleTopicCurrentService.increasePageViews(findOne.getId());
 			return ResponseEntity.ok(findOne);
 		} else {
 			return ResponseEntity.notFound().build();

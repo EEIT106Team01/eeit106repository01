@@ -9,7 +9,7 @@ $(document).ready(function () {
 function getAllProducts() {
 
     $.ajax({
-        url: "http://localhost:8080/products",
+        url: "/products",
         method: "GET",
         dataType: "json",
         cache: false,
