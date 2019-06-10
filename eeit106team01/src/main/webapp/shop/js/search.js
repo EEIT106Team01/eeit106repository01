@@ -80,6 +80,7 @@ function userSearch() {
     var name = takeSearchUrlValue()
     if (type != null) {
         if (type.match("All") != null) {
+            $("#errorMsg").empty()
             search("productType=&productName=" + name)
             console.log("使用者搜尋 type=ALL")
                 //sort close
@@ -107,6 +108,7 @@ function userSearch() {
 
             //search time
             $("#searchTimeByNameBtn").on('click', (function() {
+                $("#errorMsg").empty()
                 getProductsByUpdateTimeByName(name)
             }))
 
@@ -129,7 +131,8 @@ function userSearch() {
                 }))
                 //價錢搜索後sort功能
             $("#searchPriceByNameBtn").on('click', (function() {
-                //other sort close
+                $("#errorMsg").empty()
+                    //other sort close
                 $("#sortByName").hide();
                 //sort open
                 $("#sortByNameByMixpriceMaxprice").show();
@@ -150,6 +153,7 @@ function userSearch() {
                 getSortDescByPriceByName(name)
             }))
         } else {
+            $("#errorMsg").empty()
             console.log("使用者搜尋 type=else")
             var searchResult = takeSearchUrlValue3()
             search(searchResult)
@@ -177,10 +181,10 @@ function userSearch() {
             $("#searchTimeByNameByTypeBtnDiv").show();
             //search time
             $("#searchTimeByNameByTypeBtn").on('click', (function() {
-                var name = takeSearchUrlValue()
-                var type = takeSearchUrlValue2()
-                console.log("type=" + type + "name=" + name)
-                getProductsByUpdateTimeByNameByType(type, name)
+                $("#errorMsg").empty();
+                var name = takeSearchUrlValue();
+                var type = takeSearchUrlValue2();
+                getProductsByUpdateTimeByNameByType(type, name);
             }))
 
             //sort功能
@@ -198,7 +202,8 @@ function userSearch() {
             }))
 
             $("#searchPriceByNameByTypeBtn").on('click', (function() {
-                //sort close
+                $("#errorMsg").empty()
+                    //sort close
                 $("#sortByNameByType").hide();
                 //sort open
                 $("#sortByNameByTypeByMixpriceMaxprice").show();
@@ -224,7 +229,7 @@ function userSearch() {
 //顯示此次搜尋的產品數量
 function getProductQuantity(data) {
     var productQuantity = data.length;
-    $("#productQuantity").text(+productQuantity)
+    $("#productQuantity").text("共有" + productQuantity + "件商品")
 }
 //url處理-取type
 function takeTypeUrlValue() {
@@ -266,7 +271,7 @@ function takeSearchUrlValue3() {
 // 側邊menu用↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓↓
 
 function ByType(type) {
-
+    $("#errorMsg").empty()
     var type = takeTypeUrlValue();
     getProductsByType(type);
     getAllBrand(type);
@@ -296,6 +301,7 @@ function ByType(type) {
 
     //search time
     $("#searchTimeByTypeBtn").on('click', (function() {
+        $("#errorMsg").empty()
         var type = takeTypeUrlValue();
         getProductsByUpdateTimeByType(type)
     }))
@@ -315,6 +321,7 @@ function ByType(type) {
         }))
         //價錢搜索+
     $("#searchPriceBytypeBtn").on('click', (function() {
+
             //other sort close
             $("#sortByType").hide();
             //sort open
@@ -347,6 +354,7 @@ function ByType(type) {
                 }
             })
             if ($("#priceForm").valid()) {
+                $("#errorMsg").empty()
                 getProductsByPriceByType(type)
             }
 
@@ -367,7 +375,8 @@ function ByType(type) {
 }
 
 function ByBrand(brand) {
-    //sort close
+    $("#errorMsg").empty()
+        //sort close
     $("#sortByType").hide();
     $("#sortByName").hide();
     $("#sortByNameByType").hide();
@@ -446,6 +455,7 @@ function ByBrand(brand) {
                 }
             })
             if ($("#searchTimeForm").valid()) {
+                $("#errorMsg").empty()
                 getProductsByUpdateTimeByBrand(type, brand)
             }
 
@@ -484,6 +494,7 @@ function ByBrand(brand) {
             }
         })
         if ($("#priceForm").valid()) {
+            $("#errorMsg").empty()
             getProductsByPriceByBrand(brand, type);
         }
 
@@ -671,6 +682,18 @@ function getProductsByPrice() {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
+
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -797,6 +820,17 @@ function getProductsByPriceByType(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -926,6 +960,17 @@ function getProductsByType(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -951,8 +996,8 @@ function getProductsByPriceByBrand(brand, type) {
         console.log("只輸入最高價格")
         produstUrl = "/search/price?byNameBrandType=brand&queryString=" + queryString + "&maxPrice=" + maxPrice + "&type=" + type;
     } else if (maxPrice == 0 || maxPrice == null || isNaN(maxPrice) || typeof(maxPrice) == "undefined") {
-        console.log("只輸入最低價格 brand="+brand)
-        
+        console.log("只輸入最低價格 brand=" + brand)
+
         produstUrl = "/search/price?byNameBrandType=brand&queryString=" + queryString + "&minPrice=" + minPrice + "&type=" + type;
     }
     $.ajax({
@@ -1057,6 +1102,17 @@ function getProductsByPriceByBrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -1179,6 +1235,17 @@ function getProductsByBrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -1299,6 +1366,17 @@ function search(searchResult) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -1424,6 +1502,17 @@ function getProductsByPriceByName(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -1547,6 +1636,17 @@ function getProductsByPriceByNameByType(name, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -1657,6 +1757,17 @@ function sortPriceDescBytype(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -1786,6 +1897,17 @@ function sortPriceAscBytype(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -1915,6 +2037,17 @@ function sortPriceDescBybrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -1937,11 +2070,7 @@ function sortPriceAscBybrand(brand, type) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-            console.log("sortPriceAscBybrand() star")
-
             getProductQuantity(sortData)
-
-
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
@@ -2044,6 +2173,17 @@ function sortPriceAscBybrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -2066,11 +2206,7 @@ function sortPriceDescByname(name) {
         dataType: "json",
         cache: false,
         success: function(sortData) {
-
-
             getProductQuantity(sortData)
-
-
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];
@@ -2170,6 +2306,17 @@ function sortPriceDescByname(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -2294,6 +2441,17 @@ function sortPriceAscByname(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -2417,6 +2575,17 @@ function sortSoldDescBytype(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -2543,6 +2712,17 @@ function sortSoldAscBytype(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -2658,6 +2838,17 @@ function sortSoldDescBybrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -2769,6 +2960,17 @@ function sortSoldAscBybrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -2881,6 +3083,17 @@ function sortSoldDescByname(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -2990,6 +3203,17 @@ function sortSoldAscByname(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -3116,6 +3340,17 @@ function getSortDescByPriceByType(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -3239,6 +3474,17 @@ function getSortAscByPriceByType(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -3366,6 +3612,17 @@ function geSortDescBySoldByType(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -3493,6 +3750,17 @@ function getSortAscBySoldByType(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -3619,6 +3887,17 @@ function getSortAscBySoldBybrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -3744,6 +4023,17 @@ function getSortDescBySoldBybrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -3869,6 +4159,17 @@ function getSortAscByPriceByBrandBybrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -3992,6 +4293,17 @@ function getSortDescByPriceBybrand(brand, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -4113,6 +4425,17 @@ function getSortDescByPriceByName(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -4232,6 +4555,17 @@ function getSortAscByPriceByName(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -4351,6 +4685,17 @@ function getSortDescBySoldByName(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -4470,6 +4815,17 @@ function getSortAscBySoldByName(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -4577,6 +4933,17 @@ function getSortDescByPriceByNameByType(searchResult) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -4689,6 +5056,17 @@ function getSortAscByPriceByNameByType(searchResult) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -4805,6 +5183,17 @@ function getSortAscBySoldByNameByType(searchResult) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -4915,6 +5304,17 @@ function getSortDescBySoldByNameByType(searchResult) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -5031,6 +5431,17 @@ function getSortAscByPriceByNameByType(name, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -5156,6 +5567,17 @@ function getSortDescByPriceByNameByType(name, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -5281,6 +5703,17 @@ function getSortDescBySoldByNameByType(name, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -5406,6 +5839,17 @@ function getSortAscBySoldByNameByType(name, type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -5523,6 +5967,17 @@ function getProductsByUpdateTimeByType(type) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -5634,6 +6089,17 @@ function getProductsByUpdateTimeByBrand(type, brand) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -5744,6 +6210,17 @@ function getProductsByUpdateTimeByName(name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
@@ -5854,6 +6331,17 @@ function getProductsByUpdateTimeByNameByType(type, name) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
                 $("#Products").empty();
+                $("#PageShowUL").empty();
+                $("#productQuantity").empty();
+                //sort close
+                $("#sortByType").hide();
+                $("#sortByName").hide();
+                $("#sortByNameByType").hide();
+                $("#sortByBrandByMixpriceMaxprice").hide();
+                $("#sortByTypeByMixpriceMaxprice").hide();
+                $("#sortByNameByMixpriceMaxprice").hide();
+                $("#sortByNameByTypeByMixpriceMaxprice").hide();
+                $("#sortByBrand").hide();
                 $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
