@@ -19,6 +19,11 @@ public class MemberDAOImplTest {
 	private MemberDAO memberDAO;
 
 	@Test
+	public void name() {
+		
+	}
+	
+//	@Test
 	public void testInsertMember() {
 		Member member = new Member();
 		Member result = memberDAO.insertMember(member);

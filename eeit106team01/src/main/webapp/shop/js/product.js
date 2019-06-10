@@ -26,7 +26,7 @@ $(document).ready(function() {
         if ($("#searchForm").valid()) {
             var productType = $("#searchType").val();
             var productName = $("#searchName").val();
-            window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+            window.location.href = "/shop/search.html?productName=" + productName + "&productType=" + productType;
         }
     });
 
@@ -43,7 +43,7 @@ function insertKeyWord() {
     var KW = $("#searchName").val();
     var keyWordInput = { keyword: KW };
     $.ajax({
-        url: "http://localhost:8080/keyWord/insert",
+        url: "/keyWord/insert",
         method: "POST",
         dataType: "json",
         contentType: "application/json;charset=UTF-8",
@@ -60,7 +60,7 @@ function insertKeyWord() {
 //搜尋種類列表
 function getAllType() {
     $.ajax({
-        url: "http://localhost:8080/search/data?dataName=type",
+        url: "/search/data?dataName=type",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -84,7 +84,7 @@ function getAllType() {
 //搜單件商品
 function getProduct(id) {
     $.ajax({
-        url: "http://localhost:8080/product/" + id,
+        url: "/product/" + id,
         method: "GET",
         dataType: "json",
         success: function(productData) {
@@ -114,7 +114,7 @@ function getProduct(id) {
             localStorage.setItem("type", type)
                 //breadcrumb
             $("#typeBreadcrumb").append(
-                '<a href="http://localhost:8080/shop/search.html?type=' +
+                '<a href="/shop/search.html?type=' +
                 type +
                 '">' +
                 type +
@@ -489,7 +489,7 @@ function recommendTop(recommendData) {
 function getRecommendProducts(type) {
     $("#recommendTitle").text("你可能會喜歡");
     $.ajax({
-        url: "http://localhost:8080/products/recommend?type=" + type,
+        url: "/products/recommend?type=" + type,
         method: "GET",
         dataType: "json",
         success: function(recommendData) {

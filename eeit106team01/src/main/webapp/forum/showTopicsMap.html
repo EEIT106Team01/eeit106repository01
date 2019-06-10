@@ -208,7 +208,7 @@
             let lowerLongitude = map.getBounds().getSouthWest().lng();  //西經
             let upperLongitude = map.getBounds().getNorthEast().lng();  //東經
             $.ajax({
-                url: `http://localhost:8080/articleTopics?lowerLatitude=${lowerLatitude}&upperLatitude=${upperLatitude}&lowerLongitude=${lowerLongitude}&upperLongitude=${upperLongitude}`,
+                url: `/articleTopics?lowerLatitude=${lowerLatitude}&upperLatitude=${upperLatitude}&lowerLongitude=${lowerLongitude}&upperLongitude=${upperLongitude}`,
                 type: "GET",
                 success: function (dataTopicList) {
                     createTopicView(dataTopicList, "topicList");
@@ -258,8 +258,8 @@
                 });
 
                 markers[i].addListener('click', function () {
-                    localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
-                    location.href = "/forum/showContents.html";
+                    // localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
+                    location.href = "/forum/showContents.html?topic=" + dataTopicList[i].id;
                 });
             }
         }

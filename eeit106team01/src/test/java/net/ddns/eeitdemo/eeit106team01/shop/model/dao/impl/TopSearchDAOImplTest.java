@@ -26,6 +26,12 @@ public class TopSearchDAOImplTest {
 	NewDate newDate = new NewDate();
 	private Date date = newDate.newCurrentTime();
 
+	@Test
+	public void name() {
+		
+	}
+	
+	
 	public void testInsertTopSearch() {
 		topSearchBean = new TopSearchBean("test", 20, date);
 		assertNotNull(topSearchDAO.insertTopSearch(topSearchBean));
@@ -42,7 +48,7 @@ public class TopSearchDAOImplTest {
 		assertNotNull(topSearchDAO.findTopSearchByTopSearchId(1137L));
 	}
 
-	@Test
+//	@Test
 	public void testFindAllTopSearch() throws Exception {
 		assertNotNull(topSearchDAO.findAllTopSearch());
 	}

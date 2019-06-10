@@ -184,6 +184,12 @@ public class MemberTempController {
 				return ResponseEntity.ok().build();
 			}
 		}
+		
+		Cookie emptyMemberCookie = new Cookie("MemberBean", null);
+		emptyMemberCookie.setMaxAge(0);
+		response.addCookie(emptyMemberCookie);
+		
+		return ResponseEntity.ok().build();
 
 //		ObjectMapper mapper = new ObjectMapper();
 //		String jsonStr = mapper.writeValueAsString(mb);
@@ -191,7 +197,7 @@ public class MemberTempController {
 //		Cookie memberBeanCookie = new Cookie("MemberBean", encodeJson);
 //		response.addCookie(memberBeanCookie);
 
-		return ResponseEntity.notFound().build();
+//		return ResponseEntity.notFound().build();
 	}
 
 //	@PostMapping(path = { "/memberTempsImage" }, produces = { "application/json" })

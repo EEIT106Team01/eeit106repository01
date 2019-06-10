@@ -1,11 +1,11 @@
 function createTopicView(dataTopicList, divTopicId) {
     $(`#${divTopicId}`).text("");
     for (let i = 0; i < dataTopicList.length; i++) {
-        let divTopic = $("<div></div>").addClass("col-md-3 myTopicBlock").attr("id", `id${dataTopicList[i].id}`).css({padding: "8px", width: "259px"}).appendTo($(`#${divTopicId}`));
+        let divTopic = $("<div></div>").addClass("col-md-3 myTopicBlock").attr("id", `id${dataTopicList[i].id}`).css({margin: "8px", padding: "8px", width: "259px", "box-shadow": "0px 2px 4px rgba(0, 0, 0, 0.33)"}).appendTo($(`#${divTopicId}`));
         if(divTopicId.substr(0, 12) == "requestTopic"){
             divTopic.css({height: "128px", border: "1px solid #CCCCCC", "border-radius": "15px"});
         }else if(divTopicId.substr(0, 10) == "shareTopic"){
-            divTopic.css({height: "280px"});
+            divTopic.css({height: "280px", "border-radius": "10px"});
         }
             if(dataTopicList[i].videoBean){
                 let divVideo = $("<div></div>").addClass("col-md-12").css({"height": "150px",margin: "1px"}).appendTo(divTopic);
@@ -25,9 +25,13 @@ function createTopicView(dataTopicList, divTopicId) {
                 let divTopicContent = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px"}).text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(aLinkToContent);
             let divMemberName = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px",color: "#0066CC",minHeight: "34px"}).appendTo(divTopic);
                 let divMemberImage = $("<div></div>").addClass("col-md-2").css({height: "34px"}).appendTo(divMemberName);
+                let imageString = "/navbar/images/notLogin.jpg";
+                if(dataTopicList[i].memberBean.image){
+                    imageString = dataTopicList[i].memberBean.image;
+                }
                 $("<img />", { 
                     // src: "/navbar/images/notLogin.jpg",
-                    src: `${dataTopicList[i].memberBean.image}`,
+                    src: imageString,
                     class: "img-circle myTopicImg",
                     width: "34px"
                 }).appendTo(divMemberImage);
