@@ -47,7 +47,7 @@ let checkNavbar = setInterval(function () {
 
         $("#logout").on("click", function () {
             $.ajax({
-                url: "http://localhost:8080/forumlogout",
+                url: "/forumlogout",
                 type: "GET",
                 success: function (data, textStatus, jqXHR) {
                     location.reload(true);

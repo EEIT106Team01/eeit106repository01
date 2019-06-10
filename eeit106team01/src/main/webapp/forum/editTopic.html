@@ -279,23 +279,41 @@
 			$("#accidentTime").val(preInputAccidentTime);	//real value
 		});
 
-		function insertTopic(newTopicBean) {
+		function updateTopicBean(newTopicBean) {
 			$.ajax({
-				url: "/articleTopics",
-				method: "POST",
+				url: "/articleTopics/" + newTopicBean.id,
+				type: "PUT",
 				data: JSON.stringify(newTopicBean),
 				contentType: "application/json; charset=UTF-8",
 				dataType: "json",
 				success: function (data, textStatus, jqXHR) {
 					console.log("success");
-					console.log("回傳值 : ");
-					console.log(data);
+					console.log("回傳值 : " + data);
 					sessionStorage.removeItem("contentBean");
 					sessionStorage.removeItem("contentPage");
 					location.href = contentPage;
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log("error");
+					console.log(textStatus);
+				}
+			})
+		}
+
+		function deleteTopicBean(id) {
+			$.ajax({
+				url: "/articleTopics/" + id,
+				type: "DELETE",
+				success: function (data, textStatus, jqXHR) {
+					console.log("success");
+					console.log("回傳值 : " + data);
+					sessionStorage.removeItem("contentBean");
+					sessionStorage.removeItem("contentPage");
+					location.href = "/forum/index.html";
+				},
+				error: function (jqXHR, textStatus, errorThrown) {
+					console.log("error");
+					console.log(textStatus);
 				}
 			})
 		}
@@ -306,6 +324,56 @@
 			// $(".itemBlock").attr('disabled', true);
 			// quillTopic.enable(false);
 			// $(".formField").attr("disabled", true);
+
+			//old start
+			if ($("input[name=topicStatus]:checked").val() == "deleted") {
+				deleteTopicBean(topicBean.id);
+			} else if ($("input[name=topicStatus]:checked").val() == "normal") {
+				let newVideoBean = $("#videoBean").val();
+				if (newVideoBean == "") {
+					newVideoBean = null;
+				}
+				let newTopicBean = {
+					id: topicBean.id,
+					topicHeader: $("#topicHeader").val(),
+					topicType: $("input[name=topicType]:checked").val(),
+					// topicRegion: $("#topicRegion option:selected").val(),
+					topicRegion: null,
+					accidentTime: new Date($("#accidentTime").val()),
+					// accidentLocation: $("#accidentLocation").val(),
+					accidentLocation: null,
+					accidentLocationLatitude: accidentLocationLatitude,
+					accidentLocationLongitude: accidentLocationLongitude,
+					topicContent: JSON.stringify(quillTopic.getContents()),
+					// memberBean: topicMemberBean,
+					memberBean: null,
+					videoBean: newVideoBean
+				};
+				// console.log(newTopicBean);
+				if (newVideoBean) {
+					console.log("videoBean 不為空");
+					upload();
+					let checkVideo = setInterval(function () {
+						if (videoUploadResult) {
+							clearInterval(checkVideo);
+							console.log("videoUploadResult: ");
+							console.log(videoUploadResult);
+							newTopicBean.videoBean = videoUploadResult;
+							console.log("videoBean: ok");
+							updateTopicBean(newTopicBean);
+						} else {
+							console.log("videoUploadResult: ");
+							console.log(videoUploadResult);
+						}
+					}, 1000);
+				} else {
+					console.log(newTopicBean);
+					updateTopicBean(newTopicBean);
+				}
+			} else {
+				console.log("topicStatus Error");
+			}
+			//old end
 
 			let inputErrorExist = false;
 			let newVideoBean = $("#videoBean").val();
@@ -421,7 +489,7 @@
 			});
 
 			// for preInput()
-			marker = 
+			marker =
 				new google.maps.Marker({
 					position: {
 						lat: topicBean.accidentLocationLatitude,
