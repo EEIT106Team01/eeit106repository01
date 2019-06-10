@@ -6,11 +6,11 @@ import java.util.Date;
 
 public class NewDate {
 
-	public static Date newCurrentTime() {
+	public Date newCurrentTime() {
 		return new Date(System.currentTimeMillis());
 	}
 
-	public static Date newDate(String dateFormat, String dateString) throws ParseException {
+	public Date newDate(String dateFormat, String dateString) throws ParseException {
 		SimpleDateFormat format = new SimpleDateFormat(dateFormat);
 		return format.parse(dateString);
 	}

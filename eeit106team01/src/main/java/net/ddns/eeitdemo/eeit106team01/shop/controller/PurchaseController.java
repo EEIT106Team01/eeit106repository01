@@ -50,8 +50,8 @@ public class PurchaseController {
 
 	@Autowired
 	private MemberDAO memberDAO;
-
-	private Date currentTime = NewDate.newCurrentTime();
+	private NewDate newDate = new NewDate();
+	private Date currentTime = newDate.newCurrentTime();
 
 	// Get Method
 	// Purchase

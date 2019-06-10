@@ -23,7 +23,8 @@ public class TopSearchDAOImplTest {
 	private TopSearchDAO topSearchDAO;
 
 	private TopSearchBean topSearchBean;
-	Date date = NewDate.newCurrentTime();
+	NewDate newDate = new NewDate();
+	private Date date = newDate.newCurrentTime();
 
 	public void testInsertTopSearch() {
 		topSearchBean = new TopSearchBean("test", 20, date);
