@@ -151,17 +151,18 @@
 	<script>
 		let map;
 		let marker;
+		let videoUploadResult = null;
 		let accidentLocationLatitude;
 		let accidentLocationLongitude;
 		let quillTopic;
-		let memberBean = Cookies.get("MemberBean");
-		// console.log("CookieMember: " + memberBean);
-		if (!memberBean) {
+		let topicMemberBean = Cookies.get("MemberBean");
+		// console.log("CookieMember: " + topicMemberBean);
+		if (!topicMemberBean) {
 			sessionStorage.setItem("previousPage", location.pathname + location.search);
 			location.href = "/forum/login.html";
 		}
-		memberBean = JSON.parse(Cookies.get("MemberBean"));
-		console.log(memberBean);
+		topicMemberBean = JSON.parse(Cookies.get("MemberBean"));
+		console.log(topicMemberBean);
 
 		$(window).on('load', function () {
 			initMap();
@@ -234,8 +235,6 @@
 					console.log(data);
 					// console.log("textStatus : " + textStatus);
 					// console.log("jqXHR : " + jqXHR);
-					// sessionStorage.removeItem("contentBean");
-					// sessionStorage.removeItem("contentPage");
 					location.href = "/forum/showContents.html?topic=" + data.id;
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
@@ -246,8 +245,6 @@
 				}
 			})
 		}
-
-		let videoUploadResult = null;
 
 		// *
 		function submit() {
@@ -299,7 +296,7 @@
 			// console.log("提交驗證 經度: " + accidentLocationLongitude);
 			// console.log("提交驗證 內容: " + JSON.stringify(quillTopic.getContents()));
 			// console.log(quillTopic.getContents().ops[0].insert);
-			// console.log("提交驗證 會員: " + memberBean);
+			// console.log("提交驗證 會員: " + topicMemberBean);
 			// console.log("提交驗證 影片: " + $("#videoBean").val());
 			if (inputErrorExist) {
 				location.href = "#";
@@ -308,7 +305,7 @@
 			}
 
 			
-			if((!memberBean) || (memberBean == undefined)){
+			if((!topicMemberBean) || (topicMemberBean == undefined)){
 				alert("沒登入?");
 			}
 			let newTopicBean = {
@@ -320,7 +317,7 @@
 				accidentLocationLatitude: accidentLocationLatitude,
 				accidentLocationLongitude: accidentLocationLongitude,
 				topicContent: JSON.stringify(quillTopic.getContents()),
-				memberBean: memberBean,
+				memberBean: topicMemberBean,
 				videoBean: newVideoBean
 			};
 			console.log("topicHeader:" + newTopicBean.topicHeader);
