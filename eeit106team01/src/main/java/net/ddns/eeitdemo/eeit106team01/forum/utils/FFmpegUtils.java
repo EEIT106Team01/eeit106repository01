@@ -360,7 +360,7 @@ public class FFmpegUtils {
 		FFmpegBuilder builder = new FFmpegBuilder()
 				.setInput(inFile.getAbsolutePath())
 				.overrideOutputFiles(true)
-				.addOutput(outFolder.getAbsolutePath() + "\\sprites%00d.jpg")
+				.addOutput(outFolder.getAbsolutePath() + "/sprites%00d.jpg")
 				.addExtraArgs("-filter_complex", "fps=1,scale=427:240,tile=layout=10x6")
 				.addExtraArgs("-q:v", "2")
 				.setStrict(FFmpegBuilder.Strict.NORMAL)
