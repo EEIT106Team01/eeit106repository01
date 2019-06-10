@@ -112,7 +112,7 @@ public class PurchaseDAOImplTest {
 	}
 
 	// Purchase List
-	@Test
+//	@Test
 	public void testInsertPurchaseList() throws Exception {
 		this.purchaseListBean = new PurchaseListBean(200, "test123", purchaseDAO.findPurchaseByPurchaseId(61L),productDAO.findProductByProductId(1L));
 		assertNotNull(purchaseDAO.insertPurchaseList(purchaseListBean));

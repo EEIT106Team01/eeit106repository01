@@ -72,7 +72,7 @@ public class RefundServiceTest {
 		assertNotNull(refundService.findRefundListById("refund", 2L));
 	}
 
-	@Test
+
 	public void testFindAllRefundList() throws Exception {
 		assertNotNull(refundService.findAllRefundList());
 	}

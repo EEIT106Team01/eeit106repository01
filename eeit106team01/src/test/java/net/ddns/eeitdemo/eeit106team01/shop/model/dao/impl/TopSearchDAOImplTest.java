@@ -41,7 +41,7 @@ public class TopSearchDAOImplTest {
 		assertNotNull(topSearchDAO.findTopSearchByTopSearchId(1137L));
 	}
 
-	@Test
+//	@Test
 	public void testFindAllTopSearch() throws Exception {
 		assertNotNull(topSearchDAO.findAllTopSearch());
 	}

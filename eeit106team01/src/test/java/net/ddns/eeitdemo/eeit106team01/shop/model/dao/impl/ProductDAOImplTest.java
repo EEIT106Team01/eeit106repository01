@@ -160,7 +160,7 @@ public class ProductDAOImplTest {
 		assertNotNull(productDAO.findProductsByTypeName("行車紀錄器", "快譯通"));
 		assertNull(productDAO.findProductsByTypeName("", ""));
 	}
-	@Test
+//	@Test
 	public void testFindProductsSort() throws Exception{
 		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","totalSold","desc",""));
 		assertNotNull(productDAO.findProductsSort("type", "行車紀錄器","price","asc",""));
