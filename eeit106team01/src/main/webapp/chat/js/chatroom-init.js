@@ -1431,6 +1431,10 @@ $(document).ready(function () {
             this.notiList = $(this.notiBox).find(".dropdown-menu-list").get(0);
             this.unreadBadge = $(this.notiBox).find(".badge").get(0);
             console.log("noti init");
+            $(this.notiList).scroll(function (e) {
+                console.log($(this).height());
+                console.log("srolling..." + $(this).scrollTop());
+            });
         },
 
         createNotification: function (message, url, sendTime, icon, color, unread) {
@@ -1498,7 +1502,7 @@ $(document).ready(function () {
         clearUnread: function () {
             this.unreads = 0;
             this.updateUnreadBadge();
-            $(this.notiList).find("span").removeClass("unread");
+            $(this.notiList).find("span").removeClass("unread fadeout");
         },
 
         clearAllNotification: function () {
@@ -1514,9 +1518,16 @@ $(document).ready(function () {
             notification.clearAllNotification();
             $("#notiDrop").find("a.pull-right").click(function () {
                 notification.clearUnread();
-                clearOfflineNotification();
+                // clearOfflineNotification();
             });
-            // notification.prependNotification("我是很長很長很長很長很長很長很長很長很長很長很長很長很長的訊息", null, "30 seconds ago", null, "green", true);
+            $(notiDrop).click(function () {
+                console.log("noti click");
+                $(notiDrop).find(".unread").addClass("fadeout");
+                setTimeout(function () {
+                    notification.clearUnread();
+                    clearOfflineNotification();
+                }, 5000);
+            });
         } else {
             window.setTimeout(arguments.callee, 10);
         }
@@ -1614,17 +1625,17 @@ function timeDifference(current, previous) {
     var msPerYear = msPerDay * 365;
     var elapsed = current - previous;
     if (elapsed < msPerMinute) {
-        return Math.round(elapsed / 1000) + ' seconds ago';
+        return Math.round(elapsed / 1000) + ' 秒前';
     } else if (elapsed < msPerHour) {
-        return Math.round(elapsed / msPerMinute) + ' minutes ago';
+        return Math.round(elapsed / msPerMinute) + ' 分鐘前';
     } else if (elapsed < msPerDay) {
-        return Math.round(elapsed / msPerHour) + ' hours ago';
+        return Math.round(elapsed / msPerHour) + ' 小時前';
     } else if (elapsed < msPerMonth) {
-        return 'approximately ' + Math.round(elapsed / msPerDay) + ' days ago';
+        return '大約 ' + Math.round(elapsed / msPerDay) + ' 天前';
     } else if (elapsed < msPerYear) {
-        return 'approximately ' + Math.round(elapsed / msPerMonth) + ' months ago';
+        return '大約 ' + Math.round(elapsed / msPerMonth) + ' 個月前';
     } else {
-        return 'approximately ' + Math.round(elapsed / msPerYear) + ' years ago';
+        return '大約 ' + Math.round(elapsed / msPerYear) + ' 年前';
     }
 }
 

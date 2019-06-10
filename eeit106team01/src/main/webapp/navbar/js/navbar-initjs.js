@@ -35,6 +35,7 @@ let checkNavbar = setInterval(function () {
                 }
             });
             $("#login").css({ display: "none" });
+            $("#navbarRegister").css({ display: "none" });
         } else {
             $("#logout").css({ display: "none" });
             $("#userDropdownMenu").css({ display: "none" });
