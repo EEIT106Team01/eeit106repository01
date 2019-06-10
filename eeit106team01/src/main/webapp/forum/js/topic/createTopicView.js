@@ -25,9 +25,13 @@ function createTopicView(dataTopicList, divTopicId) {
                 let divTopicContent = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px"}).text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(aLinkToContent);
             let divMemberName = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px",color: "#0066CC",minHeight: "34px"}).appendTo(divTopic);
                 let divMemberImage = $("<div></div>").addClass("col-md-2").css({height: "34px"}).appendTo(divMemberName);
+                let imageString = "/navbar/images/notLogin.jpg";
+                if(dataTopicList[i].memberBean.image){
+                    imageString = dataTopicList[i].memberBean.image;
+                }
                 $("<img />", { 
                     // src: "/navbar/images/notLogin.jpg",
-                    src: `${dataTopicList[i].memberBean.image}`,
+                    src: imageString,
                     class: "img-circle myTopicImg",
                     width: "34px"
                 }).appendTo(divMemberImage);
