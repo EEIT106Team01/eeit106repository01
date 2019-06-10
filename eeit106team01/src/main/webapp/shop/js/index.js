@@ -35,7 +35,7 @@ $(document).ready(function() {
             if ($("#searchForm").valid()) {
                 var productType = $("#searchType").val();
                 var productName = $("#searchName").val();
-                window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+                window.location.href = "/shop/search.html?productName=" + productName + "&productType=" + productType;
             }
         }))
         addToCart();
@@ -44,7 +44,7 @@ $(document).ready(function() {
 function getProducts() {
 
     $.ajax({
-        url: "http://localhost:8080/products",
+        url: "/products",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -71,7 +71,7 @@ function getProducts() {
             var top = 10;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
+                    '<div class="col-md-2  productDiv"><a href="/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
                     '<span class="name">' + productsName[i].substr(0, 25) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
@@ -86,7 +86,7 @@ function getProducts() {
 //left-area種類列表
 function getAllType() {
     $.ajax({
-        url: "http://localhost:8080/search/data?dataName=type",
+        url: "/search/data?dataName=type",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -94,7 +94,7 @@ function getAllType() {
             var i = 0;
             var productTypeArray = [];
             $.each(typesData, function() {
-                productTypeArray.push('<li class="li"><a href="http://localhost:8080/shop/search.html?type=' + typesData[i].data + '">' + typesData[i].data + '</a></li>')
+                productTypeArray.push('<li class="li"><a href="/shop/search.html?type=' + typesData[i].data + '">' + typesData[i].data + '</a></li>')
                 i++
             })
             $("#classification").empty().append(productTypeArray.join(""))
@@ -118,7 +118,7 @@ function getProductsByUpdateTime() {
     var endDay = GetDateStr(0);
     var startDay = GetDateStr(-30);
     $.ajax({
-        url: "http://localhost:8080/search/updatedTime?dataName=&queryString=&brandType=&startDay=" + startDay + "&endDay=" + endDay,
+        url: "/search/updatedTime?dataName=&queryString=&brandType=&startDay=" + startDay + "&endDay=" + endDay,
         method: "GET",
         dataType: "json",
         cache: false,
@@ -140,7 +140,7 @@ function getProductsByUpdateTime() {
             var top = 10;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/newSale.png" class="newSale"></div>' +
+                    '<div class="col-md-2  productDiv"><a href="/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/newSale.png" class="newSale"></div>' +
                     '<span class="name">' + productsName[i].substr(0, 25) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
@@ -168,7 +168,7 @@ function insertKeyWord() {
     var KW = $("#searchName").val();
     var keyWordInput = { keyword: KW }
     $.ajax({
-        url: "http://localhost:8080/keyWord/insert",
+        url: "/keyWord/insert",
         method: "POST",
         dataType: "json",
         contentType: "application/json;charset=UTF-8",
@@ -185,7 +185,7 @@ function insertKeyWord() {
 //取關鍵字
 function getKeyword() {
     $.ajax({
-        url: "http://localhost:8080/keyWords",
+        url: "/keyWords",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -194,7 +194,7 @@ function getKeyword() {
             var i = 0;
             $.each(keywordData, function() {
                 kwArray.push(
-                    '<a href="http://localhost:8080/shop/search.html?productName=' + keywordData[i].keyword + '&productType=All">' +
+                    '<a href="/shop/search.html?productName=' + keywordData[i].keyword + '&productType=All">' +
                     '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + '</button>')
                 i++
             })
@@ -216,7 +216,7 @@ function getKeyword() {
 //找出最新預覽同種類商品
 function getMightLikeProduct(type) {
     $.ajax({
-        url: "http://localhost:8080/search/sort?dataName=type&queryString=" + type + "&type=totalSold&sort=desc&brandType=",
+        url: "/search/sort?dataName=type&queryString=" + type + "&type=totalSold&sort=desc&brandType=",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -240,7 +240,7 @@ function getMightLikeProduct(type) {
             var top = 5;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
+                    '<div class="col-md-2  productDiv"><a href="/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
                     '<span class="name">' + productsName[i].substr(0, 25) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
@@ -249,7 +249,7 @@ function getMightLikeProduct(type) {
                 '<div class="classification">' +
                 '<hr>' +
                 '<span>你可能會喜歡</spanp>' +
-                '<a href="http://localhost:8080/shop/search.html?type=' + type + '">' +
+                '<a href="/shop/search.html?type=' + type + '">' +
                 '<span class="more">更多同種類商品</span>' +
                 '</a>' +
                 '</div>' +
@@ -265,7 +265,7 @@ function getMightLikeProduct(type) {
 function getTop10Type1() {
     var type = encodeURIComponent("行車紀錄器")
     $.ajax({
-        url: "http://localhost:8080/search/sort?dataName=type&queryString=" + type + "&type=totalSold&sort=desc&brandType=",
+        url: "/search/sort?dataName=type&queryString=" + type + "&type=totalSold&sort=desc&brandType=",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -289,12 +289,12 @@ function getTop10Type1() {
             var top = 5;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
+                    '<div class="col-md-2  productDiv"><a href="/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
                     '<span class="name">' + productsName[i].substr(0, 25) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
             $("#top10Product1").empty().append(products.join(""))
-            $("#top10Product1A").attr("href", "http://localhost:8080/shop/search.html?type=" + type)
+            $("#top10Product1A").attr("href", "/shop/search.html?type=" + type)
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus);
@@ -305,7 +305,7 @@ function getTop10Type1() {
 function getTop10Type2() {
     var type = encodeURIComponent("安全帽")
     $.ajax({
-        url: "http://localhost:8080/search/sort?dataName=type&queryString=" + type + "&type=totalSold&sort=desc&brandType=",
+        url: "/search/sort?dataName=type&queryString=" + type + "&type=totalSold&sort=desc&brandType=",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -329,12 +329,12 @@ function getTop10Type2() {
             var top = 5;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
+                    '<div class="col-md-2  productDiv"><a href="/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
                     '<span class="name">' + productsName[i].substr(0, 25) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
             $("#top10Product2").empty().append(products.join(""))
-            $("#top10Product2A").attr("href", "http://localhost:8080/shop/search.html?type=" + type)
+            $("#top10Product2A").attr("href", "/shop/search.html?type=" + type)
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus);
@@ -345,7 +345,7 @@ function getTop10Type2() {
 function getTop10Type3() {
     var type = encodeURIComponent("衛星導航")
     $.ajax({
-        url: "http://localhost:8080/search/sort?dataName=type&queryString=" + type + "&type=totalSold&sort=desc&brandType=",
+        url: "/search/sort?dataName=type&queryString=" + type + "&type=totalSold&sort=desc&brandType=",
         method: "GET",
         dataType: "json",
         cache: false,
@@ -369,12 +369,12 @@ function getTop10Type3() {
             var top = 5;
             for (var i = 0; i < top; i++) {
                 products.push(
-                    '<div class="col-md-2  productDiv"><a href="http://localhost:8080/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
+                    '<div class="col-md-2  productDiv"><a href="/shop/product.html?' + productsId[i] + '"><div><img src=' + productsImg[i] + ' class="productImg"><img src="img/hotSale.png" class="hotSale"></div>' +
                     '<span class="name">' + productsName[i].substr(0, 25) + '...</span></a><span class="price">$' + productsPrice[i] + '</span></span></div>'
                 )
             }
             $("#top10Product3").empty().append(products.join(""))
-            $("#top10Product3A").attr("href", "http://localhost:8080/shop/search.html?type=" + type)
+            $("#top10Product3A").attr("href", "/shop/search.html?type=" + type)
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus);
