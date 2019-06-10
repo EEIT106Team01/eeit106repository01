@@ -18,9 +18,6 @@
     <link rel="stylesheet" href="../assets/css/neon-forms.css">
     <link rel="stylesheet" href="../assets/css/custom.css">
 
-    <script src="../assets/js/jquery-1.11.3.min.js"></script>
-
-
     <!-- Custom Style -->
     <link rel="stylesheet" href="css/upgradeMember.css" />
 
@@ -30,11 +27,10 @@
     <!-- include navbar when window.onload-->
     <div data-include="/navbar/navbarWhite.html"></div>
 
-    <div class="page-container">
+    <div class="page-container" style="background-color: white">
 
         <!-- your page start -->
         <div class="main-content">
-
             <!-- drag and drop start  -->
             <div class="row" id="div-draggable-events">
                 <div>
@@ -69,42 +65,56 @@
                 </p>
                 <hr style="width: 100%; color: black; height: 1px; background-color:black;">
                 <div class="memberSelect">
-                    <div class="col-md-6 ordinaryMember">
-                        <h4 style="font-size: 200%;color: #B8860B">普通會員<span class="memberSpan">(免入會費)</span></h4>
-                        <a><img src="img/ordinaryMember.jpg"></a>
-                        <div class="memberUl">
-                            <ul>
-                                <li>
-                                    論壇：發文﹑留言﹑點讚
-                                </li>
-                                <li>
-                                    商城：購物
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                    <div class="col-md-6 vipmember">
-                        <h4 style="font-size: 200% ;color: 	#FFD700">VIP會員<span class="memberSpan">(會費:$888/永久)</span></h4>
-                        <a href=""><img src="img/vipmember.jpg"></a>
-                        <div class="memberUl">
-                            <ul>
-                                <li>
-                                    享有一般會員的所有功能
-                                </li>
-                                <li>
-                                    論壇：觀看高清影片
-                                </li>
-                                <li>
-                                    商城：結帳再九折
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+
+                    <table style="text-align:center;">
+                        <tr>
+                            <th>
+                                <img src="img/ordinaryMember.jpg" style="display:block; margin:auto;">
+                            </th>
+                            <th>
+                                <img src="img/vipmember.jpg" style="display:block; margin:auto;">
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>普通會員</td>
+                            <td>VIP會員</td>
+                        </tr>
+                        <tr>
+                            <td>免費</td>
+                            <td>$888/永久</td>
+                        </tr>
+                        <tr>
+                            <td>論壇：發文﹑留言﹑點讚</td>
+                            <td>論壇：發文﹑留言﹑點讚</td>
+                        </tr>
+                        <tr>
+                            <td>商城：購物</td>
+                            <td>商城：購物</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>論壇：觀看高清影片</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>商城：結帳再九折</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><hr></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><a href=""><img src="img/upgrade.jpg"></a></td>
+                        </tr>
+                    </table>
                 </div>
             </div>
         </div>
         <!-- your page end -->
     </div>
+
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
     <!-- Imported scripts on this page -->
     <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
@@ -121,7 +131,8 @@
     <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
 
     <!-- Include Thumbelina  -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
+    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet"
+    />
     <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
     <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
 

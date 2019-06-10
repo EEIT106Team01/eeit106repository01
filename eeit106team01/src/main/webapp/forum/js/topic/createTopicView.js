@@ -23,13 +23,16 @@ function createTopicView(dataTopicList, divTopicId) {
             let aLinkToContent = $("<a></a>").attr("href", "http://localhost:8080/forum/showContents.html?topic=" + dataTopicList[i].id).appendTo(divTopic);
                 let divTopicHeader = $("<div></div>").addClass("col-md-12").css({margin: "1px","text-decoration": "underline","font-weight": "bolder"}).text(parseTopicHeader(dataTopicList[i].topicHeader)).appendTo(aLinkToContent);
                 let divTopicContent = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px"}).text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(aLinkToContent);
-            let divMemberName = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px",color: "#0066CC"}).appendTo(divTopic);
+            let divMemberName = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px",color: "#0066CC",minHeight: "34px"}).appendTo(divTopic);
+                let divMemberImage = $("<div></div>").addClass("col-md-2").css({height: "34px"}).appendTo(divMemberName);
                 $("<img />", { 
-                    src: "/navbar/images/icon02.png",
-                    class: "img-circle",
-                    width: "34"
-                }).appendTo(divMemberName);
-                divMemberName.append("&nbsp;John Henderson");
+                    // src: "/navbar/images/notLogin.jpg",
+                    src: `${dataTopicList[i].memberBean.image}`,
+                    class: "img-circle myTopicImg",
+                    width: "34px"
+                }).appendTo(divMemberImage);
+                let divMemberNameName = $("<div></div>").addClass("col-md-10").css({"padding": "7px"}).appendTo(divMemberName);
+                divMemberNameName.append(`${dataTopicList[i].memberBean.name}`);
             let divTopicLikeNum = $("<div></div>").addClass("col-md-2").css({"font-size": "14px",margin: "1px",width: "45px"}).appendTo(divTopic);
                 $("<i></i>").addClass("fa fa-thumbs-o-up").appendTo(divTopicLikeNum);
                 divTopicLikeNum.append(`&nbsp;${dataTopicList[i].topicLikeNum}`);

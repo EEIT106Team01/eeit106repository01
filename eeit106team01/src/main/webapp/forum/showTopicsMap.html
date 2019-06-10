@@ -76,7 +76,7 @@
             max-width: 600px;
             max-height: 500px;
         }
-        
+
         .pac-container {
             z-index: 50002;
             margin-top: -51px;
@@ -89,10 +89,10 @@
         }
 
         .myButton {
-			border-radius: 3px;
-			padding: 2px;
-			height: 100%;
-		}
+            border-radius: 3px;
+            padding: 2px;
+            height: 100%;
+        }
 
         #map_canvas {
             width: 100%;
@@ -216,6 +216,18 @@
                     $(".plyr video").height("150px");
                     $(".plyr__controls").hide();
                     $(".plyr__control--overlaid").hide();
+                    //image verticle middle start
+                    let checkNavbar = setInterval(function () {
+                        if (document.getElementsByClassName("myTopicImg")) {
+                            let memberTopicImage = $(`.myTopicImg`);
+                            for (let i = 0; i < memberTopicImage.length; i++) {
+                                memberTopicImage[i].style.position = "absolute";
+                                let memberTopicImageHeight = memberTopicImage[i].height;
+                                memberTopicImage[i].style.top = `calc(50% - ${memberTopicImageHeight / 2}px)`;
+                            }
+                        }
+                    }, 50);
+                    //image verticle middle end
                 }
             })
         }
