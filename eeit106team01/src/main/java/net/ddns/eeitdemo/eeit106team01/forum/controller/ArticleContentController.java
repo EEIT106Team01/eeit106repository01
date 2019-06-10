@@ -100,7 +100,7 @@ public class ArticleContentController {
 					notificationMsg.setMessage("您的文章被回應了");
 					notificationMsg.setUrl(url);
 					notificationMsg.setIcon("entypo-reply");
-					notificationMsg.setColor(Color.green);
+					notificationMsg.setColor(Color.RED);
 					if (result.getReply() == null) {
 						articleTopicCurrentService.increaseContentReplyNum(result.getArticleTopicCurrent().getId());
 						String repliedName = result.getArticleTopicCurrent().getMemberBean().getName();
