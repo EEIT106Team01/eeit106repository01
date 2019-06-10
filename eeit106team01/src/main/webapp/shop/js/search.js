@@ -670,7 +670,8 @@ function getProductsByPrice() {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -795,7 +796,8 @@ function getProductsByPriceByType(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -923,7 +925,8 @@ function getProductsByType(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -1053,7 +1056,8 @@ function getProductsByPriceByBrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -1174,7 +1178,8 @@ function getProductsByBrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -1293,7 +1298,8 @@ function search(searchResult) {
         error: function(jqXHR, textStatus, errorThrown) {
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -1417,7 +1423,8 @@ function getProductsByPriceByName(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -1539,7 +1546,8 @@ function getProductsByPriceByNameByType(name, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -1648,7 +1656,8 @@ function sortPriceDescBytype(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -1776,7 +1785,8 @@ function sortPriceAscBytype(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -1904,7 +1914,8 @@ function sortPriceDescBybrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2032,7 +2043,8 @@ function sortPriceAscBybrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2157,7 +2169,8 @@ function sortPriceDescByname(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2280,7 +2293,8 @@ function sortPriceAscByname(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2402,7 +2416,8 @@ function sortSoldDescBytype(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2527,7 +2542,8 @@ function sortSoldAscBytype(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2641,7 +2657,8 @@ function sortSoldDescBybrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2751,7 +2768,8 @@ function sortSoldAscBybrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2862,7 +2880,8 @@ function sortSoldDescByname(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -2970,7 +2989,8 @@ function sortSoldAscByname(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -3095,7 +3115,8 @@ function getSortDescByPriceByType(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -3217,7 +3238,8 @@ function getSortAscByPriceByType(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -3343,7 +3365,8 @@ function geSortDescBySoldByType(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -3469,7 +3492,8 @@ function getSortAscBySoldByType(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -3594,7 +3618,8 @@ function getSortAscBySoldBybrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -3718,7 +3743,8 @@ function getSortDescBySoldBybrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -3842,7 +3868,8 @@ function getSortAscByPriceByBrandBybrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -3964,7 +3991,8 @@ function getSortDescByPriceBybrand(brand, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4084,7 +4112,8 @@ function getSortDescByPriceByName(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4202,7 +4231,8 @@ function getSortAscByPriceByName(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4320,7 +4350,8 @@ function getSortDescBySoldByName(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4438,7 +4469,8 @@ function getSortAscBySoldByName(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4544,7 +4576,8 @@ function getSortDescByPriceByNameByType(searchResult) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4655,7 +4688,8 @@ function getSortAscByPriceByNameByType(searchResult) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4770,7 +4804,8 @@ function getSortAscBySoldByNameByType(searchResult) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4879,7 +4914,8 @@ function getSortDescBySoldByNameByType(searchResult) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -4994,7 +5030,8 @@ function getSortAscByPriceByNameByType(name, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -5118,7 +5155,8 @@ function getSortDescByPriceByNameByType(name, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -5242,7 +5280,8 @@ function getSortDescBySoldByNameByType(name, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -5366,7 +5405,8 @@ function getSortAscBySoldByNameByType(name, type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -5482,7 +5522,8 @@ function getProductsByUpdateTimeByType(type) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -5592,7 +5633,8 @@ function getProductsByUpdateTimeByBrand(type, brand) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -5701,7 +5743,8 @@ function getProductsByUpdateTimeByName(name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
@@ -5810,7 +5853,8 @@ function getProductsByUpdateTimeByNameByType(type, name) {
             console.log(textStatus)
             if (jqXHR.status == 404 || errorThrown == 'Not Found') {
                 console.log('There was a 404 error.');
-                $(".main-content").empty().append(
+                $("#Products").empty();
+                $("#errorMsg").empty().append(
                     '<div class="page-error-404">' +
                     '<div class="error-symbol">' +
                     '<i class="entypo-attention"></i>' +
