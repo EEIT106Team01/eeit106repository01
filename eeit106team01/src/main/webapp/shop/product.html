@@ -25,7 +25,6 @@
 
     <!-- Custom Style -->
     <link rel="stylesheet" href="css/product.css" />
-    <link rel="stylesheet" href="css/shopping-cart.css" />
 
 </head>
 
@@ -82,17 +81,18 @@
                 </ol>
             </div>
 
-            <form class="search-bar col-md-4">
+            <form class="search-bar col-md-4" id="searchForm">
                 <select class="form-control col-md-2" id="searchType"></select>
                 <div class="input-group">
-                    <input type="text" class="form-control input-lg" name="search" id="searchName" placeholder="Search for something...">
+                    <input type="text" class="form-control input-lg" name="searchName" id="searchName" placeholder="請輸入關鍵字">
                     <div class="input-group-btn">
                         <button class="btn btn-lg btn-primary btn-icon" id="search" type="button">
-                            Search
+                            搜尋
                             <i class="entypo-search"></i>
                         </button>
                     </div>
                 </div>
+                <label for="searchName"></label>
             </form>
             <!-- 排版用 -->
             <div class="col-md-4">
@@ -106,14 +106,12 @@
 
             <div class="btn-group btn-group-justified" role="group" aria-label="Basic example">
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#productInformation" aria-expanded="false"
-                        aria-controls="productInformation" id="productInformationButton">
+                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#productInformation" aria-expanded="false" aria-controls="productInformation" id="productInformationButton">
                         詳細資訊
                     </button>
                 </div>
                 <div class="btn-group">
-                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#productImgDiv" aria-expanded="false"
-                        aria-controls="productImgDiv" id="productImgDivButton">
+                    <button type="button" class="btn btn-sceondary btn-lg" data-toggle="collapse" data-target="#productImgDiv" aria-expanded="false" aria-controls="productImgDiv" id="productImgDivButton">
                         產品圖片
                     </button>
                 </div>
@@ -424,29 +422,29 @@
     </div>
     </div>
     </div> -->
-                </span>
+    </span>
 
 
-            </div>
+    </div>
 
-            <!-- recommended -->
-            <div id="recommendDiv" class="col-md-12">
-                <p class="text-dark col-md-12" id="recommendTitle"></p>
-                <div id="carousel-reviews" class="carousel slide" data-ride="carousel">
-                    <div class="carousel-inner col-md-8">
-                        <div class="item col-md-12 active" id="item1">
+    <!-- recommended -->
+    <div id="recommendDiv" class="col-md-12">
+        <p class="text-dark col-md-12" id="recommendTitle"></p>
+        <div id="carousel-reviews" class="carousel slide" data-ride="carousel">
+            <div class="carousel-inner col-md-8">
+                <div class="item col-md-12 active" id="item1">
 
-                        </div>
-                        <div class="item col-md-12" id="item2">
+                </div>
+                <div class="item col-md-12" id="item2">
 
-                        </div>
-                        <div id="recCarouselDiv">
-                           
-                        </div>
-                    </div>
+                </div>
+                <div id="recCarouselDiv">
+
                 </div>
             </div>
         </div>
+    </div>
+    </div>
     </div>
 
     <!-- Imported styles on this page -->
@@ -472,24 +470,29 @@
 
     <!-- script  src-->
     <script type="text/javascript " src="js/product.js"></script>
-    <script type="text/javascript " src="js/shopping-cart.js"></script>
     <script type="text/javascript " src="js/review.js"></script>
+
+    <!-- Shopping Cart -->
+    <script type="text/javascript " src="js/shopping-cart.js"></script>
     <script type="text/javascript " src="js/util.js"></script>
+    <link rel="stylesheet" href="css/shopping-cart.css" />
 
     <!-- Include Cloud Zoom -->
     <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
 
     <!-- Include Thumbelina  -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet"
-    />
+    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
     <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
     <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+
+    <!-- Pagination -->
+    <!-- <script src="https://pagination.js.org/dist/2.1.4/pagination.js"></script> -->
+
+    <!-- jQuery Validation Plugin -->
+    <script async src="js/jquery.validate.js"></script>
 
     <!-- NavBar -->
     <script src="../navbar/js/csi.min.js"></script>
     <script src="../navbar/js/navbar-init.js"></script>
-
-    <!-- Pagination -->
-    <!-- <script src="https://pagination.js.org/dist/2.1.4/pagination.js"></script> -->
 </body>

@@ -3,14 +3,31 @@ $(document).ready(function() {
     getAllType();
     //搜尋
     $("#search").on("click", function() {
-        insertKeyWord();
-        var productType = $("#searchType").val();
-        var productName = $("#searchName").val();
-        window.location.href =
-            "http://localhost:8080/shop/search.html?productName=" +
-            productName +
-            "&productType=" +
-            productType;
+        if ($("#searchName").val() != null || typeof($("#searchName").val()) != "undefined" || $("#searchName").val().length == 0) {
+            insertKeyWord();
+        }
+
+        //驗證
+        $("#searchForm").validate({
+            rules: {
+                searchName: {
+                    required: true
+                }
+            },
+            messages: {
+                searchName: {
+                    required: "必須輸入"
+                }
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().next("label"));
+            }
+        })
+        if ($("#searchForm").valid()) {
+            var productType = $("#searchType").val();
+            var productName = $("#searchName").val();
+            window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+        }
     });
 
 });

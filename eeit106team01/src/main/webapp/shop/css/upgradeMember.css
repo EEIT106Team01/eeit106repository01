@@ -1,16 +1,12 @@
 #memberDiv {
-    position: relative;
-    right: -10%;
-    border-image-source: url(../img/clipart-stars-border.png);
-    border-image-slice: 20;
-    border-image-width: 1em;
-    border-image-repeat: stretch;
+    /* position: relative;
+    right: -10%; */
 }
 
 #memberDiv .memberSelect {
-    position: absolute;
-    right: -10%;
-    margin-top: 10%;
+    /* position: absolute; */
+    /* right: -10%; */
+    /* margin-top: 10%; */
 }
 
 .memberSpan {
@@ -26,3 +22,9 @@
 .memberUl {
     margin-top: 5%
 }
+
+table{
+
+    margin-left:auto; 
+    margin-right:auto;
+    }

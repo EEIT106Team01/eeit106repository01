@@ -13,9 +13,28 @@ $(document).ready(function() {
         if ($("#searchName").val() != null || typeof($("#searchName").val()) != "undefined" || $("#searchName").val().length == 0) {
             insertKeyWord();
         }
-        var productType = $("#searchType").val();
-        var productName = $("#searchName").val();
-        window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+
+        //驗證
+        $("#searchForm").validate({
+            rules: {
+                searchName: {
+                    required: true
+                }
+            },
+            messages: {
+                searchName: {
+                    required: "必須輸入"
+                }
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().next("label"));
+            }
+        })
+        if ($("#searchForm").valid()) {
+            var productType = $("#searchType").val();
+            var productName = $("#searchName").val();
+            window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+        }
     }))
 
     //breadcrumb
@@ -33,6 +52,7 @@ $(document).ready(function() {
     //datepicker format
     $("#startDay").datepicker({ format: 'yyyy-mm-dd' });
     $("#endDay").datepicker({ format: 'yyyy-mm-dd' });
+
 })
 
 //關鍵字新增
@@ -299,7 +319,37 @@ function ByType(type) {
             $("#sortByType").hide();
             //sort open
             $("#sortByTypeByMixpriceMaxprice").show();
-            getProductsByPriceByType(type)
+
+            //驗證
+            $("#priceForm").validate({
+                rules: {
+                    minPrice: {
+                        digits: true,
+                        min: 0
+                    },
+                    maxPrice: {
+                        digits: true,
+                        min: 1
+                    }
+                },
+                messages: {
+                    minPrice: {
+                        digits: "必須為整數",
+                        min: "最低於0"
+                    },
+                    maxPrice: {
+                        digits: "必須為整數",
+                        min: "最低於1"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.appendTo(element.parent().next("label"));
+                }
+            })
+            if ($("#priceForm").valid()) {
+                getProductsByPriceByType(type)
+            }
+
         }))
         //sort price
     $("#sortSoldDescByTypeByMixpriceMaxprice").on('click', (function() {
@@ -368,14 +418,75 @@ function ByBrand(brand) {
         //updateTime
     $("#searchTimeByBrandBtn").on('click', (function() {
             var type = takeTypeUrlValue();
-            getProductsByUpdateTimeByBrand(type, brand)
+
+            //驗證
+            $("#searchTimeForm").validate({
+                rules: {
+                    startDay: {
+                        required: true,
+                        dateISO: true
+                    },
+                    endDay: {
+                        required: true,
+                        dateISO: true
+                    }
+                },
+                messages: {
+                    startDay: {
+                        required: "必須輸入",
+                        dateISO: "格式為yyyy-MM-dd"
+                    },
+                    endDay: {
+                        required: "必須輸入",
+                        dateISO: "格式為yyyy-MM-dd"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.appendTo(element.parent().next("label"));
+                }
+            })
+            if ($("#searchTimeForm").valid()) {
+                getProductsByUpdateTimeByBrand(type, brand)
+            }
+
+
         }))
         //搜價錢btn by brand
     $("#searchPriceByBrandBtn").on('click', (function() {
         var type = takeTypeUrlValue();
         $("#sortByBrand").hide();
-        $("#sortByBrandByMixpriceMaxprice").show()
-        getProductsByPriceByBrand(brand, type);
+        $("#sortByBrandByMixpriceMaxprice").show();
+
+        //驗證
+        $("#priceForm").validate({
+            rules: {
+                minPrice: {
+                    digits: true,
+                    min: 0
+                },
+                maxPrice: {
+                    digits: true,
+                    min: 1
+                }
+            },
+            messages: {
+                minPrice: {
+                    digits: "必須為整數",
+                    min: "最低於0"
+                },
+                maxPrice: {
+                    digits: "必須為整數",
+                    min: "最低於1"
+                }
+            },
+            errorPlacement: function(error, element) {
+                error.appendTo(element.parent().next("label"));
+            }
+        })
+        if ($("#priceForm").valid()) {
+            getProductsByPriceByBrand(brand, type);
+        }
+
     }))
 
     //sort brand price between mix max

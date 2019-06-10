@@ -32,7 +32,7 @@ public class ShopCrawlerTest {
 	final private String logPath = "C:\\Users\\Public\\";
 
 	@Test
-	public void testYahooProductDetailsCrawler() {
+	public void testYahooProductCrawler() {
 		String fetchProductName = null;
 		String fetchProductType = null;
 		String productType = null;
@@ -43,26 +43,26 @@ public class ShopCrawlerTest {
 		Scanner scanner = new Scanner(System.in);
 
 		// @formatter:off
-		System.out.println("Choose the product you want to fetch:"
-				+ "\r1.行車紀錄器"
-				+ "\r2.高壓清洗機及配件"
-				+ "\r3.導航"
-				+ "\r4.行車導航週邊配件"
-				+ "\r5.安全帽"
-				+ "\r6.車內用品"
-				+ "\r7.推車週邊/汽座週邊"
-				+ "\r8.充電器"
-				+ "\r9.汽車隔熱/遮陽"
-				+ "\r10.改裝汽車用品"
-				+ "\r11.機車部品及人身配件"
-				+ "\r12.測速器"
-				+ "\r13.固定座"
-				+ "\r14.輪胎周邊"
-				+ "\r15.行車智慧穿戴"
-				+ "\r16.汽車電力"
-				+ "\r17.千斤頂"
-				+ "\r18.胎壓偵測器");
-		// @formatter:on
+				System.out.println("Choose the product you want to fetch:"
+						+ "\r1.行車紀錄器"
+						+ "\r2.高壓清洗機及配件"
+						+ "\r3.導航"
+						+ "\r4.行車導航週邊配件"
+						+ "\r5.安全帽"
+						+ "\r6.車內用品"
+						+ "\r7.推車週邊/汽座週邊"
+						+ "\r8.充電器"
+						+ "\r9.汽車隔熱/遮陽"
+						+ "\r10.改裝汽車用品"
+						+ "\r11.機車部品及人身配件"
+						+ "\r12.測速器"
+						+ "\r13.固定座"
+						+ "\r14.輪胎周邊"
+						+ "\r15.行車智慧穿戴"
+						+ "\r16.汽車電力"
+						+ "\r17.千斤頂"
+						+ "\r18.胎壓偵測器");
+				// @formatter:on
 		switch (scanner.nextInt()) {
 		case 1:
 			fetchProductName = "行車紀錄器";
@@ -181,12 +181,12 @@ public class ShopCrawlerTest {
 		} else {
 			productType = fetchProductType;
 		}
-		
+
 		ShopCrawler crawler = new ShopCrawler();
 
 		// @formatter:off
-		List<String> links = crawler.YahooProductLinksCrawler(fetchProductName, fetchStartPage, fetchEndPage, fetchProductType);
-		// @formatter:on
+				List<String> links = crawler.yahooProductLinksCrawler(fetchProductName, fetchStartPage, fetchEndPage, fetchProductType);
+				// @formatter:on
 
 		scanner.close();
 
@@ -194,7 +194,7 @@ public class ShopCrawlerTest {
 
 		if (links != null) {
 			for (String link : links) {
-				ProductBean productBean = crawler.YahooProductDetailsCrawler(link, productType, productStock);
+				ProductBean productBean = ShopCrawler.yahooProductCrawler(link, productType, productStock);
 				ProductBean result = productService.insertProduct(productBean);
 				count++;
 				if (result != null) {
@@ -230,8 +230,8 @@ public class ShopCrawlerTest {
 				}
 			}
 			// @formatter:off
-			System.out.println("Total attempt:[" + count + "] Inserted:[" + (count - countFetchFail - countInsetFail) + "]");
-			// @formatter:on
+					System.out.println("Total attempt:[" + count + "] Inserted:[" + (count - countFetchFail - countInsetFail) + "]");
+					// @formatter:on
 			System.err.println("Total Fetch Fail:[" + countFetchFail + "]");
 			System.err.println("Total Insert Fail:[" + countInsetFail + "]");
 		} else {
