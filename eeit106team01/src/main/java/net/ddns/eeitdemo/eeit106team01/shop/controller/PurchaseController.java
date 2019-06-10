@@ -1,6 +1,7 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Collection;
@@ -22,13 +23,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.ObjectError;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ddns.eeitdemo.eeit106team01.shop.ecpay.example.integration.AllInOne;
+import net.ddns.eeitdemo.eeit106team01.shop.ecpay.example.integration.domain.AioCheckOutOneTime;
 import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
+import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
@@ -38,6 +43,7 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.service.PurchaseService;
 import net.ddns.eeitdemo.eeit106team01.shop.util.Converter;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
+import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
 
 @RestController
 public class PurchaseController {
@@ -52,6 +58,11 @@ public class PurchaseController {
 	private MemberDAO memberDAO;
 	private NewDate newDate = new NewDate();
 	private Date currentTime = newDate.newCurrentTime();
+	private static AllInOne all;
+
+	private static void initial() {
+		all = new AllInOne("");
+	}
 
 	// Get Method
 	// Purchase
@@ -411,6 +422,82 @@ public class PurchaseController {
 			return new ResponseEntity<ReviewBean>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@PostMapping(value = "/shop/processEcpay")
+	public ResponseEntity<?> processEcpay(@RequestBody String purchaseId, BindingResult bindingResult) {
+		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			Map<String, String> errors = new HashMap<String, String>();
+			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+			for (ObjectError bindingError : bindingErrors) {
+				errors.put(bindingError.getObjectName(), bindingError.toString());
+			}
+			return ResponseEntity.badRequest().body(errors);
+		}
+		if (purchaseId == null) {
+			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
+		}
+		initial();
+		Long id = Long.valueOf(purchaseId);
+		PurchaseBean purchase = purchaseService.findPurchaseById(id, "purchase").get(0);
+		List<PurchaseListBean> purchaseListBeans = purchaseService.findPurchaseListById(id, "purchase");
+		AioCheckOutOneTime obj = new AioCheckOutOneTime();
+		obj.setMerchantID("2000132");
+		SerialNumberGenerator generator = new SerialNumberGenerator(19);
+		String tradeNo = generator.nextString() + purchaseId;
+		obj.setMerchantTradeNo(tradeNo);
+		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+		obj.setMerchantTradeDate(format.format(purchase.getCreateTime()));
+		obj.setTotalAmount(String.valueOf(purchase.getProductTotalPrice()));
+		obj.setTradeDesc("三寶商城");
+		obj.setReturnURL("http://211.23.128.214:5000");
+		obj.setClientBackURL("http://localhost:8080/shop/receipt.html?" + tradeNo);
+		StringBuilder itemNameAndCountAndPrice = new StringBuilder();
+		HashMap<String, Integer> productMap = new HashMap<String, Integer>();
+		for (PurchaseListBean purchaseListBean : purchaseListBeans) {
+			ProductBean productBean = productService.findProductByPrimaryKey(purchaseListBean.getProductId().getId());
+			String productName = productBean.getName();
+			Integer one = 1;
+			if (productMap.get(productName) != null) {
+				productMap.put(productName, productMap.get(productName) + 1);
+			} else {
+				productMap.put(productName, one);
+			}
+		}
+		Iterator<Entry<String, Integer>> iterator = productMap.entrySet().iterator();
+		while (iterator.hasNext()) {
+			Map.Entry<String, Integer> entry = iterator.next();
+			String productName = entry.getKey();
+			Integer productCount = entry.getValue();
+			Integer price = productService.findProductsByName(productName).get(0).getPrice();
+			itemNameAndCountAndPrice.append(productName).append(" ").append(String.valueOf(price)).append(" ")
+					.append("元 ").append(" ").append("x").append(String.valueOf(productCount)).append("#");
+		}
+
+		obj.setItemName(itemNameAndCountAndPrice.substring(0, itemNameAndCountAndPrice.length() - 1));
+		System.out.println(obj.getItemName());
+		String result = all.aioCheckOut(obj, null);
+		if (result != null) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
+		}
+	}
+
+	@GetMapping(value = "shop/receipt/{ecpaySN}")
+	public ResponseEntity<?> receipt(@PathVariable String ecpaySN) {
+		if (ecpaySN == null) {
+			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
+		}
+		Long id = Long.valueOf(ecpaySN.substring(ecpaySN.length() - 1, ecpaySN.length()));
+		PurchaseBean purchaseBean = purchaseService.findPurchaseById(id, "purchase").get(0);
+		purchaseBean.setUpdatedTime(currentTime);
+		PurchaseBean result = purchaseService.updatePurchase(purchaseBean, "paid", null, null);
+		if (result != null) {
+			return new ResponseEntity<>(result, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>("購買失敗", HttpStatus.NOT_FOUND);
 		}
 	}
 
