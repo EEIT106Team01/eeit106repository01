@@ -91,7 +91,7 @@
 		var contentPage = sessionStorage.getItem("contentPage");
 		var replyType = sessionStorage.getItem("replyType");
 		if (!contentBean || !contentPage || !replyType) {
-			location.href = "/forum/index.html";
+			location.href = "/";
 		}
 		contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
 		console.log(contentBean.id);
@@ -265,9 +265,9 @@
 						<form>
 							<fieldset class="formField">
 								<div class="form-group">
-									<!-- <label>
+									<label hidden>
 										<h2>文章ID： <span id="contentId" class="badge badge-light"></span></h2>
-									</label><br> -->
+									</label>
 									<label>
 										<h2>標題： <span id="topicTitle" class="badge badge-light"></span></h2>
 									</label><br>

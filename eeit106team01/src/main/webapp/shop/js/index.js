@@ -15,10 +15,30 @@ $(document).ready(function() {
             if ($("#searchName").val() != null || typeof($("#searchName").val()) != "undefined" || $("#searchName").val().length == 0) {
                 insertKeyWord();
             }
-            var productType = $("#searchType").val();
-            var productName = $("#searchName").val();
-            window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+
+            //驗證
+            $("#searchForm").validate({
+                rules: {
+                    searchName: {
+                        required: true
+                    }
+                },
+                messages: {
+                    searchName: {
+                        required: "必須輸入"
+                    }
+                },
+                errorPlacement: function(error, element) {
+                    error.appendTo(element.parent().next("label"));
+                }
+            })
+            if ($("#searchForm").valid()) {
+                var productType = $("#searchType").val();
+                var productName = $("#searchName").val();
+                window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
+            }
         }))
+        addToCart();
     })
     //right-area-全站產品排行and全站產品數量
 function getProducts() {

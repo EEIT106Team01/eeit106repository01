@@ -274,8 +274,8 @@
             let information = document.createElement("div");
 
             let mbIcon;
-            if (contentBean.memberBean.icon) {
-                mbIcon = contentBean.memberBean.icon;
+            if (contentBean.memberBean.image) {
+                mbIcon = contentBean.memberBean.image;
             } else {
                 mbIcon = "/navbar/images/pepe.jpg";
             }
@@ -602,6 +602,7 @@
                 title: 'Example title',
                 sources: sources
             }
+            player.poster = thumbnailURI;
             console.log(player);
         }
 
