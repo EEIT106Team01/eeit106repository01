@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jsoup.Jsoup;
@@ -24,19 +25,22 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 public class ShopCrawler {
 
 	// UserAgents
-	private String userAgentChrome = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36";
-	private String userAgentMozilla = "Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201";
-	private String userAgentIe = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko";
-	private String userAgentEdge = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.9200";
-	private String userAgentSafari = "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25";
+	private static String userAgentChrome = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36";
+	private static String userAgentMozilla = "Mozilla/5.0 (Windows; U; Windows NT 6.1; rv:2.2) Gecko/20110201";
+	private static String userAgentIe = "Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; AS; rv:11.0) like Gecko";
+	private static String userAgentEdge = "Mozilla/5.0 (Windows NT 6.2; WOW64) AppleWebKit/537.36 (KHTML like Gecko) Chrome/46.0.2486.0 Safari/537.36 Edge/13.9200";
+	private static String userAgentSafari = "Mozilla/5.0 (iPad; CPU OS 6_0 like Mac OS X) AppleWebKit/536.26 (KHTML, like Gecko) Version/6.0 Mobile/10A5355d Safari/8536.25";
 
 	// Referrer
-	private String referrerGoogle = "https://www.google.com/";
-	private String referrerYahooTW = "https://tw.yahoo.com/";
+	private static String referrerGoogle = "https://www.google.com/";
+	private static String referrerYahooTW = "https://tw.yahoo.com/";
+	
+	//Util
+	private static Random random = new Random();
 
-	public ProductBean YahooProductDetailsCrawler(String link, String productType, Integer productStock) {
+	public static ProductBean yahooProductCrawler(String link, String productType, Integer productStock) {
 
-		flag:if (link != null && productType != null && productStock != null) {
+		flag: if (link != null && productType != null && productStock != null) {
 
 			// Prepare new ProductBean
 			Date date = new Date(System.currentTimeMillis());
@@ -50,7 +54,8 @@ public class ShopCrawler {
 			// Random User Agent
 			String userAgent;
 			String referrer;
-			Integer randomNum = (int) (Math.random() * 5 + 1);
+			
+			Integer randomNum = random.nextInt(5) + 1;
 			if (randomNum == 1) {
 				userAgent = userAgentChrome;
 				referrer = referrerGoogle;
@@ -198,7 +203,7 @@ public class ShopCrawler {
 
 		Integer pageWillFetch = 0;
 		Integer totalCount = 0;
-		flag:for (Integer currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
+		flag: for (Integer currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
 
 			//@formatter:off
 			StringBuffer URL = new StringBuffer("https://tw.buy.yahoo.com/search/product?")
