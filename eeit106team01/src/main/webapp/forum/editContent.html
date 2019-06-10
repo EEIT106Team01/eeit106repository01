@@ -5,24 +5,65 @@
 	<title>EditContent</title>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-	<script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-	<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-	<!-- Main Quill library -->
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.7.1/katex.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
-	<script src="/forum/quill/quill.js"></script>
+	<script src="/assets/js/jquery-1.11.3.min.js"></script>
+	<link rel="stylesheet" href="/forum/css/card.css">
+	<link rel="icon" href="/assets/images/favicon.ico">
 
-	<!-- Theme included stylesheets -->
-	<link href="/forum/quill/quill.snow.css" rel="stylesheet">
-	<link href="/forum/quill/quill.bubble.css" rel="stylesheet">
+	<!--input data-include property in any tag when window.onload-->
+	<script src="/navbar/js/csi.min.js"></script>
+
+	<script src="/navbar/js/navbar-init.js"></script>
+	<!-- cookie -->
+	<script src="/js/js.cookie.min.js"></script>
+
+	<!-- plyr -->
+	<link rel="stylesheet" href="/css/plyr.css" />
+	<script src="/js/plyr.polyfilled.js"></script>
+
+	<!-- quill -->
+	<script src="/forum/quill/highlight.min.js"></script>
+	<script src="/forum/quill/katex.min.js"></script>
+	<script src="/forum/quill/quill.js"></script>
+	<link rel="stylesheet" href="/forum/quill/quill.core.css">
+	<link rel="stylesheet" href="/forum/quill/quill.bubble.css">
+	<link rel="stylesheet" href="/forum/quill/quill.snow.css">
+
+	<!-- chatroom -->
+	<script src="/chat/js/sockjs.min.js"></script>
+	<script src="/chat/js/stomp.min.js"></script>
+	<script src="/chat/js/chatroom-init.js"></script>
 
 	<style>
 		body>#standalone-container {
 			margin: 50px auto;
 			max-width: 720px;
+		}
+
+		.badge {
+			font-size: 0.8em;
+		}
+
+		h1 {
+			margin: 1% 0;
+		}
+
+		.card {
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
+			margin: 1%;
+		}
+
+		.main-content {
+			padding: 0 !important;
+			background: #dddddd8e !important;
+		}
+
+		.content-content {
+			padding-top: 1%;
+			padding-bottom: 1%;
+			margin: 0 auto;
+			max-width: 80% !important;
+			background: white !important;
+			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
 		}
 
 		#editor-container {
@@ -44,11 +85,11 @@
 		var contentBean = sessionStorage.getItem("contentBean");
 		var contentPage = sessionStorage.getItem("contentPage");
 		if (!contentBean || !contentPage) {
-			location.href = "/forum/index.html";
+			location.href = "/";
 		}
 		contentBean = JSON.parse(sessionStorage.getItem("contentBean"));
 		if (contentBean.memberBean.id != memberBean.id) {
-			location.href = "/forum/index.html";
+			location.href = "/";
 		}
 
 		console.log(contentBean.id);
@@ -56,7 +97,8 @@
 		function preInput() {
 			$("#contentId").text(contentBean.id);
 			$("#topicTitle").text(contentBean.articleTopicCurrent.topicHeader);
-			$("#contentCreateTime").text(contentBean.contentCreateTime);
+			let updateTime = new Date(contentBean.contentCreateTime);
+			$("#contentCreateTime").text(updateTime.toLocaleDateString() + updateTime.toLocaleTimeString());
 			quill.setContents(JSON.parse(contentBean.contentContent));
 			if (contentBean.videoBean) {
 				$("#videoURI").text(contentBean.videoBean.videoURI);
@@ -107,42 +149,51 @@
 			console.log("contentContent: " + contentContent);
 			var videoBean = $("#videoBean").val();
 			console.log("videoBean: " + videoBean);
-			var contentStatus = $("input[name=contentStatus]:checked").val();
+			var contentStatus = "normal";
 			console.log("contentStatus: " + contentStatus);
 			var updateMessage = $("#updateMessage").val();
 			console.log("updateMessage: " + updateMessage);
-			if ($("input[name=contentStatus]:checked").val() == "deleted") {
-				console.log($("input[name=contentStatus]:checked").val());
-				newContentBean.contentStatus = contentStatus;
-				httpMethod = "DELETE";
-				updateOrDeleteContentBean(newContentBean, httpMethod);
-			} else {
-				newContentBean.contentContent = contentContent;
-				newContentBean.contentStatus = contentStatus;
-				newContentBean.updateMessage = updateMessage;
-				httpMethod = "PUT";
-				if (videoBean) {
-					console.log("videoBean 不為空");
-					upload();
-					let checkVideo = setInterval(function () {
-						if (videoUploadResult) {
-							clearInterval(checkVideo);
-							console.log("videoUploadResult: " + videoUploadResult);
-							if (videoUploadResult == 401) {
-								sessionStorage.setItem("previousPage", location.pathname);
-								location.href = "/forum/login.html";
-							}
-							newContentBean.videoBean = videoUploadResult;
-							updateOrDeleteContentBean(newContentBean, httpMethod);
-						} else {
-							console.log("videoUploadResult: " + videoUploadResult);
+			// if ($("input[name=contentStatus]:checked").val() == "deleted") {
+			// 	console.log($("input[name=contentStatus]:checked").val());
+			// 	newContentBean.contentStatus = contentStatus;
+			// 	httpMethod = "DELETE";
+			// 	updateOrDeleteContentBean(newContentBean, httpMethod);
+			// } else {
+			newContentBean.contentContent = contentContent;
+			newContentBean.contentStatus = contentStatus;
+			newContentBean.updateMessage = updateMessage;
+			httpMethod = "PUT";
+			if (videoBean) {
+				console.log("videoBean 不為空");
+				upload();
+				let checkVideo = setInterval(function () {
+					if (videoUploadResult) {
+						clearInterval(checkVideo);
+						console.log("videoUploadResult: " + videoUploadResult);
+						if (videoUploadResult == 401) {
+							sessionStorage.setItem("previousPage", location.pathname);
+							location.href = "/forum/login.html";
 						}
-					}, 1000);
-				} else {
-					console.log(newContentBean);
-					updateOrDeleteContentBean(newContentBean, httpMethod);
-				}
+						newContentBean.videoBean = videoUploadResult;
+						updateOrDeleteContentBean(newContentBean, httpMethod);
+					} else {
+						console.log("videoUploadResult: " + videoUploadResult);
+					}
+				}, 1000);
+			} else {
+				console.log(newContentBean);
+				updateOrDeleteContentBean(newContentBean, httpMethod);
 			}
+			// }
+		}
+
+		function deleteContent() {
+			var newContentBean = JSON.parse(JSON.stringify(contentBean));
+			var httpMethod = "DELETE";
+			var contentStatus = "delete";
+			newContentBean.contentStatus = contentStatus;
+			httpMethod = "DELETE";
+			updateOrDeleteContentBean(newContentBean, httpMethod);
 		}
 
 		var quill;
@@ -163,151 +214,166 @@
 	</script>
 </head>
 
-<body>
+<body class="page-body">
+	<!-- include navbar when window.onload-->
+	<div data-include="/navbar/navbarWhite.html"></div>
 
-	<div class="jumbotron text-center" style="margin-bottom: 0">
-		<h1>Index Page</h1>
-		<p>Resize this responsive page to see the effect!</p>
+	<div class="page-container">
 
-	</div>
-	<nav class="navbar navbar-expand-sm bg-dark navbar-dark">
-		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#collapsibleNavbar">
-			<span class="navbar-toggler-icon"></span>
-		</button>
-		<div class="collapse navbar-collapse" id="collapsibleNavbar">
-			<ul class="navbar-nav">
-				<li class="nav-item active"><a class="nav-link" href="index.html">Index</a></li>
-				<li class="nav-item"><a class="nav-link" href="../video.html">Video</a></li>
-				<li class="nav-item"><a class="nav-link" href="../upload.html">Upload</a></li>
-			</ul>
-		</div>
-	</nav>
+		<!-- your page start -->
+		<div class="main-content">
+			<div class="content-content">
+				<div class="card">
+					<div class="card-body">
+						<form>
+							<fieldset class="formField">
+								<div class="form-group">
+									<label hidden>
+										<h2>文章ID： <span id="contentId" class="badge badge-light"></span></h2>
+									</label>
+									<label>
+										<h2>標題： <span id="topicTitle" class="badge badge-light"></span></h2>
+									</label><br>
+									<label>
+										<h2>發布時間： <span id="contentCreateTime" class="badge badge-light"></span>
+										</h2>
+									</label><br>
+									<h2>內容： </h2>
+									<div id="standalone-container">
+										<div id="toolbar-container">
+											<span class="ql-formats">
+												<select class="ql-font"></select>
+												<select class="ql-size"></select>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-bold"></button>
+												<button class="ql-italic"></button>
+												<button class="ql-underline"></button>
+												<button class="ql-strike"></button>
+											</span>
+											<span class="ql-formats">
+												<select class="ql-color"></select>
+												<select class="ql-background"></select>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-script" value="sub"></button>
+												<button class="ql-script" value="super"></button>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-header" value="1"></button>
+												<button class="ql-header" value="2"></button>
+												<button class="ql-blockquote"></button>
+												<button class="ql-code-block"></button>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-list" value="ordered"></button>
+												<button class="ql-list" value="bullet"></button>
+												<button class="ql-indent" value="-1"></button>
+												<button class="ql-indent" value="+1"></button>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-direction" value="rtl"></button>
+												<select class="ql-align"></select>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-link"></button>
+												<button class="ql-image"></button>
+												<button class="ql-video"></button>
+												<button class="ql-formula"></button>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-clean"></button>
+											</span>
+										</div>
+										<div id="editor-container"></div>
+									</div><br>
+							</fieldset>
+						</form>
+						<label>
+							<h2>影片： <span id="videoURI" class="badge badge-light"></span></h2>
+							<form id="FileuploadForm"><input type="file" class="form-control-file border" id="videoBean"
+									name="videoFile" /></form>
+						</label><br>
 
-	<div class="container" style="margin-top: 2%; background-color: aqua">
-		<div class="card">
-			<div class="card-header">
 
-			</div>
-			<div class="card-body">
-				<form>
-					<fieldset class="formField">
-						<div class="form-group">
-							<label>
-								<h4>文章ID： <span id="contentId" class="badge badge-light"></span></h4>
-							</label><br>
-							<label>
-								<h4>標題： <span id="topicTitle" class="badge badge-light"></span></h4>
-							</label><br>
-							<label>
-								<h4>發布時間： <span id="contentCreateTime" class="badge badge-light"></span></h4>
-							</label><br>
-							<h4>內容： </h4>
-							<div id="standalone-container">
-								<div id="toolbar-container">
-									<span class="ql-formats">
-										<select class="ql-font"></select>
-										<select class="ql-size"></select>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-bold"></button>
-										<button class="ql-italic"></button>
-										<button class="ql-underline"></button>
-										<button class="ql-strike"></button>
-									</span>
-									<span class="ql-formats">
-										<select class="ql-color"></select>
-										<select class="ql-background"></select>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-script" value="sub"></button>
-										<button class="ql-script" value="super"></button>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-header" value="1"></button>
-										<button class="ql-header" value="2"></button>
-										<button class="ql-blockquote"></button>
-										<button class="ql-code-block"></button>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-list" value="ordered"></button>
-										<button class="ql-list" value="bullet"></button>
-										<button class="ql-indent" value="-1"></button>
-										<button class="ql-indent" value="+1"></button>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-direction" value="rtl"></button>
-										<select class="ql-align"></select>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-link"></button>
-										<button class="ql-image"></button>
-										<button class="ql-video"></button>
-										<button class="ql-formula"></button>
-									</span>
-									<span class="ql-formats">
-										<button class="ql-clean"></button>
-									</span>
+						<div style="display: none;" class="container progress-body">
+							<div class="progress">
+								<div class="progress-bar progress-bar-striped progress-bar-animated bg-info"
+									style="width: 0%">
 								</div>
-								<div id="editor-container"></div>
-							</div><br>
-					</fieldset>
-				</form>
-				<label>
-					<h4>影片： <span id="videoURI" class="badge badge-light"></span></h4>
-					<form id="FileuploadForm"><input type="file" class="form-control-file border" id="videoBean"
-							name="videoFile" /></form>
-				</label><br>
-
-
-				<div style="display: none;" class="container progress-body">
-					<div class="progress">
-						<div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%">
+							</div>
+							<div>
+								<span class="percentage">0%</span><br> <span
+									style="width: 100px; display: inline-block; text-align: right">上傳進度：</span>
+								<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;"
+									class="progress-speed">0
+									M/S, 0/0M</span>
+							</div>
+							<div>
+								<span style="width: 100px; display: inline-block; text-align: right">上傳狀態：</span>
+								<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;"
+									class="progress-info">請選擇檔案並點擊上傳按鈕</span>
+							</div>
 						</div>
-					</div>
-					<div>
-						<span class="percentage">0%</span><br> <span
-							style="width: 100px; display: inline-block; text-align: right">上傳進度：</span>
-						<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-speed">0
-							M/S, 0/0M</span>
-					</div>
-					<div>
-						<span style="width: 100px; display: inline-block; text-align: right">上傳狀態：</span>
-						<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;"
-							class="progress-info">請選擇檔案並點擊上傳按鈕</span>
+						<form>
+							<fieldset class="formField">
+								<hr>
+								<label>
+									<h2>刪除文章： <button type="button" data-toggle="modal" data-target="#myModal"
+											class="btn btn-danger">刪除文章</button></h2>
+								</label><br>
+								<!-- Modal -->
+								<div id="myModal" class="modal fade" style="margin-top: 10%" role="dialog">
+									<div class="modal-dialog">
+										<!-- Modal content-->
+										<div class="modal-content">
+											<div class="modal-header">
+												<button type="button" class="close"
+													data-dismiss="modal">&times;</button>
+												<h2 class="modal-title">請再次確認</h2>
+											</div>
+											<div class="modal-body">
+												<p>請注意，此操作無法復原！</p>
+											</div>
+											<div class="modal-footer">
+												<button type="button" class="btn btn-default"
+													data-dismiss="modal">取消操作</button>
+												<button onclick="deleteContent()" type="button" class="btn btn-danger"
+													data-dismiss="modal">我明白，仍要刪除</button>
+											</div>
+										</div>
+
+									</div>
+								</div>
+								<label hidden>
+									<h2>說明文字(管理員功能)： </h2><input type="text" class="form-control" id="updateMessage" />
+								</label>
+								<hr>
+								<input type="button" class="btn-block btn-blue btn-lg" value="submit" id="submit" />
+							</fieldset>
+						</form>
 					</div>
 				</div>
-				<form>
-					<fieldset class="formField">
-						<hr>
-						<label>
-							<h4>狀態(管理員功能)： </h4>
-							<div class="form-check-inline">
-								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="contentStatus"
-										value="normal">Normal
-								</label>
-							</div>
-							<div class="form-check-inline">
-								<label class="form-check-label">
-									<input type="radio" class="form-check-input" name="contentStatus"
-										value="deleted">Deleted
-								</label>
-							</div>
-						</label><br>
-						<label>
-							<h4>說明文字(管理員功能)： </h4><input type="text" class="form-control" id="updateMessage" />
-						</label><br>
-						<hr>
-						<input type="button" class="form-control" value="submit" id="submit" />
 			</div>
-			</fieldset>
-			</form>
-		</div>
-		<div class="card-footer">
 		</div>
 	</div>
-	</div>
+	<!-- JavaScripts initializations and stuff -->
+	<!-- YW: this is important for navbar -->
+	<script src="/assets/js/neon-custom.js"></script>
 
+	<!-- Bottom scripts (common) -->
+	<script src="/assets/js/gsap/TweenMax.min.js"></script>
+	<script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+	<script src="/assets/js/bootstrap.js"></script>
+	<script src="/assets/js/joinable.js"></script>
+	<script src="/assets/js/resizeable.js"></script>
+	<script src="/assets/js/neon-api.js"></script>
+
+	<!-- Imported scripts on this page -->
+	<!-- <script src="/assets/js/neon-chat.js"></script> -->
+
+	<!-- Demo Settings -->
+	<script src="/assets/js/neon-demo.js"></script>
 </body>
 
 </html>
