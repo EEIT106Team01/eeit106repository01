@@ -1,5 +1,5 @@
 //URL Domain
-const urlDomain = `http://localhost:8080/`;
+const urlDomain = `/`;
 
 // Controller
 const getOneProduct = `shop/product.html?`;
@@ -17,7 +17,7 @@ function getLocaleTime(date) {
     return dateObject.toLocaleString(`zh-TW`);
 }
 
-// Find All from LocalStorage
+// Find All from LocalStorage(shopping Cart)
 function findAllFromLocalStorage() {
     let jsonArray = [],
         keys = Object.keys(localStorage),

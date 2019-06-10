@@ -9,16 +9,16 @@ let deliveryPrice = $(`#deliveryPrice`)
     .text()
     .substr(
         $(`#deliveryPrice`)
-        .text()
-        .indexOf("$") + 1,
+            .text()
+            .indexOf("$") + 1,
         $(`#deliveryPrice`).text().length
     );
 let memberDiscount = generateMemberDiscount();
 
 //Document Ready
-$(function() {
+$(function () {
     //Time
-    $(`#currentTime`).text(currentTime);
+    $(`#currentTime`).text(getLocaleTime(currentTime));
     //Purchase ID
     getNewPurchaseId();
     //Products
@@ -35,6 +35,7 @@ $(function() {
         );
         $(`#memberDiscount`).append(`無折扣`);
     }
+    //Member
 });
 
 //New Purchase ID
@@ -43,7 +44,7 @@ function getNewPurchaseId() {
     $.ajax({
         type: "GET",
         url: urlDomain + resource,
-        success: function(response) {
+        success: function (response) {
             let currentPurchaseSize = response;
             let newPurchaseId = new String(currentPurchaseSize + 1);
             generatePurchaseId(newPurchaseId);
@@ -78,7 +79,11 @@ function generateProductHtml() {
             product.name +
             `</td>` +
             `<td>` +
-            product.quantity +
+            `<div class="input-spinner">
+            <button type="button" class="btn btn-primary " data-step="-1">-</button>
+            <input class="form-control size-1" value="` + product.quantity + `" data-min="1" data-max="` + product.totalQuantity + `">
+            <button type="button" class="btn btn-primary " data-step="1">+</button>
+            </div>`+
             `</td>` +
             `<td>` +
             `$` +
@@ -109,3 +114,17 @@ function generateMemberDiscount() {
         return false;
     }
 }
+
+$(`#receiver-check`).click(function (e) {
+    if ($(this).prop("checked") == true) {
+        $(`#receiverName`).attr(`value`, $(`#memberName`).text());
+        $(`#receiverAddress`).attr(`value`, $(`#memberAddress`).text());
+        $(`#receiverPhone`).attr(`value`, $(`#memberPhone`).text());
+        $(`#receiverMail`).attr(`value`, $(`#memberMail`).text());
+    } else {
+        $(`#receiverName`).attr(`value`, "");
+        $(`#receiverAddress`).attr(`value`, "");
+        $(`#receiverPhone`).attr(`value`, "");
+        $(`#receiverMail`).attr(`value`, "");
+    };
+});
