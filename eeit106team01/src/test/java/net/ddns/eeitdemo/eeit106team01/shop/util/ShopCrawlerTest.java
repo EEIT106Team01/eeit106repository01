@@ -185,7 +185,7 @@ public class ShopCrawlerTest {
 		ShopCrawler crawler = new ShopCrawler();
 
 		// @formatter:off
-				List<String> links = crawler.YahooProductLinksCrawler(fetchProductName, fetchStartPage, fetchEndPage, fetchProductType);
+				List<String> links = crawler.yahooProductLinksCrawler(fetchProductName, fetchStartPage, fetchEndPage, fetchProductType);
 				// @formatter:on
 
 		scanner.close();
