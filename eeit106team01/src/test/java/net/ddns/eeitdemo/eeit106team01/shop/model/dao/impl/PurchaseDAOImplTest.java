@@ -48,6 +48,12 @@ public class PurchaseDAOImplTest {
 		hashMap.put("", "");
 	}
 
+	
+	@Test
+	public void name() {
+		
+	}
+	
 	// Purchase
 
 	public void testInsertPurchase() {

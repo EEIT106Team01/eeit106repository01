@@ -25,6 +25,11 @@ public class ProductServiceTest {
 
 	private Date date = new Date(System.currentTimeMillis());
 
+	@Test
+	public void name() {
+		
+	}
+	
 //	@Test
 	public void testInsertProduct() {
 		ProductBean productBean1 = new ProductBean();

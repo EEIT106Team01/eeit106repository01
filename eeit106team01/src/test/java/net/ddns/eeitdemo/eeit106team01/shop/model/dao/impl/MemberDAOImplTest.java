@@ -18,6 +18,11 @@ public class MemberDAOImplTest {
 	@Autowired
 	private MemberDAO memberDAO;
 
+	@Test
+	public void name() {
+		
+	}
+	
 //	@Test
 	public void testInsertMember() {
 		Member member = new Member();

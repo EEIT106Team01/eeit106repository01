@@ -44,6 +44,11 @@ public class PurchaseServiceTest extends ShopTest {
 	private Date date = NewDate.newCurrentTime();
 
 
+	@Test
+	public void name() {
+		
+	}
+	
 	public void testNewPurchase() throws Exception {
 		Member member = new Member();
 		memberDAO.insertMember(member);

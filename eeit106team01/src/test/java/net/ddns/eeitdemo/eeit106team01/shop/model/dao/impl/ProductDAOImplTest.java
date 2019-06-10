@@ -37,6 +37,12 @@ public class ProductDAOImplTest {
 		ssHashMap.put("", "");
 	}
 
+	
+	@Test
+	public void name() {
+		
+	}
+	
 	public void testInsertProduct() {
 		productBean.setName("test1");
 		productBean.setBrand("brand1");
