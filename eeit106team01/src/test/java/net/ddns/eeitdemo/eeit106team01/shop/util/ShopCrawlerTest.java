@@ -32,6 +32,11 @@ public class ShopCrawlerTest {
 	final private String logPath = "C:\\Users\\Public\\";
 
 	@Test
+	public void name() {
+		
+	}
+	
+//	@Test
 	public void testYahooProductCrawler() {
 		String fetchProductName = null;
 		String fetchProductType = null;

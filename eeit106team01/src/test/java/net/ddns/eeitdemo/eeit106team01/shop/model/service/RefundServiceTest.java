@@ -33,6 +33,11 @@ public class RefundServiceTest {
 	private Member member;
 	private ArrayList<PurchaseListBean> purchaseListBeans = new ArrayList<PurchaseListBean>();
 
+	@Test
+	public void name() {
+		
+	}
+	
 	public void testNewRefund() throws Exception {
 		member = memberDAO.findByMemberId(1L);
 		RefundBean refund = new RefundBean(date, date, "test refund", "created", member);
@@ -72,7 +77,7 @@ public class RefundServiceTest {
 		assertNotNull(refundService.findRefundListById("refund", 2L));
 	}
 
-	@Test
+
 	public void testFindAllRefundList() throws Exception {
 		assertNotNull(refundService.findAllRefundList());
 	}

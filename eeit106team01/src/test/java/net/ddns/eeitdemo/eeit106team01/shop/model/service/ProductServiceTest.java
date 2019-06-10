@@ -25,6 +25,11 @@ public class ProductServiceTest {
 
 	private Date date = new Date(System.currentTimeMillis());
 
+	@Test
+	public void name() {
+		
+	}
+	
 //	@Test
 	public void testInsertProduct() {
 		ProductBean productBean1 = new ProductBean();
@@ -126,7 +131,7 @@ public class ProductServiceTest {
 		System.out.println("========================================");
 	}
 
-	@Test
+//	@Test
 	public void testFindProductStatus() throws Exception {
 //		System.out.println(productService.findProductStatus(null, "sold"));
 		
