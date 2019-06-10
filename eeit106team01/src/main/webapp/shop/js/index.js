@@ -38,6 +38,7 @@ $(document).ready(function() {
                 window.location.href = "http://localhost:8080/shop/search.html?productName=" + productName + "&productType=" + productType;
             }
         }))
+        addToCart();
     })
     //right-area-全站產品排行and全站產品數量
 function getProducts() {
