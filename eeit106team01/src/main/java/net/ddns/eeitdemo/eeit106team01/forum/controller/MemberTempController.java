@@ -176,14 +176,20 @@ public class MemberTempController {
 //		httpSession.invalidate();
 		httpSession.removeAttribute("MemberBean");
 
-		Cookie[] cookies = request.getCookies();
-		for (int i = 0; i < cookies.length; i++) {
-			if ("MemberBean".equals(cookies[i].getName())) {
-				cookies[i].setMaxAge(0);
-				response.addCookie(cookies[i]);
-				return ResponseEntity.ok().build();
-			}
-		}
+//		Cookie[] cookies = request.getCookies();
+//		for (int i = 0; i < cookies.length; i++) {
+//			if ("MemberBean".equals(cookies[i].getName())) {
+//				cookies[i].setMaxAge(0);
+//				response.addCookie(cookies[i]);
+//				return ResponseEntity.ok().build();
+//			}
+//		}
+		
+		Cookie emptyMemberCookie = new Cookie("MemberBean", null);
+		emptyMemberCookie.setMaxAge(0);
+		response.addCookie(emptyMemberCookie);
+		
+		return ResponseEntity.ok().build();
 
 //		ObjectMapper mapper = new ObjectMapper();
 //		String jsonStr = mapper.writeValueAsString(mb);
@@ -191,7 +197,7 @@ public class MemberTempController {
 //		Cookie memberBeanCookie = new Cookie("MemberBean", encodeJson);
 //		response.addCookie(memberBeanCookie);
 
-		return ResponseEntity.notFound().build();
+//		return ResponseEntity.notFound().build();
 	}
 
 //	@PostMapping(path = { "/memberTempsImage" }, produces = { "application/json" })
