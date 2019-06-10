@@ -18,9 +18,6 @@
     <link rel="stylesheet" href="../assets/css/neon-forms.css">
     <link rel="stylesheet" href="../assets/css/custom.css">
 
-    <script src="../assets/js/jquery-1.11.3.min.js"></script>
-
-
     <!-- Custom Style -->
     <link rel="stylesheet" href="css/upgradeMember.css" />
 
@@ -30,19 +27,97 @@
     <!-- include navbar when window.onload-->
     <div data-include="/navbar/navbarWhite.html"></div>
 
-    <div class="page-container">
+    <div class="page-container" style="background-color: white">
 
         <!-- your page start -->
         <div class="main-content">
+            <!-- drag and drop start  -->
+            <div class="row" id="div-draggable-events">
+                <div>
+                    <!-- Card -->
+                    <div id="draggable-events" class="card">
+
+                        <!-- Card image -->
+                        <div class="card-header p-2" id="card-shopping-cart">
+                            <span>
+                        <img class="card-img-top mr-1" src="img/cart.png" alt="Shopping Cart" />
+                        <span class="badge badge-warning align-middle pt-1">
+                            <p class="text-dark" id="card-shopping-cart-count">0</p>
+                        </span>
+                            </span>
+                        </div>
+
+                        <!--Accordion wrapper 1-->
+                        <div class="accordion md-accordion" style="display: none" id="accordion-shopping-cart" role="tablist" aria-multiselectable="true">
+                            <div class="scrollable" data-height="300">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Card -->
+                </div>
+            </div>
+            <!-- drag and drop end -->
+
             <div id="memberDiv" class="col-md-10">
-                <p class="col-md-12" style="text-align: center;font-size: 500%"><i class="fa fa-user-plus"></i> 加入/
+                <p class="col-md-12" style="text-align: center;font-size: 500%"><i class="fa fa-user-plus"></i>
                     <span style="color: brown">升級</span>會員
                 </p>
                 <hr style="width: 100%; color: black; height: 1px; background-color:black;">
                 <div class="memberSelect">
-                    <div class="col-md-6 ordinaryMember">
-                        <h4 style="font-size: 200%;color: #B8860B">普通會員<span class="memberSpan">(免入會費)</span></h4>
-                        <a href=""><img src="img/ordinaryMember.jpg"></a>
+
+                    <table style="text-align:center;">
+                        <tr>
+                            <th>
+                                <img src="img/ordinaryMember.jpg" style="display:block; margin:auto;">
+                            </th>
+                            <th>
+                                <img src="img/vipmember.jpg" style="display:block; margin:auto;">
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>普通會員</td>
+                            <td>VIP會員</td>
+                        </tr>
+                        <tr>
+                            <td>免費</td>
+                            <td>$888/永久</td>
+                        </tr>
+                        <tr>
+                            <td>論壇：發文﹑留言﹑點讚</td>
+                            <td>論壇：發文﹑留言﹑點讚</td>
+                        </tr>
+                        <tr>
+                            <td>商城：購物</td>
+                            <td>商城：購物</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>論壇：觀看高清影片</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>商城：結帳再九折</td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><hr></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td><a href=""><img src="img/upgrade.jpg"></a></td>
+                        </tr>
+                    </table>
+
+
+
+                    <!-- <div class="col-md-6 ordinaryMember">
+                        <h4 style="font-size: 200%;color: #B8860B">普通會員
+                            <span class="memberSpan">(免入會費)</span>
+                        </h4>
+                        <a>
+                            <img src="img/ordinaryMember.jpg">
+                        </a>
                         <div class="memberUl">
                             <ul>
                                 <li>
@@ -55,8 +130,12 @@
                         </div>
                     </div>
                     <div class="col-md-6 vipmember">
-                        <h4 style="font-size: 200% ;color: 	#FFD700">VIP會員<span class="memberSpan">(會費:$888/永久)</span></h4>
-                        <a href=""><img src="img/vipmember.jpg"></a>
+                        <h4 style="font-size: 200% ;color: 	#FFD700">VIP會員
+                            <span class="memberSpan">(會費:$888/永久)</span>
+                        </h4>
+                        <a href="">
+                            <img src="img/vipmember.jpg">
+                        </a>
                         <div class="memberUl">
                             <ul>
                                 <li>
@@ -70,12 +149,14 @@
                                 </li>
                             </ul>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
         <!-- your page end -->
     </div>
+
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
     <!-- Imported scripts on this page -->
     <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
@@ -92,9 +173,15 @@
     <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
 
     <!-- Include Thumbelina  -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
+    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet"
+    />
     <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
     <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+
+    <!-- Shopping Cart -->
+    <script type="text/javascript " src="js/shopping-cart.js"></script>
+    <script type="text/javascript " src="js/util.js"></script>
+    <link rel="stylesheet" href="css/shopping-cart.css" />
 
     <!-- NavBar -->
     <script src="../navbar/js/csi.min.js"></script>
@@ -103,6 +190,8 @@
     <!-- Imported scripts on this page -->
     <script src="/assets/js/tocify/jquery.tocify.min.js"></script>
     <!-- <script src="/assets/js/neon-chat.js"></script> -->
+
+    <script async src="js/upgradeMember.js"></script>
 
 </body>
 

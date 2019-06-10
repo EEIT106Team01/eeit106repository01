@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -34,9 +35,10 @@ public class ShopCrawler {
 	// Referrer
 	private static String referrerGoogle = "https://www.google.com/";
 	private static String referrerYahooTW = "https://tw.yahoo.com/";
-	
-	//Util
+
+	// Util
 	private static Random random = new Random();
+	private static Logger logger;
 
 	public static ProductBean yahooProductCrawler(String link, String productType, Integer productStock) {
 
@@ -54,7 +56,7 @@ public class ShopCrawler {
 			// Random User Agent
 			String userAgent;
 			String referrer;
-			
+
 			Integer randomNum = random.nextInt(5) + 1;
 			if (randomNum == 1) {
 				userAgent = userAgentChrome;
@@ -176,14 +178,14 @@ public class ShopCrawler {
 	}
 
 	//@formatter:off
-	public List<String> YahooProductLinksCrawler(String fetchProductName, Integer fetchStartPage, Integer fetchEndPage, String fetchProductType) {
+	public List<String> yahooProductLinksCrawler(String fetchProductName, Integer fetchStartPage, Integer fetchEndPage, String fetchProductType) {
 	//@formatter:on
 
-		List<String> links = new ArrayList<String>();
+		List<String> links = new ArrayList<>();
 
 		String userAgent;
 		String referrer;
-		Integer randomNum = (int) (Math.random() * 5 + 1);
+		Integer randomNum = random.nextInt(5) + 1;
 		if (randomNum == 1) {
 			userAgent = userAgentChrome;
 			referrer = referrerGoogle;
@@ -206,14 +208,14 @@ public class ShopCrawler {
 		flag: for (Integer currentPage = fetchStartPage; currentPage <= fetchEndPage; currentPage++) {
 
 			//@formatter:off
-			StringBuffer URL = new StringBuffer("https://tw.buy.yahoo.com/search/product?")
+			StringBuilder url = new StringBuilder("https://tw.buy.yahoo.com/search/product?")
 								   .append("flc=" + fetchProductType)
 								   .append("&p=" + fetchProductName)
 								   .append("&pg=")
 								   .append(currentPage);
 			Document xmlDoc = null;
 			try {
-				xmlDoc = Jsoup.connect(URL.toString())
+				xmlDoc = Jsoup.connect(url.toString())
 							  .userAgent(userAgent)
 							  .referrer(referrer)
 							  .timeout(60000)
@@ -229,7 +231,7 @@ public class ShopCrawler {
 
 			if (!productLinks.isEmpty()) {
 				System.out.println("Start Fetching......");
-				System.out.println("[" + URL.toString() + "]");
+				System.out.println("[" + url.toString() + "]");
 				pageWillFetch++;
 				for (Element element : productLinks) {
 					String productLink = element.attr("href");
