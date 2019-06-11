@@ -28,8 +28,8 @@
 
     <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
-    <!--引用dataTables.css-->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" />
+    <!-- 引用dataTables.css -->
+    <!-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/jquery.dataTables.min.css" /> -->
     <link rel="icon" href="/assets/images/favicon.ico">
 
 </head>
@@ -41,129 +41,67 @@
 
     <div class="page-container">
 
-                <div class="sidebar-user-info">
-
-                    <div class="sui-normal">
-                        <a href="#" class="user-link">
-                            <img src="" width="55" alt="" class="img-circle" />
-
-                            <span>Welcome,</span>
-                            <strong>三寶購物</strong>
-                        </a>
-                    </div>
-
-                    <div class="sui-hover inline-links animate-in">
-                        <!-- You can remove "inline-links" class to make links appear vertically, class "animate-in" will make A elements animateable when click on user profile -->
-                        <a href="#">
-                            <i class="entypo-pencil"></i> New Page
-                        </a>
-
-                        <a href="#">
-                            <i class="entypo-mail"></i> Inbox
-                        </a>
-
-                        <a href="#">
-                            <i class="entypo-lock"></i> Log Off
-                        </a>
-
-                        <span class="close-sui-popup">&times;</span>
-                        <!-- this is mandatory -->
-                    </div>
-                </div>
-
-
-                <ul id="main-menu" class="main-menu">
-                    <!-- add class "multiple-expanded" to allow multiple submenus to open -->
-                    <!-- class "auto-inherit-active-class" will automatically add "active" class for parent elements who are marked already with class "active" -->
-                    <li class="opened active has-sub">
-                        <a href="index.html">
-                            <i class="entypo-gauge"></i>
-                            <span class="title">商品</span>
-                        </a>
-                        <ul class="visible">
-                            <li class="opened active has-sub">
-                                <a href="#">
-                                    <span class="title">商品查詢</span>
-                                </a>
-                                <a href="#">
-                                    <span class="title">商品新增</span>
-                                </a>
-                            </li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </div>
-
         <!-- your page start -->
         <div class="main-content">
             <div>
-
-                <div id="div_right" class="col-md-10">
-                    <div id="table_products" class="dataTables_wrapper">
-                        <div class="dt-buttons">
-                            <a class="dt-button buttons-copy buttons-html5" tabindex="0" aria-controls="table-4">
-                                <span>Copy</span>
-                            </a>
-                            <a class="dt-button buttons-excel buttons-html5" tabindex="0" aria-controls="table-4">
-                                <span>Excel</span>
-                            </a>
-                            <a class="dt-button buttons-csv buttons-html5" tabindex="0" aria-controls="table-4">
-                                <span>CSV</span>
-                            </a>
-                            <a class="dt-button buttons-pdf buttons-html5" tabindex="0" aria-controls="table-4">
-                                <span>PDF</span>
-                            </a>
-                        </div>
-                        <div id="table-4_filter" class="dataTables_filter">
-                            <label>Search:
-                                <input type="search" class="" placeholder="" aria-controls="table-4">
-                            </label>
-                        </div>
-                        <table class="table table-bordered datatable dataTable" id="table-4" role="grid" aria-describedby="table-4_info">
-                            <thead>
-                                <tr role="row">
-                                    <th class="sorting_asc" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" aria-sort="ascending">ID</th>
-                                    <th class="sorting" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" style="width: 185px;">Name</th>
-                                    <th class="sorting" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" style="width: 169px;">Brnad</th>
-                                    <th class="sorting" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" style="width: 91px;">Type</th>
-                                    <th class="sorting" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" style="width: 122px;">Price</th>
-                                    <th class="sorting" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" style="width: 60px;">Stock</th>
-                                    <th class="sorting" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" style="width: 60px;">TotalSold</th>
-                                    <th class="sorting" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" style="width: 91px;">UpdateTime</th>
-                                    <th class="sorting" tabindex="0" aria-controls="table-4" rowspan="1" colspan="1" style="width: 91px;">CreateTime</th>
-                                </tr>
-                            </thead>
-                            <!-- <tbody id="productsTbody">
-                            </tbody> -->
-                            <tfoot>
-                                <tr>
-                                    <th rowspan="1" colspan="1">ID</th>
-                                    <th rowspan="1" colspan="1">Name</th>
-                                    <th rowspan="1" colspan="1">Brnad</th>
-                                    <th rowspan="1" colspan="1">Type</th>
-                                    <th rowspan="1" colspan="1">Price</th>
-                                    <th rowspan="1" colspan="1">Stock</th>
-                                    <th rowspan="1" colspan="1">TotalSold</th>
-                                    <th rowspan="1" colspan="1">UpdateTime</th>
-                                    <th rowspan="1" colspan="1">CreateTime</th>
-                                </tr>
-                            </tfoot>
-                        </table>
-                        <!-- <div class="dataTables_info" id="table-4_info" role="status" aria-live="polite">Showing 51 to 57 of 57 entries</div>
-                        <div class="dataTables_paginate paging_simple_numbers" id="table-4_paginate">
-                            <a class="paginate_button previous" aria-controls="table-4" data-dt-idx="0" tabindex="0" id="table-4_previous">Previous</a>
-                            <span>
-                                <a class="paginate_button " aria-controls="table-4" data-dt-idx="1" tabindex="0">1</a>
-                                <a class="paginate_button " aria-controls="table-4" data-dt-idx="2" tabindex="0">2</a>
-                                <a class="paginate_button " aria-controls="table-4" data-dt-idx="3" tabindex="0">3</a>
-                                <a class="paginate_button " aria-controls="table-4" data-dt-idx="4" tabindex="0">4</a>
-                                <a class="paginate_button " aria-controls="table-4" data-dt-idx="5" tabindex="0">5</a>
-                                <a class="paginate_button current" aria-controls="table-4" data-dt-idx="6" tabindex="0">6</a>
-                            </span>
-                            <a class="paginate_button next disabled" aria-controls="table-4" data-dt-idx="7" tabindex="0" id="table-4_next">Next</a>
-                        </div> -->
+                <div id="div_left" class="col-md-2">
+                    <div>
+                        <ul>商品 :
+                            <li>
+                                <a id="productsInfo">商品總覽</a>
+                            </li>
+                            <li>
+                                商品新增
+                            </li>
+                        </ul>
                     </div>
+                </div>
+                <div id="div_right" class="col-md-10">
+
+                    <table class="table table-bordered table-striped datatable" id="table-2">
+                        <thead>  
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Brnad</th>
+                                <th>Type</th>
+                                <th>Price</th>
+                                <!-- <th>Stock</th>
+                                <th>TotalSold</th>
+                                <th>UpdateTime</th>
+                                <th>CreateTime</th> -->
+                            </tr>
+                        </thead>
+                        <tbody>
+
+                            <!-- <td>
+                                    <div class="checkbox checkbox-replace">
+                                        <input type="checkbox" id="chk-1">
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="#" class="btn btn-default btn-sm btn-icon icon-left">
+                                        <i class="entypo-pencil"></i>
+                                        Edit
+                                    </a>
+
+                                    <a href="#" class="btn btn-danger btn-sm btn-icon icon-left">
+                                        <i class="entypo-cancel"></i>
+                                        Delete
+                                    </a>
+
+                                    <a href="#" class="btn btn-info btn-sm btn-icon icon-left">
+                                        <i class="entypo-info"></i>
+                                        Profile
+                                    </a>
+                                </td> -->
+                        </tbody>
+                    </table>
+                    <br />
+                    <!-- <a href="javascript: fnClickAddRow();" class="btn btn-primary">
+                        <i class="entypo-plus"></i>
+                        Add Row
+                    </a> -->
                 </div>
             </div>
 
@@ -172,7 +110,7 @@
     </div>
 
     <!--引用jquery dataTables.js-->
-    <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script>
+    <!-- <script type="text/javascript" src="https://cdn.datatables.net/1.10.16/js/jquery.dataTables.min.js"></script> -->
 
     <!-- Imported styles on this page -->
     <link rel="stylesheet" href="../assets/js/selectboxit/jquery.selectBoxIt.css">
@@ -207,7 +145,8 @@
     <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
 
     <!-- Include Thumbelina  -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
+    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet"
+    />
     <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
     <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
 
