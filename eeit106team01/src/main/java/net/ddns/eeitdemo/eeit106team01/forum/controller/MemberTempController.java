@@ -76,7 +76,7 @@ public class MemberTempController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@PostMapping(path = { "/memberTemps" }, consumes = { "application/json" }, produces = { "application/json" })
 	public ResponseEntity<?> postMemberTemp(@RequestBody MemberTempBean requestbody, BindingResult bindingResult,
 			HttpSession httpSession, HttpServletResponse response) throws JsonProcessingException {
@@ -116,11 +116,11 @@ public class MemberTempController {
 			return ResponseEntity.noContent().build();
 		}
 	}
-	
+
 	@PutMapping(path = { "/memberTemps/{id}" }, consumes = { "application/json" }, produces = { "application/json" })
-	public ResponseEntity<?> updateTopic(@PathVariable(name = "id") int id,
-			@RequestBody MemberTempBean requestbody,
-			HttpSession httpSession, HttpServletResponse response) throws JsonProcessingException {
+	public ResponseEntity<?> updateMemberTemps(@PathVariable(name = "id") int id,
+			@RequestBody MemberTempBean requestbody, HttpSession httpSession, HttpServletResponse response)
+			throws JsonProcessingException {
 		System.out.println("updateMemberTemp method running");
 		System.out.println(requestbody.toString());
 		if (id == requestbody.getId().intValue()) {
@@ -184,11 +184,11 @@ public class MemberTempController {
 				return ResponseEntity.ok().build();
 			}
 		}
-		
+
 		Cookie emptyMemberCookie = new Cookie("MemberBean", null);
 		emptyMemberCookie.setMaxAge(0);
 		response.addCookie(emptyMemberCookie);
-		
+
 		return ResponseEntity.ok().build();
 
 //		ObjectMapper mapper = new ObjectMapper();
