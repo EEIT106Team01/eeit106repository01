@@ -101,12 +101,14 @@ public class ProductController {
 			@RequestParam String queryString, @RequestParam(required = false) String brandType,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDay,
 			@RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date endDay) {
+			System.out.println("starDay="+startDay+"endDay="+endDay);
 		if (startDay != null && endDay != null && startDay.equals(endDay) == false && startDay.compareTo(endDay) < 0) {
 			List<ProductBean> result = productService.findProductsByUpdatedTime(dataName, queryString, startDay, endDay,
 					brandType);
 			if (result != null) {
 				return new ResponseEntity<List<ProductBean>>(result, HttpStatus.OK);
 			}
+			System.out.println("result");
 			return ResponseEntity.notFound().build();
 		}
 		return ResponseEntity.notFound().build();

@@ -439,17 +439,20 @@ public class PurchaseController {
 			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
 		}
 		initial();
-		Long id = Long.valueOf(purchaseId);
+		String idStr = new String(purchaseId);
+		Long id = Long.valueOf(idStr);
+		int length = idStr.length();
+		int count = 18 - length;
 		PurchaseBean purchase = purchaseService.findPurchaseById(id, "purchase").get(0);
 		List<PurchaseListBean> purchaseListBeans = purchaseService.findPurchaseListById(id, "purchase");
 		AioCheckOutOneTime obj = new AioCheckOutOneTime();
 		obj.setMerchantID("2000132");
-		SerialNumberGenerator generator = new SerialNumberGenerator(19);
-		String tradeNo = generator.nextString() + purchaseId;
+		SerialNumberGenerator generator = new SerialNumberGenerator(count);
+		String tradeNo = generator.nextString() + "ZZ" + purchaseId;
 		obj.setMerchantTradeNo(tradeNo);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		obj.setMerchantTradeDate(format.format(purchase.getCreateTime()));
-		obj.setTotalAmount(String.valueOf(purchase.getProductTotalPrice()));
+		obj.setTotalAmount(String.valueOf(purchase.getProductTotalPrice() + purchase.getDeliverPrice()));
 		obj.setTradeDesc("三寶商城");
 		obj.setReturnURL("http://211.23.128.214:5000");
 		obj.setClientBackURL("http://localhost:8080/shop/receipt.html?" + tradeNo);
@@ -475,10 +478,10 @@ public class PurchaseController {
 					.append("元 ").append(" ").append("x").append(String.valueOf(productCount)).append("#");
 		}
 
-		obj.setItemName(itemNameAndCountAndPrice.substring(0, itemNameAndCountAndPrice.length() - 1));
-		System.out.println(obj.getItemName());
+		obj.setItemName(itemNameAndCountAndPrice.append("運費 60 元").toString());
 		String result = all.aioCheckOut(obj, null);
 		if (result != null) {
+			System.err.println(result);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
@@ -490,7 +493,7 @@ public class PurchaseController {
 		if (ecpaySN == null) {
 			return new ResponseEntity<>("缺少必要值", HttpStatus.BAD_REQUEST);
 		}
-		Long id = Long.valueOf(ecpaySN.substring(ecpaySN.length() - 1, ecpaySN.length()));
+		Long id = Long.valueOf(ecpaySN.substring(ecpaySN.indexOf("ZZ") + 2, ecpaySN.length()));
 		PurchaseBean purchaseBean = purchaseService.findPurchaseById(id, "purchase").get(0);
 		purchaseBean.setUpdatedTime(currentTime);
 		PurchaseBean result = purchaseService.updatePurchase(purchaseBean, "paid", null, null);

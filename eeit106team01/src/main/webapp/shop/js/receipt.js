@@ -1,6 +1,6 @@
 $(function() {
     getReceipt(getEcpaySn());
-    getReceiptItem(getEcpaySn().substr(getEcpaySn().indexOf(getEcpaySn().length - 1), getEcpaySn().length));
+    getReceiptItem(getEcpaySn().substr(getEcpaySn().indexOf(`ZZ`) + 2, getEcpaySn().length));
 });
 
 // Get ecpay SN
@@ -21,6 +21,12 @@ function getReceipt(ecpaySn) {
             $(`#createTime`).append(getLocaleTime(response.createTime));
             $(`#productsTotalPrice`).append(response.productTotalPrice);
             $(`#totalPrice`).append(response.productTotalPrice + 60);
+            if ((response.payStatus).match(`paid`)) {
+                $(`#payStatus`).append(`已付款`);
+            }
+            let receiverInformation = response.receiverInformation;
+            $(`#receiverName`).append(receiverInformation.receiver);
+            $(`#receiverAddress`).append(receiverInformation.address);
         }
     }).fail(function(response) {
         console.log(response);

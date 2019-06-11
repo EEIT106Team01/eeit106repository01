@@ -269,10 +269,12 @@ function recommendTop(recommendData) {
     var recommendName = [];
     var recommendPrice = [];
     var recommendImg = [];
+    var recommendId =[];
     var recommendAll = [];
     var recommendC1 = [];
     var recommendC2 = [];
     $.each(recommendData, function() {
+        recommendId.push(recommendData[i].id);
         recommendName.push(recommendData[i].name);
         recommendPrice.push(recommendData[i].price);
         recommendImg.push(recommendData[i].imageLink[0]);
@@ -294,7 +296,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="#" tabindex="0">' +
+                '<a href="/shop/product.html?'+recommendId[k]+'" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
@@ -325,7 +327,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="#" tabindex="0">' +
+                '<a href="/shop/product.html?'+recommendId[q]+'" tabindex="0">' +
                 "<h5>" +
                 recommendName[q].substr(0, 10) +
                 "..." +
@@ -415,7 +417,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="#" tabindex="0">' +
+                '<a href="/shop/product.html?'+recommendId[k]+'" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
@@ -446,7 +448,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="#" tabindex="0">' +
+                '<a href="/shop/product.html?'+recommendId[q]+'" tabindex="0">' +
                 "<h5>" +
                 recommendName[q].substr(0, 10) +
                 "..." +
