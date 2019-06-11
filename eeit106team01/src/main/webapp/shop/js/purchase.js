@@ -36,6 +36,7 @@ $(function() {
         $(`#memberDiscount`).append(`無折扣`);
     }
     newPurchase();
+    quantityBtn();
     //Member
 });
 
@@ -80,9 +81,9 @@ function generateProductHtml() {
             product.name +
             `</td>` +
             `<td>` +
-            `<div class="input-spinner" name="name-` + product.id + `">
+            `<div class="input-spinner" name="price-` + product.price + `">
             <button type="button" class="btn btn-primary " data-step="-1">-</button>
-            <input class="form-control size-1" value="` + product.quantity + `" data-min="1" data-max="` + product.totalQuantity + `">
+            <input class="form-control size-2" value="` + product.quantity + `" data-min="1" data-max="` + product.totalQuantity + `">
             <button type="button" class="btn btn-primary " data-step="1">+</button>
             </div>` +
             `</td>` +
@@ -116,10 +117,36 @@ function generateMemberDiscount() {
     }
 }
 
+//Quantity Btn
 function quantityBtn() {
-    $(`.input-spinner `).click(function() {
-
+    $(`.input-spinner button`).click(function() {
+        let plusOrMinus;
+        if ($(this).text().match(/\+/)) {
+            plusOrMinus = true;
+        } else {
+            plusOrMinus = false;
+        }
+        let price = parseInt($(this).parent(`div .input-spinner`).attr(`name`).replace(`price-`, ``));
+        let name = $(this).parent(`div .input-spinner`).attr(`name`);
+        editTotalPrice(plusOrMinus, price, name);
     });
+}
+
+//Edit total price
+function editTotalPrice(boolean, price, name) {
+    let currentProductPrice = parseInt($(`#productsTotalPrice`).text().replace(`$`, ``));
+    let currentTotalPrice = parseInt($(`#totalPrice`).text().replace(`$`, ``));
+    let inputValue = parseInt($(`div[name=` + name + `] input`).attr(`value`));
+    if (boolean) {
+        // $(`div[name=` + name + `] input`).attr(`value`, inputValue + 1);
+        $(`#productsTotalPrice`).text(`$` + (currentProductPrice + price));
+        $(`#totalPrice`).text(`$` + (currentProductPrice + price));
+    } else {
+        if ((currentProductPrice - price) > price) {
+            $(`#productsTotalPrice`).text(`$` + (currentProductPrice - price));
+            $(`#totalPrice`).text(`$` + (currentProductPrice - price));
+        }
+    }
 }
 
 $(`#receiver-check`).click(function(e) {
@@ -190,3 +217,4 @@ function newPurchase() {
         });
     })
 }
+0
