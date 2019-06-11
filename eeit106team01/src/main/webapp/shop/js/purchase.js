@@ -133,28 +133,54 @@ $(`#receiver-check`).click(function(e) {
 //newPurchase
 function newPurchase() {
     $(`#check-out`).click(function() {
-        let url = urlDomain + `/shop/newPurchase`;
+        let url = `/shop/newPurchase`;
         let productIds = [];
         let payStatus = `unpaid`;
         let productTotalPrice = $(`#productsTotalPrice`).text().replace(/\$/, ``);
-        console.log(productTotalPrice);
+        let deliverStatus = `unsent`;
+        let deliverType = `address`;
+        let deliverPrice = 60;
         getProductFromCart().forEach(product => {
             for (let index = 0; index < product.quantity; index++) {
                 productIds.push(product.id);
             }
-
         });
+        let receiverInformationJson = new Object();
+        receiverInformationJson.address = $(`#receiverAddress`).attr(`value`);
+        receiverInformationJson.receiver = $(`#receiverName`).attr(`value`);
+
         let createJson = new Object();
         createJson.id = productIds;
-        console.log(createJson.id);
-        // createJson.id = ;
-        // $.ajax({
-        //     type: "POST",
-        //     url: url,
-        //     data: data,
-        //     success: function(response) {
+        createJson.payStatus = payStatus;
+        createJson.productTotalPrice = productTotalPrice;
+        createJson.deliverStatus = deliverStatus;
+        createJson.deliverType = deliverType;
+        createJson.deliverPrice = deliverPrice;
+        createJson.receiverInformation = receiverInformationJson;
+        createJson.memberId = 1;
+        let data = JSON.stringify(createJson);
 
-        //     }
-        // });
+        let cartLocalStorage = localStorage;
+        cartLocalStorage.clear();
+
+        $.ajax({
+            type: "POST",
+            url: url,
+            data: data,
+            contentType: `application/json`,
+            success: function(response) {
+                let id = String(response.id);
+                console.log(id);
+                $.ajax({
+                    type: "POST",
+                    url: "/shop/processEcpay",
+                    data: id,
+                    contentType: `application/json`,
+                    success: function(response) {
+                        $(`body`).html(response);
+                    }
+                });
+            }
+        });
     })
 }
