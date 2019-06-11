@@ -20,7 +20,7 @@ function createTopicView(dataTopicList, divTopicId) {
                 //     width: "100%"
                 // }).appendTo(divVideo);
             }
-            let aLinkToContent = $("<a></a>").attr("href", "http://localhost:8080/forum/showContents.html?topic=" + dataTopicList[i].id).appendTo(divTopic);
+            let aLinkToContent = $("<a></a>").attr("href", "/forum/showContents.html?topic=" + dataTopicList[i].id).appendTo(divTopic);
                 let divTopicHeader = $("<div></div>").addClass("col-md-12").css({margin: "1px","text-decoration": "underline","font-weight": "bolder"}).text(parseTopicHeader(dataTopicList[i].topicHeader)).appendTo(aLinkToContent);
                 let divTopicContent = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px"}).text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(aLinkToContent);
             let divMemberName = $("<div></div>").addClass("col-md-12").css({"font-size": "14px",margin: "1px",color: "#0066CC",minHeight: "34px"}).appendTo(divTopic);
@@ -84,7 +84,7 @@ function createTopicView(dataTopicList, divTopicId) {
         //     let divCardBody = $("<div></div>").addClass("card-body").appendTo(divCard);
         //         let h4TopicHeader = $("<h4></h4>").addClass("card-title").text(dataTopicList[i].topicHeader).appendTo(divCardBody);
         //         let pTopicContent = $("<p></p>").addClass("card-text").text(parseQuillContent(JSON.parse(dataTopicList[i].topicContent))).appendTo(divCardBody);
-        //             let aLinkToContent = $("<a></a>").addClass("card-link").attr("href", "http://localhost:8080/forum/showContents.html")
+        //             let aLinkToContent = $("<a></a>").addClass("card-link").attr("href", "/forum/showContents.html")
         //                 .on("click", function(){
         //                     localStorage.setItem("topicBean", JSON.stringify(dataTopicList[i]));
         //                 }).text("<詳細內容>").appendTo(pTopicContent);

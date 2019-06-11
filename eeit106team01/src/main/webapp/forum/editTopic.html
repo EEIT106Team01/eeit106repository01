@@ -325,16 +325,57 @@
 			// quillTopic.enable(false);
 			// $(".formField").attr("disabled", true);
 
-			//old start
 			if ($("input[name=topicStatus]:checked").val() == "deleted") {
 				deleteTopicBean(topicBean.id);
 			} else if ($("input[name=topicStatus]:checked").val() == "normal") {
+				//updateTopic start
+				let inputErrorExist = false;
 				let newVideoBean = $("#videoBean").val();
-				if (newVideoBean == "") {
+
+				if ($("input[name=topicType]:checked").val() == "shareTopic") {
+					console.log("這是分享文");
+					$(".myProgressDiv").css("display", "block");
+					if (!$("#videoBean").val()) {
+						// videoValidationCss();
+						// inputErrorExist = true;
+						newVideoBean = null;
+					}
+				} else if ($("input[name=topicType]:checked").val() == "requestTopic") {
+					console.log("這是協尋文");
 					newVideoBean = null;
+				} else {
+					console.log("impossible");
+					return;
+				}
+
+				if ((!$("#topicHeader").val()) || ($("#topicHeader").val().trim().length == 0)) {
+					headerValidationCss();
+					inputErrorExist = true;
+				}
+				if (!$("#accidentTime").val()) {
+					dateTimePickerValidationCss();
+					inputErrorExist = true;
+				}
+				if (!(accidentLocationLatitude && accidentLocationLongitude)) {
+					locationValidationCss();
+					inputErrorExist = true;
+				}
+				if (quillTopic.getContents().ops[0].insert.trim().length == 0) {
+					contentValidationCss();
+					inputErrorExist = true;
+				}
+
+				if (inputErrorExist) {
+					location.href = "#";
+					console.log("有錯誤");
+					return;
+				}
+
+
+				if ((!topicMemberBean) || (topicMemberBean == undefined)) {
+					alert("沒登入?");
 				}
 				let newTopicBean = {
-					id: topicBean.id,
 					topicHeader: $("#topicHeader").val(),
 					topicType: $("input[name=topicType]:checked").val(),
 					// topicRegion: $("#topicRegion option:selected").val(),
@@ -350,6 +391,8 @@
 					videoBean: newVideoBean
 				};
 				// console.log(newTopicBean);
+
+				// var httpMethod = "POST";
 				if (newVideoBean) {
 					console.log("videoBean 不為空");
 					upload();
@@ -370,109 +413,9 @@
 					console.log(newTopicBean);
 					updateTopicBean(newTopicBean);
 				}
+				//updateTopic end
 			} else {
 				console.log("topicStatus Error");
-			}
-			//old end
-
-			let inputErrorExist = false;
-			let newVideoBean = $("#videoBean").val();
-
-			if ($("input[name=topicType]:checked").val() == "shareTopic") {
-				console.log("這是分享文");
-				$(".myProgressDiv").css("display", "block");
-				if (!$("#videoBean").val()) {
-					videoValidationCss();
-					inputErrorExist = true;
-				}
-			} else if ($("input[name=topicType]:checked").val() == "requestTopic") {
-				console.log("這是協尋文");
-				newVideoBean = null;
-			} else {
-				console.log("impossible");
-				return;
-			}
-
-			if ((!$("#topicHeader").val()) || ($("#topicHeader").val().trim().length == 0)) {
-				headerValidationCss();
-				inputErrorExist = true;
-			}
-			if (!$("#accidentTime").val()) {
-				dateTimePickerValidationCss();
-				inputErrorExist = true;
-			}
-			if (!(accidentLocationLatitude && accidentLocationLongitude)) {
-				locationValidationCss();
-				inputErrorExist = true;
-			}
-			if (quillTopic.getContents().ops[0].insert.trim().length == 0) {
-				contentValidationCss();
-				inputErrorExist = true;
-			}
-
-
-			// console.log("提交驗證 header: " + $("#topicHeader").val());
-			// console.log("提交驗證 date: " + new Date($("#accidentTime").val()));
-			// console.log("提交驗證 date String: " + $("#accidentTime").val());
-			// console.log("提交驗證 緯度: " + accidentLocationLatitude);
-			// console.log("提交驗證 經度: " + accidentLocationLongitude);
-			// console.log("提交驗證 內容: " + JSON.stringify(quillTopic.getContents()));
-			// console.log(quillTopic.getContents().ops[0].insert);
-			// console.log("提交驗證 會員: " + topicMemberBean);
-			// console.log("提交驗證 影片: " + $("#videoBean").val());
-			if (inputErrorExist) {
-				location.href = "#";
-				console.log("有錯誤");
-				return;
-			}
-
-
-			if ((!topicMemberBean) || (topicMemberBean == undefined)) {
-				alert("沒登入?");
-			}
-			let newTopicBean = {
-				topicHeader: $("#topicHeader").val(),
-				topicType: $("input[name=topicType]:checked").val(),
-				topicRegion: $("#topicRegion option:selected").val(),
-				accidentTime: new Date($("#accidentTime").val()),
-				accidentLocation: $("#accidentLocation").val(),
-				accidentLocationLatitude: accidentLocationLatitude,
-				accidentLocationLongitude: accidentLocationLongitude,
-				topicContent: JSON.stringify(quillTopic.getContents()),
-				memberBean: topicMemberBean,
-				videoBean: newVideoBean
-			};
-			console.log("topicHeader:" + newTopicBean.topicHeader);
-			console.log("topicType:" + newTopicBean.topicType);
-			console.log("topicRegion:" + newTopicBean.topicRegion);
-			console.log("accidentTime:" + newTopicBean.accidentTime);
-			console.log("accidentLocation:" + newTopicBean.accidentLocation);
-			console.log("accidentLocationLatitude:" + newTopicBean.accidentLocationLatitude);
-			console.log("accidentLocationLongitude:" + newTopicBean.accidentLocationLongitude);
-			console.log("topicContent:" + newTopicBean.topicContent);
-			console.log("memberBean: ");
-			console.log(newTopicBean.memberBean);
-			console.log("videoBean is null? :" + newTopicBean.videoBean);
-			// var httpMethod = "POST";
-			if (newVideoBean) {
-				console.log("videoBean 不為空");
-				upload();
-				let checkVideo = setInterval(function () {
-					if (videoUploadResult) {
-						clearInterval(checkVideo);
-						console.log("videoUploadResult: ");
-						console.log(videoUploadResult);
-						newTopicBean.videoBean = videoUploadResult;
-						console.log("videoBean: ok");
-						insertTopic(newTopicBean);
-					} else {
-						console.log("videoUploadResult: ");
-						console.log(videoUploadResult);
-					}
-				}, 1000);
-			} else {
-				console.log(newTopicBean);
-				insertTopic(newTopicBean);
 			}
 
 		}
