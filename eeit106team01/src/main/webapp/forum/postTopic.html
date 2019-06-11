@@ -159,6 +159,7 @@
 		// console.log("CookieMember: " + topicMemberBean);
 		if (!topicMemberBean) {
 			sessionStorage.setItem("previousPage", location.pathname + location.search);
+			alert("請先登入");
 			location.href = "/forum/login.html";
 		}
 		topicMemberBean = JSON.parse(Cookies.get("MemberBean"));
