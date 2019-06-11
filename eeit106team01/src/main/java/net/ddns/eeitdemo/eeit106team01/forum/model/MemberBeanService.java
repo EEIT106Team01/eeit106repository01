@@ -1,6 +1,9 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
+import java.util.Calendar;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -70,6 +73,21 @@ public class MemberBeanService {
 				//不應該在這修改
 //				findOne.setMemberCreateTime(bean.getMemberCreateTime());
 			}
+			
+			return memberTempDAO.update(findOne);
+		}
+		return null;
+	};
+	
+	public MemberTempBean memberTempsLevelup(int id) {
+		MemberTempBean findOne = findByPrimaryKey(id);
+		if (findOne != null) {
+			findOne.setLevel("VIP");
+			
+			Calendar nowCalendar = Calendar.getInstance();
+			nowCalendar.setTime(new java.util.Date());
+			nowCalendar.add(Calendar.MONTH, 1); // 比較月份，月份+1
+			findOne.setLevelTime(nowCalendar.getTime());
 			
 			return memberTempDAO.update(findOne);
 		}
