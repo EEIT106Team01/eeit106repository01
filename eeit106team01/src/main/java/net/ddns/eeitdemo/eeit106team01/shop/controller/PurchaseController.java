@@ -448,11 +448,11 @@ public class PurchaseController {
 		AioCheckOutOneTime obj = new AioCheckOutOneTime();
 		obj.setMerchantID("2000132");
 		SerialNumberGenerator generator = new SerialNumberGenerator(count);
-		String tradeNo = generator.nextString()+ "ZZ" + purchaseId;
+		String tradeNo = generator.nextString() + "ZZ" + purchaseId;
 		obj.setMerchantTradeNo(tradeNo);
 		SimpleDateFormat format = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
 		obj.setMerchantTradeDate(format.format(purchase.getCreateTime()));
-		obj.setTotalAmount(String.valueOf(purchase.getProductTotalPrice()));
+		obj.setTotalAmount(String.valueOf(purchase.getProductTotalPrice() + purchase.getDeliverPrice()));
 		obj.setTradeDesc("三寶商城");
 		obj.setReturnURL("http://211.23.128.214:5000");
 		obj.setClientBackURL("http://localhost:8080/shop/receipt.html?" + tradeNo);
@@ -478,7 +478,7 @@ public class PurchaseController {
 					.append("元 ").append(" ").append("x").append(String.valueOf(productCount)).append("#");
 		}
 
-		obj.setItemName(itemNameAndCountAndPrice.substring(0, itemNameAndCountAndPrice.length() - 1));
+		obj.setItemName(itemNameAndCountAndPrice.append("運費 60 元").toString());
 		String result = all.aioCheckOut(obj, null);
 		if (result != null) {
 			System.err.println(result);
