@@ -11,21 +11,14 @@
 
     <link rel="icon" href="../assets/images/favicon.ico">
 
+    <title>訂單查詢</title>
+
+    <!-- jQuery -->
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
+
     <!-- cookie -->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
-    <title>訂單查詢</title>
-
-    <link rel="stylesheet" href="../assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
-    <link rel="stylesheet" href="../assets/css/font-icons/entypo/css/entypo.css">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
-    <link rel="stylesheet" href="../assets/css/bootstrap.css">
-    <link rel="stylesheet" href="../assets/css/neon-core.css">
-    <link rel="stylesheet" href="../assets/css/neon-theme.css">
-    <link rel="stylesheet" href="../assets/css/neon-forms.css">
-    <link rel="stylesheet" href="../assets/css/custom.css">
-
-    <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
 </head>
 
@@ -100,7 +93,41 @@
 
         <br />
 
+        <!-- Modal 7 (Ajax Modal)-->
+        <div class="modal fade" id="modal-7">
+            <div class="modal-dialog">
+                <div class="modal-content">
+
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        <h4 class="modal-title">Dynamic Content</h4>
+                    </div>
+
+                    <div class="modal-body">
+
+                        Content is loading...
+
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-info">Save changes</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
     </div>
+
+    <!-- Custom JavaScript -->
+    <script src="js/util.js"></script>
+    <script src="js/purchase-show.js"></script>
+
+    <!-- Imported styles on this page -->
+    <link rel="stylesheet" href="../assets/js/datatables/datatables.css">
+
+    <!-- Imported scripts on this page -->
+    <script src="../assets/js/datatables/datatables.js"></script>
 
     <!-- Bottom scripts (common) -->
     <script src="../assets/js/gsap/TweenMax.min.js"></script>
@@ -110,35 +137,12 @@
     <script src="../assets/js/resizeable.js"></script>
     <script src="../assets/js/neon-api.js"></script>
 
-
-    <!-- Imported scripts on this page -->
-    <script src="../assets/js/neon-chat.js"></script>
-
-
     <!-- JavaScripts initializations and stuff -->
     <script src="../assets/js/neon-custom.js"></script>
-
-
-    <!-- Demo Settings -->
-    <script src="../assets/js/neon-demo.js"></script>
-
-    <!-- Imported styles on this page -->
-    <link rel="stylesheet" href="../assets/js/datatables/datatables.css">
-    <link rel="stylesheet" href="../assets/js/select2/select2-bootstrap.css">
-    <link rel="stylesheet" href="../assets/js/select2/select2.css">
-
-    <!-- Imported scripts on this page -->
-    <script src="../assets/js/datatables/datatables.js"></script>
-    <script src="../assets/js/select2/select2.min.js"></script>
-
-    <!-- Custom JavaScript -->
-    <script src="js/util.js"></script>
-    <script src="js/purchase-show.js"></script>
 
     <!-- Data-Include -->
     <script src="../navbar/js/csi.min.js"></script>
     <script src="../navbar/js/navbar-init.js"></script>
-
 </body>
 
 </html>

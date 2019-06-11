@@ -1,5 +1,6 @@
 $(function() {
     findPurchaseByMemberId(1);
+    // showAjaxModal();
 });
 
 //Generate Purchase By Member Id
@@ -9,17 +10,13 @@ function findPurchaseByMemberId(id) {
         type: "GET",
         url: `/shop/findPurchaseById?idType=member&id=` + memberId,
         success: function(response) {
-            console.log(response);
             response.forEach(element => {
                 let time = getLocaleTime(element.createTime);
                 let daysAgo = getLocaleTime(GetDateStr(-1));
-                console.log(element);
                 let id;
                 if (time > daysAgo) {
-                    // console.log(`new`);
                     id = element.id + `&nbsp;&nbsp;&nbsp;<span class="label label-sm label-success">New Purchase</span>`
                 } else {
-                    // console.log(`not new`);
                     id = element.id;
                 }
                 let totalPrice = element.productTotalPrice + element.deliverPrice;
@@ -32,11 +29,11 @@ function findPurchaseByMemberId(id) {
                         <td>` + time + `</td>
                         <td>` + totalPrice + `</td>
                         <td>
-                            <a href="#" class="btn btn-info btn-lg btn-icon icon-left">
+                            <a href="javascript:;" onclick="jQuery('#modal-7').modal('show', {backdrop: 'static'});" class="btn btn-info btn-lg btn-icon icon-left">
                                 <i class="entypo-info"></i> 訂單明細
                             </a>
                             <a href="#" class="btn btn-danger btn-lg btn-icon icon-left">
-                                <i class="entypo-pencil"></i> 退貨申請
+                                <i class="entypo-help-circled"></i> 退貨申請
                             </a>
                         </td>
                     </tr>`
@@ -45,7 +42,18 @@ function findPurchaseByMemberId(id) {
         }
     });
 }
-
 /* <div class="checkbox checkbox-replace">
     <input type="checkbox" id="chk-1">
 </div>*/
+
+
+// function showAjaxModal() {
+//     jQuery('#modal-7').modal('show', { backdrop: 'static' });
+
+//     jQuery.ajax({
+//         url: "data/ajax-content.txt",
+//         success: function(response) {
+//             jQuery('#modal-7 .modal-body').html(response);
+//         }
+//     });
+// }

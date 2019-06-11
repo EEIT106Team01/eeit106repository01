@@ -80,7 +80,7 @@ function generateProductHtml() {
             product.name +
             `</td>` +
             `<td>` +
-            `<div class="input-spinner">
+            `<div class="input-spinner" name="name-` + product.id + `">
             <button type="button" class="btn btn-primary " data-step="-1">-</button>
             <input class="form-control size-1" value="` + product.quantity + `" data-min="1" data-max="` + product.totalQuantity + `">
             <button type="button" class="btn btn-primary " data-step="1">+</button>
@@ -114,6 +114,12 @@ function generateMemberDiscount() {
     } else {
         return false;
     }
+}
+
+function quantityBtn() {
+    $(`.input-spinner `).click(function() {
+
+    });
 }
 
 $(`#receiver-check`).click(function(e) {
