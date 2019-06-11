@@ -21,6 +21,10 @@
     <link rel="stylesheet" href="../assets/css/neon-forms.css">
     <link rel="stylesheet" href="../assets/css/custom.css">
 
+    <!-- NavBar -->
+    <script src="../navbar/js/csi.min.js"></script>
+    <script src="../navbar/js/navbar-init.js"></script>
+
     <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
     <!-- Custom Style -->
@@ -140,14 +144,14 @@
                         <div class="row">
                             <div class="col-sm-3">
 
-                                <select name="test" class="selectboxit">
+                                <!-- <select name="test" class="selectboxit">
                                     <optgroup label="Selected Comments">
                                         <option value="1">Delete</option>
                                         <option value="2">Edit</option>
                                         <option value="3">Spam</option>
                                         <option value="4">Approve</option>
                                     </optgroup>
-                                </select>
+                                </select> -->
 
                             </div>
 
@@ -247,14 +251,14 @@
                         <div class="row">
                             <div class="col-sm-3">
 
-                                <select name="test" class="selectboxit">
+                                <!-- <select name="test" class="selectboxit">
                                     <optgroup label="Selected Comments">
                                         <option value="1">Delete</option>
                                         <option value="2">Edit</option>
                                         <option value="3">Spam</option>
                                         <option value="4">Approve</option>
                                     </optgroup>
-                                </select>
+                                </select> -->
 
                             </div>
 
@@ -269,10 +273,10 @@
                                                 <i class="entypo-left-open-mini"></i>
                                             </a>
                                         </li>
-                                        <li>
+                                        <li class="active">
                                             <a href="#">1</a>
                                         </li>
-                                        <li class="active">
+                                        <li>
                                             <a href="#">2</a>
                                         </li>
                                         <li>
@@ -319,132 +323,29 @@
 
                 <!-- Edit Comment Modal -->
                 <span id="modal-edit">
-                    <!-- <div class="modal fade" id="modal-edit-comment-2">
-                    <div class="modal-dialog" style="width: 60%; top:50px;">
-                        <div class="modal-content">
+                </span>
 
-                            <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                                <h4 class="modal-title">編輯評論</h4>
-                            </div>
-
-                            <div class="modal-body">
-
-                                <div class="row">
-
-                                    <div class="col-sm-2">
-                                        <a href="#">
-                                            <img src="../assets/images/member-1.jpg" class="img-rounded img-responsive" />
-                                        </a>
-
-                                        <br />
-                                        <span>評論編號: <span id="review-id-edit"></span></span>
-                <br />
-                <span>訂單編號: <span id="purchase-id-edit"></span></span>
-            </div>
-
-            <div class="col-sm-10">
-
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="form-group">
-                            <label for="field-1" class="control-label">會員</label>
-                            <input type="text" class="form-control" id="member-id-edit" value="" disabled="disabled">
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12">
-
-                        <div class="form-group">
-                            <label for="field-1" class="control-label">評論內容</label>
-
-                            <textarea class="form-control" id="comment-edit" style="min-height: 120px;"></textarea>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-4">
-
-                        <div class="form-group">
-                            <label for="field-1" class="control-label">上次修改時間</label>
-
-                            <p>
-                                <strong id="update-time-edit"></strong>
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        <div class="form-group">
-                            <label for="field-1" class="control-label">商品名稱</label>
-
-                            <p>
-                                <a href="#">
-                                    <strong id="product-id-edit"></strong>
-                                </a>
-                            </p>
-                        </div>
-
-                    </div>
-
-                    <div class="col-md-4">
-
-                        <div class="form-group">
-                            <label for="field-1" class="control-label">商品評分</label>
-                            <div class="input-spinner">
-                                <button type="button" class="btn btn-default" data-step="-0.5">-</button>
-                                <input id="rating-edit" class="form-control size-1" value="" data-min="0" data-max="5">
-                                <button type="button" class="btn btn-default" data-step="0.5">+</button>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
 
             </div>
 
-        </div>
+            <!-- recommended -->
+            <div id="recommendDiv" class="col-md-12">
+                <p class="text-dark col-md-12" id="recommendTitle"></p>
+                <div id="carousel-reviews" class="carousel slide" data-ride="carousel">
+                    <div class="carousel-inner col-md-8">
+                        <div class="item col-md-12 active" id="item1">
 
-    </div>
+                        </div>
+                        <div class="item col-md-12" id="item2">
 
-    <div class="modal-footer">
-        <button type="button" class="btn btn-danger" data-dismiss="modal">關閉</button>
-        <button type="button" class="btn btn-info" id="update-edit">修改</button>
-    </div>
-    </div>
-    </div>
-    </div> -->
-    </span>
+                        </div>
+                        <div id="recCarouselDiv">
 
-
-    </div>
-
-    <!-- recommended -->
-    <div id="recommendDiv" class="col-md-12">
-        <p class="text-dark col-md-12" id="recommendTitle"></p>
-        <div id="carousel-reviews" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner col-md-8">
-                <div class="item col-md-12 active" id="item1">
-
-                </div>
-                <div class="item col-md-12" id="item2">
-
-                </div>
-                <div id="recCarouselDiv">
-
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
-    </div>
     </div>
 
     <!-- Imported styles on this page -->
@@ -492,7 +393,4 @@
     <!-- jQuery Validation Plugin -->
     <script async src="js/jquery.validate.js"></script>
 
-    <!-- NavBar -->
-    <script src="../navbar/js/csi.min.js"></script>
-    <script src="../navbar/js/navbar-init.js"></script>
 </body>

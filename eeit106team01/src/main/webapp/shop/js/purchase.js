@@ -9,14 +9,14 @@ let deliveryPrice = $(`#deliveryPrice`)
     .text()
     .substr(
         $(`#deliveryPrice`)
-            .text()
-            .indexOf("$") + 1,
+        .text()
+        .indexOf("$") + 1,
         $(`#deliveryPrice`).text().length
     );
 let memberDiscount = generateMemberDiscount();
 
 //Document Ready
-$(function () {
+$(function() {
     //Time
     $(`#currentTime`).text(getLocaleTime(currentTime));
     //Purchase ID
@@ -35,6 +35,7 @@ $(function () {
         );
         $(`#memberDiscount`).append(`無折扣`);
     }
+    newPurchase();
     //Member
 });
 
@@ -44,7 +45,7 @@ function getNewPurchaseId() {
     $.ajax({
         type: "GET",
         url: urlDomain + resource,
-        success: function (response) {
+        success: function(response) {
             let currentPurchaseSize = response;
             let newPurchaseId = new String(currentPurchaseSize + 1);
             generatePurchaseId(newPurchaseId);
@@ -83,7 +84,7 @@ function generateProductHtml() {
             <button type="button" class="btn btn-primary " data-step="-1">-</button>
             <input class="form-control size-1" value="` + product.quantity + `" data-min="1" data-max="` + product.totalQuantity + `">
             <button type="button" class="btn btn-primary " data-step="1">+</button>
-            </div>`+
+            </div>` +
             `</td>` +
             `<td>` +
             `$` +
@@ -115,7 +116,7 @@ function generateMemberDiscount() {
     }
 }
 
-$(`#receiver-check`).click(function (e) {
+$(`#receiver-check`).click(function(e) {
     if ($(this).prop("checked") == true) {
         $(`#receiverName`).attr(`value`, $(`#memberName`).text());
         $(`#receiverAddress`).attr(`value`, $(`#memberAddress`).text());
@@ -128,3 +129,32 @@ $(`#receiver-check`).click(function (e) {
         $(`#receiverMail`).attr(`value`, "");
     };
 });
+
+//newPurchase
+function newPurchase() {
+    $(`#check-out`).click(function() {
+        let url = urlDomain + `/shop/newPurchase`;
+        let productIds = [];
+        let payStatus = `unpaid`;
+        let productTotalPrice = $(`#productsTotalPrice`).text().replace(/\$/, ``);
+        console.log(productTotalPrice);
+        getProductFromCart().forEach(product => {
+            for (let index = 0; index < product.quantity; index++) {
+                productIds.push(product.id);
+            }
+
+        });
+        let createJson = new Object();
+        createJson.id = productIds;
+        console.log(createJson.id);
+        // createJson.id = ;
+        // $.ajax({
+        //     type: "POST",
+        //     url: url,
+        //     data: data,
+        //     success: function(response) {
+
+        //     }
+        // });
+    })
+}

@@ -24,7 +24,7 @@ function findAllFromLocalStorage() {
         i = keys.length;
     while (i--) {
         if (isNaN(keys[i])) {
-            console.log(`There are ` + i + ` NaN.`);
+            // console.log(`There are ` + i + ` NaN.`);
         } else {
             let jsonObject = JSON.parse(localStorage.getItem(keys[i]));
             jsonArray.push(jsonObject);
