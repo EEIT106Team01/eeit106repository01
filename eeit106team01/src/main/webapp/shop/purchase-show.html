@@ -13,6 +13,10 @@
 
     <title>訂單查詢</title>
 
+    <!-- Data-Include -->
+    <script src="../navbar/js/csi.min.js"></script>
+    <script src="../navbar/js/navbar-init.js"></script>
+
     <!-- jQuery -->
     <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
@@ -94,7 +98,7 @@
         <br />
 
         <!-- Modal 7 (Ajax Modal)-->
-        <div class="modal fade" id="modal-7">
+        <div class="modal fade" id="modal-7" style="top: 100px;">
             <div class="modal-dialog">
                 <div class="modal-content">
 
@@ -104,9 +108,17 @@
                     </div>
 
                     <div class="modal-body">
-
-                        Content is loading...
-
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>商品名稱</th>
+                                    <th>商品單價</th>
+                                    <th>商品序號</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
                     </div>
 
                     <div class="modal-footer">
@@ -140,9 +152,6 @@
     <!-- JavaScripts initializations and stuff -->
     <script src="../assets/js/neon-custom.js"></script>
 
-    <!-- Data-Include -->
-    <script src="../navbar/js/csi.min.js"></script>
-    <script src="../navbar/js/navbar-init.js"></script>
 </body>
 
 </html>

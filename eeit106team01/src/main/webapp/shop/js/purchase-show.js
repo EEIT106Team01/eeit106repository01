@@ -1,7 +1,14 @@
 $(function() {
+    memberInfo(1);
     findPurchaseByMemberId(1);
-    // showAjaxModal();
 });
+
+//generate member info 
+function memberInfo(id) {
+    console.log();
+    document.title = `Member ` + id + `-` + `訂單查詢`;
+    $(`#memberId`).prepend(`Member ` + id + ` `);
+}
 
 //Generate Purchase By Member Id
 function findPurchaseByMemberId(id) {
@@ -29,7 +36,7 @@ function findPurchaseByMemberId(id) {
                         <td>` + time + `</td>
                         <td>` + totalPrice + `</td>
                         <td>
-                            <a href="javascript:;" onclick="jQuery('#modal-7').modal('show', {backdrop: 'static'});" class="btn btn-info btn-lg btn-icon icon-left">
+                            <a href="javascript:;" onclick="showAjaxModal(` + element.id + `)" class="btn btn-info btn-lg btn-icon icon-left">
                                 <i class="entypo-info"></i> 訂單明細
                             </a>
                             <a href="#" class="btn btn-danger btn-lg btn-icon icon-left">
@@ -42,18 +49,27 @@ function findPurchaseByMemberId(id) {
         }
     });
 }
-/* <div class="checkbox checkbox-replace">
-    <input type="checkbox" id="chk-1">
-</div>*/
 
-
-// function showAjaxModal() {
-//     jQuery('#modal-7').modal('show', { backdrop: 'static' });
-
-//     jQuery.ajax({
-//         url: "data/ajax-content.txt",
-//         success: function(response) {
-//             jQuery('#modal-7 .modal-body').html(response);
-//         }
-//     });
-// }
+function showAjaxModal(id) {
+    $('#modal-7 .modal-body tbody').text(``);
+    $('#modal-7').modal('show', { backdrop: 'static' });
+    $.ajax({
+        url: `/shop/findPurchaseListById/?idType=purchase&id=` + id,
+        success: function(response) {
+            response.forEach(element => {
+                let productId = element.productId.id;
+                let purchaseListId = element.id;
+                let productName = element.productId.name;
+                let productPrice = element.price;
+                let productSN = element.serialNumber;
+                $('#modal-7 .modal-body tbody').append(
+                    `<tr>
+                        <td id="` + purchaseListId + `"><a href="/shop/product.html?` + productId + `">` + productName.substr(0, 8) + `...</a>` + `</td>
+                        <td>` + productPrice + `</td>
+                        <td>` + productSN + `</td>
+                    </tr>`
+                );
+            });
+        }
+    });
+}
