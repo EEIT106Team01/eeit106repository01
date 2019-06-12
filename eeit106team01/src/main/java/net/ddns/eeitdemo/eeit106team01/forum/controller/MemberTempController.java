@@ -4,6 +4,8 @@ import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -72,6 +74,19 @@ public class MemberTempController {
 			resultTemp.setId(findOne.getId());
 			resultTemp.setImage(findOne.getImage());
 			return ResponseEntity.ok(resultTemp);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	@GetMapping(path = { "/getImageByName/{name}" }, produces = { "application/json" })
+	public ResponseEntity<?> getImageByName(@PathVariable(name = "name") String name) {
+		System.out.println("getImageByName method running");
+		MemberTempBean findOne = memberBeanService.findByName(name);
+		if (findOne != null) {
+			Map<String, String> imageMap = new HashMap<String, String>();
+			imageMap.put("image", findOne.getImage());
+			return ResponseEntity.ok(imageMap);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -175,9 +190,11 @@ public class MemberTempController {
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
 				Cookie memberBeanCookie = new Cookie("MemberBean", encodeJson);
 				response.addCookie(memberBeanCookie);
+				System.out.println("登入成功");
 				return ResponseEntity.ok(mb);
 			}
 		}
+		System.out.println("登入失敗");
 		return ResponseEntity.notFound().build();
 	}
 

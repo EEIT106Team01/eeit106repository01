@@ -54,20 +54,22 @@
           console.log("cookie: " + Cookies.get("MemberBean"));
           let redirect = sessionStorage.getItem("previousPage");
           console.log(redirect);
+          sessionStorage.removeItem("previousPage");
           if (!redirect) {
             redirect = "/index.html";
           }
           location.href = redirect;
         },
-        error: function (data, textStatus, jqXHR) {
+        error: function (jqXHR, textStatus) {
           console.log("error");
-          console.log(textStatus);
+          console.log(jqXHR.status);
+          // console.log(textStatus);
         }
       });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      $("#login").click(login);
+      $("#login").on("click", login);
       // $("#id").keyup(function () {
       //     let id = $(this).val();
       //     if (id.match(/\d{1,10}/)) {
