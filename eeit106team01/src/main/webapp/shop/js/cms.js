@@ -81,21 +81,47 @@ $(document).ready(function() {
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">產品圖片</label>
-
-                        <input type="text" class="form-control" name="imageLink" id="imageLink" data-validate="required" placeholder="產品圖片" />
+                        <label class="control-label">產品圖片
+                            <button type="button" class="btn btn-primary btn-icon" id="btn_addImgCol">
+                            增加欄位
+                            <i class="fa fa-plus"></i></button>
+                        </label>
+                        <div id="div_insertImg">
+                            <div id="div_imageLink0">
+                                <input type="text" class="form-control" name="imageLink0" id="imageLink0" data-validate="required" placeholder="順序" />
+                                <input type="text" class="form-control" name="imageLinkContent0" id="imageLinkContent0" data-validate="required" placeholder="圖片" />
+                            </div><br>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">詳細資訊</label>
-
-                        <input type="text" class="form-control" name="information" id="information" data-validate="required" placeholder="詳細資訊" />
+                        <label class="control-label">詳細資訊
+                            <button type="button" class="btn btn-primary btn-icon" id="btn_addInfoCol">
+                            增加欄位
+                            <i class="fa fa-plus"></i></button>
+                        
+                        </label>
+                        <div id="div_insertInfo">
+                            <div id="div_info0">
+                                <input type="text" class="form-control" name="information0" id="information0" data-validate="required" placeholder="資訊" />
+                                <input type="text" class="form-control" name="informationContent0" id="informationContent0" data-validate="required" placeholder="資訊內容" />
+                            </div><br>
+                        </div>
                     </div>
 
                     <div class="form-group">
-                        <label class="control-label">詳細圖片</label>
-
-                        <input type="text" class="form-control" name="informationImageLink" id="informationImageLink" data-validate="required" placeholder="詳細圖片" />
+                        <label class="control-label">詳細圖片
+                            <button type="button" class="btn btn-primary btn-icon" id="btn_addInfoImgCol">
+                            增加欄位
+                            <i class="fa fa-plus"></i></button>
+                        </label>
+                        <div id="div_insertInfoImg">
+                            <div id="div_informationImageLink0">
+                                <input type="text" class="form-control" name="informationImageLink0" id="informationImageLink0" data-validate="required" placeholder="順序" />
+                                <input type="text" class="form-control" name="informationImageLinkContent0" id="informationImageLinkContent0" data-validate="required" placeholder="詳細圖片" />
+                            </div><br>
+                        </div>
+                        
                     </div>
 
                     <div class="form-group">
@@ -105,6 +131,36 @@ $(document).ready(function() {
                 </form>
             </div>`
         )
+        let k = 1;
+        $("#btn_addImgCol").on("click",function(){
+            k++;
+            $("#div_insertImg").append(
+                `<div id="div_imageLink`+k+`">
+                    <input type="text" class="form-control" name="imageLink`+k+`" id="imageLink`+k+`" data-validate="required" placeholder="順序" />
+                    <input type="text" class="form-control" name="imageLinkContent`+k+`" id="imageLinkContent`+k+`" data-validate="required" placeholder="圖片" />
+                    </div><br>`
+            )
+        })
+        let j = 1;
+        $("#btn_addInfoCol").on("click",function(){
+            j++;
+            $("#div_insertInfo").append(
+                `<div id="div_imageLink`+k+`">
+                    <input type="text" class="form-control" name="information`+k+`" id="information`+k+`" data-validate="required" placeholder="資訊" />
+                    <input type="text" class="form-control" name="informationContent`+k+`" id="informationContent`+k+`" data-validate="required" placeholder="資訊內容" />
+                    </div><br>`
+            )
+        })
+        let c = 1;
+        $("#btn_addInfoImgCol").on("click",function(){
+            c++;
+            $("#div_insertInfoImg").append(
+                `<div id="div_imageLink`+c+`">
+                    <input type="text" class="form-control" name="informationImageLink`+c+`" id="informationImageLink`+c+`" data-validate="required" placeholder="順序" />
+                    <input type="text" class="form-control" name="informationImageLinkContent`+c+`" id="informationImageLinkContent`+c+`" data-validate="required" placeholder="圖片" />
+                    </div><br>`
+            )
+        })
     }));
 
     $("#productUpdate").on("click", (function() {
@@ -187,8 +243,7 @@ $(document).ready(function() {
             )
             let id = $("#id").val();
             getProduct(id);
-            
-            
+             
             $("#btn_update").on("click",(function(){
                 
                 let nameVal = $("#name").val();
@@ -197,31 +252,25 @@ $(document).ready(function() {
                 let priceVal = $("#price").val();
                 let stockVal = $("#stock").val();
 
-                let length = $("#div_imageLinkAll input").length;
+                let imgLength = $("#div_imageLinkAll input").length;
                 console.log(  $($("#div_imageLinkAll input").eq(1)).val())
-                let imgArray = [];
-                for(let i =0;i<length;i+=2){
-                    imgArray.push($($("#div_imageLinkAll input").eq(i)).val()+":"+$($("#div_imageLinkAll input").eq(i+1)).val())
+                let imageLinkVal = new Object();
+                for(let i =0;i<imgLength;i+=2){
+                    imageLinkVal.$($("#div_imageLinkAll input").eq(i)).val()=$($("#div_imageLinkAll input").eq(i+1)).val()
                 }
-                let imageLinkVal = JSON.stringify(imgArray);
-                console.log(imageLinkVal)
 
-                let length = $("#div_infoAll input").length;
-                console.log(  $($("#div_infoAll input").eq(1)).val())
-                let infoArray = [];
-                for(let i =0;i<length;i+=2){
-                    infoArray.push($($("#div_infoAll input").eq(i)).val()+":"+$($("#div_infoAll input").eq(i+1)).val())
+                let infoLength = $("#div_infoAll input").length;
+                let informationVal = new Object();
+                for(let i =0;i<infoLength;i+=2){
+                    infoArray.$($("#div_infoAll input").eq(i)).val()=$($("#div_infoAll input").eq(i+1)).val()
                 }
-                let informationVal = JSON.stringify(infoArray);
 
-                let length = $("#div_infoAll input").length;
-                console.log(  $($("#div_infoAll input").eq(1)).val())
-                let infoArray = [];
-                for(let i =0;i<length;i+=2){
-                    infoArray.push($($("#div_infoAll input").eq(i)).val()+":"+$($("#div_infoAll input").eq(i+1)).val())
+                let infoImgLength = $("#div_informationImageLinkALl input").length;
+                let informationImageLinkVal = new Object();
+                for(let i =0;i<infoImgLength;i+=2){
+                    infoImgArray.$($("#div_informationImageLinkALl input").eq(i)).val()=$($("#div_informationImageLinkALl input").eq(i+1)).val()
                 }
-                let informationImageLinkVal = JSON.stringify(infoArray);
-                // updateProduct(nameVal,brandVal,typeVal,priceVal,stockVal,imageLinkVal,informationVal,informationImageLinkVal)
+                updateProduct(nameVal,brandVal,typeVal,priceVal,stockVal,imageLinkVal,informationVal,informationImageLinkVal)
             })) 
         }))
     }))
