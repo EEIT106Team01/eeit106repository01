@@ -207,20 +207,20 @@ function getOld(id, index) {
 }
 
 function initRegionChat(region) {
-    $("#" + region).click(function () {
-        if (worker != null) {
-            worker.port.postMessage({
-                "command": "subscribeRegion",
-                "region": region
-            });
-            worker.port.postMessage({
-                "command": "getRegionActive",
-                "region": region
-            });
-        }
-        neonChat.setStatus($(this).attr("id"), "online");
-        $(this).unbind();
-    });
+    // $("#" + region).click(function () {
+    if (worker != null) {
+        worker.port.postMessage({
+            "command": "subscribeRegion",
+            "region": region
+        });
+        worker.port.postMessage({
+            "command": "getRegionActive",
+            "region": region
+        });
+    }
+    neonChat.setStatus($("#" + region).attr("id"), "online");
+    // $(this).unbind();
+    // });
 }
 
 function workerInit() {
@@ -293,6 +293,7 @@ function workerInit() {
             initRegionChat("middle");
             initRegionChat("south");
             initRegionChat("east");
+
             addEventListener("beforeunload", function () {
                 worker.port.postMessage({
                     "command": "closing"
@@ -847,6 +848,18 @@ $(document).ready(function () {
                             $entry = $('<li><span class="user"></span><p></p><span class="time"></span></li>'),
                             date = entry.time,
                             date_formated = date;
+
+                        let $image = $(document.createElement("img"));
+                        let imageSrc = "/navbar/images/notLogin.jpg";
+                        $image.attr({
+                            src: imageSrc,
+                            width: 40,
+                            class: "img-circle"
+                        });
+                        $image.css({
+                            margin: "1%"
+                        });
+                        $entry.find('.user').before($image);
 
                         if (typeof date == 'object') {
                             var hour = date.getHours(),
@@ -1548,8 +1561,8 @@ $(document).ready(function () {
         chatUsername = memberBean.name;
         if (worker == null) {
             worker = new SharedWorker("/chat/js/websocket-worker.js");
-            console.log("initworker")
             workerInit();
+            console.log("initworker");
         }
 
         $("#checkUser").keydown(function (e) {
