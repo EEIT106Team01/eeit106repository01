@@ -28,7 +28,8 @@ public class RefundDAOImplTest extends ShopTest {
 
 	private RefundBean refundBean;
 	private RefundListBean refundListBean;
-	private Date date = NewDate.newCurrentTime();
+	NewDate newDate = new NewDate();
+	private Date date = newDate.newCurrentTime();
 
 	@Test
 	public void name() {

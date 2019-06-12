@@ -29,8 +29,13 @@ let checkNavbar = setInterval(function () {
                             console.log("no memberImage in this member");
                             $("#navbarUserImage").attr("src", "/navbar/images/notLogin.jpg");
                         }
-                        let imgHeight = document.getElementById('navbarUserImage').clientHeight;
-                        $("#navbarUserImage").css({ top: `calc(50% - ${imgHeight / 2}px)` });
+                        let checkNavbarUserImage = setInterval(function () {
+                            if (document.getElementById("navbarUserImage")) {
+                                clearInterval(checkNavbarUserImage);
+                                let imgHeight = document.getElementById('navbarUserImage').clientHeight;
+                                $("#navbarUserImage").css({ top: `calc(50% - ${imgHeight / 2}px)` });
+                            }
+                        }, 10);
                     }
                 }
             });

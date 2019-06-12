@@ -79,7 +79,7 @@ function allStorage() {
         i = keys.length;
     while (i--) {
         if (isNaN(keys[i])) {
-            console.log(`There are ` + i + ` NaN.`);
+            // console.log(`There are ` + i + ` NaN.`);
         } else {
             values.push(localStorage.getItem(keys[i]));
         }
@@ -168,6 +168,7 @@ function addToCart() {
         }
     });
 
+    //Save in Cart
     $("#shoppingCartButton").click(function() {
         var productURL = location.href;
         var productId = parseInt(
@@ -186,6 +187,7 @@ function addToCart() {
         );
         var productQuantity = parseInt($("#quantity option:selected").val());
         var productImage = $("#productLeftInfo img").attr("src");
+        var productTotalQuantity = parseInt($("#quantity option:last").val());
 
         //create json object
         var productInfoJson = new Object();
@@ -194,6 +196,7 @@ function addToCart() {
         productInfoJson.price = productPrice;
         productInfoJson.quantity = productQuantity;
         productInfoJson.image = productImage;
+        productInfoJson.totalQuantity = productTotalQuantity;
         var productData = JSON.stringify(productInfoJson);
 
         if (null != cartLocalStorage.getItem(productId)) {
@@ -204,10 +207,48 @@ function addToCart() {
         }
 
         var result = cartLocalStorage.getItem(productId);
+        location.href = location.href;
     });
 
-    //button click reload
-    $("#shoppingCartButton").click(function() {
-        location.href = location.href;
+    //buyNow
+    $("#buyNow").click(function() {
+        var productURL = location.href;
+        var productId = parseInt(
+            productURL.substr(productURL.indexOf("?") + 1, productURL.length)
+        );
+        var productName = $("#productName").text();
+        var productPrice = parseInt(
+            $("#productPrice")
+            .text()
+            .substr(
+                $("#productPrice")
+                .text()
+                .indexOf("$") + 1,
+                $("#productPrice").text().length
+            )
+        );
+        var productQuantity = parseInt($("#quantity option:selected").val());
+        var productImage = $("#productLeftInfo img").attr("src");
+        var productTotalQuantity = parseInt($("#quantity option:last").val());
+
+        //create json object
+        var productInfoJson = new Object();
+        productInfoJson.id = productId;
+        productInfoJson.name = productName;
+        productInfoJson.price = productPrice;
+        productInfoJson.quantity = productQuantity;
+        productInfoJson.image = productImage;
+        productInfoJson.totalQuantity = productTotalQuantity;
+        var productData = JSON.stringify(productInfoJson);
+
+        if (null != cartLocalStorage.getItem(productId)) {
+            cartLocalStorage.removeItem(cartLocalStorage.getItem(productId));
+            cartLocalStorage.setItem(productId, productData);
+        } else {
+            cartLocalStorage.setItem(productId, productData);
+        }
+
+        var result = cartLocalStorage.getItem(productId);
+        location.href = urlDomain + `shop/purchase.html`;
     });
 }

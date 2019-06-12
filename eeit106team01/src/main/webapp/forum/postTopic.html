@@ -159,6 +159,7 @@
 		// console.log("CookieMember: " + topicMemberBean);
 		if (!topicMemberBean) {
 			sessionStorage.setItem("previousPage", location.pathname + location.search);
+			alert("請先登入");
 			location.href = "/forum/login.html";
 		}
 		topicMemberBean = JSON.parse(Cookies.get("MemberBean"));
@@ -235,6 +236,7 @@
 					console.log(data);
 					// console.log("textStatus : " + textStatus);
 					// console.log("jqXHR : " + jqXHR);
+					alert("文章發佈成功");
 					location.href = "/forum/showContents.html?topic=" + data.id;
 				},
 				error: function (jqXHR, textStatus, errorThrown) {

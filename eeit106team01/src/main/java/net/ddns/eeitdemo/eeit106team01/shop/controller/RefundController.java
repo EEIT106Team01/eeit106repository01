@@ -39,8 +39,8 @@ public class RefundController {
 
 	@Autowired
 	private MemberDAO memberDAO;
-
-	private Date currentTime = NewDate.newCurrentTime();
+	private NewDate newDate = new NewDate();
+	private Date currentTime = newDate.newCurrentTime();
 	
 	private static final String VALUENOTFOUND= "缺少必要值";
 	private static final String NULLPOINTER = "無此退貨單";

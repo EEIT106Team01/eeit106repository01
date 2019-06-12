@@ -82,6 +82,9 @@ public class ArticleTopicCurrentService {
 			}
 			if (bean.getTopicType() != null) {
 				findOne.setTopicType(bean.getTopicType());
+				if("requestTopic".equals(bean.getTopicType())) {
+					findOne.setVideoBean(null);
+				}
 			}
 			if (bean.getTopicRegion() != null) {
 				findOne.setTopicRegion(bean.getTopicRegion());

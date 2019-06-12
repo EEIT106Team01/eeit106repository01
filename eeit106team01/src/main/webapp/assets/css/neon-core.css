@@ -9392,7 +9392,7 @@ table {
   width: 280px;
   background: #303641;
   /* background: #ffffff; */
-  z-index: 5;
+  z-index: 60001;
   display: none;
 }
 #chat.fixed {

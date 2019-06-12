@@ -20,7 +20,7 @@ function autocomplete(inp) {
         this.parentNode.appendChild(a);
         // get String Array from ajax
         $.ajax({
-            url: `http://localhost:8080/autocomplete/${val}`,
+            url: `/autocomplete/${val}`,
             type: "GET",
             success: function (data, textStatus, jqXHR) {
                 if (data.length > 0) {
@@ -50,12 +50,12 @@ function autocomplete(inp) {
                                         (or any other open lists of autocompleted values:*/
                                         closeAllLists();
                                         $.ajax({
-                                            url: "http://localhost:8080/queryarticleTopics/" + $("#myInput").val(),
+                                            url: "/queryarticleTopics/" + $("#myInput").val(),
                                             type: "GET",
                                             success: function (data, textStatus, jqXHR) {
                                                 if (data.length == 1) {
-                                                    localStorage.setItem("topicBean", JSON.stringify(data[0]));
-                                                    location.href = "/forum/showContents.html";
+                                                    // localStorage.setItem("topicBean", JSON.stringify(data[0]));
+                                                    location.href = "/forum/showContents.html?topic=" + data[0].id;
                                                 } else {
                                                     console.log("incorrect too many results");
                                                 }

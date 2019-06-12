@@ -78,6 +78,10 @@
 			color: red;
 		}
 
+		.mytopicStatusBlock {
+			text-align: center;
+		}
+
 		.errorMessage {
 			display: none;
 			font-size: 16px;
@@ -192,10 +196,11 @@
 		});
 
 		function preInput() {
+			//編輯類型 一般都是normal
 			$(`input[name=topicStatus][value=${topicBean.topicStatus}]`).attr("checked", true);
 
-			$("#topicHeader").val(topicBean.topicHeader);
 			$("#" + topicBean.topicType).prop("checked", true);
+			$("#topicHeader").val(topicBean.topicHeader);
 			// $("#" + topicBean.topicRegion).prop("selected", true);
 			//topicBean.accidentTime preInput is after dateTimepicker()
 			// $("#accidentLocation").val(topicBean.accidentLocation);
@@ -226,6 +231,20 @@
 
 		$(document).ready(function () {
 			preInput();
+			$("#updateTopic").on("click", function () {
+				$(".updateBlock").css("display", "block");
+				if ($("input[name=topicType]:checked").val() == "shareTopic") {
+					$("#submit").val("分享影片資源");
+				} else if ($("input[name=topicType]:checked").val() == "requestTopic") {
+					$("#submit").val("送出協尋請求");
+				}
+			});
+			$("#deleteTopic").on("click", function () {
+				$(".updateBlock").css("display", "none");
+				$("#submit").val("刪除文章");
+			});
+
+
 			let selectedTopicType = getUrlParameters().t;
 
 			if (selectedTopicType == undefined) {
@@ -291,11 +310,13 @@
 					console.log("回傳值 : " + data);
 					sessionStorage.removeItem("contentBean");
 					sessionStorage.removeItem("contentPage");
+					alert("文章修改成功");
 					location.href = contentPage;
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log("error");
 					console.log(textStatus);
+					alert("文章修改失敗");
 				}
 			})
 		}
@@ -309,11 +330,13 @@
 					console.log("回傳值 : " + data);
 					sessionStorage.removeItem("contentBean");
 					sessionStorage.removeItem("contentPage");
-					location.href = "/forum/index.html";
+					alert("文章刪除成功");
+					location.href = "/index.html";
 				},
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log("error");
 					console.log(textStatus);
+					alert("文章刪除失敗");
 				}
 			})
 		}
@@ -325,13 +348,55 @@
 			// quillTopic.enable(false);
 			// $(".formField").attr("disabled", true);
 
-			//old start
 			if ($("input[name=topicStatus]:checked").val() == "deleted") {
 				deleteTopicBean(topicBean.id);
 			} else if ($("input[name=topicStatus]:checked").val() == "normal") {
+				//updateTopic start
+				let inputErrorExist = false;
 				let newVideoBean = $("#videoBean").val();
-				if (newVideoBean == "") {
+
+				if ($("input[name=topicType]:checked").val() == "shareTopic") {
+					console.log("這是分享文");
+					$(".myProgressDiv").css("display", "block");
+					if (!$("#videoBean").val()) {
+						// videoValidationCss();
+						// inputErrorExist = true;
+						newVideoBean = null;
+					}
+				} else if ($("input[name=topicType]:checked").val() == "requestTopic") {
+					console.log("這是協尋文");
 					newVideoBean = null;
+				} else {
+					console.log("impossible");
+					return;
+				}
+
+				if ((!$("#topicHeader").val()) || ($("#topicHeader").val().trim().length == 0)) {
+					headerValidationCss();
+					inputErrorExist = true;
+				}
+				if (!$("#accidentTime").val()) {
+					dateTimePickerValidationCss();
+					inputErrorExist = true;
+				}
+				if (!(accidentLocationLatitude && accidentLocationLongitude)) {
+					locationValidationCss();
+					inputErrorExist = true;
+				}
+				if (quillTopic.getContents().ops[0].insert.trim().length == 0) {
+					contentValidationCss();
+					inputErrorExist = true;
+				}
+
+				if (inputErrorExist) {
+					location.href = "#";
+					console.log("有錯誤");
+					return;
+				}
+
+
+				if ((!topicMemberBean) || (topicMemberBean == undefined)) {
+					alert("沒登入?");
 				}
 				let newTopicBean = {
 					id: topicBean.id,
@@ -350,6 +415,8 @@
 					videoBean: newVideoBean
 				};
 				// console.log(newTopicBean);
+				// return;
+				// var httpMethod = "POST";
 				if (newVideoBean) {
 					console.log("videoBean 不為空");
 					upload();
@@ -370,109 +437,9 @@
 					console.log(newTopicBean);
 					updateTopicBean(newTopicBean);
 				}
+				//updateTopic end
 			} else {
 				console.log("topicStatus Error");
-			}
-			//old end
-
-			let inputErrorExist = false;
-			let newVideoBean = $("#videoBean").val();
-
-			if ($("input[name=topicType]:checked").val() == "shareTopic") {
-				console.log("這是分享文");
-				$(".myProgressDiv").css("display", "block");
-				if (!$("#videoBean").val()) {
-					videoValidationCss();
-					inputErrorExist = true;
-				}
-			} else if ($("input[name=topicType]:checked").val() == "requestTopic") {
-				console.log("這是協尋文");
-				newVideoBean = null;
-			} else {
-				console.log("impossible");
-				return;
-			}
-
-			if ((!$("#topicHeader").val()) || ($("#topicHeader").val().trim().length == 0)) {
-				headerValidationCss();
-				inputErrorExist = true;
-			}
-			if (!$("#accidentTime").val()) {
-				dateTimePickerValidationCss();
-				inputErrorExist = true;
-			}
-			if (!(accidentLocationLatitude && accidentLocationLongitude)) {
-				locationValidationCss();
-				inputErrorExist = true;
-			}
-			if (quillTopic.getContents().ops[0].insert.trim().length == 0) {
-				contentValidationCss();
-				inputErrorExist = true;
-			}
-
-
-			// console.log("提交驗證 header: " + $("#topicHeader").val());
-			// console.log("提交驗證 date: " + new Date($("#accidentTime").val()));
-			// console.log("提交驗證 date String: " + $("#accidentTime").val());
-			// console.log("提交驗證 緯度: " + accidentLocationLatitude);
-			// console.log("提交驗證 經度: " + accidentLocationLongitude);
-			// console.log("提交驗證 內容: " + JSON.stringify(quillTopic.getContents()));
-			// console.log(quillTopic.getContents().ops[0].insert);
-			// console.log("提交驗證 會員: " + topicMemberBean);
-			// console.log("提交驗證 影片: " + $("#videoBean").val());
-			if (inputErrorExist) {
-				location.href = "#";
-				console.log("有錯誤");
-				return;
-			}
-
-
-			if ((!topicMemberBean) || (topicMemberBean == undefined)) {
-				alert("沒登入?");
-			}
-			let newTopicBean = {
-				topicHeader: $("#topicHeader").val(),
-				topicType: $("input[name=topicType]:checked").val(),
-				topicRegion: $("#topicRegion option:selected").val(),
-				accidentTime: new Date($("#accidentTime").val()),
-				accidentLocation: $("#accidentLocation").val(),
-				accidentLocationLatitude: accidentLocationLatitude,
-				accidentLocationLongitude: accidentLocationLongitude,
-				topicContent: JSON.stringify(quillTopic.getContents()),
-				memberBean: topicMemberBean,
-				videoBean: newVideoBean
-			};
-			console.log("topicHeader:" + newTopicBean.topicHeader);
-			console.log("topicType:" + newTopicBean.topicType);
-			console.log("topicRegion:" + newTopicBean.topicRegion);
-			console.log("accidentTime:" + newTopicBean.accidentTime);
-			console.log("accidentLocation:" + newTopicBean.accidentLocation);
-			console.log("accidentLocationLatitude:" + newTopicBean.accidentLocationLatitude);
-			console.log("accidentLocationLongitude:" + newTopicBean.accidentLocationLongitude);
-			console.log("topicContent:" + newTopicBean.topicContent);
-			console.log("memberBean: ");
-			console.log(newTopicBean.memberBean);
-			console.log("videoBean is null? :" + newTopicBean.videoBean);
-			// var httpMethod = "POST";
-			if (newVideoBean) {
-				console.log("videoBean 不為空");
-				upload();
-				let checkVideo = setInterval(function () {
-					if (videoUploadResult) {
-						clearInterval(checkVideo);
-						console.log("videoUploadResult: ");
-						console.log(videoUploadResult);
-						newTopicBean.videoBean = videoUploadResult;
-						console.log("videoBean: ok");
-						insertTopic(newTopicBean);
-					} else {
-						console.log("videoUploadResult: ");
-						console.log(videoUploadResult);
-					}
-				}, 1000);
-			} else {
-				console.log(newTopicBean);
-				insertTopic(newTopicBean);
 			}
 
 		}
@@ -601,12 +568,12 @@
 				<!-- <fieldset class="formField"> -->
 				<div class="col-md-12">
 					<div class="col-md-12 itemBlock">
-						<div class="col-md-2">
+						<!-- <div class="col-md-2">
 							<label>
 								<span class="requiredIcon">*</span>編輯類型：
 							</label>
-						</div>
-						<div class="col-md-10">
+						</div> -->
+						<div class="col-md-12 mytopicStatusBlock">
 							<label>
 								<input type="radio" name="topicStatus" id="updateTopic" value="normal">修改文章
 							</label>
@@ -616,214 +583,216 @@
 						</div>
 					</div>
 
-					<div class="col-md-12 itemBlock">
-						<div class="col-md-2">
-							<label>
-								<span class="requiredIcon">*</span>文章類型：
-							</label>
-						</div>
-						<div class="col-md-10">
-							<label>
-								<input type="radio" name="topicType" id="shareTopic" value="shareTopic">提供影片
-							</label>
-							<label>
-								<input type="radio" name="topicType" id="requestTopic" value="requestTopic">需求影片
-							</label>
-						</div>
-					</div>
-
-					<div class="col-md-12 itemBlock">
-						<div class="col-md-2" for="topicHeader">
-							<label for="topicHeader">
-								<span class="requiredIcon">*</span>標題：
-							</label>
-						</div>
-						<div class="col-md-10">
-							<input type="text" class="myHeaderInput" name="topicHeader" id="topicHeader" autocomplete="off">
-							<div class="col-md-12 errorMessage" id="errorMessageHeader">
-								請輸入標題
+					<div class="updateBlock">
+						<div class="col-md-12 itemBlock">
+							<div class="col-md-2">
+								<label>
+									<span class="requiredIcon">*</span>文章類型：
+								</label>
+							</div>
+							<div class="col-md-10">
+								<label>
+									<input type="radio" name="topicType" id="shareTopic" value="shareTopic">提供影片
+								</label>
+								<label>
+									<input type="radio" name="topicType" id="requestTopic" value="requestTopic">需求影片
+								</label>
 							</div>
 						</div>
-						</form>
-					</div>
 
-					<div class="col-md-12 itemBlock" style="display: none">
-						<div class="col-md-3">
-							地區分類：
+						<div class="col-md-12 itemBlock">
+							<div class="col-md-2" for="topicHeader">
+								<label for="topicHeader">
+									<span class="requiredIcon">*</span>標題：
+								</label>
+							</div>
+							<div class="col-md-10">
+								<input type="text" class="myHeaderInput" name="topicHeader" id="topicHeader" autocomplete="off">
+								<div class="col-md-12 errorMessage" id="errorMessageHeader">
+									請輸入標題
+								</div>
+							</div>
+							</form>
 						</div>
-						<div class="col-md-9">
-							<select name="topicRegion" id="topicRegion">
-								<option value="northernRegion">北部區域</option>
-								<option value="centralRegion">中部區域</option>
-								<option value="southernRegion">南部區域</option>
-								<option value="easternRegion">東部區域</option>
-							</select>
-						</div>
-						<div class="col-md-10">
-							<button class="btn btn-default popover-default" id="buttonRegion" data-toggle="popover" data-trigger="hover" data-placement="right"
-							 data-content="北部區域：包括臺北市、新北市、基隆市、新竹市、桃園市、新竹縣及宜蘭縣。中部區域：包括臺中市、苗栗縣、彰化縣、南投縣及雲林縣。南部區域：包括高雄市、臺南市、嘉義市、嘉義縣、屏東縣及澎湖縣。東部區域：包括花蓮縣及臺東縣。"
-							 data-original-title="分區說明">各縣市分區</button>
-						</div>
-					</div>
 
-					<div class="col-md-12 itemBlock">
-						<!-- <div class="form-group"> -->
-						<div class="col-md-2">
+						<div class="col-md-12 itemBlock" style="display: none">
+							<div class="col-md-3">
+								地區分類：
+							</div>
+							<div class="col-md-9">
+								<select name="topicRegion" id="topicRegion">
+									<option value="northernRegion">北部區域</option>
+									<option value="centralRegion">中部區域</option>
+									<option value="southernRegion">南部區域</option>
+									<option value="easternRegion">東部區域</option>
+								</select>
+							</div>
+							<div class="col-md-10">
+								<button class="btn btn-default popover-default" id="buttonRegion" data-toggle="popover" data-trigger="hover" data-placement="right"
+								 data-content="北部區域：包括臺北市、新北市、基隆市、新竹市、桃園市、新竹縣及宜蘭縣。中部區域：包括臺中市、苗栗縣、彰化縣、南投縣及雲林縣。南部區域：包括高雄市、臺南市、嘉義市、嘉義縣、屏東縣及澎湖縣。東部區域：包括花蓮縣及臺東縣。"
+								 data-original-title="分區說明">各縣市分區</button>
+							</div>
+						</div>
+
+						<div class="col-md-12 itemBlock">
+							<!-- <div class="form-group"> -->
+							<div class="col-md-2">
+								<label>
+									<span class="requiredIcon">*</span>事發時間：
+								</label>
+							</div>
+							<div class="col-md-10 myDivDateTimePicker">
+								<div class="input-group date form_datetime col-md-5" data-link-field="accidentTime">
+									<input class="form-control" id="accidentTimeCheck" size="20" type="text" value="" readonly>
+									<span class="input-group-addon myDateTimeIcon">
+										<span class="glyphicon glyphicon-remove"></span>
+									</span>
+									<span class="input-group-addon myDateTimeIcon">
+										<span class="glyphicon glyphicon-th"></span>
+									</span>
+								</div>
+								<div class="col-md-12 errorMessage" id="errorMessageDateTime">
+									請輸入時間
+								</div>
+							</div>
+							<input type="hidden" id="accidentTime" value="" />
+							<!-- </div> -->
+						</div>
+
+						<div class="col-md-12 itemBlock" style="display: none">
 							<label>
-								<span class="requiredIcon">*</span>事發時間：
+								事發地點說明：
+								<input type="text" name="accidentLocation" id="accidentLocation" value="地點預設">
 							</label>
 						</div>
-						<div class="col-md-10 myDivDateTimePicker">
-							<div class="input-group date form_datetime col-md-5" data-link-field="accidentTime">
-								<input class="form-control" id="accidentTimeCheck" size="20" type="text" value="" readonly>
-								<span class="input-group-addon myDateTimeIcon">
-									<span class="glyphicon glyphicon-remove"></span>
-								</span>
-								<span class="input-group-addon myDateTimeIcon">
-									<span class="glyphicon glyphicon-th"></span>
-								</span>
-							</div>
-							<div class="col-md-12 errorMessage" id="errorMessageDateTime">
-								請輸入時間
-							</div>
-						</div>
-						<input type="hidden" id="accidentTime" value="" />
-						<!-- </div> -->
-					</div>
 
-					<div class="col-md-12 itemBlock" style="display: none">
-						<label>
-							事發地點說明：
-							<input type="text" name="accidentLocation" id="accidentLocation" value="地點預設">
-						</label>
-					</div>
+						<div class="col-md-12 itemBlock">
+							<div class="col-md-2">
+								<label>
+									<span class="requiredIcon">*</span>事發地點：
+								</label>
+							</div>
+							<div class="col-md-10">
+								<div class="col-md-12 itemBlockSub">
+									<input type="button" class="myButton" id="taipei" value="台北市">
+									<input type="button" class="myButton" id="taoyuan" value="桃園市">
+									<input type="button" class="myButton" id="taichung" value="台中市">
+									<input type="button" class="myButton" id="tainan" value="台南市">
+									<input type="button" class="myButton" id="kaohsiung" value="高雄市">
+									<input type="button" class="myButton" id="yilan" value="宜蘭縣">
+									<input type="button" class="myButton" id="taitung" value="台東縣">
+								</div>
+								<div class="col-md-12 errorMessage" id="errorMessageLocation">
+									請點擊地圖
+								</div>
+								<div id="map_canvas" style="width:600px; height:500px;"></div>
+							</div>
+						</div>
 
-					<div class="col-md-12 itemBlock">
-						<div class="col-md-2">
-							<label>
-								<span class="requiredIcon">*</span>事發地點：
-							</label>
-						</div>
-						<div class="col-md-10">
-							<div class="col-md-12 itemBlockSub">
-								<input type="button" class="myButton" id="taipei" value="台北市">
-								<input type="button" class="myButton" id="taoyuan" value="桃園市">
-								<input type="button" class="myButton" id="taichung" value="台中市">
-								<input type="button" class="myButton" id="tainan" value="台南市">
-								<input type="button" class="myButton" id="kaohsiung" value="高雄市">
-								<input type="button" class="myButton" id="yilan" value="宜蘭縣">
-								<input type="button" class="myButton" id="taitung" value="台東縣">
+						<div class="col-md-12 itemBlock">
+							<div class="col-md-2">
+								<label>
+									<span class="requiredIcon">*</span>文章內容：
+								</label>
 							</div>
-							<div class="col-md-12 errorMessage" id="errorMessageLocation">
-								請點擊地圖
-							</div>
-							<div id="map_canvas" style="width:600px; height:500px;"></div>
-						</div>
-					</div>
-
-					<div class="col-md-12 itemBlock">
-						<div class="col-md-2">
-							<label>
-								<span class="requiredIcon">*</span>文章內容：
-							</label>
-						</div>
-						<div class="col-md-10">
-							<div class="col-md-12 errorMessage" id="errorMessageContent">
-								請輸入內容
-							</div>
-							<div class="col-md-12">
-								<div id="standalone-container">
-									<div id="topic-toolbar-container">
-										<span class="ql-formats">
-											<select class="ql-font"></select>
-											<select class="ql-size"></select>
-										</span>
-										<span class="ql-formats">
-											<button class="ql-bold"></button>
-											<button class="ql-italic"></button>
-											<button class="ql-underline"></button>
-											<button class="ql-strike"></button>
-										</span>
-										<span class="ql-formats">
-											<select class="ql-color"></select>
-											<select class="ql-background"></select>
-										</span>
-										<span class="ql-formats">
-											<button class="ql-script" value="sub"></button>
-											<button class="ql-script" value="super"></button>
-										</span>
-										<span class="ql-formats">
-											<button class="ql-header" value="1"></button>
-											<button class="ql-header" value="2"></button>
-											<button class="ql-blockquote"></button>
-											<button class="ql-code-block"></button>
-										</span>
-										<span class="ql-formats">
-											<button class="ql-list" value="ordered"></button>
-											<button class="ql-list" value="bullet"></button>
-											<button class="ql-indent" value="-1"></button>
-											<button class="ql-indent" value="+1"></button>
-										</span>
-										<span class="ql-formats">
-											<button class="ql-direction" value="rtl"></button>
-											<select class="ql-align"></select>
-										</span>
-										<span class="ql-formats">
-											<button class="ql-link"></button>
-											<button class="ql-image"></button>
-											<button class="ql-video"></button>
-											<button class="ql-formula"></button>
-										</span>
-										<span class="ql-formats">
-											<button class="ql-clean"></button>
-										</span>
+							<div class="col-md-10">
+								<div class="col-md-12 errorMessage" id="errorMessageContent">
+									請輸入內容
+								</div>
+								<div class="col-md-12">
+									<div id="standalone-container">
+										<div id="topic-toolbar-container">
+											<span class="ql-formats">
+												<select class="ql-font"></select>
+												<select class="ql-size"></select>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-bold"></button>
+												<button class="ql-italic"></button>
+												<button class="ql-underline"></button>
+												<button class="ql-strike"></button>
+											</span>
+											<span class="ql-formats">
+												<select class="ql-color"></select>
+												<select class="ql-background"></select>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-script" value="sub"></button>
+												<button class="ql-script" value="super"></button>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-header" value="1"></button>
+												<button class="ql-header" value="2"></button>
+												<button class="ql-blockquote"></button>
+												<button class="ql-code-block"></button>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-list" value="ordered"></button>
+												<button class="ql-list" value="bullet"></button>
+												<button class="ql-indent" value="-1"></button>
+												<button class="ql-indent" value="+1"></button>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-direction" value="rtl"></button>
+												<select class="ql-align"></select>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-link"></button>
+												<button class="ql-image"></button>
+												<button class="ql-video"></button>
+												<button class="ql-formula"></button>
+											</span>
+											<span class="ql-formats">
+												<button class="ql-clean"></button>
+											</span>
+										</div>
+										<div id="topic-editor-container"></div>
 									</div>
-									<div id="topic-editor-container"></div>
 								</div>
 							</div>
 						</div>
-					</div>
 
 
-					<!-- </fieldset> -->
-					<!-- </form> -->
-					<div class="col-md-12 itemBlock myVideoDiv">
-						<div class="col-md-2">
-							<label>
-								<span class="requiredIcon">*</span>影片：
-							</label>
-						</div>
-						<div class="col-md-10">
-							<div class="col-md-12">
-								<span id="videoURI" class="badge badge-light"></span>
+						<!-- </fieldset> -->
+						<!-- </form> -->
+						<div class="col-md-12 itemBlock myVideoDiv">
+							<div class="col-md-2">
+								<label>
+									<span class="requiredIcon">*</span>影片：
+								</label>
 							</div>
-							<div class="col-md-12">
-								<form id="FileuploadForm">
-									<input type="file" class="form-control-file border myInputFile" id="videoBean" name="videoFile" />
-								</form>
-							</div>
-							<div class="col-md-12 errorMessage" id="errorMessageVideo">
-								請選擇影片
-							</div>
-						</div>
-					</div>
-
-
-					<div style="display: none" class="col-md-12 itemBlock myProgressDiv">
-						<div style="display: none;" class="container progress-body">
-							<div class="progress">
-								<div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%">
+							<div class="col-md-10">
+								<div class="col-md-12">
+									<span id="videoURI" class="badge badge-light"></span>
+								</div>
+								<div class="col-md-12">
+									<form id="FileuploadForm">
+										<input type="file" class="form-control-file border myInputFile" id="videoBean" name="videoFile" />
+									</form>
+								</div>
+								<div class="col-md-12 errorMessage" id="errorMessageVideo">
+									請選擇影片
 								</div>
 							</div>
-							<div>
-								<span class="percentage">0%</span>
-								<br>
-								<span style="width: 100px; display: inline-block; text-align: right">上傳進度：</span>
-								<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-speed">0 M/S, 0/0M</span>
-							</div>
-							<div>
-								<span style="width: 100px; display: inline-block; text-align: right">上傳狀態：</span>
-								<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-info">請選擇檔案並點擊上傳按鈕</span>
+						</div>
+
+
+						<div style="display: none" class="col-md-12 itemBlock myProgressDiv">
+							<div style="display: none;" class="container progress-body">
+								<div class="progress">
+									<div class="progress-bar progress-bar-striped progress-bar-animated bg-info" style="width: 0%">
+									</div>
+								</div>
+								<div>
+									<span class="percentage">0%</span>
+									<br>
+									<span style="width: 100px; display: inline-block; text-align: right">上傳進度：</span>
+									<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-speed">0 M/S, 0/0M</span>
+								</div>
+								<div>
+									<span style="width: 100px; display: inline-block; text-align: right">上傳狀態：</span>
+									<span style="margin-bottom: 10px; margin-left: 30px; width: 300px;" class="progress-info">請選擇檔案並點擊上傳按鈕</span>
+								</div>
 							</div>
 						</div>
 					</div>
@@ -831,12 +800,12 @@
 					<div class="col-md-12">
 						<input type="button" class="form-control btn btn-blue mySubmit" value="" id="submit" />
 					</div>
+					<!-- </div> -->
+
+
+					<!-- </div> -->
+					<!-- </div> -->
 				</div>
-				<!-- </div> -->
-
-
-				<!-- </div> -->
-				<!-- </div> -->
 			</div>
 
 		</div>

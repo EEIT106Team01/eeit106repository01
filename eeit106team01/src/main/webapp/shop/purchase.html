@@ -11,35 +11,19 @@
 
     <link rel="icon" href="../assets/images/favicon.ico">
 
-    <title>訂單 No. </title>
+    <!-- cookie -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
-    <link rel="stylesheet" href="../assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
-    <link rel="stylesheet" href="../assets/css/font-icons/entypo/css/entypo.css">
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Noto+Sans:400,700,400italic">
-    <link rel="stylesheet" href="../assets/css/bootstrap.css">
-    <link rel="stylesheet" href="../assets/css/neon-core.css">
-    <link rel="stylesheet" href="../assets/css/neon-theme.css">
-    <link rel="stylesheet" href="../assets/css/neon-forms.css">
-    <link rel="stylesheet" href="../assets/css/custom.css">
+    <title>購物車 No. </title>
 
     <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
-    <!-- Data-Include -->
-    <script src="../navbar/js/csi.min.js"></script>
-    <script src="../navbar/js/navbar-init.js"></script>
-
-    <!--[if lt IE 9]><script src="assets/js/ie8-responsive-file-warning.js"></script><![endif]-->
-
-    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
-    <!--[if lt IE 9]>
-		<script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
-		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-	<![endif]-->
-
+    <link rel="stylesheet" href="../assets/css/font-icons/font-awesome/css/font-awesome.css">
+    <link rel="stylesheet" href="../assets/js/selectboxit/jquery.selectBoxIt.css">
 
 </head>
 
-<body class="page-body" data-url="http://neon.dev">
+<body class="page-body">
 
     <!-- Nav Bar -->
     <span data-include="../navbar/navbarWhite.html"></span>
@@ -60,7 +44,7 @@
 
                     <div class="col-sm-6 invoice-right">
 
-                        <h3 id="purchaseId">訂單 No. </h3>
+                        <h3 id="purchaseId">購物車 No. </h3>
                         <span id="currentTime"></span>
                     </div>
 
@@ -75,28 +59,28 @@
                     <div class="col-sm-3 invoice-left">
 
                         <h4>會員</h4>
-                        <span id="memberId">編號:</span>
-                        <br /> <span id="memberName">姓名:</span>
-                        <br /> <span id="memberShip">會員資格:</span>
+                        編號:<span id="memberId">1</span>
+                        <br /> 姓名:<span id="memberName">王大明</span>
+                        <br /> 會員資格:<span id="memberShip"></span>
 
                     </div>
 
                     <div class="col-sm-3 invoice-left">
 
                         <h4>&nbsp;</h4>
-                        帳號:
-                        <br /> <span id="memberMail">信箱:</span>
-                        <br /> <span id="memberPhone">電話:</span>
+                        地址: <span id="memberAddress">台北市信義區</span>
+                        <br /> 信箱:<span id="memberMail">wangdaming@gmail.com</span>
+                        <br /> 電話:<span id="memberPhone">0972-452-777</span>
                     </div>
 
                     <div class="col-md-6 invoice-right">
 
                         <h4>付款方式:</h4>
-                        <strong>V.A.T Reg #:</strong> 542554(DEMO)78
+                        <strong>信用卡號:</strong> -
                         <br />
-                        <strong>Account Name:</strong> FoodMaster Ltd
-                        <br />
-                        <strong>SWIFT code:</strong> 45454DEMO545DEMO
+                        <strong>付費狀態:</strong> 未付費
+                        <!-- <br />
+                        <strong></strong> -->
 
                     </div>
 
@@ -110,52 +94,12 @@
                             <th class="text-center">#</th>
                             <th width="60%">商品</th>
                             <th>數量</th>
-                            <th>價格</th>
+                            <th>單價</th>
                         </tr>
                     </thead>
 
                     <tbody id="productsFromCart">
-                        <!-- <tr>
-                            <td class="text-center">1</td>
-                            <td>On am we offices expense thought</td>
-                            <td>1</td>
-                            <td class="text-right">$1,290</td>
-                        </tr>
 
-                        <tr>
-                            <td class="text-center">2</td>
-                            <td>Up do view time they shot</td>
-                            <td>1</td>
-                            <td class="text-right">$400</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">3</td>
-                            <td>Way ham unwilling not breakfast</td>
-                            <td>1</td>
-                            <td class="text-right">$550</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">4</td>
-                            <td>Songs to an blush woman be sorry</td>
-                            <td>1</td>
-                            <td class="text-right">$4020</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">5</td>
-                            <td>Luckily offered article led lasting</td>
-                            <td>1</td>
-                            <td class="text-right">$87</td>
-                        </tr>
-
-                        <tr>
-                            <td class="text-center">6</td>
-                            <td>Of as by belonging therefore suspicion</td>
-                            <td>1</td>
-                            <td class="text-right">$140</td>
-                        </tr> -->
                     </tbody>
                 </table>
 
@@ -163,20 +107,37 @@
 
                 <div class="row">
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-2">
 
                         <div class="invoice-left">
 
-                            <h4>收件人:</h4>
-                            <span id="receiverName">姓名:</span>
-                            <br /> <span id="receiverAddress">地址:</span>
-                            <br /> <span id="receiverPhone">電話:</span>
-                            <br /> <span id="receiverMail">信箱:</span>
+                            <h4>收件人: &nbsp;&nbsp;&nbsp; <input type="checkbox" id="receiver-check">與會員資料相同</input>
+                            </h4>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i
+                                        class="entypo entypo-user"></i></span>
+                                <input id="receiverName" type="text" placeholder="姓名:" class="form-control-lg"></input>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i
+                                        class="entypo entypo-address"></i></span>
+                                <input id="receiverAddress" type="text" placeholder="地址:" class="form-control-lg"></input>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i
+                                        class="entypo entypo-mobile"></i></span>
+                                <input id="receiverPhone" type="tel" placeholder="電話:" class="form-control-lg"></input>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon"><i
+                                        class="entypo entypo-mail"></i></span>
+                                <input id="receiverMail" type="email" placeholder="信箱:" class="form-control-lg"></input>
+                            </div>
                         </div>
 
                     </div>
 
-                    <div class="col-sm-6">
+                    <div class="col-sm-10">
 
                         <div class="invoice-right">
 
@@ -201,14 +162,11 @@
 
                             <br />
 
-                            <a href="javascript:window.print();" class="btn btn-primary btn-icon icon-left hidden-print">
-                                列印此訂單
+                            <a id="check-out" class="btn btn-primary btn-icon icon-left hidden-print btn-lg">
+                                結帳
                                 <i class="entypo-doc-text"></i>
-                            </a> &nbsp;
+                            </a>
 
-                            <a href="mailbox-compose.html" class="btn btn-success btn-icon icon-left hidden-print">
-                                轉寄至信箱
-                                <i class="entypo-mail"></i>
                             </a>
                         </div>
 
@@ -222,9 +180,6 @@
 
     </div>
 
-
-
-
     <!-- Bottom scripts (common) -->
     <script src="../assets/js/gsap/TweenMax.min.js"></script>
     <script src="../assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
@@ -235,12 +190,8 @@
 
 
     <!-- Imported scripts on this page -->
+    <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
     <script src="../assets/js/neon-chat.js"></script>
-
-
-    <!-- JavaScripts initializations and stuff -->
-    <script src="../assets/js/neon-custom.js"></script>
-
 
     <!-- Demo Settings -->
     <script src="../assets/js/neon-demo.js"></script>
@@ -249,6 +200,12 @@
     <script src="js/util.js"></script>
     <script src="js/purchase.js"></script>
 
+    <!-- JavaScripts initializations and stuff -->
+    <script src="../assets/js/neon-custom.js"></script>
+
+    <!-- Data-Include -->
+    <script src="../navbar/js/csi.min.js"></script>
+    <script src="../navbar/js/navbar-init.js"></script>
 </body>
 
 </html>

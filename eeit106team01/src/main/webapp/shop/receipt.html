@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="Neon Admin Panel" />
+    <meta name="author" content="" />
+
+    <link rel="icon" href="../assets/images/favicon.ico">
+
+    <!-- cookie -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <title>訂單 No. </title>
+
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
+
+</head>
+
+<body class="page-body">
+
+    <!-- Nav Bar -->
+    <span data-include="../navbar/navbarWhite.html"></span>
+
+    <div class="page-container">
+
+        <div class="main-content">
+
+            <br class="hidden-print" />
+
+            <div class="invoice">
+
+                <div class="row">
+
+                    <div class="col-sm-6 invoice-left">
+
+                    </div>
+
+                    <div class="col-sm-6 invoice-right">
+
+                        <h3 id="receiptId">訂單 No. </h3>
+                        <span id="createTime"></span>
+                    </div>
+
+                </div>
+
+
+                <hr class="margin" />
+
+
+                <div class="row">
+
+                    <div class="col-sm-3 invoice-left">
+
+                        <h4>會員</h4>
+                        <span id="memberId">編號:</span>
+                        <br /> <span id="memberName">姓名:</span>
+                        <br /> <span id="memberShip">會員資格:</span>
+
+                    </div>
+
+                    <div class="col-sm-3 invoice-left">
+
+                        <h4>&nbsp;</h4>
+                        帳號:
+                        <br /> <span id="memberMail">信箱:</span>
+                        <br /> <span id="memberPhone">電話:</span>
+                    </div>
+
+                    <div class="col-md-6 invoice-right">
+
+                        <h4>付款方式:</h4>
+                        <strong>信用卡:</strong> 4311-95**-****-***
+                        <br />
+                        <strong>付款狀態:</strong><span id="payStatus"></span>
+                        <!-- <br />
+                        <strong>SWIFT code:</strong> 45454DEMO545DEMO -->
+
+                    </div>
+
+                </div>
+
+                <div class="margin"></div>
+
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th class="text-center">#</th>
+                            <th width="60%">商品</th>
+                            <th>數量</th>
+                            <th>價格</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="receiptItem">
+
+                    </tbody>
+                </table>
+
+                <div class="margin"></div>
+
+                <div class="row">
+
+                    <div class="col-sm-6">
+
+                        <div class="invoice-left">
+
+                            <h4>收件人:</h4>
+                            <span id="receiverName">姓名:</span>
+                            <br /> <span id="receiverAddress">地址:</span>
+                            <br /> <span id="receiverPhone">電話:</span>
+                            <br /> <span id="receiverMail">信箱:</span>
+                        </div>
+
+                    </div>
+
+                    <div class="col-sm-6">
+
+                        <div class="invoice-right">
+
+                            <ul class="list-unstyled">
+                                <li>
+                                    商品 - 總和:
+                                    <strong id="productsTotalPrice">$</strong>
+                                </li>
+                                <li>
+                                    運費:
+                                    <strong id="deliveryPrice">$60</strong>
+                                </li>
+                                <li>
+                                    會員折扣:
+                                    <strong id="memberDiscount"></strong>
+                                </li>
+                                <li>
+                                    總金額:
+                                    <strong id="totalPrice">$</strong>
+                                </li>
+                            </ul>
+
+                            <br />
+
+                            <!-- <a href="javascript:window.print();" class="btn btn-primary btn-icon icon-left hidden-print">
+                                結帳
+                                <i class="entypo-doc-text"></i>
+                            </a> &nbsp; -->
+
+                            <a href="javascript:window.print();" class="btn btn-lg btn-primary btn-icon icon-left hidden-print">
+                                        列印此訂單
+                                        <i class="entypo-doc-text"></i>
+                                    </a> &nbsp;
+
+                            <a href="mailbox-compose.html" class="btn btn-lg btn-success btn-icon icon-left hidden-print">
+                                        轉寄至信箱
+                                        <i class="entypo-mail"></i>
+                            </a>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- Bottom scripts (common) -->
+    <script src="../assets/js/gsap/TweenMax.min.js"></script>
+    <script src="../assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+    <script src="../assets/js/bootstrap.js"></script>
+    <script src="../assets/js/joinable.js"></script>
+    <script src="../assets/js/resizeable.js"></script>
+    <script src="../assets/js/neon-api.js"></script>
+
+    <!-- Imported scripts on this page -->
+    <script src="../assets/js/neon-chat.js"></script>
+
+    <!-- Demo Settings -->
+    <script src="../assets/js/neon-demo.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="js/util.js"></script>
+    <script src="js/receipt.js"></script>
+
+    <!-- JavaScripts initializations and stuff -->
+    <script src="../assets/js/neon-custom.js"></script>
+
+    <!-- Data-Include -->
+    <script src="../navbar/js/csi.min.js"></script>
+    <script src="../navbar/js/navbar-init.js"></script>
+
+</body>
+
+</html>
