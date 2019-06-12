@@ -33,11 +33,43 @@
     <style>
         .myMemberInfo {
             width: 60%;
+            height: 450px;
+            max-width: 666px;
             margin: auto;
+            margin-top: 40px;
+            background-color: #ffffff;
+            padding-left: 15px;
+            padding-right: 15px;
+            box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
+            border-radius: 20px;
+        }
+
+        .itemBlockTop {
+            border-bottom: 1px solid #CCCCCC;
+            padding-bottom: 18px;
+            margin-bottom: 24px;
+            height: 190px;
         }
 
         #imagePreview {
-            width: 300px;
+            margin-top: 15px;
+        }
+
+        .itemBlock {
+            border-bottom: 1px solid #CCCCCC;
+            padding-bottom: 18px;
+            margin-bottom: 24px;
+        }
+
+        .subItemBlockPassword {
+            border-bottom: 1px solid #CCCCCC;
+            padding-bottom: 18px;
+            margin-bottom: 24px;
+        }
+
+        #imagePreview {
+            width: 100px;
+            max-height: 100px;
         }
 
         .datepicker.datepicker-dropdown.dropdown-menu.datepicker-orient-left.datepicker-orient-bottom {
@@ -167,56 +199,60 @@
 
             <div class="myMemberInfo">
                 <div class="col-md-12">
-                    <h1>個人資料：</h1>
+                    <h1>修改個人資料：</h1>
                 </div>
-                <div class="col-md-12">
-                    <div class="col-md-12">
-                        <label>個人頭像：</label>
+                <div class="col-md-12 itemBlockTop">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <label>個人頭像：</label>
+                        </div>
+                        <div class="col-md-12">
+                            <form id="imageUploadForm">
+                                <input type="file" id="imageInput" name="imageInput" accept="image/gif, image/jpeg, image/png" />
+                                <img id="imagePreview" src="/navbar/images/notLogin.jpg" />
+                            </form>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <form id="imageUploadForm">
-                            <input type="file" id="imageInput" name="imageInput" accept="image/gif, image/jpeg, image/png" />
-                            <img id="imagePreview" src="/navbar/images/notLogin.jpg" />
-                        </form>
+                    <div class="col-md-6 subItemBlockPassword">
+                        <div class="col-md-12">
+                            <label>修改密碼：</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="password" name="memberPassword" id="memberPassword" placeholder="請輸入新密碼">
+                        </div>
                     </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-12">
-                        <label>修改密碼：</label>
-                    </div>
-                    <div class="col-md-12">
-                        <input type="password" name="memberPassword" id="memberPassword" placeholder="請輸入新密碼">
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-12">
-                        <label>確認新密碼：</label>
-                    </div>
-                    <div class="col-md-12">
-                        <input type="password" name="memberPasswordCheck" id="memberPasswordCheck" placeholder="請再一次輸入新密碼">
-                    </div>
-                </div>
-                <div class="col-md-12">
-                    <div class="col-md-12">
-                        <label>生日：</label>
-                    </div>
-                    <div class="col-md-12">
-                        <div class="input-group col-md-12">
-                            <input type="text" name="memberBirth" id="memberBirth" class="form-control datepicker" data-format="yyyy-mm-dd" placeholder="請選擇日期">
-                            <div class="input-group-addon">
-                                <a href="#">
-                                    <i class="entypo-calendar"></i>
-                                </a>
-                            </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <label>確認新密碼：</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="password" name="memberPasswordCheck" id="memberPasswordCheck" placeholder="請再一次輸入新密碼">
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12">
-                    <div class="col-md-12">
-                        <label>信箱：</label>
+                <div class="col-md-12 itemBlock">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <label>生日：</label>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="input-group col-md-12">
+                                <input type="text" name="memberBirth" id="memberBirth" class="form-control datepicker" data-format="yyyy-mm-dd" placeholder="請選擇日期">
+                                <div class="input-group-addon">
+                                    <a href="#">
+                                        <i class="entypo-calendar"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-md-12">
-                        <input type="text" name="memberEmail" id="memberEmail" placeholder="請輸入有效信箱">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <label>信箱：</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" name="memberEmail" id="memberEmail" placeholder="請輸入有效信箱">
+                        </div>
                     </div>
                 </div>
                 <div class="col-md-12">
