@@ -47,6 +47,7 @@ function subsribe() {
         sendMessageBack("privateMessage", response.body);
     });
     stompClient.subscribe('/user/topic/checkUser', function (response) {
+        // console.log(response);
         sendMessageBack("checkUser", response.body);
     });
     stompClient.subscribe('/topic/getOnlineUsers', function (response) {
@@ -86,6 +87,7 @@ onconnect = function (e) {
         for (var i = 0, j = e.ports.length; i < j; i++) {
             console.log(e);
             e.ports[i].onmessage = function (e) {
+                // console.log(e);
                 if (e.data.command == "subscribeRegion") {
                     if (e.data.region == "north") {
                         subscribeNorth.push(e.ports[i]);
