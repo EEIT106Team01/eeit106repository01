@@ -590,6 +590,7 @@
                 type: "video/mp4",
                 size: height
             }
+            let presetQuality = 480;
             sources.push(origin);
             if (videoBean.videoStatus == "ok") {
                 sources.push({
@@ -597,12 +598,14 @@
                     type: "video/mp4",
                     size: 480,
                 });
-            } else if (!memberBean || !memberBean.level || !memberBean.level === "VIP") {
+                // presetQuality = 480;
+            } else if (!memberBean || !memberBean.level || memberBean.level != "VIP") {
                 sources.push({
                     src: "/forum/blank.mp4",
                     type: "video/mp4",
                     size: 240,
                 });
+                presetQuality = 240;
             }
             player.source = {
                 type: 'video',
@@ -610,6 +613,7 @@
                 sources: sources
             }
             player.poster = thumbnailURI;
+            player.quality = presetQuality;
         }
 
         function vipVideoCheck() {
@@ -618,11 +622,10 @@
                     let $badge = $(element).find(".plyr__badge");
                     $badge.text("VIP");
                     $badge.css("background", "red");
-                    if (!memberBean || !memberBean.level || !memberBean.level === "VIP") {
-                        element.disabled = true;
+                    if (!memberBean || !memberBean.level || memberBean.level != "VIP") {
+                        element.disabled = true;    
                     }
                 } else if ((element.value = 240) && ($(element).find("span").text()) === "240p") {
-
                     element.disabled = true;
                     $(element).find("span").text("影片處理中");
                 }
