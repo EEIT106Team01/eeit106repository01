@@ -219,6 +219,9 @@ function initRegionChat(region) {
         });
     }
     neonChat.setStatus($("#" + region).attr("id"), "online");
+    $("#" + region).find(".user-status").css({
+        "background-color": "#00ffcc"
+    });
     // $(this).unbind();
     // });
 }
@@ -245,7 +248,7 @@ function workerInit() {
         } else if (e.data.command == "checkUser") {
             let id = e.data.message;
             // console.log(eval(id));
-            if (id) {
+            if (eval(id)) {
                 if (!$("#" + id).get(0)) {
                     neonChat.addUser("group-2", id, "online", false, id);
                     neonChat.refreshUserIds();
@@ -853,12 +856,13 @@ $(document).ready(function () {
                         let $image = $(document.createElement("img"));
                         $image.attr({
                             src: "/navbar/images/notLogin.jpg",
-                            width: 40,
+                            width: 50,
                             class: "img-circle"
                         });
                         $image.css({
                             "margin": "0 2% 0 0",
-                            "max-height": "40px",
+                            "max-height": "50px",
+                            float: "left",
                             // "box-shadow": "0px 2px 4px rgba(255, 255, 255)",
                             border: "2px solid rgb(255, 255, 255, 0.3)"
                         });
@@ -875,19 +879,12 @@ $(document).ready(function () {
                             }
                         });
                         $entry.find('.user').before($image);
+                        $entry.find('.user').css({
+                            "margin-left": "2%"
+                        });
 
                         let date_title;
                         if (typeof date == 'object') {
-                            var hour = date.getHours(),
-                                hour = (hour < 10 ? "0" : "") + hour,
-
-                                min = date.getMinutes(),
-                                min = (min < 10 ? "0" : "") + min,
-
-                                sec = date.getSeconds();
-                            sec = (sec < 10 ? "0" : "") + sec;
-
-                            // date_formated = hour + ':' + min;
                             date_title = date.toLocaleDateString() + date.toLocaleTimeString()
                             date_formated = timeDifference(new Date(), date);
                         }
@@ -942,19 +939,41 @@ $(document).ready(function () {
                             date = entry.time,
                             date_formated = date;
 
+                        let $image = $(document.createElement("img"));
+                        $image.attr({
+                            src: "/navbar/images/notLogin.jpg",
+                            width: 50,
+                            class: "img-circle"
+                        });
+                        $image.css({
+                            "margin": "0 2% 0 0",
+                            "max-height": "50px",
+                            float: "left",
+                            // "box-shadow": "0px 2px 4px rgba(255, 255, 255)",
+                            border: "2px solid rgb(255, 255, 255, 0.3)"
+                        });
+                        $.ajax({
+                            method: "GET",
+                            url: "/getImageByName/" + entry.from,
+                            dataType: "json",
+                            success: function (data, textStatus, jqXHR) {
+                                if (data && data.image) {
+                                    $image.attr({
+                                        src: data.image
+                                    });
+                                }
+                            }
+                        });
+                        $entry.find('.user').before($image);
+                        $entry.find('.user').css({
+                            "margin-left": "2%"
+                        });
+
+                        let date_title;
                         if (typeof date == 'object') {
-                            var hour = date.getHours(),
-                                hour = (hour < 10 ? "0" : "") + hour,
-
-                                min = date.getMinutes(),
-                                min = (min < 10 ? "0" : "") + min,
-
-                                sec = date.getSeconds();
-                            sec = (sec < 10 ? "0" : "") + sec;
-
-                            date_formated = hour + ':' + min;
+                            date_title = date.toLocaleDateString() + date.toLocaleTimeString()
+                            date_formated = timeDifference(new Date(), date);
                         }
-
 
                         // Populate message DOM
                         $entry.find('.user').html(entry.from);
@@ -975,6 +994,9 @@ $(document).ready(function () {
 
 
                         $entry.find('.time').html(date_formated);
+                        $entry.find('.time').attr({
+                            title: date_title
+                        });
 
                         if (entry.fromOpponent) {
                             $entry.addClass('odd');

@@ -1894,6 +1894,8 @@ function scrollToBottom($el)
 		$el = $($el);
 
 	$el.get(0).scrollTop = $el.get(0).scrollHeight;
+	console.log("$el.get(0).scrollTop; "+ $el.get(0).scrollTop);
+	console.log("$el.get(0).scrollHeight; "+ $el.get(0).scrollHeight);
 }
 
 
