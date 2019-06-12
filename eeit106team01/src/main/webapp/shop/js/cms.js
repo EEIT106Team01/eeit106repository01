@@ -198,13 +198,22 @@ $(document).ready(function() {
                 let stockVal = $("#stock").val();
 
                 let length = $("#div_imageLinkAll input").length;
-                console.log(length)
+                console.log(  $($("#div_imageLinkAll input").eq(1)).val())
                 let imgArray = [];
-                for(let i=0;i<length;i+2){
-                    // imgArray.push($("#div_imageLinkAll input").eq(i).val()+":"+$("#div_imageLinkAll input").eq(i+1).val())
-                   
+                for(let i =0;i<length;i+=2){
+                    imgArray.push($($("#div_imageLinkAll input").eq(i)).val()+":"+$($("#div_imageLinkAll input").eq(i+1)).val())
                 }
-                console.log(imgArray)
+                let imageLinkVal = JSON.stringify(imgArray);
+                console.log(imageLinkVal)
+
+                // let length = $("#div_imageLinkAll input").length;
+                // console.log(  $($("#div_imageLinkAll input").eq(1)).val())
+                // let imgArray = [];
+                // for(let i =0;i<length;i+=2){
+                //     imgArray.push($($("#div_imageLinkAll input").eq(i)).val()+":"+$($("#div_imageLinkAll input").eq(i+1)).val())
+                // }
+                // let imageLinkVal = JSON.stringify(imgArray);
+                // updateProduct(nameVal,brandVal,typeVal,priceVal,stockVal,imageLinkVal,informationVal,informationImageLinkVal)
             })) 
         }))
     }))
@@ -376,9 +385,9 @@ function insertProduct() {
     })
 }
 
-function updateProduct(){
+function updateProduct(nameVal,brandVal,typeVal,priceVal,stockVal,imageLinkVal,informationVal,informationImageLinkVal){
 
-    let bean = {name:nameVal,brand:brandVal,type:typeVal,price:priceVal,stock:stockVal,information:informationVal,informationImageLink:informationImageLinkVal}
+    let bean = {name:nameVal,brand:brandVal,type:typeVal,price:priceVal,stock:stockVal,imageLink:imageLinkVal,information:informationVal,informationImageLink:informationImageLinkVal}
 
     $.ajax({
         url: "/product/update",
