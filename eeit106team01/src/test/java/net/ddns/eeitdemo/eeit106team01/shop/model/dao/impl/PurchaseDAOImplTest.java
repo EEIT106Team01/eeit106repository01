@@ -21,7 +21,6 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.ProductDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.PurchaseDAO;
-import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest

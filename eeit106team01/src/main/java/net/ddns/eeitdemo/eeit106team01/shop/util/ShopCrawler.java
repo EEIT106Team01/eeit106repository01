@@ -8,7 +8,6 @@ import java.util.List;
 import java.util.Random;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.logging.log4j.Logger;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -38,7 +37,6 @@ public class ShopCrawler {
 
 	// Util
 	private static Random random = new Random();
-	private static Logger logger;
 
 	public static ProductBean yahooProductCrawler(String link, String productType, Integer productStock) {
 

@@ -66,7 +66,6 @@ public class ExampleAllInOne {
 			obj.setItemName(new String("哈".getBytes("BIG5"), "UTF-8"));
 			obj.setTradeDesc(new String("哈".getBytes("BIG5"), "UTF-8"));
 		} catch (UnsupportedEncodingException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

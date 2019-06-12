@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -22,10 +21,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import net.ddns.eeitdemo.eeit106team01.shop.ShopTest;
 import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
-import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -34,15 +31,15 @@ public class PurchaseServiceTest extends ShopTest {
 	@Autowired
 	private PurchaseService purchaseService;
 
-	@Autowired
-	private ProductService productService;
+//	@Autowired
+//	private ProductService productService;
 
 	@Autowired
 	private MemberDAO memberDAO;
 
-	private ArrayList<Integer> productIdList;
-	private NewDate newDate = new NewDate();
-	private Date currentTime = newDate.newCurrentTime();
+//	private ArrayList<Integer> productIdList;
+//	private NewDate newDate = new NewDate();
+//	private Date currentTime = newDate.newCurrentTime();
 
 
 	@Test
@@ -54,9 +51,9 @@ public class PurchaseServiceTest extends ShopTest {
 		Member member = new Member();
 		memberDAO.insertMember(member);
 
-		Integer productTotalPrice = (productService.findProductByPrimaryKey(5L).getPrice() * 5)
-				+ productService.findProductByPrimaryKey(6L).getPrice()
-				+ productService.findProductByPrimaryKey(7L).getPrice();
+//		Integer productTotalPrice = (productService.findProductByPrimaryKey(5L).getPrice() * 5)
+//				+ productService.findProductByPrimaryKey(6L).getPrice()
+//				+ productService.findProductByPrimaryKey(7L).getPrice();
 
 		HashMap<String, String> receiverInformation = new HashMap<String, String>();
 		receiverInformation.put("receiver", "Alex");
@@ -108,13 +105,13 @@ public class PurchaseServiceTest extends ShopTest {
 
 	public void testNewReviews() throws Exception {
 		List<ReviewBean> reviewBeans = new ArrayList<ReviewBean>();
-		Member member = memberDAO.findByMemberId(1L);
-		PurchaseListBean purchaseListId1 = purchaseService.findPurchaseListById(1L, "PurchaseList").get(0);
-		PurchaseListBean purchaseListId2 = purchaseService.findPurchaseListById(2L, "PurchaseList").get(0);
-		PurchaseListBean purchaseListId3 = purchaseService.findPurchaseListById(3L, "PurchaseList").get(0);
-		PurchaseListBean purchaseListId4 = purchaseService.findPurchaseListById(4L, "PurchaseList").get(0);
-		PurchaseListBean purchaseListId5 = purchaseService.findPurchaseListById(5L, "PurchaseList").get(0);
-		ReviewBean reviewBean;
+//		Member member = memberDAO.findByMemberId(1L);
+//		PurchaseListBean purchaseListId1 = purchaseService.findPurchaseListById(1L, "PurchaseList").get(0);
+//		PurchaseListBean purchaseListId2 = purchaseService.findPurchaseListById(2L, "PurchaseList").get(0);
+//		PurchaseListBean purchaseListId3 = purchaseService.findPurchaseListById(3L, "PurchaseList").get(0);
+//		PurchaseListBean purchaseListId4 = purchaseService.findPurchaseListById(4L, "PurchaseList").get(0);
+//		PurchaseListBean purchaseListId5 = purchaseService.findPurchaseListById(5L, "PurchaseList").get(0);
+//		ReviewBean reviewBean;
 //		reviewBean = new ReviewBean(date, date, 10d, "test1", member, purchaseListId1, purchaseListId1.getProductId());
 //		reviewBeans.add(reviewBean);
 //		reviewBean = new ReviewBean(date, date, 10d, "test1", member, purchaseListId2, purchaseListId2.getProductId());

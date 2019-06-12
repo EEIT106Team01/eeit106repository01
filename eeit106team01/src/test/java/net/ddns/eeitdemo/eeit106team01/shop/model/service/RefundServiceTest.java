@@ -4,7 +4,6 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNull;
 
 import java.util.ArrayList;
-import java.util.Date;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -12,11 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
-import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,12 +22,12 @@ public class RefundServiceTest {
 	private RefundService refundService;
 	@Autowired
 	private PurchaseService purchaseService;
-	@Autowired
-	private MemberDAO memberDAO;
+//	@Autowired
+//	private MemberDAO memberDAO;
 
-	private NewDate newDate = new NewDate();
-	private Date currentTime = newDate.newCurrentTime();
-	private Member member;
+//	private NewDate newDate = new NewDate();
+//	private Date currentTime = newDate.newCurrentTime();
+//	private Member member;
 	private ArrayList<PurchaseListBean> purchaseListBeans = new ArrayList<PurchaseListBean>();
 
 	@Test
@@ -40,7 +36,7 @@ public class RefundServiceTest {
 	}
 	
 	public void testNewRefund() throws Exception {
-		member = memberDAO.findByMemberId(1L);
+//		member = memberDAO.findByMemberId(1L);
 //		RefundBean refund = new RefundBean(date, date, "test refund", "created", member);
 		PurchaseListBean purchaseListBean = purchaseService.findPurchaseListById(1L, "purchaseList").get(0);
 		purchaseListBeans.add(purchaseListBean);
