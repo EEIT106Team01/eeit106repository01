@@ -157,7 +157,7 @@
                     createVideoPlayer(topicBean.videoBean, topic.id + "player");
                 }
                 initMap();
-                $(".content-content").append(createAd());
+                // $(".content-content").append(createAd());
             }
             if (contentBeans) {
                 $(".content-content").append("<hr>");
@@ -197,6 +197,7 @@
                 $('[data-toggle="popover"]').popover();
             }
             setTimeout(resizeWindow, 50);
+            vipVideoCheck();
         }
 
         function createTopic(topicBean) {
@@ -497,7 +498,7 @@
             // let videoBottom = document.createElement("div");
             let video = document.createElement("video");
             // let source = document.createElement("source");
-            let thumbnailURI = "/storage/others/no-image.png";
+            let thumbnailURI = "/forum/icon/no-image.png";
             let videoURI = "/storage/videos/" + videoBean.videoURI;
             if (videoBean.thumbnailURI != null && videoBean.thumbnailURI.length != 0) {
                 thumbnailURI = "/storage/jpgs/" + videoBean.thumbnailURI;
@@ -536,8 +537,8 @@
             return videoCard;
         }
         function createVideoPlayer(videoBean, videoId) {
-            let thumbnailURI = "/storage/others/no-image.png";
-            let gifURI = "/storage/others/no-image.png";
+            let thumbnailURI = "/forum/icon/no-image.png";
+            let gifURI = "/forum/icon/no-image.png";
             let videoURI = "/storage/videos/" + videoBean.videoURI;
             if (videoBean.thumbnailURI != null && videoBean.thumbnailURI.length != 0) {
                 thumbnailURI = "/storage/jpgs/" + videoBean.thumbnailURI;
@@ -596,6 +597,12 @@
                     type: "video/mp4",
                     size: 480,
                 });
+            } else if (!memberBean || !memberBean.level || !memberBean.level === "VIP") {
+                sources.push({
+                    src: "/forum/blank.mp4",
+                    type: "video/mp4",
+                    size: 240,
+                });
             }
             player.source = {
                 type: 'video',
@@ -603,7 +610,28 @@
                 sources: sources
             }
             player.poster = thumbnailURI;
-            console.log(player);
+        }
+
+        function vipVideoCheck() {
+            $("button[data-plyr='quality']").each(function (index, element) {
+                if (element.value > 480) {
+                    let $badge = $(element).find(".plyr__badge");
+                    $badge.text("VIP");
+                    $badge.css("background", "red");
+                    if (!memberBean || !memberBean.level || !memberBean.level === "VIP") {
+                        element.disabled = true;
+                    }
+                } else if ((element.value = 240) && ($(element).find("span").text()) === "240p") {
+
+                    element.disabled = true;
+                    $(element).find("span").text("影片處理中");
+                }
+            });
+            $(".plyr__menu__value").each(function (i, e) {
+                if ($(e).text() === "240p") {
+                    $(e).text("影片處理中");
+                }
+            });
         }
 
         function createChangePageBtn() {
@@ -691,27 +719,35 @@
         }
 
         function createChangeOrderBtn() {
-            let btn = document.createElement("button");
-            let text;
-            let type;
-            if (orderType == "orderByLike") {
-                text = "依時間排序";
-                type = "orderByTime";
-            } else if (orderType == "orderByTime") {
-                text = "依喜歡排序";
-                type = "orderByLike";
-            }
-            btn.textContent = text;
-            btn.onclick = function () {
-                location.href = location.pathname + "?topic=" + topic + "&page=" + page + "&orderType=" + type;
-            };
-            btn.className = "btn btn-white btn-sm";
-            $(btn).css({
-                "float": "right",
-                "margin": "1%"
+            let div = document.createElement("div");
+            let byLikeBtn = document.createElement("button");
+            let byTimeBtn = document.createElement("button");
+            byLikeBtn.textContent = "依喜歡排序";
+            byLikeBtn.className = "btn btn-primary btn-sm";
+            $(byLikeBtn).css({
+                // "float": "right",
+                "margin-left": "1%"
             });
-
-            return btn;
+            byTimeBtn.textContent = "依時間排序";
+            byTimeBtn.className = "btn btn-primary btn-sm";
+            $(byTimeBtn).css({
+                // "float": "right",
+                "margin-left": "1%"
+            });
+            if (orderType == "orderByLike") {
+                $(byLikeBtn).addClass("disabled");
+                byTimeBtn.onclick = function () {
+                    location.href = location.pathname + "?topic=" + topic + "&page=" + page + "&orderType=orderByTime";
+                };
+            } else if (orderType == "orderByTime") {
+                $(byTimeBtn).addClass("disabled");
+                byLikeBtn.onclick = function () {
+                    location.href = location.pathname + "?topic=" + topic + "&page=" + page + "&orderType=orderByLike";
+                };
+            }
+            div.appendChild(byLikeBtn);
+            div.appendChild(byTimeBtn);
+            return div;
         }
 
         function getTopic() {

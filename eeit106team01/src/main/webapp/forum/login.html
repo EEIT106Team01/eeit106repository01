@@ -54,20 +54,22 @@
           console.log("cookie: " + Cookies.get("MemberBean"));
           let redirect = sessionStorage.getItem("previousPage");
           console.log(redirect);
+          sessionStorage.removeItem("previousPage");
           if (!redirect) {
             redirect = "/index.html";
           }
           location.href = redirect;
         },
-        error: function (data, textStatus, jqXHR) {
+        error: function (jqXHR, textStatus) {
           console.log("error");
-          console.log(textStatus);
+          console.log(jqXHR.status);
+          // console.log(textStatus);
         }
       });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      $("#login").click(login);
+      $("#login").on("click", login);
       // $("#id").keyup(function () {
       //     let id = $(this).val();
       //     if (id.match(/\d{1,10}/)) {
@@ -199,7 +201,7 @@
     form button {
       display: block;
       margin: 0;
-      padding: .65em 1em 1em;
+      /* padding: .65em 1em 1em; */
       background-color: #4eb8dd;
       border: none;
       border-radius: 4px;
@@ -384,8 +386,8 @@
           <!-- <input type="password" name="memberPassword" id="memberPassword" placeholder="密碼"> -->
         </div>
         <div class="inputGroup inputGroup3">
-          <!-- <button id="login">Log in</button> -->
-          <input type="button" value="Login" id="login" />
+          <button id="login">Log in</button>
+          <!-- <input type="button" value="Login" id="login" /> -->
         </div>
       </form>
 
@@ -417,6 +419,7 @@
   <script src="https://static.codepen.io/assets/common/stopExecutionOnTimeout-de7e2ef6bfefd24b79a3f68b414b87b8db5b08439cac3f1012092b2290c719cd.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/1.20.3/TweenMax.min.js"></script>
   <!-- <script src="//s3-us-west-2.amazonaws.com/s.cdpn.io/16327/MorphSVGPlugin.min.js?r=182"></script> -->
+  <script src="/forum/js/member/MorphSVGPlugin.js"></script>
   <script id="rendered-js">
     var email = document.querySelector('#email'), password = document.querySelector('#password'), mySVG = document.querySelector('.svgContainer'), armL = document.querySelector('.armL'), armR = document.querySelector('.armR'), eyeL = document.querySelector('.eyeL'), eyeR = document.querySelector('.eyeR'), nose = document.querySelector('.nose'), mouth = document.querySelector('.mouth'), mouthBG = document.querySelector('.mouthBG'), mouthSmallBG = document.querySelector('.mouthSmallBG'), mouthMediumBG = document.querySelector('.mouthMediumBG'), mouthLargeBG = document.querySelector('.mouthLargeBG'), mouthMaskPath = document.querySelector('#mouthMaskPath'), mouthOutline = document.querySelector('.mouthOutline'), tooth = document.querySelector('.tooth'), tongue = document.querySelector('.tongue'), chin = document.querySelector('.chin'), face = document.querySelector('.face'), eyebrow = document.querySelector('.eyebrow'), outerEarL = document.querySelector('.earL .outerEar'), outerEarR = document.querySelector('.earR .outerEar'), earHairL = document.querySelector('.earL .earHair'), earHairR = document.querySelector('.earR .earHair'), hair = document.querySelector('.hair');
     var caretPos, curEmailIndex, screenCenter, svgCoords, eyeMaxHorizD = 20, eyeMaxVertD = 10, noseMaxHorizD = 23, noseMaxVertD = 10, dFromC, eyeDistH, eyeLDistV, eyeRDistV, eyeDistR, mouthStatus = "small";
@@ -621,8 +624,8 @@
     email.addEventListener('input', onEmailInput);
     password.addEventListener('focus', onPasswordFocus);
     password.addEventListener('blur', onPasswordBlur);
-    TweenMax.set(armL, { x: -93, y: 220, rotation: 105, transformOrigin: "top left" });
-    TweenMax.set(armR, { x: -93, y: 220, rotation: -105, transformOrigin: "top right" });
+    // TweenMax.set(armL, { x: -93, y: 220, rotation: 105, transformOrigin: "top left" });
+    // TweenMax.set(armR, { x: -93, y: 220, rotation: -105, transformOrigin: "top right" });
           //# sourceURL=pen.js
   </script>
 

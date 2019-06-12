@@ -4,6 +4,8 @@ import java.nio.charset.Charset;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
@@ -76,6 +78,19 @@ public class MemberTempController {
 			return ResponseEntity.notFound().build();
 		}
 	}
+	
+	@GetMapping(path = { "/getImageByName/{name}" }, produces = { "application/json" })
+	public ResponseEntity<?> getImageByName(@PathVariable(name = "name") String name) {
+		System.out.println("getImageByName method running");
+		MemberTempBean findOne = memberBeanService.findByName(name);
+		if (findOne != null) {
+			Map<String, String> imageMap = new HashMap<String, String>();
+			imageMap.put("image", findOne.getImage());
+			return ResponseEntity.ok(imageMap);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
 
 	@PostMapping(path = { "/memberTemps" }, consumes = { "application/json" }, produces = { "application/json" })
 	public ResponseEntity<?> postMemberTemp(@RequestBody MemberTempBean requestbody, BindingResult bindingResult,
@@ -106,6 +121,10 @@ public class MemberTempController {
 			MemberTempBean mb = new MemberTempBean();
 			mb.setId(insertResult.getId());
 			mb.setName(insertResult.getName());
+			mb.setEmail(insertResult.getEmail());
+			mb.setLevel(insertResult.getLevel());
+			mb.setLevelTime(insertResult.getLevelTime());
+			mb.setMemberCreateTime(insertResult.getMemberCreateTime());
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonStr = mapper.writeValueAsString(mb);
 			String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -132,6 +151,10 @@ public class MemberTempController {
 				MemberTempBean mb = new MemberTempBean();
 				mb.setId(updateResult.getId());
 				mb.setName(updateResult.getName());
+				mb.setEmail(updateResult.getEmail());
+				mb.setLevel(updateResult.getLevel());
+				mb.setLevelTime(updateResult.getLevelTime());
+				mb.setMemberCreateTime(updateResult.getMemberCreateTime());
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonStr = mapper.writeValueAsString(mb);
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -158,14 +181,20 @@ public class MemberTempController {
 				MemberTempBean mb = new MemberTempBean();
 				mb.setId(result.getId());
 				mb.setName(result.getName());
+				mb.setEmail(result.getEmail());
+				mb.setLevel(result.getLevel());
+				mb.setLevelTime(result.getLevelTime());
+				mb.setMemberCreateTime(result.getMemberCreateTime());
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonStr = mapper.writeValueAsString(mb);
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
 				Cookie memberBeanCookie = new Cookie("MemberBean", encodeJson);
 				response.addCookie(memberBeanCookie);
+				System.out.println("登入成功");
 				return ResponseEntity.ok(mb);
 			}
 		}
+		System.out.println("登入失敗");
 		return ResponseEntity.notFound().build();
 	}
 
