@@ -621,14 +621,14 @@
                     if (!memberBean || !memberBean.level || !memberBean.level === "VIP") {
                         element.disabled = true;
                     }
-                } else if (element.value = 240) {
+                } else if ((element.value = 240) && ($(element).find("span").text()) === "240p") {
                     element.disabled = true;
                     $(element).find("span").text("影片處理中");
-                    $(".plyr__menu__value").each(function (i, e) {
-                        if ($(e).text() === "240p") {
-                            $(e).text("影片處理中");
-                        }
-                    });
+                }
+            });
+            $(".plyr__menu__value").each(function (i, e) {
+                if ($(e).text() === "240p") {
+                    $(e).text("影片處理中");
                 }
             });
         }
