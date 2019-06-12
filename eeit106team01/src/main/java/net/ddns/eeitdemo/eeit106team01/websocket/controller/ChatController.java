@@ -194,7 +194,7 @@ public class ChatController {
 			if (mb != null) {
 				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", mb.getName());
 			} else {
-				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", false);
+				messagingTemplate.convertAndSendToUser(user.getName(), "/topic/checkUser", "");
 			}
 		}
 	}

@@ -247,13 +247,16 @@ function workerInit() {
             }
         } else if (e.data.command == "checkUser") {
             let id = e.data.message;
-            // console.log(eval(id));
-            if (eval(id)) {
-                if (!$("#" + id).get(0)) {
-                    neonChat.addUser("group-2", id, "online", false, id);
-                    neonChat.refreshUserIds();
+            console.log(e.data);
+            if (id && (id !== chatUsername)) {
+                if (id != chatUsername) {
+                    if (!$("#" + id).get(0)) {
+                        neonChat.addUser("group-2", id, "online", false, id);
+                        neonChat.refreshUserIds();
+                    }
+                    getOnlineUsers();
+                    $("#checkUser").attr("placeholder", "Search User");
                 }
-                getOnlineUsers();
             } else {
                 $("#checkUser").attr("placeholder", "User does not exist!");
             }
