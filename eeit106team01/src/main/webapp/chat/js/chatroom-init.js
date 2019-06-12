@@ -207,20 +207,20 @@ function getOld(id, index) {
 }
 
 function initRegionChat(region) {
-    $("#" + region).click(function () {
-        if (worker != null) {
-            worker.port.postMessage({
-                "command": "subscribeRegion",
-                "region": region
-            });
-            worker.port.postMessage({
-                "command": "getRegionActive",
-                "region": region
-            });
-        }
-        neonChat.setStatus($(this).attr("id"), "online");
-        $(this).unbind();
-    });
+    // $("#" + region).click(function () {
+    if (worker != null) {
+        worker.port.postMessage({
+            "command": "subscribeRegion",
+            "region": region
+        });
+        worker.port.postMessage({
+            "command": "getRegionActive",
+            "region": region
+        });
+    }
+    neonChat.setStatus($("#" + region).attr("id"), "online");
+    // $(this).unbind();
+    // });
 }
 
 function workerInit() {
@@ -293,6 +293,7 @@ function workerInit() {
             initRegionChat("middle");
             initRegionChat("south");
             initRegionChat("east");
+
             addEventListener("beforeunload", function () {
                 worker.port.postMessage({
                     "command": "closing"
@@ -713,6 +714,7 @@ $(document).ready(function () {
                     offset = maxOffset;
                 }
 
+
                 $conversation_window.transition({
                     top: offset,
                     opacity: 1
@@ -848,6 +850,33 @@ $(document).ready(function () {
                             date = entry.time,
                             date_formated = date;
 
+                        let $image = $(document.createElement("img"));
+                        $image.attr({
+                            src: "/navbar/images/notLogin.jpg",
+                            width: 40,
+                            class: "img-circle"
+                        });
+                        $image.css({
+                            "margin": "0 2% 0 0",
+                            "max-height": "40px",
+                            // "box-shadow": "0px 2px 4px rgba(255, 255, 255)",
+                            border: "2px solid rgb(255, 255, 255, 0.3)"
+                        });
+                        $.ajax({
+                            method: "GET",
+                            url: "/getImageByName/" + entry.from,
+                            dataType: "json",
+                            success: function (data, textStatus, jqXHR) {
+                                if (data && data.image) {
+                                    $image.attr({
+                                        src: data.image
+                                    });
+                                }
+                            }
+                        });
+                        $entry.find('.user').before($image);
+
+                        let date_title;
                         if (typeof date == 'object') {
                             var hour = date.getHours(),
                                 hour = (hour < 10 ? "0" : "") + hour,
@@ -858,7 +887,9 @@ $(document).ready(function () {
                                 sec = date.getSeconds();
                             sec = (sec < 10 ? "0" : "") + sec;
 
-                            date_formated = hour + ':' + min;
+                            // date_formated = hour + ':' + min;
+                            date_title = date.toLocaleDateString() + date.toLocaleTimeString()
+                            date_formated = timeDifference(new Date(), date);
                         }
 
 
@@ -881,6 +912,9 @@ $(document).ready(function () {
 
 
                         $entry.find('.time').html(date_formated);
+                        $entry.find('.time').attr({
+                            title: date_title
+                        });
 
                         if (entry.fromOpponent) {
                             $entry.addClass('odd');
@@ -1548,8 +1582,8 @@ $(document).ready(function () {
         chatUsername = memberBean.name;
         if (worker == null) {
             worker = new SharedWorker("/chat/js/websocket-worker.js");
-            console.log("initworker")
             workerInit();
+            console.log("initworker");
         }
 
         $("#checkUser").keydown(function (e) {
