@@ -6,8 +6,9 @@ let productId = parseInt(location.href.substr((location.href.indexOf(`?`) + 1), 
 
 // Document Ready
 $(function() {
-    generateCurrentFilterText();
-    findReviewsByProductId(`product`, productId);
+    // generateCurrentFilterText();
+    // findReviewsByProductId(`product`, productId);
+    findReview(1);
 });
 
 //Generate Current Filter Text
@@ -268,3 +269,31 @@ function generateReviewEdit(productPageUrl, reviewId, comment, updateTime, ratin
     `).appendTo($(`#modal-edit`));
 
 }
+
+
+//findReview
+function findReview(ProductId) {
+    $.ajax({
+        type: "GET",
+        url: "/shop/findReviewById/?idType=product&id=" + ProductId,
+        success: function(response) {
+            response.forEach(element => {
+                console.log(element);
+            });
+        }
+    });
+}
+
+
+// $(`.datatable tbody`).append(
+//     `<tr>
+//     <td>
+//         <a href="javascript:;" onclick="showAjaxModal(` + element.id + `,` + memberId + `)" class="btn btn-info btn-lg btn-icon icon-left">
+//             <i class="entypo-info"></i> 訂單明細／退貨申請
+//         </a>
+//     </td>
+//     <td>` + id + ` </td>
+//     <td>` + time + `</td>
+//     <td>$` + totalPrice + `</td>
+//     </tr>`
+// );

@@ -714,6 +714,7 @@ $(document).ready(function () {
                     offset = maxOffset;
                 }
 
+
                 $conversation_window.transition({
                     top: offset,
                     opacity: 1
@@ -875,6 +876,7 @@ $(document).ready(function () {
                         });
                         $entry.find('.user').before($image);
 
+                        let date_title;
                         if (typeof date == 'object') {
                             var hour = date.getHours(),
                                 hour = (hour < 10 ? "0" : "") + hour,
@@ -885,7 +887,9 @@ $(document).ready(function () {
                                 sec = date.getSeconds();
                             sec = (sec < 10 ? "0" : "") + sec;
 
-                            date_formated = hour + ':' + min;
+                            // date_formated = hour + ':' + min;
+                            date_title = date.toLocaleDateString() + date.toLocaleTimeString()
+                            date_formated = timeDifference(new Date(), date);
                         }
 
 
@@ -908,6 +912,9 @@ $(document).ready(function () {
 
 
                         $entry.find('.time').html(date_formated);
+                        $entry.find('.time').attr({
+                            title: date_title
+                        });
 
                         if (entry.fromOpponent) {
                             $entry.addClass('odd');
