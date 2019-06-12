@@ -54,20 +54,22 @@
           console.log("cookie: " + Cookies.get("MemberBean"));
           let redirect = sessionStorage.getItem("previousPage");
           console.log(redirect);
+          sessionStorage.removeItem("previousPage");
           if (!redirect) {
             redirect = "/index.html";
           }
           location.href = redirect;
         },
-        error: function (data, textStatus, jqXHR) {
+        error: function (jqXHR, textStatus) {
           console.log("error");
-          console.log(textStatus);
+          console.log(jqXHR.status);
+          // console.log(textStatus);
         }
       });
     }
 
     document.addEventListener("DOMContentLoaded", function () {
-      $("#login").click(login);
+      $("#login").on("click", login);
       // $("#id").keyup(function () {
       //     let id = $(this).val();
       //     if (id.match(/\d{1,10}/)) {
@@ -199,7 +201,7 @@
     form button {
       display: block;
       margin: 0;
-      padding: .65em 1em 1em;
+      /* padding: .65em 1em 1em; */
       background-color: #4eb8dd;
       border: none;
       border-radius: 4px;
@@ -384,8 +386,8 @@
           <!-- <input type="password" name="memberPassword" id="memberPassword" placeholder="密碼"> -->
         </div>
         <div class="inputGroup inputGroup3">
-          <!-- <button id="login">Log in</button> -->
-          <input type="button" value="Login" id="login" />
+          <button id="login">Log in</button>
+          <!-- <input type="button" value="Login" id="login" /> -->
         </div>
       </form>
 
@@ -622,8 +624,8 @@
     email.addEventListener('input', onEmailInput);
     password.addEventListener('focus', onPasswordFocus);
     password.addEventListener('blur', onPasswordBlur);
-    TweenMax.set(armL, { x: -93, y: 220, rotation: 105, transformOrigin: "top left" });
-    TweenMax.set(armR, { x: -93, y: 220, rotation: -105, transformOrigin: "top right" });
+    // TweenMax.set(armL, { x: -93, y: 220, rotation: 105, transformOrigin: "top left" });
+    // TweenMax.set(armR, { x: -93, y: 220, rotation: -105, transformOrigin: "top right" });
           //# sourceURL=pen.js
   </script>
 
