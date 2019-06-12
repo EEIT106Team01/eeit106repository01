@@ -55,8 +55,8 @@ public class PurchaseController {
 
 	@Autowired
 	private MemberDAO memberDAO;
+	
 	private NewDate newDate = new NewDate();
-	private Date currentTime = newDate.newCurrentTime();
 	private static AllInOne all;
 	private static final String IDILEGAL= "ID不合法";
 	private static final String VALUEMISSED= "缺少必要值";
@@ -237,8 +237,8 @@ public class PurchaseController {
 		try {
 			ArrayList<Integer> productIdList = new ArrayList<>();
 			PurchaseBean purchaseBean = new PurchaseBean();
-			purchaseBean.setCreateTime(currentTime);
-			purchaseBean.setUpdatedTime(currentTime);
+			purchaseBean.setCreateTime(newDate.newCurrentTime());
+			purchaseBean.setUpdatedTime(newDate.newCurrentTime());
 			Iterator<Entry<String, Object>> iterator = json.entrySet().iterator();
 			while (iterator.hasNext()) {
 				Map.Entry<String, Object> entry = iterator.next();
@@ -301,8 +301,8 @@ public class PurchaseController {
 					review.setImage(serialBlob);
 					review.setImageBase64(null);
 				}
-				review.setCreateTime(currentTime);
-				review.setUpdatedTime(currentTime);
+				review.setCreateTime(newDate.newCurrentTime());
+				review.setUpdatedTime(newDate.newCurrentTime());
 				review.setMemberId(memberDAO.findByMemberId(review.getMemberId().getId()));
 				review.setProductId(productService.findProductByPrimaryKey(review.getProductId().getId()));
 				review.setPurchaseListId(purchaseService
@@ -350,7 +350,7 @@ public class PurchaseController {
 					String stringId = String.valueOf(value);
 					Long purchaseId = Long.valueOf(stringId);
 					purchaseBean = purchaseService.findPurchaseById(purchaseId, PURCHASE).get(0);
-					purchaseBean.setUpdatedTime(currentTime);
+					purchaseBean.setUpdatedTime(newDate.newCurrentTime());
 				} else if (key.equalsIgnoreCase(PAYSTATUS)) {
 					payStatus = value;
 				} else if (key.equalsIgnoreCase(DELIVERSTATUS)) {
@@ -402,7 +402,7 @@ public class PurchaseController {
 					String stringId = String.valueOf(value);
 					Long reviewId = Long.valueOf(stringId);
 					reviewBean = purchaseService.findReviewById("review", reviewId).get(0);
-					reviewBean.setUpdatedTime(currentTime);
+					reviewBean.setUpdatedTime(newDate.newCurrentTime());
 				} else if (key.equalsIgnoreCase("rating")) {
 					rating = Double.valueOf(value);
 				} else if (key.equalsIgnoreCase("comment")) {
@@ -494,7 +494,7 @@ public class PurchaseController {
 		}
 		Long id = Long.valueOf(ecpaySN.substring(ecpaySN.indexOf("ZZ") + 2, ecpaySN.length()));
 		PurchaseBean purchaseBean = purchaseService.findPurchaseById(id, PURCHASE).get(0);
-		purchaseBean.setUpdatedTime(currentTime);
+		purchaseBean.setUpdatedTime(newDate.newCurrentTime());
 		PurchaseBean result = purchaseService.updatePurchase(purchaseBean, "paid", null, null);
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);

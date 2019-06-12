@@ -1,7 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.dao.MemberDAO;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.PurchaseService;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.RefundService;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
@@ -37,10 +35,7 @@ public class RefundController {
 	@Autowired
 	private PurchaseService purchaseService;
 
-	@Autowired
-	private MemberDAO memberDAO;
 	private NewDate newDate = new NewDate();
-	private Date currentTime = newDate.newCurrentTime();
 	
 	private static final String VALUENOTFOUND= "缺少必要值";
 	private static final String NULLPOINTER = "無此退貨單";
@@ -61,8 +56,8 @@ public class RefundController {
 		}
 		List<PurchaseListBean> purchaseListBeans = new ArrayList<>();
 		RefundBean refundBean = new RefundBean();
-		refundBean.setCreateTime(currentTime);
-		refundBean.setUpdatedTime(currentTime);
+		refundBean.setCreateTime(newDate.newCurrentTime());
+		refundBean.setUpdatedTime(newDate.newCurrentTime());
 		refundBean.setProcessStatus("created");
 		Iterator<Entry<String, Object>> iterator = json.entrySet().iterator();
 		while (iterator.hasNext()) {
@@ -75,12 +70,10 @@ public class RefundController {
 				PurchaseListBean purchaseListBean = purchaseService.findPurchaseListById(purchaseListId, "purchaseList")
 						.get(0);
 				purchaseListBeans.add(purchaseListBean);
+				refundBean.setMemberId(purchaseListBean.getPurchaseId().getMemberId());
 			} else if (key.equalsIgnoreCase("comment")) {
 				refundBean.setComment((String) value);
-			} else if (key.equalsIgnoreCase("memberID")) {
-				Long memberId = Long.valueOf((String) value);
-				refundBean.setMemberId(memberDAO.findByMemberId(memberId));
-			}
+			} 
 		}
 		RefundBean result = refundService.newRefund(purchaseListBeans, refundBean);
 		if (result != null && result.isNotNull()) {
@@ -115,7 +108,7 @@ public class RefundController {
 				String stringId = (String) value;
 				Long refundId = Long.valueOf(stringId);
 				refundBean = refundService.findRefundsById("refund", refundId).get(0);
-				refundBean.setUpdatedTime(currentTime);
+				refundBean.setUpdatedTime(newDate.newCurrentTime());
 			} else if (key.equalsIgnoreCase("processStatus")) {
 				processStatus = (String) value;
 			}

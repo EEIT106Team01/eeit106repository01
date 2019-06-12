@@ -81,7 +81,7 @@ function generateProductHtml() {
             product.name +
             `</td>` +
             `<td>` +
-            `<div class="input-spinner" name="price-` + product.price + `">
+            `<div class="input-spinner" name="price-` + product.price + `" id="id-` + product.id + `">
             <button type="button" class="btn btn-primary " data-step="-1">-</button>
             <input class="form-control size-2" value="` + product.quantity + `" data-min="1" data-max="` + product.totalQuantity + `">
             <button type="button" class="btn btn-primary " data-step="1">+</button>
@@ -128,23 +128,57 @@ function quantityBtn() {
         }
         let price = parseInt($(this).parent(`div .input-spinner`).attr(`name`).replace(`price-`, ``));
         let name = $(this).parent(`div .input-spinner`).attr(`name`);
-        editTotalPrice(plusOrMinus, price, name);
+        let indexCount = parseInt($(`.text-center:last`).text()) - 1;
+        let otherPrice = 0;
+        let id = parseInt($(this).parent(`div .input-spinner`).attr(`id`).replace(`id-`, ``));
+        for (let index = 0; index < indexCount; index++) {
+            otherPrice += parseInt($($(`div .input-spinner[name!=` + $(this).parent(`div .input-spinner`).attr(`name`) + `]`).eq(index)).attr(`name`).replace(`price-`, ``));
+        }
+        editTotalPrice(id, plusOrMinus, price, name, otherPrice);
     });
 }
 
 //Edit total price
-function editTotalPrice(boolean, price, name) {
+function editTotalPrice(id, boolean, price, name, otherPrice) {
+    let cart = localStorage;
     let currentProductPrice = parseInt($(`#productsTotalPrice`).text().replace(`$`, ``));
     let currentTotalPrice = parseInt($(`#totalPrice`).text().replace(`$`, ``));
     let inputValue = parseInt($(`div[name=` + name + `] input`).attr(`value`));
     if (boolean) {
-        // $(`div[name=` + name + `] input`).attr(`value`, inputValue + 1);
-        $(`#productsTotalPrice`).text(`$` + (currentProductPrice + price));
-        $(`#totalPrice`).text(`$` + (currentProductPrice + price));
+        if (inputValue < parseInt($(`div[name=` + name + `] input`).attr(`data-max`))) {
+            getProductFromCart().forEach(element => {
+                if (element.id == id) {
+                    let newProduct = new Object();
+                    newProduct.id = element.id;
+                    newProduct.name = element.name;
+                    newProduct.price = element.price;
+                    newProduct.quantity = inputValue + 1;
+                    newProduct.image = element.image;
+                    newProduct.totalQuantity = element.totalQuantity;
+                    let newP = JSON.stringify(newProduct);
+                    cart.removeItem(element.id);
+                    cart.setItem(element.id, newP);
+                    location.href = location.href;
+                }
+            });
+        }
     } else {
-        if ((currentProductPrice - price) > price) {
-            $(`#productsTotalPrice`).text(`$` + (currentProductPrice - price));
-            $(`#totalPrice`).text(`$` + (currentProductPrice - price));
+        if (inputValue > parseInt($(`div[name=` + name + `] input`).attr(`data-min`))) {
+            getProductFromCart().forEach(element => {
+                if (element.id == id) {
+                    let newProduct = new Object();
+                    newProduct.id = element.id;
+                    newProduct.name = element.name;
+                    newProduct.price = element.price;
+                    newProduct.quantity = inputValue - 1;
+                    newProduct.image = element.image;
+                    newProduct.totalQuantity = element.totalQuantity;
+                    let newP = JSON.stringify(newProduct);
+                    cart.removeItem(element.id);
+                    cart.setItem(element.id, newP);
+                    location.href = location.href;
+                }
+            });
         }
     }
 }
@@ -217,4 +251,3 @@ function newPurchase() {
         });
     })
 }
-0
