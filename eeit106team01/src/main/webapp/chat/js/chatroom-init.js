@@ -850,14 +850,28 @@ $(document).ready(function () {
                             date_formated = date;
 
                         let $image = $(document.createElement("img"));
-                        let imageSrc = "/navbar/images/notLogin.jpg";
                         $image.attr({
-                            src: imageSrc,
+                            src: "/navbar/images/notLogin.jpg",
                             width: 40,
                             class: "img-circle"
                         });
                         $image.css({
-                            margin: "1%"
+                            "margin": "0 2% 0 0",
+                            "max-height": "40px",
+                            // "box-shadow": "0px 2px 4px rgba(255, 255, 255)",
+                            border: "2px solid rgb(255, 255, 255, 0.3)"
+                        });
+                        $.ajax({
+                            method: "GET",
+                            url: "/getImageByName/" + entry.from,
+                            dataType: "json",
+                            success: function (data, textStatus, jqXHR) {
+                                if (data && data.image) {
+                                    $image.attr({
+                                        src: data.image
+                                    });
+                                }
+                            }
                         });
                         $entry.find('.user').before($image);
 
