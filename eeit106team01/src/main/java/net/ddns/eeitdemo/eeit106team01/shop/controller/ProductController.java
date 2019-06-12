@@ -200,7 +200,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PutMapping(path = { "/products" }, consumes = { "application/json; charset=UTF-8" }, produces = {
+	@PutMapping(path = { "/product/update" }, consumes = { "application/json; charset=UTF-8" }, produces = {
 			"application/json" })
 	public ResponseEntity<?> putProduct(@RequestBody ProductBean productBean, BindingResult bindingResult) {
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
