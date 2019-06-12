@@ -9,16 +9,16 @@
     <meta name="description" content="Neon Admin Panel" />
     <meta name="author" content="" />
 
-    <link rel="icon" href="../assets/images/favicon.ico">
+    <link rel="icon" href="/assets/images/favicon.ico">
 
     <title>訂單查詢</title>
 
     <!-- Data-Include -->
-    <script src="../navbar/js/csi.min.js"></script>
-    <script src="../navbar/js/navbar-init.js"></script>
+    <script src="/navbar/js/csi.min.js"></script>
+    <script src="/navbar/js/navbar-init.js"></script>
 
     <!-- jQuery -->
-    <script src="../assets/js/jquery-1.11.3.min.js"></script>
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
 
     <!-- cookie -->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
@@ -29,11 +29,11 @@
 <body class="page-body">
 
     <!-- Nav Bar -->
-    <span data-include="../navbar/navbarWhite.html"></span>
+    <span data-include="/navbar/navbarWhite.html"></span>
 
     <div class="page-container">
 
-        <h3><span id="memberId"></span>的購物紀錄</h3>
+        <h3><span id="memberId"></span>&nbsp;的訂單歷史紀錄</h3>
 
         <script type="text/javascript">
             jQuery(window).load(function() {
@@ -47,7 +47,6 @@
                     "aoColumns": [{
                             "bSortable": false
                         },
-                        null,
                         null,
                         null,
                         null
@@ -77,15 +76,10 @@
         <table class="table table-bordered table-striped datatable" id="table-2">
             <thead>
                 <tr>
-                    <th>退貨狀態
-                        <!-- <div class="checkbox checkbox-replace">
-                            <input type="checkbox" id="chk-1">
-                        </div> -->
-                    </th>
+                    <th class="col-lg-2">訂單明細／退貨申請</th>
                     <th>訂單編號</th>
                     <th>購買時間</th>
                     <th>總金額</th>
-                    <th>訂單明細／退貨申請</th>
                 </tr>
             </thead>
 
@@ -104,16 +98,17 @@
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title">Dynamic Content</h4>
+                        <h4 class="modal-title" id="show-productList"></h4>
                     </div>
 
                     <div class="modal-body">
-                        <table>
+                        <table class="table table-bordered table-striped datatable">
                             <thead>
                                 <tr>
-                                    <th>商品名稱</th>
-                                    <th>商品單價</th>
-                                    <th>商品序號</th>
+                                    <th>名稱</th>
+                                    <th>序號</th>
+                                    <th>狀態</th>
+                                    <th>退貨申請</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -122,8 +117,7 @@
                     </div>
 
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-info">Save changes</button>
+                        <button type="button" class="btn btn-default btn-lg" data-dismiss="modal" id="modal-close">關閉</button>
                     </div>
                 </div>
             </div>
@@ -136,21 +130,22 @@
     <script src="js/purchase-show.js"></script>
 
     <!-- Imported styles on this page -->
-    <link rel="stylesheet" href="../assets/js/datatables/datatables.css">
+    <link rel="stylesheet" href="/assets/js/datatables/datatables.css">
 
     <!-- Imported scripts on this page -->
-    <script src="../assets/js/datatables/datatables.js"></script>
+    <script src="/assets/js/datatables/datatables.js"></script>
+    <script src="/chat/js/chatroom-init.js"></script>
 
     <!-- Bottom scripts (common) -->
-    <script src="../assets/js/gsap/TweenMax.min.js"></script>
-    <script src="../assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
-    <script src="../assets/js/bootstrap.js"></script>
-    <script src="../assets/js/joinable.js"></script>
-    <script src="../assets/js/resizeable.js"></script>
-    <script src="../assets/js/neon-api.js"></script>
+    <script src="/assets/js/gsap/TweenMax.min.js"></script>
+    <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+    <script src="/assets/js/bootstrap.js"></script>
+    <script src="/assets/js/joinable.js"></script>
+    <script src="/assets/js/resizeable.js"></script>
+    <script src="/assets/js/neon-api.js"></script>
 
     <!-- JavaScripts initializations and stuff -->
-    <script src="../assets/js/neon-custom.js"></script>
+    <script src="/assets/js/neon-custom.js"></script>
 
 </body>
 

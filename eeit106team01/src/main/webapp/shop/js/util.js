@@ -14,7 +14,7 @@ function getCurrentTime() {
 //Get Locale Time
 function getLocaleTime(date) {
     let dateObject = new Date(Date.parse(date));
-    return dateObject.toLocaleString(`zh-TW`);
+    return dateObject.toLocaleString(`en-US`);
 }
 
 // Find All from LocalStorage(shopping Cart)
