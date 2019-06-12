@@ -12,18 +12,18 @@
     <link rel="icon" href="/assets/images/favicon.ico">
 
 
-    <!-- cookie -->
-    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
     <title>三寶購物中心</title>
 
+    <!-- Data-Include -->
+    <script src="/navbar/js/csi.min.js"></script>
+    <script src="/navbar/js/navbar-init.js"></script>
+
+    <!-- jQuery -->
     <script src="/assets/js/jquery-1.11.3.min.js"></script>
 
-    <!-- Imported styles on this page -->
-    <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="/assets/js/selectboxit/jquery.selectBoxIt.css">
-    <link rel="stylesheet" href="css/shopping-cart.css" />
-    <link rel="stylesheet" href="css/product.css" />
+    <!-- cookie -->
+    <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
 </head>
 
@@ -122,8 +122,96 @@
             <div id="reviewResult" class="col-md-12">
                 <h2>商品評論</h2>
 
+                <script type="text/javascript">
+                    jQuery(window).load(function() {
+                        var $table2 = jQuery("#table-2");
+
+                        // Initialize DataTable
+                        $table2.DataTable({
+                            "sDom": "tip",
+                            "bStateSave": false,
+                            "iDisplayLength": 8,
+                            "aoColumns": [{
+                                    "bSortable": false
+                                },
+                                null,
+                                null,
+                                null
+                            ],
+                            "bStateSave": true
+                        });
+
+                        // Highlighted rows
+                        $table2.find("tbody input[type=checkbox]").each(function(i, el) {
+                            var $this = $(el),
+                                $p = $this.closest('tr');
+
+                            $(el).on('change', function() {
+                                var is_checked = $this.is(':checked');
+
+                                $p[is_checked ? 'addClass' : 'removeClass']('highlight');
+                            });
+                        });
+
+                        // Replace Checboxes
+                        $table2.find(".pagination a").click(function(ev) {
+                            replaceCheckboxes();
+                        });
+                    });
+                </script>
+
+                <table class="table table-bordered table-striped datatable" id="table-2">
+                    <thead>
+                        <tr>
+                            <th class="col-lg-2">用戶</th>
+                            <th>評分</th>
+                            <th class="col-lg-5">評論</th>
+                            <th>時間</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+
+                    </tbody>
+
+                </table>
+
+                <br />
+
+                <!-- Modal 7 (Ajax Modal)-->
+                <div class="modal fade" id="modal-7" style="top: 100px;">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                                <h4 class="modal-title" id="show-productList"></h4>
+                            </div>
+
+                            <div class="modal-body">
+                                <table class="table table-bordered table-striped datatable">
+                                    <thead>
+                                        <tr>
+                                            <th>名稱</th>
+                                            <th>序號</th>
+                                            <th>狀態</th>
+                                            <th>退貨申請</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default btn-lg" data-dismiss="modal" id="modal-close">關閉</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
                 <!-- Comments Area -->
-                <section class="comments-env">
+                <!-- <section class="comments-env">
 
                     <div class="comment-filters">
                         <a href="#allReview" class="current">全部</a>
@@ -131,15 +219,15 @@
                         <a href="#normalReview">普通評價</a>
                         <a href="#nagativeeReview">負面評價</a>
                         <a href="#reviewWithImage">附上圖片</a>
-                    </div>
+                    </div> -->
 
-                    <!-- Search and Comment Pagination (Header) -->
-                    <div class="filtering">
+                <!-- Search and Comment Pagination (Header) -->
+                <!-- <div class="filtering">
 
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-3"> -->
 
-                                <!-- <select name="test" class="selectboxit">
+                <!-- <select name="test" class="selectboxit">
                                     <optgroup label="Selected Comments">
                                         <option value="1">Delete</option>
                                         <option value="2">Edit</option>
@@ -148,12 +236,12 @@
                                     </optgroup>
                                 </select> -->
 
-                            </div>
+                <!-- </div>
 
-                            <div class="col-sm-9 search-and-pagination">
+                            <div class="col-sm-9 search-and-pagination"> -->
 
-                                <!-- Pagination -->
-                                <div class="pagination-container">
+                <!-- Pagination -->
+                <!-- <div class="pagination-container">
 
                                     <ul class="pagination">
                                         <li>
@@ -186,10 +274,10 @@
                                         </li>
                                     </ul>
 
-                                </div>
+                                </div> -->
 
-                                <!-- Search Form -->
-                                <div class="search-form-contaner">
+                <!-- Search Form -->
+                <!-- <div class="search-form-contaner">
 
                                     <form method="get" role="form" class="search-form-full">
 
@@ -205,11 +293,11 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> -->
 
 
-                    <!-- Comments List Panel -->
-                    <div class="row">
+                <!-- Comments List Panel -->
+                <!-- <div class="row">
 
                         <div class="col-md-12">
 
@@ -223,10 +311,10 @@
                                     </div>
                                 </div>
 
-                                <div class="panel-body no-padding">
+                                <div class="panel-body no-padding"> -->
 
-                                    <!-- List of Comments -->
-                                    <ul class="comments-list">
+                <!-- List of Comments -->
+                <!-- <ul class="comments-list">
 
                                     </ul>
 
@@ -236,17 +324,17 @@
 
                         </div>
 
-                    </div>
+                    </div> -->
 
 
 
-                    <!-- Search and Comment Pagination (Footer) -->
-                    <div class="filtering">
+                <!-- Search and Comment Pagination (Footer) -->
+                <!-- <div class="filtering">
 
                         <div class="row">
-                            <div class="col-sm-3">
+                            <div class="col-sm-3"> -->
 
-                                <!-- <select name="test" class="selectboxit">
+                <!-- <select name="test" class="selectboxit">
                                     <optgroup label="Selected Comments">
                                         <option value="1">Delete</option>
                                         <option value="2">Edit</option>
@@ -255,12 +343,12 @@
                                     </optgroup>
                                 </select> -->
 
-                            </div>
+                <!-- </div>
 
-                            <div class="col-sm-9 search-and-pagination">
+                            <div class="col-sm-9 search-and-pagination"> -->
 
-                                <!-- Pagination -->
-                                <div class="pagination-container">
+                <!-- Pagination -->
+                <!-- <div class="pagination-container">
 
                                     <ul class="pagination">
                                         <li>
@@ -293,10 +381,10 @@
                                         </li>
                                     </ul>
 
-                                </div>
+                                </div> -->
 
-                                <!-- Search Form -->
-                                <div class="search-form-contaner">
+                <!-- Search Form -->
+                <!-- <div class="search-form-contaner">
 
                                     <form method="get" role="form" class="search-form-full">
 
@@ -312,13 +400,13 @@
                             </div>
                         </div>
 
-                    </div>
+                    </div> -->
 
-                </section>
+                <!-- </section> -->
 
                 <!-- Edit Comment Modal -->
-                <span id="modal-edit">
-                </span>
+                <!-- <span id="modal-edit">
+                </span> -->
 
 
             </div>
@@ -343,6 +431,25 @@
         </div>
     </div>
 
+    <!-- Imported styles on this page -->
+    <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.css" />
+    <link rel="stylesheet" href="/assets/js/datatables/datatables.css">
+    <link rel="stylesheet" href="/assets/js/selectboxit/jquery.selectBoxIt.css">
+    <link rel="stylesheet" href="css/shopping-cart.css" />
+    <link rel="stylesheet" href="css/product.css" />
+
+    <!-- Imported scripts on this page -->
+    <!-- <script src="/assets/js/selectboxit/jquery.selectBoxIt.min.js"></script> -->
+    <script src="/assets/js/datatables/datatables.js"></script>
+    <script src="/chat/js/chatroom-init.js"></script>
+
+    <!-- Include Cloud Zoom -->
+    <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css" rel="stylesheet" />
+    <script src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
+    <!-- Include Thumbelina  -->
+    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
+    <script src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
+
     <!-- Bottom scripts (common) -->
     <script src="/assets/js/gsap/TweenMax.min.js"></script>
     <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
@@ -352,35 +459,18 @@
     <script src="/assets/js/resizeable.js"></script>
     <script src="/assets/js/neon-api.js"></script>
 
-    <!-- Imported scripts on this page -->
-    <script src="/assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
-
-    <!-- Demo Settings -->
-    <script src="/assets/js/neon-demo.js"></script>
-
-    <!-- Include Cloud Zoom -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css" rel="stylesheet" />
-    <script src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
-
-    <!-- Include Thumbelina  -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
-    <script src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
+    <!-- jQuery Validation Plugin -->
+    <script async src="js/jquery.validate.js"></script>
 
     <!-- Custom JavaScript-->
     <script src="js/product.js"></script>
     <script src="js/review.js"></script>
     <script src="js/shopping-cart.js"></script>
     <script src="js/util.js"></script>
-    <!-- jQuery Validation Plugin -->
-    <script async src="js/jquery.validate.js"></script>
 
     <!-- JavaScripts initializations and stuff -->
     <script src="/assets/js/neon-custom.js"></script>
-    <script src="/chat/js/chatroom-init.js"></script>
 
-    <!-- Data-Include -->
-    <script src="/navbar/js/csi.min.js"></script>
-    <script src="/navbar/js/navbar-init.js"></script>
 </body>
 
 </html>
