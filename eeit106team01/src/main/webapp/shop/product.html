@@ -2,8 +2,8 @@
 <html lang="zh-Hant">
 
 <head>
-    <title>三寶購物中心</title>
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="description" content="Neon Admin Panel" />
@@ -11,10 +11,13 @@
 
     <link rel="icon" href="../assets/images/favicon.ico">
 
-    <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
     <!-- cookie -->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+
+    <title>三寶購物中心</title>
+
+    <script src="../assets/js/jquery-1.11.3.min.js"></script>
 
     <!-- Imported styles on this page -->
     <link rel="stylesheet" href="../assets/css/font-icons/font-awesome/css/font-awesome.css" />
@@ -24,7 +27,7 @@
 
 </head>
 
-<body class="page-body" data-url="http://neon.dev">
+<body class="page-body">
 
     <!-- include navbar when window.onload-->
     <div data-include="../navbar/navbarWhite.html"></div>
@@ -342,6 +345,7 @@
 
     <!-- Bottom scripts (common) -->
     <script src="../assets/js/gsap/TweenMax.min.js"></script>
+    <script src="../assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
     <script src="../assets/js/jquery-ui/js/jquery-ui-1.10.3.custom.js"></script>
     <script src="../assets/js/bootstrap.js"></script>
     <script src="../assets/js/joinable.js"></script>
@@ -355,31 +359,28 @@
     <!-- Demo Settings -->
     <script src="../assets/js/neon-demo.js"></script>
 
-    <!-- script  src-->
-    <script src="js/product.js"></script>
-    <script src="js/review.js"></script>
-
-    <!-- Shopping Cart -->
-    <script src="js/shopping-cart.js"></script>
-    <script src="js/util.js"></script>
-
     <!-- Include Cloud Zoom -->
     <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
+    <script src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
 
     <!-- Include Thumbelina  -->
     <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
-    <script src="../assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
+    <script src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
 
+    <!-- Custom JavaScript-->
+    <script src="js/product.js"></script>
+    <script src="js/review.js"></script>
+    <script src="js/shopping-cart.js"></script>
+    <script src="js/util.js"></script>
     <!-- jQuery Validation Plugin -->
     <script async src="js/jquery.validate.js"></script>
 
     <!-- JavaScripts initializations and stuff -->
     <script src="../assets/js/neon-custom.js"></script>
 
-    <!-- NavBar -->
+    <!-- Data-Include -->
     <script src="../navbar/js/csi.min.js"></script>
     <script src="../navbar/js/navbar-init.js"></script>
-
 </body>
+
+</html>
