@@ -33,7 +33,7 @@ function createTopicView(dataTopicList, divTopicId) {
                     // src: "/navbar/images/notLogin.jpg",
                     src: imageString,
                     class: "img-circle myTopicImg",
-                    width: "34px"
+                    style: "max-height: 34px; width: 34px"
                 }).appendTo(divMemberImage);
                 let divMemberNameName = $("<div></div>").addClass("col-md-10").css({"padding": "7px"}).appendTo(divMemberName);
                 divMemberNameName.append(`${dataTopicList[i].memberBean.name}`);

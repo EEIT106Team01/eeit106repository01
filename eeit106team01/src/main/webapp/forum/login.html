@@ -27,57 +27,52 @@
 
   <script>
 
-    function login() {
-      // $(".formField input").attr("readonly", true);
-      // $("#id").unbind();
-      // $("#login").attr('disabled', true);
-      console.log($("#email").val());
-      console.log($("#password").val());
-      // let memberName = $("#email").serialize().substr(6);
-      // let memberPassword = $("#password").serialize().substr(10);
-      let memberName = $("#email").val();
-      let memberPassword = $("#password").val();
-      console.log("memberName: " + memberName);
-      console.log("memberPassword: " + memberPassword);
-      // return;
-      let loginData = {
-        name: memberName,
-        password: memberPassword
-      };
-      $.ajax({
-        url: "/forumlogin",
-        method: "POST",
-        data: loginData,
-        success: function (data, textStatus, jqXHR) {
-          console.log("success");
-          console.log("回傳值 : " + data);
-          console.log("cookie: " + Cookies.get("MemberBean"));
-          let redirect = sessionStorage.getItem("previousPage");
-          console.log(redirect);
-          sessionStorage.removeItem("previousPage");
-          if (!redirect) {
-            redirect = "/index.html";
-          }
-          location.href = redirect;
-        },
-        error: function (jqXHR, textStatus) {
-          console.log("error");
-          console.log(jqXHR.status);
-          // console.log(textStatus);
-        }
-      });
-    }
-
     document.addEventListener("DOMContentLoaded", function () {
-      $("#login").on("click", login);
-      // $("#id").keyup(function () {
-      //     let id = $(this).val();
-      //     if (id.match(/\d{1,10}/)) {
-      //         $("#login").attr('disabled', false);
-      //     } else {
-      //         $("#login").attr('disabled', true);
-      //     }
-      // })
+      $("#login").on("click", function (e) {
+        e.preventDefault();
+        // $(".formField input").attr("readonly", true);
+        // $("#id").unbind();
+        // $("#login").attr('disabled', true);
+        console.log($("#email").val());
+        console.log($("#password").val());
+        // let memberName = $("#email").serialize().substr(6);
+        // let memberPassword = $("#password").serialize().substr(10);
+        let memberName = $("#email").val();
+        let memberPassword = $("#password").val();
+        console.log("memberName: " + memberName);
+        console.log("memberPassword: " + memberPassword);
+        // return;
+        let loginData = {
+          name: memberName,
+          password: memberPassword
+        };
+        $.ajax({
+          url: "/forumlogin",
+          method: "POST",
+          data: loginData,
+          success: function (data, textStatus, jqXHR) {
+            console.log("success");
+            console.log("回傳值 : " + data);
+            console.log("cookie: " + Cookies.get("MemberBean"));
+            let redirect = sessionStorage.getItem("previousPage");
+            sessionStorage.removeItem("previousPage");
+            console.log(redirect);
+            console.log(location.pathname + location.search);
+            if ((!redirect) || redirect == location.pathname + location.search) {
+              redirect = "/index.html";
+            }
+            location.href = redirect;
+          },
+          error: function (jqXHR, textStatus) {
+            console.log("error");
+            console.log(jqXHR.status);
+            // console.log(textStatus);
+          }
+        });
+
+
+      });
+
     })
   </script>
 
