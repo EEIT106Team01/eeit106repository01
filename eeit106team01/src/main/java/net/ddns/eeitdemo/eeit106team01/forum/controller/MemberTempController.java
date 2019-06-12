@@ -106,6 +106,10 @@ public class MemberTempController {
 			MemberTempBean mb = new MemberTempBean();
 			mb.setId(insertResult.getId());
 			mb.setName(insertResult.getName());
+			mb.setEmail(insertResult.getEmail());
+			mb.setLevel(insertResult.getLevel());
+			mb.setLevelTime(insertResult.getLevelTime());
+			mb.setMemberCreateTime(insertResult.getMemberCreateTime());
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonStr = mapper.writeValueAsString(mb);
 			String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -132,6 +136,10 @@ public class MemberTempController {
 				MemberTempBean mb = new MemberTempBean();
 				mb.setId(updateResult.getId());
 				mb.setName(updateResult.getName());
+				mb.setEmail(updateResult.getEmail());
+				mb.setLevel(updateResult.getLevel());
+				mb.setLevelTime(updateResult.getLevelTime());
+				mb.setMemberCreateTime(updateResult.getMemberCreateTime());
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonStr = mapper.writeValueAsString(mb);
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -158,6 +166,10 @@ public class MemberTempController {
 				MemberTempBean mb = new MemberTempBean();
 				mb.setId(result.getId());
 				mb.setName(result.getName());
+				mb.setEmail(result.getEmail());
+				mb.setLevel(result.getLevel());
+				mb.setLevelTime(result.getLevelTime());
+				mb.setMemberCreateTime(result.getMemberCreateTime());
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonStr = mapper.writeValueAsString(mb);
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
