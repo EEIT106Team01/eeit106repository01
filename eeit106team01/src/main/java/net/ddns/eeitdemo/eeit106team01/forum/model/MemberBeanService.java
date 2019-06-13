@@ -2,6 +2,7 @@ package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.nio.charset.Charset;
 import java.util.Calendar;
+import java.util.List;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -9,7 +10,6 @@ import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.util.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,6 +47,10 @@ public class MemberBeanService {
 		return memberTempDAO.findByName(name);
 	}
 	
+	public List<MemberTempBean> findAll() {
+		return memberTempDAO.findAll();
+	};
+	
 	public MemberTempBean insert(MemberTempBean bean) {
 		if (bean != null) {
 			return memberTempDAO.insert(bean);
@@ -81,6 +85,12 @@ public class MemberBeanService {
 			if (bean.getMemberCreateTime() != null) {
 				//不應該在這修改
 //				findOne.setMemberCreateTime(bean.getMemberCreateTime());
+			}
+			if (bean.getPhone() != null) {
+				findOne.setPhone(bean.getPhone());
+			}
+			if (bean.getAddress() != null) {
+				findOne.setAddress(bean.getAddress());
 			}
 			
 			return memberTempDAO.update(findOne);

@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -31,6 +32,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
+import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 
 @Controller
@@ -46,6 +48,17 @@ public class MemberTempController {
 		if (findOne != null) {
 			findOne.setPassword(null);
 			return ResponseEntity.ok(findOne);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+	
+	@GetMapping(path = { "/memberTemps" }, produces = { "application/json" })
+	public ResponseEntity<?> getAllMember() {
+		System.out.println("getAllMember method running");
+		List<MemberTempBean> findAll = memberBeanService.findAll();
+		if (findAll != null && findAll.size() != 0) {
+			return ResponseEntity.ok(findAll);
 		} else {
 			return ResponseEntity.notFound().build();
 		}

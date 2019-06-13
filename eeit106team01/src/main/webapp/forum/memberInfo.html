@@ -50,6 +50,18 @@
             height: 190px;
         }
 
+        input {
+            width: 100%;
+        }
+
+        .updateItemBlock {
+            text-align: center;
+        }
+
+        #memberUpdate {
+            width: 540px;
+        }
+
         #imagePreview {
             margin-top: 15px;
         }
@@ -78,9 +90,10 @@
     <script>
         let memberInfoBean = Cookies.get("MemberBean");
         console.log("CookieMember: " + memberInfoBean);
-        if (memberInfoBean != undefined) {
-            memberInfoBean = JSON.parse(Cookies.get("MemberBean"));
+        if (memberInfoBean == undefined) {
+            location.href = "/index.html";
         }
+        memberInfoBean = JSON.parse(Cookies.get("MemberBean"));
         console.log(memberInfoBean);
 
         document.addEventListener("DOMContentLoaded", function () {
@@ -283,7 +296,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-12 itemBlock">
+                <div class="col-md-12 updateItemBlock">
                     <input type="button" value="修改" id="memberUpdate" />
                 </div>
             </div>

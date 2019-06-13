@@ -55,8 +55,8 @@
             max-width: 1130px;
             padding: 15px;
             margin: auto;
-            min-height: 1236px;
-            height: 100%;
+            min-height: 1422px;
+            /* height: 100%; */
             background-color: #ffffff;
             box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
             /* border-radius: 10px; */
@@ -86,9 +86,17 @@
             margin-bottom: 10px;
         }
 
-        #requestTopicHeader {
-            color: #FF0000 !important;
+        #requestTopicBlock, #requestTopicSearchBlock {
+            height: 386px;
         }
+
+        #shareTopicBlock, #shareTopicSearchBlock {
+            height: 690px;
+        }
+
+        /* #requestTopicHeader {
+            color: #FF0000 !important;
+        } */
 
         .myPagination {
             text-align: right;
@@ -404,14 +412,14 @@
                     <div class="col-md-12 mySubTopicBlock">
                         <h1>搜尋結果</h1>
                     </div>
-                    <div class="col-md-12 mySubTopicBlock">
+                    <div class="col-md-12 mySubTopicBlock" id="requestTopicSearchBlock">
                         <div class="col-md-12" id="requestTopicSearchHeader">
                             <h1>需求</h1>
                         </div>
                         <div class="col-md-12" id="requestTopicSearch"></div>
                         <div class="col-md-12 myPagination" id="requestTopicSearchPagi"></div>
                     </div>
-                    <div class="col-md-12 mySubTopicBlock">
+                    <div class="col-md-12 mySubTopicBlock" id="shareTopicSearchBlock">
                         <div class="col-md-12" id="shareTopicSearchHeader">
                             <h1>提供</h1>
                         </div>

@@ -7,12 +7,20 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
+import net.ddns.eeitdemo.eeit106team01.websocket.controller.NotificationController;
+
 @Service
 @Transactional
 public class NotificationService {
 
 	@Autowired
 	private NotificationDAO notificationDAO;
+	@Autowired
+	private NotificationController notificationController;
+	@Autowired
+	private MemberBeanService memberBeanService;
 
 	public NotificationBean createFirstRecord(String name) {
 		NotificationBean notificationBean = new NotificationBean();
@@ -92,5 +100,16 @@ public class NotificationService {
 			result = notificationDAO.update(notificationBean);
 		}
 		return result;
+	}
+
+	public void sendNotificationToUser(String username, NotificationMsg notificationMsg) {
+		notificationController.sendNotificationToUser(username, notificationMsg);
+	}
+
+	public void sendNotificationToAllUser(NotificationMsg notificationMsg) {
+		List<MemberTempBean> memberBeans = memberBeanService.findAll();
+		for (MemberTempBean memberBean : memberBeans) {
+			notificationController.sendNotificationToUser(memberBean.getName(), notificationMsg);
+		}
 	}
 }
