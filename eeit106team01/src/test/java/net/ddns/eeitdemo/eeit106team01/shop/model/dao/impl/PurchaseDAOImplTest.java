@@ -55,17 +55,17 @@ public class PurchaseDAOImplTest {
 	
 	// Purchase
 
-	public void testInsertPurchase() {
-		this.member = new Member();
-		memberDAO.insertMember(member);
-		this.purchaseBean = purchaseDAO
-				.insertPurchase(new PurchaseBean("", date, date, 100, "", "test", 0, hashMap, member));
-		this.purchaseBean = purchaseDAO
-				.insertPurchase(new PurchaseBean("", date, date, 200, "", "test", 0, hashMap, member));
-		this.purchaseBean = purchaseDAO
-				.insertPurchase(new PurchaseBean("", date, date, 1000, "", "test", 0, hashMap, member));
-		assertNotNull(purchaseBean);
-	}
+//	public void testInsertPurchase() {
+//		this.member = new Member();
+//		memberDAO.insertMember(member);
+//		this.purchaseBean = purchaseDAO
+//				.insertPurchase(new PurchaseBean("", date, date, 100, "", "test", 0, hashMap, member));
+//		this.purchaseBean = purchaseDAO
+//				.insertPurchase(new PurchaseBean("", date, date, 200, "", "test", 0, hashMap, member));
+//		this.purchaseBean = purchaseDAO
+//				.insertPurchase(new PurchaseBean("", date, date, 1000, "", "test", 0, hashMap, member));
+//		assertNotNull(purchaseBean);
+//	}
 
 	public void testUpdatePurchase() {
 		this.purchaseBean = purchaseDAO.findPurchaseByPurchaseId(1L);
@@ -157,11 +157,11 @@ public class PurchaseDAOImplTest {
 		assertEquals(new Integer(purchaseDAO.findPurchaseListByProductId(3L).size()), new Integer(1));
 	}
 
-	public void testInsertReview() throws Exception {
-		reviewBean = new ReviewBean(date, date, 5d, "test", memberDAO.findByMemberId(1L),
-				purchaseDAO.findPurchaseListByPurchaseListId(1L), productDAO.findProductByProductId(1L));
-		assertNotNull(purchaseDAO.insertReview(reviewBean));
-	}
+//	public void testInsertReview() throws Exception {
+//		reviewBean = new ReviewBean(date, date, 5d, "test", memberDAO.findByMemberId(1L),
+//				purchaseDAO.findPurchaseListByPurchaseListId(1L), productDAO.findProductByProductId(1L));
+//		assertNotNull(purchaseDAO.insertReview(reviewBean));
+//	}
 
 	public void testUpdateReview() throws Exception {
 		reviewBean = purchaseDAO.findReviewByReviewId(1L);

@@ -211,10 +211,13 @@ public class ProductController {
 			}
 			return ResponseEntity.badRequest().body(errors);
 		}
+		System.err.println(productBean);
 		if (productBean != null) {
+			System.err.println(productBean.getId());
 			ProductBean origin = productService.findProductByPrimaryKey(productBean.getId());
 			if (origin != null) {
 				ProductBean result = productService.updateProduct(productBean);
+				System.err.println(result);
 				if (origin.getStock() == productBean.getStock()) {
 					if (result != null) {
 						return ResponseEntity.ok(result);

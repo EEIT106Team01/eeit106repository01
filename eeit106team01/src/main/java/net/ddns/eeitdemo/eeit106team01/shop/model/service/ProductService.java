@@ -63,7 +63,7 @@ public class ProductService {
 			findOne.setName(productBean.getName());
 			findOne.setPrice(productBean.getPrice());
 			findOne.setType(productBean.getType());
-			findOne.setTotalSold(productBean.getTotalSold());
+//			findOne.setTotalSold(productBean.getTotalSold());
 			findOne.setImageLink(productBean.getImageLink());
 			findOne.setInformationImageLink(productBean.getInformationImageLink());
 			return productDAO.updateProduct(findOne);

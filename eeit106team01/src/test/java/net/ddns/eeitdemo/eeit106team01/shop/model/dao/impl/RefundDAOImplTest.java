@@ -37,11 +37,11 @@ public class RefundDAOImplTest extends ShopTest {
 	}
 	
 	
-	public void testInsertRefund() throws Exception {
-		memberDAO.insertMember(new Member());
-		refundBean = new RefundBean(date, date, "test", "test", memberDAO.findByMemberId(60L));
-		assertNotNull(refundDAO.insertRefund(refundBean));
-	}
+//	public void testInsertRefund() throws Exception {
+//		memberDAO.insertMember(new Member());
+//		refundBean = new RefundBean(date, date, "test", "test", memberDAO.findByMemberId(60L));
+//		assertNotNull(refundDAO.insertRefund(refundBean));
+//	}
 
 	public void testUpdateRefund() throws Exception {
 		refundBean = refundDAO.findRefundByRefundId(1L);

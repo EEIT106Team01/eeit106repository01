@@ -127,11 +127,29 @@ $(document).ready(function() {
                     <div class="form-group">
                         <button type="button" class="btn btn-success" id="btn_insert">新增</button>
                         <button type="reset" class="btn">Reset</button>
+                        <button type="button" class="btn btn-success" id="btn_autoInsert">一鍵帶入</button>
                     </div>
                 </form>
             </div>`
         )
-        let k = 1;
+
+        $('#btn_autoInsert').on("click", function() {
+            $("#name").val("abc行車紀錄器");
+            $("#brand").val("abc");
+            $("#type").val("行車紀錄器");
+            $("#price").val("99");
+            $("#stock").val("0");
+            $('#imageLink0').val("0");
+            $('#imageLinkContent0').val(`"https://s.yimg.com/zp/MerchandiseImages/53AA16062A-SP-6753566.jpg"`);
+            $('#information0').val("品牌");
+            $('#informationContent0').val("abc");
+            $('#information1').val("型號");
+            $('#informationContent1').val("abc-123");
+            $('#informationImageLink0').val("0");
+            $('#informationImageLinkContent0').val("https://s.yimg.com/zp/MerchandiseSpec/A97F4F7F9A-SP-6753566.jpg");         
+        })
+
+        let k = 0;
         $("#btn_addImgCol").on("click", function() {
             k++;
             $("#div_insertImg").append(
@@ -141,7 +159,7 @@ $(document).ready(function() {
                     </div><br>`
             )
         })
-        let j = 1;
+        let j = 0;
         $("#btn_addInfoCol").on("click", function() {
             j++;
             $("#div_insertInfo").append(
@@ -151,7 +169,7 @@ $(document).ready(function() {
                     </div><br>`
             )
         })
-        let c = 1;
+        let c = 0;
         $("#btn_addInfoImgCol").on("click", function() {
             c++;
             $("#div_insertInfoImg").append(
@@ -169,27 +187,23 @@ $(document).ready(function() {
             let stockVal = $("#stock").val();
 
             let imgLength = $("#div_insertImg input").length;
-            // let imageLinkVal = new Object();
-            let imgTemp = [];
+            let imageLinkVal = new Object();
             for (let i = 0; i < imgLength; i += 2) {
-                // imageLinkVal.$($("#div_insertImg input").eq(i)).val() = $($("#div_insertImg input").eq(i + 1)).val()
-                imgTemp.push(
-                    $($("#div_insertImg input").eq(i)).val() + ":" + $($("#div_insertImg input").eq(i + 1)).val()
-                )
+                imageLinkVal[$($("#div_insertImg input").eq(i)).val()] = $($("#div_insertImg input").eq(i + 1)).val()
+                console.log(imageLinkVal)
             }
-            let imageLinkVal = JSON.stringify(imgTemp).replace(`/"`)
-            console.log(imageLinkVal)
+            // let imageLinkVal = JSON.stringify(imgTemp).replace(`/"`)
 
             let infoLength = $("#div_insertInfo input").length;
             let informationVal = new Object();
             for (let i = 0; i < infoLength; i += 2) {
-                infoArray.$($("#div_insertInfo input").eq(i)).val() = $($("#div_insertInfo input").eq(i + 1)).val()
+                informationVal[$($("#div_insertInfo input").eq(i)).val()] = $($("#div_insertInfo input").eq(i + 1)).val()
             }
 
             let infoImgLength = $("#div_insertInfoImg input").length;
             let informationImageLinkVal = new Object();
             for (let i = 0; i < infoImgLength; i += 2) {
-                infoImgArray.$($("#div_insertInfoImg input").eq(i)).val() = $($("#div_insertInfoImg input").eq(i + 1)).val()
+                informationImageLinkVal[$($("#div_insertInfoImg input").eq(i)).val()] = $($("#div_insertInfoImg input").eq(i + 1)).val()
             }
             insertProduct(nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal)
         })
@@ -273,8 +287,8 @@ $(document).ready(function() {
                     </form>
                 </div>`
             )
-            let id = $("#id").val();
-            getProduct(id);
+            let idVal = $("#id").val();
+            getProduct(idVal);
 
             $("#btn_update").on("click", (function() {
 
@@ -285,31 +299,25 @@ $(document).ready(function() {
                 let stockVal = $("#stock").val();
 
                 let imgLength = $("#div_imageLinkAll input").length;
-                console.log($($("#div_imageLinkAll input").eq(1)).val())
-                    // let imageLinkVal = new Object();
-                let imgTemp = [];
+                    let imageLinkVal = new Object();
                 for (let i = 0; i < imgLength; i += 2) {
-                    // imageLinkVal.$($("#div_imageLinkAll input").eq(i)).val() = $($("#div_imageLinkAll input").eq(i + 1)).val()
-                    imgTemp.push(
-                        $($("#div_imageLinkAll input").eq(i)).val() + ":" + $($("#div_imageLinkAll input").eq(i + 1)).val()
-                    )
+                    imageLinkVal[$($("#div_imageLinkAll input").eq(i)).val()] = $($("#div_imageLinkAll input").eq(i + 1)).val()
+                    
                 }
-                let imageLinkValTemp = JSON.stringify(imgTemp)
-                let imageLinkVal = imageLinkValTemp.replace(`\"`, "")
-                console.log(imageLinkVal)
-
+                
                 let infoLength = $("#div_infoAll input").length;
                 let informationVal = new Object();
                 for (let i = 0; i < infoLength; i += 2) {
-                    infoArray.$($("#div_infoAll input").eq(i)).val() = $($("#div_infoAll input").eq(i + 1)).val()
+                    informationVal[$($("#div_infoAll input").eq(i)).val()] = $($("#div_infoAll input").eq(i + 1)).val()
                 }
 
                 let infoImgLength = $("#div_informationImageLinkALl input").length;
                 let informationImageLinkVal = new Object();
                 for (let i = 0; i < infoImgLength; i += 2) {
-                    infoImgArray.$($("#div_informationImageLinkALl input").eq(i)).val() = $($("#div_informationImageLinkALl input").eq(i + 1)).val()
+                    informationImageLinkVal[$($("#div_informationImageLinkALl input").eq(i)).val()] = $($("#div_informationImageLinkALl input").eq(i + 1)).val()
                 }
-                updateProduct(nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal)
+                console.log("nameVal="+nameVal," brandVal="+brandVal," typeVal="+ typeVal," priceVal=" +priceVal, " stockVal="+stockVal, " imageLinkVal="+imageLinkVal," informationVal"+ informationVal," informationImageLinkVal"+ informationImageLinkVal)
+                updateProduct(idVal ,nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal)
             }))
         }))
     }))
@@ -391,8 +399,6 @@ function getProduct(id) {
                 $("#" + id2_infoImg).val(val)
                 p++
             })
-
-            console.log($("#div_imageLinkAll input").length)
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus);
@@ -403,7 +409,7 @@ function getProduct(id) {
 //Get Locale Time
 function getLocaleTime(date) {
     let dateObject = new Date(Date.parse(date));
-    return dateObject.toLocaleString(`zh-TW`);
+    return dateObject.toLocaleString(`en-US`);
 }
 
 function showAjaxModal(id) {
@@ -411,7 +417,7 @@ function showAjaxModal(id) {
     jQuery.ajax({
         url: "/product/" + id,
         success: function(response) {
-            jQuery('#modal-7 .modal-body').append('<img src="' + response.imageLink[0] + '"/>');
+            jQuery('#modal-7 .modal-body').empty().append('<img src=' + response.imageLink[0] + ' width="100%" />');
         }
     });
 }
@@ -461,24 +467,26 @@ function insertProduct(nameVal, brandVal, typeVal, priceVal, stockVal, imageLink
     let bean = { name: nameVal, brand: brandVal, type: typeVal, price: priceVal, stock: stockVal, imageLink: imageLinkVal, information: informationVal, informationImageLink: informationImageLinkVal }
 
     $.ajax({
-        url: "/keyWord/insert",
+        url: "/products/insert",
         method: "POST",
         dataType: "json",
         contentType: "application/json;charset=UTF-8",
         data: JSON.stringify(bean),
         success: function() {
+            console.log(JSON.stringify(bean))
             alert("新增成功")
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
+            console.log(JSON.stringify(bean))
             alert("新增失敗")
         }
     })
 }
 
-function updateProduct(nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal) {
+function updateProduct(idVal,nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal) {
 
-    let bean = { name: nameVal, brand: brandVal, type: typeVal, price: priceVal, stock: stockVal, imageLink: imageLinkVal, information: informationVal, informationImageLink: informationImageLinkVal }
+    let bean = {id:idVal, name: nameVal, brand: brandVal, type: typeVal, price: priceVal, stock: stockVal, imageLink: imageLinkVal, information: informationVal, informationImageLink: informationImageLinkVal }
 
     $.ajax({
         url: "/product/update",
@@ -487,9 +495,11 @@ function updateProduct(nameVal, brandVal, typeVal, priceVal, stockVal, imageLink
         contentType: "application/json;charset=UTF-8",
         data: JSON.stringify(bean),
         success: function() {
+            console.log(JSON.stringify(bean))
             alert("產品更新成功")
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            console.log(JSON.stringify(bean))
             alert("產品更新失敗")
         }
     })
