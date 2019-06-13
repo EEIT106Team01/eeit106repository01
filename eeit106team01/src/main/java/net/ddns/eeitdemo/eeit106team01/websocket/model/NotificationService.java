@@ -7,12 +7,17 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import net.ddns.eeitdemo.eeit106team01.websocket.controller.NotificationController;
+
 @Service
 @Transactional
 public class NotificationService {
 
 	@Autowired
 	private NotificationDAO notificationDAO;
+
+	@Autowired
+	private NotificationController notificationController;
 
 	public NotificationBean createFirstRecord(String name) {
 		NotificationBean notificationBean = new NotificationBean();
@@ -92,5 +97,13 @@ public class NotificationService {
 			result = notificationDAO.update(notificationBean);
 		}
 		return result;
+	}
+
+	public void sendNotificationToUser(String username, NotificationMsg notificationMsg) {
+		notificationController.sendNotificationToUser(username, notificationMsg);
+	}
+
+	public void sendNotificationToAllUser(NotificationMsg notificationMsg) {
+		notificationController.sendNotificationToUser(null, notificationMsg);
 	}
 }
