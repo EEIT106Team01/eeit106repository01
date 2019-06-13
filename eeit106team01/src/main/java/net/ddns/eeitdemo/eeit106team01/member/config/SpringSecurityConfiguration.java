@@ -32,6 +32,8 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
 		.and()
 		.formLogin()
 		.and()
+		.oauth2Login()
+		.and()
 		.logout()
 		.deleteCookies("JSESSIONID")
 		.and()

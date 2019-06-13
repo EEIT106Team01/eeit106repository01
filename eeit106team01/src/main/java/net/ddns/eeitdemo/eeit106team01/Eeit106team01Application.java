@@ -31,31 +31,8 @@ import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.VideoBean;
 import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.DatetimeGranterEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.IntegerGranterEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.NumericGranterEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ProductBasicEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ProductDatetimeEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ProductIntegerEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ProductNumericEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ProductTextEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptBasicEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptDatetimeEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptDetailsDatetimeEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptDetailsEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptDetailsIntegerEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptDetailsNumericEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptDetailsTextEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptIntegerEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptNumericEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.ReceiptTextEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.TextGranterEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.TimestampIndexEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.UserBasicEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.UserDatetimeEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.UserIntegerEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.UserNumericEntity;
-import net.ddns.eeitdemo.eeit106team01.member.model.entity.UserTextEntity;
+import net.ddns.eeitdemo.eeit106team01.member.model.entity.AuthorityEntity;
+import net.ddns.eeitdemo.eeit106team01.member.model.entity.MemberEntity;
 import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
@@ -142,33 +119,8 @@ public class Eeit106team01Application {
 		builder.addAnnotatedClass(NotificationBean.class);
 		
 		//Member
-		builder.addAnnotatedClasses(TextGranterEntity.class,
-				DatetimeGranterEntity.class,
-				IntegerGranterEntity.class,
-				NumericGranterEntity.class,
-				TimestampIndexEntity.class);
-		builder.addAnnotatedClasses(UserBasicEntity.class,
-				UserIntegerEntity.class,
-				UserNumericEntity.class,
-				UserTextEntity.class,
-				UserDatetimeEntity.class);
-		builder.addAnnotatedClasses(ProductBasicEntity.class,
-				ProductDatetimeEntity.class,
-				ProductIntegerEntity.class,
-				ProductNumericEntity.class,
-				ProductTextEntity.class);
-		builder.addAnnotatedClasses(ReceiptBasicEntity.class,
-				ReceiptDatetimeEntity.class,
-				ReceiptIntegerEntity.class,
-				ReceiptNumericEntity.class,
-				ReceiptTextEntity.class);
-		builder.addAnnotatedClasses(ReceiptDetailsEntity.class,
-				ReceiptDetailsDatetimeEntity.class,
-				ReceiptDetailsIntegerEntity.class,
-				ReceiptDetailsNumericEntity.class,
-				ReceiptDetailsTextEntity.class);
-		
-		
+		builder.addAnnotatedClasses(MemberEntity.class,
+				AuthorityEntity.class);
 		Properties props = new Properties();
 		props.setProperty("hibernate.dialect", environment.getProperty("hibernate.dialect"));
 		props.setProperty("hibernate.show_sql", environment.getProperty("hibernate.show_sql"));

@@ -13,29 +13,26 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import net.ddns.eeitdemo.eeit106team01.member.controller.formbacking.RegisterForm;
+import net.ddns.eeitdemo.eeit106team01.member.model.entity.MemberEntity;
 import net.ddns.eeitdemo.eeit106team01.member.model.service.MemberService;
 
-@RestController()
+@RestController
 public class DemoRestfulController {
 
 	@Autowired
-	private MemberService<?> memberService;
+	private MemberService memberService;
 	
 	@Autowired
 	private PasswordEncoder passwordEncoder;
 	
 	@PostMapping(path= {"/register"},produces= {"application/json"})
-	public ResponseEntity<?> registerDemo(@Valid RegisterForm bean,BindingResult bindingResult){
+	public ResponseEntity<?> registerDemo(@Valid MemberEntity bean,BindingResult bindingResult){
 		Map<String,String> result = new HashMap<String,String>();
 		if(!bindingResult.hasErrors()) {
-//			result.put("url","register-success.html");
 			result.put("message","success");
-			memberService.demoRegister(bean.getEmail(), passwordEncoder.encode(bean.getPassword()), bean.getUsername());
+			memberService.register( bean.getUsername(),bean.getEmail(),passwordEncoder.encode(bean.getPassword()));
 			return ResponseEntity.ok().contentType(MediaType.APPLICATION_JSON_UTF8).body(result);
 		}
-//		result.put("message","fail");
-//		result.put("url","register-fail.html");
 		return ResponseEntity.badRequest().contentType(MediaType.APPLICATION_JSON_UTF8).body(result);
 	}
 }
