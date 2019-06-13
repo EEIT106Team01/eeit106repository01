@@ -36,7 +36,7 @@ $(document).ready(function() {
             window.location.href = "/shop/search.html?productName=" + productName + "&productType=" + productType;
         }
     }))
-
+    
     //breadcrumb
     var typeUrl = takeTypeUrlValue();
     var typedecodeURI = decodeURIComponent(typeUrl)
@@ -1273,10 +1273,7 @@ function search(searchResult) {
         dataType: "json",
         cache: false,
         success: function(searchData) {
-
             getProductQuantity(searchData)
-
-
             var productsName = [];
             var productsPrice = [];
             var productsImg = [];

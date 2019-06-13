@@ -119,7 +119,7 @@ function getAllType() {
 //新產品推薦
 function getProductsByUpdateTime() {
 
-    var endDay = GetDateStr(1);
+    var endDay = GetDateStr(2);
     var startDay = GetDateStr(-30);
     $.ajax({
         url: "/search/updatedTime?dataName=&queryString=&brandType=&startDay=" + startDay + "&endDay=" + endDay,
