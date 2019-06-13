@@ -9,6 +9,18 @@ function getEcpaySn() {
     return ecpaySn;
 };
 
+//member
+$(`#memberId`).append(`&nbsp;&nbsp;` + member.id);
+$(`#memberName`).append(`&nbsp;&nbsp;` + member.name);
+if (member.level.match(/normal/)) {
+    $(`#memberShip`).append(`&nbsp;&nbsp;普通會員`);
+} else if (member.level.match(/VIP/)) {
+    $(`#memberShip`).append(`&nbsp;&nbsp;VIP會員`);
+
+}
+$(`#memberAddress`).append(`&nbsp;&nbsp;` + member.address);
+$(`#memberMail`).append(`&nbsp;&nbsp;` + member.email);
+$(`#memberPhone`).append(`&nbsp;&nbsp;` + member.phone);
 
 function getReceipt(ecpaySn) {
     let url = urlDomain + `shop/receipt/` + ecpaySn;
@@ -25,8 +37,10 @@ function getReceipt(ecpaySn) {
                 $(`#payStatus`).append(`已付款`);
             }
             let receiverInformation = response.receiverInformation;
-            $(`#receiverName`).append(receiverInformation.receiver);
-            $(`#receiverAddress`).append(receiverInformation.address);
+            $(`#receiverName`).append(`&nbsp;&nbsp;` + receiverInformation.receiver);
+            $(`#receiverAddress`).append(`&nbsp;&nbsp;` + receiverInformation.address);
+            $(`#receiverPhone`).append(`&nbsp;&nbsp;` + receiverInformation.receiverPhone);
+            $(`#receiverMail`).append(`&nbsp;&nbsp;` + receiverInformation.receiverMail);
         }
     }).fail(function(response) {
         console.log(response);
