@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
+import java.awt.Color;
 import java.net.URI;
 import java.util.Date;
 import java.util.HashMap;
@@ -7,6 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -22,11 +24,14 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.SerialNumberBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.ProductService;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationMsg;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationService;
 
 @RestController
 public class ProductController {
@@ -34,7 +39,10 @@ public class ProductController {
 	private ServletContext application;
 	@Autowired
 	private ProductService productService;
-
+	@Autowired
+	private NotificationService notificationService;
+	
+	
 	@GetMapping(path = { "/product/{id}" }, produces = { "application/json" })
 	public ResponseEntity<?> getProductByPrimaryKey(@PathVariable Long id) {
 		if ((id != null) && (id.intValue() > 0)) {
@@ -268,5 +276,28 @@ public class ProductController {
 		} else {
 			return ResponseEntity.noContent().build();
 		}
+	}
+	
+	@GetMapping(path = { "/sendMsg" }, consumes = { "application/json" }, produces = { "application/json" })
+	public ResponseEntity<?> sendMsg(@RequestParam String msg, BindingResult bindingResult){
+		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
+			Map<String, String> errors = new HashMap<String, String>();
+			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
+			for (ObjectError bindingError : bindingErrors) {
+				errors.put(bindingError.getObjectName(), bindingError.toString());
+			}
+			return ResponseEntity.badRequest().body(errors);
+		}
+		if(msg != null) {
+			NotificationMsg notificationMsg = new NotificationMsg();
+			String url = "/shop/upgradeMember.html";
+			notificationMsg.setMessage(msg);
+			notificationMsg.setUrl(url);
+			notificationMsg.setIcon("entypo-info");
+			notificationMsg.setColor(Color.RED);
+			notificationService.sendNotificationToAllUser(notificationMsg);
+			return new ResponseEntity<NotificationMsg>(notificationMsg, HttpStatus.OK);
+		}
+		return ResponseEntity.notFound().build();
 	}
 }

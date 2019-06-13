@@ -146,7 +146,7 @@ $(document).ready(function() {
             $('#information1').val("型號");
             $('#informationContent1').val("abc-123");
             $('#informationImageLink0').val("0");
-            $('#informationImageLinkContent0').val("https://s.yimg.com/zp/MerchandiseSpec/A97F4F7F9A-SP-6753566.jpg");         
+            $('#informationImageLinkContent0').val("https://s.yimg.com/zp/MerchandiseSpec/A97F4F7F9A-SP-6753566.jpg");
         })
 
         let k = 0;
@@ -230,7 +230,7 @@ $(document).ready(function() {
             $("#div_right2").empty().append(
                 `<div class="panel-body">
     
-                    <form role="form" id="form1" class="validate">
+                    <form role="form" id="form2" class="validate">
                         <div class="form-group">
                             <label class="control-label">產品名稱</label>
     
@@ -299,12 +299,12 @@ $(document).ready(function() {
                 let stockVal = $("#stock").val();
 
                 let imgLength = $("#div_imageLinkAll input").length;
-                    let imageLinkVal = new Object();
+                let imageLinkVal = new Object();
                 for (let i = 0; i < imgLength; i += 2) {
                     imageLinkVal[$($("#div_imageLinkAll input").eq(i)).val()] = $($("#div_imageLinkAll input").eq(i + 1)).val()
-                    
+
                 }
-                
+
                 let infoLength = $("#div_infoAll input").length;
                 let informationVal = new Object();
                 for (let i = 0; i < infoLength; i += 2) {
@@ -316,14 +316,65 @@ $(document).ready(function() {
                 for (let i = 0; i < infoImgLength; i += 2) {
                     informationImageLinkVal[$($("#div_informationImageLinkALl input").eq(i)).val()] = $($("#div_informationImageLinkALl input").eq(i + 1)).val()
                 }
-                console.log("nameVal="+nameVal," brandVal="+brandVal," typeVal="+ typeVal," priceVal=" +priceVal, " stockVal="+stockVal, " imageLinkVal="+imageLinkVal," informationVal"+ informationVal," informationImageLinkVal"+ informationImageLinkVal)
-                updateProduct(idVal ,nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal)
+                console.log("nameVal=" + nameVal, " brandVal=" + brandVal, " typeVal=" + typeVal, " priceVal=" + priceVal, " stockVal=" + stockVal, " imageLinkVal=" + imageLinkVal, " informationVal" + informationVal, " informationImageLinkVal" + informationImageLinkVal)
+                updateProduct(idVal, nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal)
             }))
         }))
     }))
 
+    $("#sendMsgToAll").on("click", (function() {
+        $("#div_right2").empty()
+        $("#div_right").empty().append(
+            `<form role="form" id="form1" class="validate">   
+                <label class="control-label">你想通知大家的話...</label>
+                <input type="text" class="form-control" name="msg" id="msg" data-validate="required" placeholder="訊息" />
 
+                <div class="form-group">
+                    <button type="button" class="btn btn-success" id="btn_sendMsg">送出</button>
+                    <button type="reset" class="btn">Reset</button>
+                </div>
+             </form>
+            `
+        )
+        $("#btn_sendMsg").on("click", (function() {
+            sendMsgToAll();
+        }))
+    }))
 })
+
+function sendMsgToAll() {
+    $.ajax({
+        url: "/sendMsg",
+        method: "GET",
+        dataType: "json",
+        success: function(Data) {
+            $("#div_right2").empty().append(
+                `<div class="col-md-6"> 
+                <h4>送出訊息資訊</h4> 
+                <table class="table table-bordered"> 
+                    <thead> 
+                        <tr> 
+                            <th>#</th> 
+                            <th>訊息</th> 
+                            <th>url</th> 
+                        </tr> 
+                    </thead> 
+                    <tbody> 
+                        <tr> 
+                            <td>1</td> 
+                            <td>` + Data.message + `</td> 
+                            <td>` + Data.url + `</td> 
+                        </tr> 
+                    </tbody> 
+                </table> 
+                </div>`
+            )
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+        }
+    })
+}
 
 function getProduct(id) {
     $.ajax({
@@ -484,9 +535,9 @@ function insertProduct(nameVal, brandVal, typeVal, priceVal, stockVal, imageLink
     })
 }
 
-function updateProduct(idVal,nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal) {
+function updateProduct(idVal, nameVal, brandVal, typeVal, priceVal, stockVal, imageLinkVal, informationVal, informationImageLinkVal) {
 
-    let bean = {id:idVal, name: nameVal, brand: brandVal, type: typeVal, price: priceVal, stock: stockVal, imageLink: imageLinkVal, information: informationVal, informationImageLink: informationImageLinkVal }
+    let bean = { id: idVal, name: nameVal, brand: brandVal, type: typeVal, price: priceVal, stock: stockVal, imageLink: imageLinkVal, information: informationVal, informationImageLink: informationImageLinkVal }
 
     $.ajax({
         url: "/product/update",
