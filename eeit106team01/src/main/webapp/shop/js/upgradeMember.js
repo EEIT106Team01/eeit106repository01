@@ -29,6 +29,8 @@ function IntoCart(id, price, name) {
     productInfoJson.quantity = productQuantity;
     let productData = JSON.stringify(productInfoJson);
 
+    let cartLocalStorage = localStorage;
+
     if (null != cartLocalStorage.getItem(productId)) {
         cartLocalStorage.removeItem(cartLocalStorage.getItem(productId));
         cartLocalStorage.setItem(productId, productData);
