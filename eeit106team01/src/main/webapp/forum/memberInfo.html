@@ -32,11 +32,10 @@
 
     <style>
         .myMemberInfo {
-            width: 60%;
-            height: 450px;
-            max-width: 666px;
+            width: 700px;
+            height: 550px;
             margin: auto;
-            margin-top: 40px;
+            margin-top: 20px;
             background-color: #ffffff;
             padding-left: 15px;
             padding-right: 15px;
@@ -104,6 +103,9 @@
             let memberPasswordCheck = $("#memberPasswordCheck").serialize().substr(20);
             let memberBirth = $("#memberBirth").val();
             let memberEmail = $("#memberEmail").val();
+            let memberPhone = $("#memberPhone").val();
+            let memberAddress = $("#memberAddress").val();
+
             if (memberPassword !== memberPasswordCheck) {
                 alert("確認密碼錯誤，請輸入相同密碼");
                 return;
@@ -117,12 +119,20 @@
             if ((memberEmail == "") || (memberEmail.trim().length == 0)) {
                 memberEmail = null;
             }
+            if ((memberPhone == "") || (memberPhone.trim().length == 0)) {
+                memberPhone = null;
+            }
+            if ((memberAddress == "") || (memberAddress.trim().length == 0)) {
+                memberAddress = null;
+            }
             let memberInfoData = {
                 id: memberInfoBean.id,
                 image: null,
                 password: memberPassword,
                 birth: memberBirth,
-                email: memberEmail
+                email: memberEmail,
+                phone: memberPhone,
+                address: memberAddress
             };
             if ((memberImage != "") && (memberImage.trim().length != 0)) {
                 console.log("有圖");
@@ -160,11 +170,11 @@
             }
         }
 
-        function memberUpdate(data) {
+        function memberUpdate(updateData) {
             $.ajax({
                 url: "/memberTemps/" + memberInfoBean.id,
                 method: "PUT",
-                data: JSON.stringify(data),
+                data: JSON.stringify(updateData),
                 contentType: "application/json; charset=UTF-8",
                 dataType: "json",
                 success: function (data, textStatus, jqXHR) {
@@ -252,6 +262,24 @@
                         </div>
                         <div class="col-md-12">
                             <input type="text" name="memberEmail" id="memberEmail" placeholder="請輸入有效信箱">
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-12 itemBlock">
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <label>聯絡電話：</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" name="memberPhone" id="memberPhone" placeholder="請輸入聯絡電話">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="col-md-12">
+                            <label>通訊地址：</label>
+                        </div>
+                        <div class="col-md-12">
+                            <input type="text" name="memberAddress" id="memberAddress" placeholder="請輸入通訊地址">
                         </div>
                     </div>
                 </div>

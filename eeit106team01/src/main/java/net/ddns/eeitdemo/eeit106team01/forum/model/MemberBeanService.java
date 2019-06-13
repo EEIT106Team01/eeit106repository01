@@ -1,11 +1,20 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
+import java.nio.charset.Charset;
 import java.util.Calendar;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import org.apache.catalina.util.URLEncoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -79,7 +88,7 @@ public class MemberBeanService {
 		return null;
 	};
 	
-	public MemberTempBean memberTempsLevelup(int id) {
+	public MemberTempBean memberTempsLevelup(int id, HttpSession httpSession, HttpServletResponse response) throws JsonProcessingException {
 		MemberTempBean findOne = findByPrimaryKey(id);
 		if (findOne != null) {
 			findOne.setLevel("VIP");
@@ -89,7 +98,24 @@ public class MemberBeanService {
 			nowCalendar.add(Calendar.MONTH, 1); // 比較月份，月份+1
 			findOne.setLevelTime(nowCalendar.getTime());
 			
-			return memberTempDAO.update(findOne);
+			MemberTempBean levelupResult = memberTempDAO.update(findOne);
+			httpSession.setAttribute("MemberBean", levelupResult);
+			MemberTempBean mb = new MemberTempBean();
+			mb.setId(levelupResult.getId());
+			mb.setName(levelupResult.getName());
+			mb.setEmail(levelupResult.getEmail());
+			mb.setLevel(levelupResult.getLevel());
+			mb.setLevelTime(levelupResult.getLevelTime());
+			mb.setMemberCreateTime(levelupResult.getMemberCreateTime());
+			mb.setPhone(levelupResult.getPhone());
+			mb.setAddress(levelupResult.getAddress());
+			ObjectMapper mapper = new ObjectMapper();
+			String jsonStr = mapper.writeValueAsString(mb);
+			String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
+			Cookie memberBeanCookie = new Cookie("MemberBean", encodeJson);
+			response.addCookie(memberBeanCookie);
+			
+			return levelupResult;
 		}
 		return null;
 	};
