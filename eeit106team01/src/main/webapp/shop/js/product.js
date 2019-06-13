@@ -85,64 +85,74 @@ function getAllType() {
 
 //搜單件商品
 function getProduct(id) {
+    if(id != 1630){
 
-    $.ajax({
-        url: "/product/" + id,
-        method: "GET",
-        dataType: "json",
-        success: function(productData) {
-            //產品圖片
-            $("#productImgDivButton").click(function() {
-                productImgDiv(productData);
-            });
-            //產品資訊
-            searchResult(productData);
-            //詳細規格
-            $("#productInformationButton").click(function() {
-                productInformation(productData);
-            });
-            //庫存數量.購買/購物車按鈕
-            buy(productData);
-
-            $("#reviewResultButton").click(function() {
-                review();
-            });
-
-            var type = productData.type;
-            getRecommendProducts(type);
-            //type存入localStorage
-            if (localStorage.hasOwnProperty('type')) {
-                localStorage.removeItem("type");
-            }
-            localStorage.setItem("type", type)
-                //breadcrumb
-            $("#typeBreadcrumb").append(
-                '<a href="/shop/search.html?type=' +
-                type +
-                '">' +
-                type +
-                "</a>"
-            );
-            $("#productBreadcrumb").append("<a>" + productData.name + "</a>");
-
-            function review() {
-                $("#reviewTitle").text("商品評價");
-            }
-            //cloudZoom
-            CloudZoom.quickStart();
-            // Initialize the slider.
-            $(function() {
-                $("#slider1").Thumbelina({
-                    $bwdBut: $("#slider1 .left"),
-                    $fwdBut: $("#slider1 .right")
+        $.ajax({
+            url: "/product/" + id,
+            method: "GET",
+            dataType: "json",
+            success: function(productData) {
+                //產品圖片
+                $("#productImgDivButton").click(function() {
+                    productImgDiv(productData);
                 });
-            });
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-        }
-    });
+                //產品資訊
+                searchResult(productData);
+                //詳細規格
+                $("#productInformationButton").click(function() {
+                    productInformation(productData);
+                });
+                //庫存數量.購買/購物車按鈕
+                buy(productData);
+
+                $("#reviewResultButton").click(function() {
+                    review();
+                });
+
+                var type = productData.type;
+                getRecommendProducts(type);
+                //type存入localStorage
+                if (localStorage.hasOwnProperty('type')) {
+                    localStorage.removeItem("type");
+                }
+                localStorage.setItem("type", type)
+                    //breadcrumb
+                $("#typeBreadcrumb").append(
+                    '<a href="/shop/search.html?type=' +
+                    type +
+                    '">' +
+                    type +
+                    "</a>"
+                );
+                $("#productBreadcrumb").append("<a>" + productData.name + "</a>");
+
+                function review() {
+                    $("#reviewTitle").text("商品評價");
+                }
+                //cloudZoom
+                CloudZoom.quickStart();
+                // Initialize the slider.
+                $(function() {
+                    $("#slider1").Thumbelina({
+                        $bwdBut: $("#slider1 .left"),
+                        $fwdBut: $("#slider1 .right")
+                    });
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+    }else{
+        jump();
+    }
 }
+//跳轉回首頁
+function jump(){
+    location.href="/shop/index.html"; //跳转
+    //window.location.reload(); //刷新
+}
+
 //產品查詢結果
 function searchResult(productData) {
     var productImgArray = [];

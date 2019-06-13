@@ -551,7 +551,9 @@ function getAllType() {
             var i = 0;
             var productTypeArray = [];
             $.each(typesData, function() {
-                productTypeArray.push('<li><a href="/shop/search.html?type=' + typesData[i].data + '" onclick="ByType(this)">' + typesData[i].data + '</a></li>')
+                if(typesData[i].data != "會員"){
+                    productTypeArray.push('<li><a href="/shop/search.html?type=' + typesData[i].data + '" onclick="ByType(this)">' + typesData[i].data + '</a></li>')
+                }
                 i++
             })
             $("#typeForm").empty().append(productTypeArray.join(""))
@@ -559,7 +561,9 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
+                if(typesData[i].data != "會員"){
                 productTypeArray2.push("<option>" + typesData[y].data + "</option>")
+                }
                 y++
             })
             $("#searchType").empty().append("<option>All</option>" + productTypeArray2.join(""))
