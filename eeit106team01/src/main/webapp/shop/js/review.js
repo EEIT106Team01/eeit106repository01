@@ -8,7 +8,7 @@ let productId = parseInt(location.href.substr((location.href.indexOf(`?`) + 1), 
 $(function() {
     // generateCurrentFilterText();
     // findReviewsByProductId(`product`, productId);
-    findReview(1);
+    findReview(1, 2);
 });
 
 //Generate Current Filter Text
@@ -272,28 +272,58 @@ function generateReviewEdit(productPageUrl, reviewId, comment, updateTime, ratin
 
 
 //findReview
-function findReview(ProductId) {
+function findReview(ProductId, memberId) {
     $.ajax({
         type: "GET",
         url: "/shop/findReviewById/?idType=product&id=" + ProductId,
         success: function(response) {
             response.forEach(element => {
-                console.log(element);
+                if (element.memberId.id == memberId) {
+                    $(`#table-2 tbody`).append(
+                        `<tr>
+                        <td>` + element.memberId.id + ` </td>
+                        <td><a href="javascript:;" name="` + element.comment + `" onclick="showAjaxModal(` + element.memberId.id + `,` + element.rating + `)">` + element.rating + ` </a></td>
+                        <td><a href="javascript:;" name="` + element.comment + `" onclick="showAjaxModal(` + element.memberId.id + `,` + element.rating + `)">` + element.comment + `</a></td>
+                        <td>` + getLocaleTime(element.updatedTime) + `</td>
+                        </tr>`
+                    );
+                } else {
+                    $(`#table-2 tbody`).append(
+                        `<tr>
+                        <td>` + element.memberId.id + ` </td>
+                        <td>` + element.rating + `</td>
+                        <td>` + element.comment + `</td>
+                        <td>` + getLocaleTime(element.updatedTime) + `</td>
+                        </tr>`
+                    );
+                }
             });
         }
     });
 }
 
-
-// $(`.datatable tbody`).append(
-//     `<tr>
-//     <td>
-//         <a href="javascript:;" onclick="showAjaxModal(` + element.id + `,` + memberId + `)" class="btn btn-info btn-lg btn-icon icon-left">
-//             <i class="entypo-info"></i> 訂單明細／退貨申請
-//         </a>
-//     </td>
-//     <td>` + id + ` </td>
-//     <td>` + time + `</td>
-//     <td>$` + totalPrice + `</td>
-//     </tr>`
-// );
+function showAjaxModal(memberId, rating) {
+    $('#modal-7 .modal-body tbody').empty();
+    $('#modal-7').modal('show', { backdrop: 'static' });
+    $(`#show-memberId`).text(memberId + ` 正在修改評論...`);
+    $('#modal-7 .modal-body tbody').append(
+        `<tr>
+            <th>用戶</th>
+        </tr>
+        <tr>
+            <td>` + memberId + `</td>
+        </tr>
+        <tr>
+            <th>評分</th>
+        </tr>
+        <tr>
+            <td><input type="number" class="form-control-sm" min="0" max="5" step="0.5" value="` + rating + `"></input></td>
+        </tr>
+        <tr>
+            <th>評論</th>
+        </tr>
+        <tr>
+            <td><textarea style="width:400px;height:100px;" value="` + $(this).attr(`name`) + `"></textarea></td>
+        </tr> `
+    );
+}
