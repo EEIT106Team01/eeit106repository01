@@ -32,7 +32,7 @@ public class NotificationController {
 		Principal toUser = connectionsHandler.getOnlineUsers().get(username);
 		notificationMsg.setSendTime(new Date(System.currentTimeMillis()));
 		if (toUser != null) {
-			notificationService.addMessage(username, notificationMsg);
+			notificationService.addOfflineMessage(username, notificationMsg);
 			messagingTemplate.convertAndSendToUser(toUser.getName(), "/topic/notificationMsg", notificationMsg);
 		} else {
 			notificationService.addOfflineMessage(username, notificationMsg);

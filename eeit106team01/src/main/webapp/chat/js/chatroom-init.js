@@ -11,6 +11,20 @@ var quillChat;
 
 var notification;
 
+function DingDong() {
+    let dingDong = new Audio("/chat/dingdong.mp3");
+    var playPromise = dingDong.play();
+    if (playPromise !== undefined) {
+        playPromise
+            .then(function () {
+                // dingDong.pause();
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
+}
+
 
 // ----------append quill js&css
 // if (typeof Quill === 'undefined') {
@@ -345,7 +359,7 @@ function showActiveNotification(notiMsgBean) {
 }
 function showNotificationMsg(notiMsg) {
     console.log(notiMsg);
-    notification.prependNotification(notiMsg[i].message, notiMsg[i].url, notiMsg[i].sendTime, notiMsg[i].icon, notiMsg[i].color.rgb, true);
+    notification.prependNotification(notiMsg.message, notiMsg.url, notiMsg.sendTime, notiMsg.icon, notiMsg.color.rgb, true);
 }
 function clearOfflineNotification() {
     worker.port.postMessage({
@@ -1554,6 +1568,7 @@ $(document).ready(function () {
                 $(this.unreadBadge).css("display", "inline");
                 $(this.unreadBadge).css("background-color", "red");
                 $(this.unreadBadge).text(this.unreads);
+                DingDong();
             }
             $(this.notiBox).find("strong").text(this.unreads);
         },
@@ -1585,7 +1600,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     notification.clearUnread();
                     clearOfflineNotification();
-                }, 5000);
+                }, 3000);
             });
         } else {
             window.setTimeout(arguments.callee, 10);
