@@ -18,6 +18,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
+
 @Entity
 @Table(schema = "Shop", name = "Purchase")
 public class PurchaseBean implements Serializable {
@@ -57,7 +59,7 @@ public class PurchaseBean implements Serializable {
 
 	@ManyToOne
 	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
-	private Member memberId;
+	private MemberTempBean memberId;
 
 	@OneToMany(mappedBy = "purchaseId")
 	private List<PurchaseListBean> purchaseListId;
@@ -79,7 +81,7 @@ public class PurchaseBean implements Serializable {
 	 */
 	public PurchaseBean(String payStatus, Date createTime, Date updatedTime, Integer productTotalPrice,
 			String deliverStatus, String deliverType, Integer deliverPrice, HashMap<String, String> receiverInformation,
-			Member memberId) {
+			MemberTempBean memberId) {
 		super();
 		this.payStatus = payStatus;
 		this.createTime = createTime;
@@ -191,11 +193,11 @@ public class PurchaseBean implements Serializable {
 		this.receiverInformation = receiverInformation;
 	}
 
-	public Member getMemberId() {
+	public MemberTempBean getMemberId() {
 		return memberId;
 	}
 
-	public void setMemberId(Member memberId) {
+	public void setMemberId(MemberTempBean memberId) {
 		this.memberId = memberId;
 	}
 

@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 import net.ddns.eeitdemo.eeit106team01.shop.ecpay.example.integration.AllInOne;
 import net.ddns.eeitdemo.eeit106team01.shop.ecpay.example.integration.domain.AioCheckOutOneTime;
 import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
@@ -54,7 +56,7 @@ public class PurchaseController {
 	private ProductService productService;
 
 	@Autowired
-	private MemberDAO memberDAO;
+	private MemberBeanService memberBeanService;
 	
 	private NewDate newDate = new NewDate();
 	private static AllInOne all;
@@ -261,7 +263,7 @@ public class PurchaseController {
 					HashMap<String, String> receiverInformation = (HashMap<String, String>) entry.getValue();
 					purchaseBean.setReceiverInformation(receiverInformation);
 				} else if (key.equalsIgnoreCase("memberId")) {
-					Member member = memberDAO.findByMemberId(Long.valueOf(value));
+					MemberTempBean member = memberBeanService.findByPrimaryKey(Integer.valueOf(value).intValue());
 					purchaseBean.setMemberId(member);
 				}
 			}
@@ -303,7 +305,7 @@ public class PurchaseController {
 				}
 				review.setCreateTime(newDate.newCurrentTime());
 				review.setUpdatedTime(newDate.newCurrentTime());
-				review.setMemberId(memberDAO.findByMemberId(review.getMemberId().getId()));
+				review.setMemberId(memberBeanService.findByPrimaryKey(review.getMemberId().getId().intValue()));
 				review.setProductId(productService.findProductByPrimaryKey(review.getProductId().getId()));
 				review.setPurchaseListId(purchaseService
 						.findPurchaseListById(review.getPurchaseListId().getId(), "purchaseList").get(0));
