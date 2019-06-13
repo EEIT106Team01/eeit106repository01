@@ -1,9 +1,21 @@
-$(".vipmember").mouseover(function(){
-    $(".vipmember").css("transform-origin","0")
-    $(".vipmember").css("transform","scale(1.2,1.2)")
-})
+function a_buyVIP() {
+    $.ajax({
+        url: "/product/1630",
+        method: "GET",
+        dataType: "json",
+        cache: false,
+        success: function(Data) {
+            let id = Data.id;
+            let name = Data.name;
+            let price = Data.price;
+            IntoCart(id,price,name)
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            console.log(textStatus);
+        }
+    });
+}
 
-$(".vipmember").mouseout(function(){
-    $(".vipmember").css("transform-origin","0")
-    $(".vipmember").css("transform","scale(1,1)")
-})
+function IntoCart(id,price,name){
+
+}

@@ -56,11 +56,13 @@ function getProducts() {
             var productsId = [];
             var y = 0;
             $.each(productsData, function() {
-                productsName.push(productsData[y].name);
-                productsPrice.push(productsData[y].price);
-                productsImg.push(productsData[y].imageLink[0]);
-                productTotalSold.push(productsData[y].totalSold);
-                productsId.push(productsData[y].id);
+                if(productsData[y].id != 1630){
+                    productsName.push(productsData[y].name);
+                    productsPrice.push(productsData[y].price);
+                    productsImg.push(productsData[y].imageLink[0]);
+                    productTotalSold.push(productsData[y].totalSold);
+                    productsId.push(productsData[y].id);
+                }
                 y++;
             })
 
@@ -94,7 +96,9 @@ function getAllType() {
             var i = 0;
             var productTypeArray = [];
             $.each(typesData, function() {
-                productTypeArray.push('<li class="li"><a href="/shop/search.html?type=' + typesData[i].data + '">' + typesData[i].data + '</a></li>')
+                if(typesData[i].data!="會員"){
+                    productTypeArray.push('<li class="li"><a href="/shop/search.html?type=' + typesData[i].data + '">' + typesData[i].data + '</a></li>')
+                }
                 i++
             })
             $("#classification").empty().append(productTypeArray.join(""))
@@ -129,10 +133,12 @@ function getProductsByUpdateTime() {
             var productsId = [];
             var y = 0;
             $.each(dayData, function() {
-                productsName.push(dayData[y].name)
-                productsPrice.push(dayData[y].price)
-                productsImg.push(dayData[y].imageLink[0])
-                productsId.push(dayData[y].id)
+                if(dayData[y].id != 1630){
+                    productsName.push(dayData[y].name)
+                    productsPrice.push(dayData[y].price)
+                    productsImg.push(dayData[y].imageLink[0])
+                    productsId.push(dayData[y].id)
+                }
                 y++;
             })
 
@@ -229,10 +235,12 @@ function getMightLikeProduct(type) {
 
             var y = 0;
             $.each(sortData, function() {
-                productsName.push(sortData[y].name)
-                productsPrice.push(sortData[y].price)
-                productsImg.push(sortData[y].imageLink[0])
-                productsId.push(sortData[y].id);
+                if(sortData[y].id != 1630){                   
+                    productsName.push(sortData[y].name)
+                    productsPrice.push(sortData[y].price)
+                    productsImg.push(sortData[y].imageLink[0])
+                    productsId.push(sortData[y].id);
+                }
                 y++;
             })
 

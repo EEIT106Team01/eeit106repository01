@@ -9,21 +9,17 @@
     <meta name="description" content="Neon Admin Panel" />
     <meta name="author" content="" />
 
+    <link rel="icon" href="/assets/images/favicon.ico">
+
     <!-- cookie -->
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
 
-    <!-- Imported styles on this page -->
-    <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.css" />
-    <link rel="stylesheet" href="/assets/js/jquery-ui/css/no-theme/jquery-ui-1.10.3.custom.min.css">
-    <!-- <link rel="stylesheet" href="/assets/css/bootstrap.css"> -->
-    <link rel="stylesheet" href="/assets/css/neon-core.css">
-    <link rel="stylesheet" href="/assets/css/neon-theme.css">
-    <link rel="stylesheet" href="/assets/css/neon-forms.css">
-    <link rel="stylesheet" href="/assets/css/custom.css">
+    <script src="/assets/js/jquery-1.11.3.min.js"></script>
 
     <!-- Custom Style -->
     <link rel="stylesheet" href="css/upgradeMember.css" />
 
+    <script src="/chat/js/chatroom-init.js"></script>
 </head>
 
 <body class="page-body">
@@ -63,7 +59,8 @@
             <!-- drag and drop end -->
 
             <div id="memberDiv" class="col-md-10">
-                <p class="col-md-12" style="text-align: center;font-size: 500%"><i class="fa fa-user-plus"></i>
+                <p class="col-md-12" style="text-align: center;font-size: 500%">
+                    <i class="fa fa-user-plus"></i>
                     <span style="color: brown">升級</span>會員
                 </p>
                 <hr style="width: 100%; color: black; height: 1px; background-color:black;">
@@ -79,28 +76,33 @@
                             </th>
                         </tr>
                         <tr>
-                            <td>普通會員</td>
-                            <td>VIP會員</td>
+                            <td style="font-size: 120%;color: slategrey">普通會員</td>
+                            <td style="font-size: 150%;color: rgb(221, 182, 7)">VIP會員</td>
                         </tr>
                         <tr>
                             <td>免費</td>
-                            <td>$888/月</td>
+                            <td>
+                                <span style="color: red">$888</span>/月</td>
                         </tr>
                         <tr>
-                            <td>論壇：發文﹑留言﹑點讚</td>
-                            <td>論壇：發文﹑留言﹑點讚</td>
+                            <td>論壇發文﹑留言﹑點讚</td>
+                            <td>論壇發文﹑留言﹑點讚</td>
                         </tr>
                         <tr>
-                            <td>商城：購物</td>
-                            <td>商城：購物</td>
-                        </tr>
-                        <tr>
-                            <td></td>
-                            <td>論壇：觀看高清影片</td>
+                            <td>商城購物</td>
+                            <td>商城購物</td>
                         </tr>
                         <tr>
                             <td></td>
-                            <td>商城：結帳再九折</td>
+                            <td>觀看高清影片
+                                <i class="glyphicon glyphicon-thumbs-up" style="color: brown"></i>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td>商城結帳再九折
+                                <i class="glyphicon glyphicon-thumbs-up" style="color: brown"></i>
+                            </td>
                         </tr>
                         <tr>
                             <td></td>
@@ -110,37 +112,27 @@
                         </tr>
                         <tr>
                             <td></td>
-                            <td>
-                                <a href=""><img src="img/upgrade.jpg"></a>
+                            <td style="background-color:#FFDDAA">
+                                <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);">
+                                <a href="#" onclick="a_buyVIP()">
+                                    <span style="font-size: 120%;color: tomato">立即升級
+                                        <i class="glyphicon glyphicon-hand-left"></i>
+                                    </span>
+                                </a>
+                                <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);">
                             </td>
                         </tr>
-                    </table>
                 </div>
             </div>
         </div>
         <!-- your page end -->
     </div>
 
-    <script src="/assets/js/jquery-1.11.3.min.js"></script>
-
-    <!-- Imported scripts on this page -->
-    <script src="/assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
-    <script src="/assets/js/neon-chat.js"></script>
+	<!-- Imported styles on this page -->
+	<link rel="stylesheet" href="assets/css/font-icons/font-awesome/css/font-awesome.min.css">
 
     <!-- JavaScripts initializations and stuff -->
     <script src="/assets/js/neon-custom.js"></script>
-
-    <!-- Demo Settings -->
-    <script src="/assets/js/neon-demo.js"></script>
-
-    <!-- Include Cloud Zoom -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/cloudzoom/cloudzoom.js"></script>
-
-    <!-- Include Thumbelina  -->
-    <link href="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.css" type="text/css" rel="stylesheet" />
-    <script type="text/javascript" src="https://www.starplugins.com/sites/starplugins/js/thumbelina/thumbelina.js"></script>
-    <script src="/assets/js/selectboxit/jquery.selectBoxIt.min.js"></script>
 
     <!-- Shopping Cart -->
     <script type="text/javascript " src="js/shopping-cart.js"></script>
@@ -150,10 +142,6 @@
     <!-- NavBar -->
     <script src="/navbar/js/csi.min.js"></script>
     <script src="/navbar/js/navbar-init.js"></script>
-
-    <!-- Imported scripts on this page -->
-    <script src="/assets/js/tocify/jquery.tocify.min.js"></script>
-    <script src="/assets/js/neon-chat.js"></script>
 
     <script async src="js/upgradeMember.js"></script>
 

@@ -68,7 +68,9 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
-                productTypeArray2.push("<option>" + typesData[y].data + "</option>");
+                if(typesData[y].data != "會員"){
+                    productTypeArray2.push("<option>" + typesData[y].data + "</option>");
+                }
                 y++;
             });
             $("#searchType")
@@ -83,6 +85,7 @@ function getAllType() {
 
 //搜單件商品
 function getProduct(id) {
+
     $.ajax({
         url: "/product/" + id,
         method: "GET",
