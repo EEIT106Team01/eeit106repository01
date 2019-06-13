@@ -12,6 +12,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.apache.commons.lang3.ArrayUtils;
@@ -28,6 +30,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
@@ -55,11 +59,11 @@ public class PurchaseController {
 
 	@Autowired
 	private MemberBeanService memberBeanService;
-	
+
 	private NewDate newDate = new NewDate();
 	private static AllInOne all;
-	private static final String IDILEGAL= "ID不合法";
-	private static final String VALUEMISSED= "缺少必要值";
+	private static final String IDILEGAL = "ID不合法";
+	private static final String VALUEMISSED = "缺少必要值";
 	private static final String DELIVERSTATUS = "deliverStatus";
 	private static final String PAYSTATUS = "payStatus";
 	private static final String PURCHASE = "purchase";
@@ -221,7 +225,8 @@ public class PurchaseController {
 	// Create a Purchase and Purchase List
 	@PostMapping(value = "/shop/newPurchase")
 	@SuppressWarnings("unchecked")
-	public ResponseEntity<?> newPurchase(@RequestBody Map<String, Object> json, BindingResult bindingResult) {
+	public ResponseEntity<?> newPurchase(@RequestBody Map<String, Object> json, HttpSession httpSession,
+			HttpServletResponse response, BindingResult bindingResult) {
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 			Map<String, String> errors = new HashMap<>();
 			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
@@ -266,8 +271,8 @@ public class PurchaseController {
 				}
 			}
 
-			result = purchaseService.newPurchase(productIdList, purchaseBean);
-		} catch (IllegalArgumentException e) {
+			result = purchaseService.newPurchase(productIdList, purchaseBean, httpSession, response);
+		} catch (IllegalArgumentException | JsonProcessingException e) {
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.isNotNull()) {
@@ -295,6 +300,7 @@ public class PurchaseController {
 		List<ReviewBean> result = new ArrayList<>();
 		try {
 			for (ReviewBean review : reviews) {
+				System.err.println(review.toString());
 				if (!NullChecker.isEmpty(review.getImageBase64())) {
 					Byte[] byteObjects = review.getImageBase64();
 					SerialBlob serialBlob = new SerialBlob(ArrayUtils.toPrimitive(byteObjects));
@@ -305,8 +311,7 @@ public class PurchaseController {
 				review.setUpdatedTime(newDate.newCurrentTime());
 				review.setMemberId(memberBeanService.findByPrimaryKey(review.getMemberId().getId().intValue()));
 				review.setProductId(productService.findProductByPrimaryKey(review.getProductId().getId()));
-				review.setPurchaseListId(purchaseService
-						.findPurchaseListById(review.getPurchaseListId().getId(), "purchaseList").get(0));
+				review.setPurchaseListId(purchaseService.findPurchaseListById(review.getPurchaseListId().getId(), "purchaseList").get(0));
 				reviewsWithTime.add(review);
 			}
 			result = purchaseService.newReviews(reviewsWithTime);

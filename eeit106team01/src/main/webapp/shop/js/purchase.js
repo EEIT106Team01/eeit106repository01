@@ -19,16 +19,14 @@ let memberDiscount = generateMemberDiscount();
 $(`#memberId`).append(`&nbsp;&nbsp;` + member.id);
 $(`#memberName`).append(`&nbsp;&nbsp;` + member.name);
 if (member.level.match(/normal/)) {
-    $(`#memberShip`).empty();
     $(`#memberShip`).append(`&nbsp;&nbsp;普通會員`);
 } else if (member.level.match(/VIP/)) {
-    $(`#memberShip`).empty();
     $(`#memberShip`).append(`&nbsp;&nbsp;VIP會員`);
 
 }
-$(`#memberAddress`).append(`&nbsp;&nbsp;還沒有地址`);
+$(`#memberAddress`).append(`&nbsp;&nbsp;` + member.address);
 $(`#memberMail`).append(`&nbsp;&nbsp;` + member.email);
-$(`#memberPhone`).append(`&nbsp;&nbsp;還沒有電話`);
+$(`#memberPhone`).append(`&nbsp;&nbsp;` + member.phone);
 
 //Document Ready
 $(function() {
@@ -56,6 +54,9 @@ $(function() {
     newPurchase();
     quantityBtn();
     //Member
+    if ($(`td`).text().match(/VIP會員/)) {
+        console.log($(`td`).text().match(/VIP會員/));
+    }
 });
 
 //New Purchase ID
