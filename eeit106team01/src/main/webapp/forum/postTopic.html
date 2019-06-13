@@ -58,7 +58,7 @@
 			width: 886px;
 			padding: 15px;
 			margin: auto;
-			height: 100%;
+			min-height: 1352px;
 			background-color: #ffffff;
 			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
 		}
@@ -201,18 +201,22 @@
 				$("#shareTopic").attr("checked", true);
 				$("#submit").val("分享影片資源");
 				$(".myVideoDiv").css("display", "block");
+				$(".myTopicList").css({ height: "1423px" });
 			} else if (selectedTopicType.substr(0, 4) == "help") {
 				$("#requestTopic").attr("checked", true);
 				$("#submit").val("送出協尋請求");
 				$(".myVideoDiv").css("display", "none");
+				$(".myTopicList").css({ height: "1352px" });
 			}
 			$("#shareTopic").on("click", function () {
 				$("#submit").val("分享影片資源");
 				$(".myVideoDiv").css("display", "block");
+				$(".myTopicList").css({ height: "1423px" });
 			});
 			$("#requestTopic").on("click", function () {
 				$("#submit").val("送出協尋請求");
 				$(".myVideoDiv").css("display", "none");
+				$(".myTopicList").css({ height: "1352px" });
 			});
 
 			$("#topicHeader").on("input", headerToggleCss);
@@ -306,8 +310,8 @@
 				return;
 			}
 
-			
-			if((!topicMemberBean) || (topicMemberBean == undefined)){
+
+			if ((!topicMemberBean) || (topicMemberBean == undefined)) {
 				alert("沒登入?");
 			}
 			let newTopicBean = {
