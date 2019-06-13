@@ -78,4 +78,6 @@ public interface PurchaseDAO {
 
 	abstract List<ReviewBean> findReviews();
 
+	abstract List<ReviewBean> findReviewsByPurchaseListId(Long purchaseListId);
+
 }

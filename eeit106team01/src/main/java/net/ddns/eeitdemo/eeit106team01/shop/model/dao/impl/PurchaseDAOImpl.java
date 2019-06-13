@@ -562,6 +562,23 @@ public class PurchaseDAOImpl implements PurchaseDAO {
 		}
 		return null;
 	}
+	
+	@Override
+	public List<ReviewBean> findReviewsByPurchaseListId(Long purchaseListId) {
+		if (purchaseListId != null && purchaseListId.longValue() > 0L) {
+			try {
+				this.review = this.getSession()
+						.createQuery("from ReviewBean where PurchaseListID= :PurchaseListID", ReviewBean.class)
+						.setParameter("PurchaseListID", purchaseListId).getResultList();
+			} catch (HibernateException e) {
+				throw new HibernateException(e.getMessage());
+			}
+			if (this.review != null && this.review.size() > 0) {
+				return this.review;
+			}
+		}
+		return null;
+	}
 
 	@Override
 	public Integer findPurchaseIdCount() {
