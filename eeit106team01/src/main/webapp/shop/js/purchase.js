@@ -15,6 +15,21 @@ let deliveryPrice = $(`#deliveryPrice`)
     );
 let memberDiscount = generateMemberDiscount();
 
+//Member
+$(`#memberId`).append(`&nbsp;&nbsp;` + member.id);
+$(`#memberName`).append(`&nbsp;&nbsp;` + member.name);
+if (member.level.match(/normal/)) {
+    $(`#memberShip`).empty();
+    $(`#memberShip`).append(`&nbsp;&nbsp;普通會員`);
+} else if (member.level.match(/VIP/)) {
+    $(`#memberShip`).empty();
+    $(`#memberShip`).append(`&nbsp;&nbsp;VIP會員`);
+
+}
+$(`#memberAddress`).append(`&nbsp;&nbsp;還沒有地址`);
+$(`#memberMail`).append(`&nbsp;&nbsp;` + member.email);
+$(`#memberPhone`).append(`&nbsp;&nbsp;還沒有電話`);
+
 //Document Ready
 $(function() {
     //Time
@@ -27,12 +42,15 @@ $(function() {
     $(`#productsTotalPrice`).append(generateProductsTotalPrice());
     if (memberDiscount) {
         $(`#totalPrice`).append(
-            generateProductsTotalPrice() + parseInt(deliveryPrice) - 100
+            Math.round((generateProductsTotalPrice() + parseInt(deliveryPrice)) * 0.9)
         );
+        $(`#memberDiscount`).empty();
+        $(`#memberDiscount`).append(`VIP`);
     } else {
         $(`#totalPrice`).append(
             generateProductsTotalPrice() + parseInt(deliveryPrice)
         );
+        $(`#memberDiscount`).empty();
         $(`#memberDiscount`).append(`無折扣`);
     }
     newPurchase();
@@ -110,7 +128,7 @@ function generateProductsTotalPrice() {
 
 //Generate Member Discount
 function generateMemberDiscount() {
-    if (1 == 2) {
+    if (member.level.match(/VIP/)) {
         return true;
     } else {
         return false;
@@ -185,10 +203,10 @@ function editTotalPrice(id, boolean, price, name, otherPrice) {
 
 $(`#receiver-check`).click(function(e) {
     if ($(this).prop("checked") == true) {
-        $(`#receiverName`).attr(`value`, $(`#memberName`).text());
-        $(`#receiverAddress`).attr(`value`, $(`#memberAddress`).text());
-        $(`#receiverPhone`).attr(`value`, $(`#memberPhone`).text());
-        $(`#receiverMail`).attr(`value`, $(`#memberMail`).text());
+        $(`#receiverName`).attr(`value`, $(`#memberName`).text().trim());
+        $(`#receiverAddress`).attr(`value`, $(`#memberAddress`).text().trim());
+        $(`#receiverPhone`).attr(`value`, $(`#memberPhone`).text().trim());
+        $(`#receiverMail`).attr(`value`, $(`#memberMail`).text().trim());
     } else {
         $(`#receiverName`).attr(`value`, "");
         $(`#receiverAddress`).attr(`value`, "");

@@ -1,19 +1,13 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
 import java.util.Date;
-import java.util.List;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
-
-import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.RefundBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.ReviewBean;
 
 @Entity
 @Table(name = "MemberTempVer2")
@@ -30,27 +24,29 @@ public class MemberTempBean {
 	private String level;
 	private java.util.Date levelTime;
 	private java.util.Date memberCreateTime;
+	private String phone;
+	private String address;
 	
-	@OneToMany(mappedBy = "memberId")
-	private List<PurchaseBean> purchaseId;
-
-	@OneToMany(mappedBy = "memberId")
-	private List<RefundBean> refundId;
-
-	@OneToMany(mappedBy = "memberId")
-	private List<ReviewBean> reviewId;
+//	@OneToMany(mappedBy = "memberId")
+//	private List<PurchaseBean> purchaseId;
+//
+//	@OneToMany(mappedBy = "memberId")
+//	private List<RefundBean> refundId;
+//
+//	@OneToMany(mappedBy = "memberId")
+//	private List<ReviewBean> reviewId;
 	
 	@Override
 	public String toString() {
-		return "MemberBean [id=" + id + ", name=" + name + ", password=" + password + ", image=" + image + ", email="
-				+ email + ", birth=" + birth + ", level=" + level + ", levelTime=" + levelTime + ", memberCreateTime="
-				+ memberCreateTime + "]";
+		return "MemberTempBean [id=" + id + ", name=" + name + ", password=" + password + ", image=" + image
+				+ ", email=" + email + ", birth=" + birth + ", level=" + level + ", levelTime=" + levelTime
+				+ ", memberCreateTime=" + memberCreateTime + ", phone=" + phone + ", address=" + address + "]";
 	}
 
 	public MemberTempBean() {
 		super();
 	}
-	
+
 	public MemberTempBean(String name, String password, String image, String email, Date birth, String level, Date levelTime,
 			Date memberCreateTime) {
 		super();
@@ -119,28 +115,46 @@ public class MemberTempBean {
 		this.memberCreateTime = memberCreateTime;
 	}
 
-	public List<PurchaseBean> getPurchaseId() {
-		return purchaseId;
+	public String getPhone() {
+		return phone;
 	}
 
-	public void setPurchaseId(List<PurchaseBean> purchaseId) {
-		this.purchaseId = purchaseId;
+	public void setPhone(String phone) {
+		this.phone = phone;
 	}
 
-	public List<RefundBean> getRefundId() {
-		return refundId;
+	public String getAddress() {
+		return address;
 	}
 
-	public void setRefundId(List<RefundBean> refundId) {
-		this.refundId = refundId;
+	public void setAddress(String address) {
+		this.address = address;
 	}
-
-	public List<ReviewBean> getReviewId() {
-		return reviewId;
-	}
-
-	public void setReviewId(List<ReviewBean> reviewId) {
-		this.reviewId = reviewId;
-	}
+	
+	
+	
+//	public List<PurchaseBean> getPurchaseId() {
+//		return purchaseId;
+//	}
+//
+//	public void setPurchaseId(List<PurchaseBean> purchaseId) {
+//		this.purchaseId = purchaseId;
+//	}
+//
+//	public List<RefundBean> getRefundId() {
+//		return refundId;
+//	}
+//
+//	public void setRefundId(List<RefundBean> refundId) {
+//		this.refundId = refundId;
+//	}
+//
+//	public List<ReviewBean> getReviewId() {
+//		return reviewId;
+//	}
+//
+//	public void setReviewId(List<ReviewBean> reviewId) {
+//		this.reviewId = reviewId;
+//	}
 
 }

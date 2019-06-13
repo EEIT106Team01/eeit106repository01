@@ -125,6 +125,8 @@ public class MemberTempController {
 			mb.setLevel(insertResult.getLevel());
 			mb.setLevelTime(insertResult.getLevelTime());
 			mb.setMemberCreateTime(insertResult.getMemberCreateTime());
+			mb.setPhone(insertResult.getPhone());
+			mb.setAddress(insertResult.getAddress());
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonStr = mapper.writeValueAsString(mb);
 			String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -155,6 +157,8 @@ public class MemberTempController {
 				mb.setLevel(updateResult.getLevel());
 				mb.setLevelTime(updateResult.getLevelTime());
 				mb.setMemberCreateTime(updateResult.getMemberCreateTime());
+				mb.setPhone(updateResult.getPhone());
+				mb.setAddress(updateResult.getAddress());
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonStr = mapper.writeValueAsString(mb);
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -185,6 +189,8 @@ public class MemberTempController {
 				mb.setLevel(result.getLevel());
 				mb.setLevelTime(result.getLevelTime());
 				mb.setMemberCreateTime(result.getMemberCreateTime());
+				mb.setPhone(result.getPhone());
+				mb.setAddress(result.getAddress());
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonStr = mapper.writeValueAsString(mb);
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));

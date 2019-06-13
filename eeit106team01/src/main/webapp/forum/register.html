@@ -71,6 +71,12 @@
         }
     </style>
     <script>
+        let registerMemberBean = Cookies.get("MemberBean");
+		// console.log("CookieMember: " + registerMemberBean);
+		if (registerMemberBean) {
+			location.href = "/index.html";
+		}
+
         document.addEventListener("DOMContentLoaded", function () {
             $("#register").click(register);
 
