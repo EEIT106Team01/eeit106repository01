@@ -1,54 +1,69 @@
-var chatUsername = "pikachu";
+var chatUsername;
+// if (typeof thisname !== "undefined") {
+//     chatUsername = thisname;
+// } else {
+//     chatUsername = "pikachu";
+// }
 
 var neonChat;
 
-var quill;
+var quillChat;
+
+var notification;
 
 
 // ----------append quill js&css
-var body = document.getElementsByTagName('body')[0];
-
+// if (typeof Quill === 'undefined') {
+// console.log("Quill does not exist, start loading...");
+var head = document.getElementsByTagName('head')[0];
 var quillJs1 = document.createElement('script');
 quillJs1.src = '/forum/quill/katex.min.js';
-
 var quillJs2 = document.createElement('script');
 quillJs2.src = '/forum/quill/highlight.min.js';
-
 var quillJs3 = document.createElement('script');
 quillJs3.src = '/forum/quill/quill.js';
-
 var quillCss1 = document.createElement('link');
 quillCss1.rel = 'stylesheet';
 quillCss1.type = 'text/css';
 quillCss1.href = '/forum/quill/quill.snow.css';
-
 var quillCss2 = document.createElement('link');
 quillCss2.rel = 'stylesheet';
 quillCss2.type = 'text/css';
 quillCss2.href = '/forum/quill/quill.bubble.css';
-
-body.appendChild(quillJs1);
-body.appendChild(quillJs2);
-body.appendChild(quillJs3);
-body.appendChild(quillCss1);
-body.appendChild(quillCss2);
+head.appendChild(quillJs1);
+head.appendChild(quillJs2);
+head.appendChild(quillJs3);
+head.appendChild(quillCss1);
+head.appendChild(quillCss2);
+// }
 // ----------append quill js&css end
 
+// ----------append cookie js
+var cookieJs = document.createElement('script');
+cookieJs.src = '/js/js.cookie.min.js';
+head.appendChild(cookieJs);
+// ----------append cookie js end
 
 function onSubmitMessage(id, msg, chatData) {
-    console.log(id);
-    console.log(msg);
-    console.log(chatData);
+    // console.log(id);
+    // console.log(msg);
+    // console.log(chatData);
     if (
         id === "north"
         || id === "middle"
         || id === "south"
         || id === "east"
     ) {
-        stompClient.send("/" + id, {}, JSON.stringify({ 'name': chatUsername, 'message': msg, 'command': 'normal' }));
-
+        worker.port.postMessage({
+            "command": "regionMessage",
+            "message": JSON.stringify({ 'name': chatUsername, 'message': msg, 'command': 'normal' }),
+            "region": id
+        });
     } else {
-        stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': chatUsername, 'message': msg, 'command': 'normal' }));
+        worker.port.postMessage({
+            "command": "privateMessage",
+            "message": JSON.stringify({ 'toUser': id, 'fromUser': chatUsername, 'message': msg, 'command': 'normal' })
+        });
     }
 
 }
@@ -74,7 +89,9 @@ function onReceivePrivateMessage(id, msgBean) {
         id = msgBean.toUser;
         neonChat.pushMessage(id, msgBean.message, msgBean.fromUser, new Date(msgBean.sendTime), false, false);
     }
-    neonChat.renderMessages(id);
+    if (neonChatNowOpenId && neonChatNowOpenId == id) {
+        neonChat.renderMessages(id);
+    }
 }
 
 function showOldMessage(msgBeans, regionActive) {
@@ -82,7 +99,7 @@ function showOldMessage(msgBeans, regionActive) {
     for (let i = msgBeans.length - 1; i >= 0; i--) {
         let id = msgBeans[i].region;
         $("#" + id).attr("index", msgBeans[i].index);
-        console.log($("#" + id).attr("index"));
+        // console.log($("#" + id).attr("index"));
         for (let j = msgBeans[i].messages.length - 1; j >= 0; j--) {
             if (msgBeans[i].messages[j].name !== chatUsername) {
                 fromOpponent = true;
@@ -150,95 +167,24 @@ function keepScrollPosition($el, oldScrollHeight) {
     $el.get(0).scrollTop = $el.get(0).scrollHeight - oldScrollHeight * 3;
 }
 
-var stompClient = null;
-
-
-function connect() {
-    name = $('#name').val();
-    var socket = new SockJS('/simple');
-    stompClient = Stomp.over(socket);
-    stompClient.connect({
-        'name': chatUsername
-    }, function (frame) {
-        // setConnected(true);
-        console.log('Connected:' + frame);
-        sendName();
-
-    });
-    $('#chat').attr('data-current-user', chatUsername);
-}
-
-function disconnect() {
-    if (stompClient != null) {
-        stompClient.disconnect();
-    }
-    // setConnected(false);
-    console.log('Disconnected');
-}
-
-function sendName() {
-    neonChat.close();
-    stompClient.subscribe('/user/topic/msg', function (response) {
-        var msgBean = JSON.parse(response.body);
-        console.log(msgBean);
-        if (Array.isArray(msgBean)) {
-            showOldPrivateMessage(msgBean);
-        } else {
-            onReceivePrivateMessage(msgBean.fromUser, msgBean);
-        }
-    });
-    stompClient.subscribe('/user/topic/getAllActiveMsg', function (response) {
-        var msgBean = JSON.parse(response.body);
-        console.log(msgBean);
-        if (Array.isArray(msgBean)) {
-            showOldPrivateMessage(msgBean);
-        } else {
-            onReceivePrivateMessage(msgBean.fromUser, msgBean);
-        }
-    });
-    stompClient.send("/getAllActiveMsg", {});
-    stompClient.subscribe('/user/topic/checkUser', function (response) {
-        console.log(eval(response.body));
-        if (eval(response.body)) {
-            let id = $("#checkUser").val();
-            if (!$("#" + id).get(0)) {
-                neonChat.addUser("group-2", id, "online", false, id);
-                neonChat.refreshUserIds();
-            }
-            getOnlineUsers();
-        } else {
-            $("#checkUser").attr("placeholder", "User does not exist!");
-        }
-        $("#checkUser").val("");
-    });
-    stompClient.subscribe('/topic/getOnlineUsers', function (response) {
-        let data = eval(response.body);
-        let allUsers = neonChat.getAllUserIds();
-        if (Array.isArray(allUsers)) {
-            $(allUsers).each(function (i) {
-                if (data.indexOf(allUsers[i]) !== -1) {
-                    neonChat.setStatus(allUsers[i], "online");
-                } else {
-                    neonChat.setStatus(allUsers[i], "offline");
-                }
-            });
-        }
-    });
-}
-
 function getOnlineUsers() {
-    stompClient.send("/getOnlineUsers", {});
+    worker.port.postMessage({
+        "command": "getOnlineUsers",
+    });
 }
 
 function checkUserExist() {
     let username = $("#checkUser").val();
-    if (stompClient != null && !$("#" + username).get(0)) {
-        stompClient.send("/checkUser", {}, JSON.stringify({ 'toUser': '', 'fromUser': chatUsername, 'message': username, 'command': 'checkUserExist' }));
+    if (worker != null && !$("#" + username).get(0)) {
+        worker.port.postMessage({
+            "command": "checkUser",
+            "message": JSON.stringify({ 'toUser': '', 'fromUser': chatUsername, 'message': username, 'command': 'checkUserExist' })
+        });
     }
 }
 
 function getOld(id, index) {
-    console.log("getOld index: " + index);
+    // console.log("getOld index: " + index);
     if (id && index && index > 0) {
         if (
             id === "north"
@@ -246,40 +192,163 @@ function getOld(id, index) {
             || id === "south"
             || id === "east"
         ) {
-            stompClient.send("/" + id, {}, JSON.stringify({ 'name': chatUsername, 'message': index, 'command': 'getOldByIndex' }));
+            worker.port.postMessage({
+                "command": "regionMessage",
+                "message": JSON.stringify({ 'name': chatUsername, 'message': index, 'command': 'getOldByIndex' }),
+                "region": id
+            });
         } else {
-            stompClient.send("/msg", {}, JSON.stringify({ 'toUser': id, 'fromUser': chatUsername, 'message': index, 'command': 'getOldByIndex' }));
+            worker.port.postMessage({
+                "command": "privateMessage",
+                "message": JSON.stringify({ 'toUser': id, 'fromUser': chatUsername, 'message': index, 'command': 'getOldByIndex' })
+            });
         }
     }
 }
 
 function initRegionChat(region) {
     $("#" + region).click(function () {
-        if (stompClient != null) {
-            stompClient.subscribe('/topic/' + region, function (response) {
-                var msgBean = JSON.parse(response.body);
-                console.log(msgBean);
-                if (Array.isArray(msgBean)) {
-                    showOldMessage(msgBean);
-                } else {
-                    onReceiveMessage(region, msgBean);
-                }
+        if (worker != null) {
+            worker.port.postMessage({
+                "command": "subscribeRegion",
+                "region": region
             });
-            stompClient.subscribe('/user/topic/' + region + '/getActive', function (response) {
-                var msgBean = JSON.parse(response.body);
-                console.log(msgBean);
-                if (Array.isArray(msgBean)) {
-                    showOldMessage(msgBean, true);
-                } else {
-                    onReceiveMessage(region, msgBean);
-                }
+            worker.port.postMessage({
+                "command": "getRegionActive",
+                "region": region
             });
-            stompClient.send("/" + region + '/getActive', {});
         }
         neonChat.setStatus($(this).attr("id"), "online");
         $(this).unbind();
     });
 }
+
+function workerInit() {
+    worker.port.onmessage = function (e) {
+        // console.log("getWorkerMessage: " + JSON.stringify(e.data));
+        if (e.data.command == "regionMessage") {
+            var msgBean = JSON.parse(e.data.message);
+            // console.log(msgBean);
+            if (Array.isArray(msgBean)) {
+                showOldMessage(msgBean);
+            } else {
+                onReceiveMessage(e.data.region, msgBean);
+            }
+        } else if (e.data.command == "privateMessage") {
+            var msgBean = JSON.parse(e.data.message);
+            // console.log(msgBean);
+            if (Array.isArray(msgBean)) {
+                showOldPrivateMessage(msgBean);
+            } else {
+                onReceivePrivateMessage(msgBean.fromUser, msgBean);
+            }
+        } else if (e.data.command == "checkUser") {
+            let id = e.data.message;
+            // console.log(eval(id));
+            if (id) {
+                if (!$("#" + id).get(0)) {
+                    neonChat.addUser("group-2", id, "online", false, id);
+                    neonChat.refreshUserIds();
+                }
+                getOnlineUsers();
+            } else {
+                $("#checkUser").attr("placeholder", "User does not exist!");
+            }
+            $("#checkUser").val("");
+        } else if (e.data.command == "getOnlineUsers") {
+            let data = eval(e.data.message);
+            let allUsers = neonChat.getAllUserIds();
+            if (Array.isArray(allUsers)) {
+                $(allUsers).each(function (i) {
+                    if (data.indexOf(allUsers[i]) !== -1) {
+                        neonChat.setStatus(allUsers[i], "online");
+                    } else {
+                        neonChat.setStatus(allUsers[i], "offline");
+                    }
+                });
+            }
+        } else if (e.data.command == "getRegionActive") {
+            var msgBean = JSON.parse(e.data.message);
+            // console.log(msgBean);
+            if (Array.isArray(msgBean)) {
+                showOldMessage(msgBean, true);
+            } else {
+                onReceiveMessage(e.data.region, msgBean);
+            }
+        } else if (e.data.command == "getAllActiveMsg") {
+            var msgBean = JSON.parse(e.data.message);
+            // console.log(msgBean);
+            if (Array.isArray(msgBean)) {
+                showOldPrivateMessage(msgBean);
+            } else {
+                onReceivePrivateMessage(msgBean.fromUser, msgBean);
+            }
+        } else if (e.data.command == "connected") {
+            neonChat.close();
+            worker.port.postMessage({
+                "command": "getAllActiveMsg",
+            });
+            $('#chat').attr('data-current-user', chatUsername);
+            initRegionChat("north");
+            initRegionChat("middle");
+            initRegionChat("south");
+            initRegionChat("east");
+            addEventListener("beforeunload", function () {
+                worker.port.postMessage({
+                    "command": "closing"
+                });
+            });
+            //-------------Notification
+            worker.port.postMessage({
+                "command": "getActiveNotification",
+            });
+            //-------------Notification end
+        }
+        //-------------Notification
+        else if (e.data.command == "getActiveNotification") {
+            let notiMsgBean = JSON.parse(e.data.message);
+            showActiveNotification(notiMsgBean);
+        } else if (e.data.command == "notificationMsg") {
+            let notiMsg = JSON.parse(e.data.message);
+            showNotificationMsg(notiMsg);
+        }
+        //-------------Notification end
+    }
+    worker.port.postMessage({
+        "command": "connect",
+        "chatUsername": chatUsername
+    });
+}
+//-------------Notification
+function showActiveNotification(notiMsgBean) {
+    console.log(notiMsgBean);
+    let msgs = notiMsgBean.messages;
+    let unreadMsgs = notiMsgBean.offlineMessages;
+    notification.index = notiMsgBean.index;
+    if (msgs) {
+        for (let i = 0; i < msgs.length; i++) {
+            notification.prependNotification(msgs[i].message, msgs[i].url, msgs[i].sendTime, msgs[i].icon, msgs[i].color.rgb, false);
+        }
+    }
+    if (unreadMsgs) {
+        for (let i = 0; i < unreadMsgs.length; i++) {
+            notification.prependNotification(unreadMsgs[i].message, unreadMsgs[i].url, unreadMsgs[i].sendTime, unreadMsgs[i].icon, unreadMsgs[i].color.rgb, true);
+        }
+    }
+}
+function showNotificationMsg(notiMsg) {
+    console.log(notiMsg);
+    notification.prependNotification(notiMsg[i].message, notiMsg[i].url, notiMsg[i].sendTime, notiMsg[i].icon, notiMsg[i].color.rgb, true);
+}
+function clearOfflineNotification() {
+    worker.port.postMessage({
+        "command": "clearOfflineNotification"
+    });
+}
+
+//-------------Notification end
+
+var worker = null;
 
 var neonChatNowOpenId;
 
@@ -331,7 +400,7 @@ $(document).ready(function () {
 
         + '<div class="chat-textarea">'
         + '<div id="standalone-container">'
-        + '<div id="toolbar-container">'
+        + '<div id="chat-toolbar-container">'
         + '<span class="ql-formats">'
         + '<select class="ql-font"></select>'
         + '<select class="ql-size"></select>'
@@ -376,7 +445,7 @@ $(document).ready(function () {
         + '<button class="ql-clean"></button>'
         + '</span>'
         + '</div>'
-        + '<div id="editor-container" style="height: 80px"></div>'
+        + '<div id="chat-editor-container" style="height: 80px"></div>'
         + '</div>'
 
         + '</div>'
@@ -388,6 +457,7 @@ $(document).ready(function () {
         + '<style>'
         + '#chat {'
         + 'font-size: 0.8em;'
+        + 'margin: 0;'
         + '}'
         + '</style>'
 
@@ -474,7 +544,7 @@ $(document).ready(function () {
 
 
                 // Texarea
-                $("#editor-container").keydown(function (e) {
+                $("#chat-editor-container").keydown(function (e) {
                     if (e.keyCode == 13 && !e.shiftKey) {
                         e.preventDefault();
                         neonChat.submitMessage();
@@ -537,7 +607,7 @@ $(document).ready(function () {
 
             open: function ($user_link) {
                 this.close();
-                this.refreshUserIds();
+                // this.refreshUserIds();
 
                 if (typeof $user_link == 'string') {
                     $user_link = $($user_link);
@@ -554,9 +624,9 @@ $(document).ready(function () {
                         let id = $user_link.attr('id');
                         let index = $user_link.attr('index');
                         if (id && index > 0) {
-                            console.log("$(this).scrollTop()");
-                            console.log(id);
-                            console.log("index: " + index);
+                            // console.log("$(this).scrollTop()");
+                            // console.log(id);
+                            // console.log("index: " + index);
                             getOld(id, --index);
                         }
                     }
@@ -601,6 +671,10 @@ $(document).ready(function () {
                 $conversation_window.hide().css({ top: 0, opacity: 0 });
 
                 $conversation_body.find('li.unread').removeClass('unread');
+
+                // Clear Now Open Chat Room ID
+
+                neonChatNowOpenId = null;
 
                 // Unbind Conversation Body Scroll Event
                 $conversation_body.unbind('scroll');
@@ -660,10 +734,10 @@ $(document).ready(function () {
             submitMessage: function () // Submit whats on textarea
             {
                 // var msg = $.trim($textarea.val());
-                var msg = JSON.stringify(quill.getContents());
+                var msg = JSON.stringify(quillChat.getContents());
 
                 // $textarea.val('');
-                quill.setText('');
+                quillChat.setText('');
 
                 if (this.isOpen && this.$current_user) {
                     var id = this.$current_user.uniqueId().attr('id');
@@ -712,7 +786,7 @@ $(document).ready(function () {
 
             pushMessage: function (id, msg, from, time, fromOpponent, unread) {
                 if (id && msg) {
-                    this.refreshUserIds();
+                    // this.refreshUserIds();
 
                     var max_chat_history = this.getChatHistoryLength();
 
@@ -739,7 +813,7 @@ $(document).ready(function () {
 
             unshiftMessage: function (id, msg, from, time, fromOpponent, unread) {
                 if (id && msg) {
-                    this.refreshUserIds();
+                    // this.refreshUserIds();
 
                     var max_chat_history = this.getChatHistoryLength();
 
@@ -1030,9 +1104,13 @@ $(document).ready(function () {
 
             puffUnreadsAll: function () {
                 var total_unreads = this.countUnreadMessages();
+                var $navbarBadge = $("#chatBadge");
+                $navbarBadge.css("background", "red");
 
                 $chat_badge.html(total_unreads);
                 $chat_badge[total_unreads > 0 ? 'removeClass' : 'addClass']('is-hidden');
+                $navbarBadge.html(total_unreads);
+                $navbarBadge[total_unreads > 0 ? 'removeClass' : 'addClass']('is-hidden');
             },
 
             resetUnreads: function (id) {
@@ -1101,8 +1179,8 @@ $(document).ready(function () {
 
                 if ($group && $group.length) {
                     var status = this.statuses[status],
-                        $user = $('<a href="#"><span class="user-status ' + status.class + '"></span> <em>' + display_name + '</em> <span class="badge badge-info is-hidden>0</span></a>');
-
+                        $user = $('<a href="#"><span class="user-status ' + status.class + '"></span> <em>' + display_name + '</em></a>');
+                    $user.append('<span class="badge badge-info is-hidden">0</span>');
                     if (user_id) {
                         $user.attr('id', user_id);
                     }
@@ -1139,7 +1217,7 @@ $(document).ready(function () {
 
             getAllUserIds: function () {
                 let ids = [];
-                $(".chat-group > a").each(function () {
+                $("#group-2 > a").each(function () {
                     ids.push($(this).attr("id"));
                 });
                 return ids;
@@ -1341,31 +1419,231 @@ $(document).ready(function () {
 
     })(jQuery, window);
     //----------------------------------------
-
-    connect();
-    // sendName();
-
-    initRegionChat("north");
-    initRegionChat("middle");
-    initRegionChat("south");
-    initRegionChat("east");
-    $("#checkUser").keydown(function (e) {
-        if (e.keyCode == 13 && !e.shiftKey) {
-            e.preventDefault();
-            checkUserExist();
-            return false;
-        } else if (e.keyCode == 27) {
-            $(this).val("");
-        }
-    });
-
-    quill = new Quill('#editor-container', {
-        modules: {
-            formula: true,
-            syntax: true,
-            toolbar: '#toolbar-container'
+    //-------------Notification
+    notification = {
+        notiBox: null,
+        unreadBadge: null,
+        notiList: null,
+        unreads: 0,
+        init: function (notiBox) {
+            this.notiBox = notiBox;
+            $(this.notiBox).find(".dropdown-menu").css("left", "auto");
+            this.notiList = $(this.notiBox).find(".dropdown-menu-list").get(0);
+            this.unreadBadge = $(this.notiBox).find(".badge").get(0);
+            console.log("noti init");
+            $(this.notiList).scroll(function (e) {
+                console.log($(this).height());
+                console.log("srolling..." + $(this).scrollTop());
+            });
         },
-        theme: 'snow'
-    });
 
+        createNotification: function (message, url, sendTime, icon, color, unread) {
+            let $li = $("<li></li>");
+            let $a = $("<a></a>");
+            let $i = $("<i></i>");
+            let $message = $("<span></span>");
+            let $sendTime = $("<span></span>");
+            if (!url) {
+                url = "#";
+            }
+            $a.attr("href", url);
+            $message.text(message);
+            if (typeof sendTime === "string") {
+                sendTime = new Date(sendTime);
+            }
+            sendTime = timeDifference(new Date(), sendTime);
+            $sendTime.text(sendTime);
+            if (color) {
+                $i.css({
+                    "background-color": toColor(color),
+                    "color": "#fff"
+                });
+            }
+            if (unread) {
+                $message.addClass("unread");
+                this.unreads++;
+            }
+            $i.addClass("pull-right");
+            if (!icon) {
+                icon = "fa fa-tripadvisor";
+            }
+            $i.addClass(icon);
+            $message.addClass("line");
+            $sendTime.addClass("line small");
+            $a.append($i, $message, $sendTime);
+            $li.append($a);
+            $li.click(function () {
+                clearOfflineNotification();
+            });
+            return $li;
+        },
+
+        appendNotification: function (message, url, sendTime, icon, color, unread) {
+            $(this.notiList).append(this.createNotification(message, url, sendTime, icon, color, unread));
+            this.updateUnreadBadge();
+        },
+
+        prependNotification: function (message, url, sendTime, icon, color, unread) {
+            $(this.notiList).prepend(this.createNotification(message, url, sendTime, icon, color, unread));
+            this.updateUnreadBadge();
+        },
+
+        updateUnreadBadge: function () {
+            if (this.unreads == 0) {
+                $(this.unreadBadge).css("display", "none");
+            } else {
+                $(this.unreadBadge).css("display", "inline");
+                $(this.unreadBadge).css("background-color", "red");
+                $(this.unreadBadge).text(this.unreads);
+            }
+            $(this.notiBox).find("strong").text(this.unreads);
+        },
+
+        clearUnread: function () {
+            this.unreads = 0;
+            this.updateUnreadBadge();
+            $(this.notiList).find("span").removeClass("unread fadeout");
+        },
+
+        clearAllNotification: function () {
+            $(this.notiList).html("");
+        }
+    };
+
+
+    window.setTimeout(function () {
+        let notiDrop = document.getElementById("notiDrop");
+        if (notiDrop) {
+            notification.init(notiDrop);
+            notification.clearAllNotification();
+            $("#notiDrop").find("a.pull-right").click(function () {
+                notification.clearUnread();
+                // clearOfflineNotification();
+            });
+            $(notiDrop).click(function () {
+                console.log("noti click");
+                $(notiDrop).find(".unread").addClass("fadeout");
+                setTimeout(function () {
+                    notification.clearUnread();
+                    clearOfflineNotification();
+                }, 5000);
+            });
+        } else {
+            window.setTimeout(arguments.callee, 10);
+        }
+    }, 10);
+
+    //-------------Notification end
+
+    window.addEventListener("resize", resizeWindow);
+
+    var memberBean = Cookies.get("MemberBean");
+    console.log(Cookies.get("MemberBean"));
+    if (memberBean) {
+        initChat();
+    }
+
+    function initChat() {
+        memberBean = JSON.parse(Cookies.get("MemberBean"));
+        chatUsername = memberBean.name;
+        if (worker == null) {
+            worker = new SharedWorker("/chat/js/websocket-worker.js");
+            console.log("initworker")
+            workerInit();
+        }
+
+        $("#checkUser").keydown(function (e) {
+            if (e.keyCode == 13 && !e.shiftKey) {
+                e.preventDefault();
+                checkUserExist();
+                return false;
+            } else if (e.keyCode == 27) {
+                $(this).val("");
+            }
+        });
+
+        let timeout = 10;
+        window.setTimeout(function () {
+            if (typeof Quill !== 'undefined') {
+                quillChat = new Quill('#chat-editor-container', {
+                    modules: {
+                        formula: true,
+                        syntax: true,
+                        toolbar: '#chat-toolbar-container'
+                    },
+                    theme: 'snow'
+                });
+            } else {
+                window.setTimeout(arguments.callee, timeout);
+            }
+        }, timeout);
+
+        // console.log($(".badge"));
+
+        window.setTimeout(function () {
+            let chatToggleBtn = document.getElementById("toggleChatBtn");
+            if (chatToggleBtn) {
+                chatToggleBtn.addEventListener("click", resizeWhenToggleChatSidebar);
+                document.getElementsByClassName("chat-close")[0].addEventListener("click", resizeWhenToggleChatSidebar);
+            } else {
+                window.setTimeout(arguments.callee, timeout);
+            }
+        }, timeout);
+    }
 });
+
+var chatSidebarOpen = false;
+function resizeWhenToggleChatSidebar() {
+    if (neonChat && !chatSidebarOpen) {
+        $(".main-content").css("width", ($(".page-container").width() - 279));
+        chatSidebarOpen = true;
+    } else {
+        $(".main-content").css("width", "100%");
+        chatSidebarOpen = false;
+    }
+}
+function resizeWindow() {
+    let navbarHeight = $("#bs-example-navbar-collapse-2").height();
+    let topicVideoHeight = $(window).height();
+    if (navbarHeight >= 54 && navbarHeight <= 106) {
+        $(".page-container").css("margin-top", navbarHeight);
+        $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - navbarHeight) / 9 * 16));
+    } else {
+        $(".page-container").css("margin-top", 54);
+        $(".topicVideo>.card-img-top").css("max-width", Math.ceil((topicVideoHeight - 54) / 9 * 16));
+    }
+    if (neonChat && chatSidebarOpen) {
+        $(".main-content").css("width", ($(".page-container").width() - 279));
+    }
+}
+
+function timeDifference(current, previous) {
+    var msPerMinute = 60 * 1000;
+    var msPerHour = msPerMinute * 60;
+    var msPerDay = msPerHour * 24;
+    var msPerMonth = msPerDay * 30;
+    var msPerYear = msPerDay * 365;
+    var elapsed = current - previous;
+    if (elapsed < msPerMinute) {
+        return Math.round(elapsed / 1000) + ' 秒前';
+    } else if (elapsed < msPerHour) {
+        return Math.round(elapsed / msPerMinute) + ' 分鐘前';
+    } else if (elapsed < msPerDay) {
+        return Math.round(elapsed / msPerHour) + ' 小時前';
+    } else if (elapsed < msPerMonth) {
+        return '大約 ' + Math.round(elapsed / msPerDay) + ' 天前';
+    } else if (elapsed < msPerYear) {
+        return '大約 ' + Math.round(elapsed / msPerMonth) + ' 個月前';
+    } else {
+        return '大約 ' + Math.round(elapsed / msPerYear) + ' 年前';
+    }
+}
+
+function toColor(num) {
+    num >>>= 0;
+    var b = num & 0xFF,
+        g = (num & 0xFF00) >>> 8,
+        r = (num & 0xFF0000) >>> 16,
+        a = ((num & 0xFF000000) >>> 24) / 255;
+    return "rgba(" + [r, g, b, a].join(",") + ")";
+}

@@ -127,7 +127,7 @@ public class ProductBean implements Serializable {
 		this.brand = Objects.requireNonNull(brand, "brand must not be null");
 		this.price = Objects.requireNonNull(price, "price must not be null");
 		this.stock = Objects.requireNonNull(stock, "stock must not be null");
-		this.totalSold = Objects.requireNonNull(totalSold, "brand must not be null");
+		this.totalSold = Objects.requireNonNull(totalSold, "totalSold must not be null");
 		this.information = Objects.requireNonNull(information, "information must not be null");
 		this.informationImageLink = Objects.requireNonNull(informationImageLink, "brand must not be null");
 		this.imageLink = Objects.requireNonNull(imageLink, "imageLink must not be null");

@@ -207,20 +207,23 @@ function getOld(id, index) {
 }
 
 function initRegionChat(region) {
-    $("#" + region).click(function () {
-        if (worker != null) {
-            worker.port.postMessage({
-                "command": "subscribeRegion",
-                "region": region
-            });
-            worker.port.postMessage({
-                "command": "getRegionActive",
-                "region": region
-            });
-        }
-        neonChat.setStatus($(this).attr("id"), "online");
-        $(this).unbind();
+    // $("#" + region).click(function () {
+    if (worker != null) {
+        worker.port.postMessage({
+            "command": "subscribeRegion",
+            "region": region
+        });
+        worker.port.postMessage({
+            "command": "getRegionActive",
+            "region": region
+        });
+    }
+    neonChat.setStatus($("#" + region).attr("id"), "online");
+    $("#" + region).find(".user-status").css({
+        "background-color": "#00ffcc"
     });
+    // $(this).unbind();
+    // });
 }
 
 function workerInit() {
@@ -244,13 +247,16 @@ function workerInit() {
             }
         } else if (e.data.command == "checkUser") {
             let id = e.data.message;
-            // console.log(eval(id));
-            if (id) {
-                if (!$("#" + id).get(0)) {
-                    neonChat.addUser("group-2", id, "online", false, id);
-                    neonChat.refreshUserIds();
+            console.log(e.data);
+            if (id && (id !== chatUsername)) {
+                if (id != chatUsername) {
+                    if (!$("#" + id).get(0)) {
+                        neonChat.addUser("group-2", id, "online", false, id);
+                        neonChat.refreshUserIds();
+                    }
+                    getOnlineUsers();
+                    $("#checkUser").attr("placeholder", "Search User");
                 }
-                getOnlineUsers();
             } else {
                 $("#checkUser").attr("placeholder", "User does not exist!");
             }
@@ -293,6 +299,7 @@ function workerInit() {
             initRegionChat("middle");
             initRegionChat("south");
             initRegionChat("east");
+
             addEventListener("beforeunload", function () {
                 worker.port.postMessage({
                     "command": "closing"
@@ -713,6 +720,7 @@ $(document).ready(function () {
                     offset = maxOffset;
                 }
 
+
                 $conversation_window.transition({
                     top: offset,
                     opacity: 1
@@ -848,17 +856,40 @@ $(document).ready(function () {
                             date = entry.time,
                             date_formated = date;
 
+                        let $image = $(document.createElement("img"));
+                        $image.attr({
+                            src: "/navbar/images/notLogin.jpg",
+                            width: 50,
+                            class: "img-circle"
+                        });
+                        $image.css({
+                            "margin": "0 2% 0 0",
+                            "max-height": "50px",
+                            float: "left",
+                            // "box-shadow": "0px 2px 4px rgba(255, 255, 255)",
+                            border: "2px solid rgb(255, 255, 255, 0.3)"
+                        });
+                        $.ajax({
+                            method: "GET",
+                            url: "/getImageByName/" + entry.from,
+                            dataType: "json",
+                            success: function (data, textStatus, jqXHR) {
+                                if (data && data.image) {
+                                    $image.attr({
+                                        src: data.image
+                                    });
+                                }
+                            }
+                        });
+                        $entry.find('.user').before($image);
+                        $entry.find('.user').css({
+                            "margin-left": "2%"
+                        });
+
+                        let date_title;
                         if (typeof date == 'object') {
-                            var hour = date.getHours(),
-                                hour = (hour < 10 ? "0" : "") + hour,
-
-                                min = date.getMinutes(),
-                                min = (min < 10 ? "0" : "") + min,
-
-                                sec = date.getSeconds();
-                            sec = (sec < 10 ? "0" : "") + sec;
-
-                            date_formated = hour + ':' + min;
+                            date_title = date.toLocaleDateString() + date.toLocaleTimeString()
+                            date_formated = timeDifference(new Date(), date);
                         }
 
 
@@ -881,6 +912,9 @@ $(document).ready(function () {
 
 
                         $entry.find('.time').html(date_formated);
+                        $entry.find('.time').attr({
+                            title: date_title
+                        });
 
                         if (entry.fromOpponent) {
                             $entry.addClass('odd');
@@ -908,19 +942,41 @@ $(document).ready(function () {
                             date = entry.time,
                             date_formated = date;
 
+                        let $image = $(document.createElement("img"));
+                        $image.attr({
+                            src: "/navbar/images/notLogin.jpg",
+                            width: 50,
+                            class: "img-circle"
+                        });
+                        $image.css({
+                            "margin": "0 2% 0 0",
+                            "max-height": "50px",
+                            float: "left",
+                            // "box-shadow": "0px 2px 4px rgba(255, 255, 255)",
+                            border: "2px solid rgb(255, 255, 255, 0.3)"
+                        });
+                        $.ajax({
+                            method: "GET",
+                            url: "/getImageByName/" + entry.from,
+                            dataType: "json",
+                            success: function (data, textStatus, jqXHR) {
+                                if (data && data.image) {
+                                    $image.attr({
+                                        src: data.image
+                                    });
+                                }
+                            }
+                        });
+                        $entry.find('.user').before($image);
+                        $entry.find('.user').css({
+                            "margin-left": "2%"
+                        });
+
+                        let date_title;
                         if (typeof date == 'object') {
-                            var hour = date.getHours(),
-                                hour = (hour < 10 ? "0" : "") + hour,
-
-                                min = date.getMinutes(),
-                                min = (min < 10 ? "0" : "") + min,
-
-                                sec = date.getSeconds();
-                            sec = (sec < 10 ? "0" : "") + sec;
-
-                            date_formated = hour + ':' + min;
+                            date_title = date.toLocaleDateString() + date.toLocaleTimeString()
+                            date_formated = timeDifference(new Date(), date);
                         }
-
 
                         // Populate message DOM
                         $entry.find('.user').html(entry.from);
@@ -941,6 +997,9 @@ $(document).ready(function () {
 
 
                         $entry.find('.time').html(date_formated);
+                        $entry.find('.time').attr({
+                            title: date_title
+                        });
 
                         if (entry.fromOpponent) {
                             $entry.addClass('odd');
@@ -1548,8 +1607,8 @@ $(document).ready(function () {
         chatUsername = memberBean.name;
         if (worker == null) {
             worker = new SharedWorker("/chat/js/websocket-worker.js");
-            console.log("initworker")
             workerInit();
+            console.log("initworker");
         }
 
         $("#checkUser").keydown(function (e) {

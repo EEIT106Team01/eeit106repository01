@@ -1,6 +1,13 @@
 //URL Domain
 const urlDomain = `/`;
 
+//Get Member
+let memberBean = Cookies.get("MemberBean");
+let member = null;
+if (memberBean != undefined) {
+    member = JSON.parse(Cookies.get("MemberBean"));
+}
+
 // Controller
 const getOneProduct = `shop/product.html?`;
 

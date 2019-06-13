@@ -34,7 +34,6 @@ import net.ddns.eeitdemo.eeit106team01.forum.utils.FFmpegUtils;
 import net.ddns.eeitdemo.eeit106team01.member.model.entity.AuthorityEntity;
 import net.ddns.eeitdemo.eeit106team01.member.model.entity.MemberEntity;
 import net.ddns.eeitdemo.eeit106team01.shop.model.DataBean;
-import net.ddns.eeitdemo.eeit106team01.shop.model.Member;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
@@ -94,7 +93,6 @@ public class Eeit106team01Application {
 	public SessionFactory sessionFactory(@Autowired DataSource dataSource) {
 		LocalSessionFactoryBuilder builder = new LocalSessionFactoryBuilder(dataSource);
 		// Shop
-		builder.addAnnotatedClass(Member.class);
 		builder.addAnnotatedClass(ProductBean.class);
 		builder.addAnnotatedClass(ReviewBean.class);
 		builder.addAnnotatedClass(PurchaseBean.class);

@@ -9656,10 +9656,11 @@ table {
   text-align: left;
 }
 #chat .chat-conversation .conversation-body > li{
-  /* margin: 10px; */
+  margin: 0% 1% 1% 1%;
   /* padding: 0; */
-  border: 2px groove #555f72;
+  /* border: 20px groove #555f72; */
   border-radius: 5px;
+  box-shadow: 0px 2px 4px rgba(255, 255, 255, 0.33);
 }
 /* #chat .chat-conversation .conversation-body > li.odd > .time{
   float: right;
@@ -12194,4 +12195,7 @@ body.page-fade-only-init > .page-container {
 .notifications.dropdown .dropdown-menu > li > ul > li .fadeout {
   color: black;
   animation: fadeOut 3s forwards;
+}
+.ql-editor > p{
+  font-family: 'Noto Sans TC', '微軟正黑體', sans-serif;
 }

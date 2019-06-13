@@ -200,7 +200,7 @@ public class ProductController {
 		return ResponseEntity.notFound().build();
 	}
 
-	@PutMapping(path = { "/products" }, consumes = { "application/json; charset=UTF-8" }, produces = {
+	@PutMapping(path = { "/product/update" }, consumes = { "application/json; charset=UTF-8" }, produces = {
 			"application/json" })
 	public ResponseEntity<?> putProduct(@RequestBody ProductBean productBean, BindingResult bindingResult) {
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
@@ -211,10 +211,13 @@ public class ProductController {
 			}
 			return ResponseEntity.badRequest().body(errors);
 		}
+		System.err.println(productBean);
 		if (productBean != null) {
+			System.err.println(productBean.getId());
 			ProductBean origin = productService.findProductByPrimaryKey(productBean.getId());
 			if (origin != null) {
 				ProductBean result = productService.updateProduct(productBean);
+				System.err.println(result);
 				if (origin.getStock() == productBean.getStock()) {
 					if (result != null) {
 						return ResponseEntity.ok(result);

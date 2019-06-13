@@ -107,7 +107,8 @@
                     console.log("cookie: " + Cookies.get("MemberBean"));
                     let redirect = sessionStorage.getItem("previousPage");
                     console.log(redirect);
-                    if (!redirect) {
+                    console.log(location.pathname + location.search);
+                    if ((!redirect) || redirect == location.pathname + location.search) {
                         redirect = "/index.html";
                     }
                     location.href = redirect;

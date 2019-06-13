@@ -25,6 +25,14 @@ public class MemberTempBean {
 	private java.util.Date levelTime;
 	private java.util.Date memberCreateTime;
 	
+//	@OneToMany(mappedBy = "memberId")
+//	private List<PurchaseBean> purchaseId;
+//
+//	@OneToMany(mappedBy = "memberId")
+//	private List<RefundBean> refundId;
+//
+//	@OneToMany(mappedBy = "memberId")
+//	private List<ReviewBean> reviewId;
 	
 	@Override
 	public String toString() {
@@ -104,6 +112,29 @@ public class MemberTempBean {
 	public void setMemberCreateTime(java.util.Date memberCreateTime) {
 		this.memberCreateTime = memberCreateTime;
 	}
-	
-	
+
+//	public List<PurchaseBean> getPurchaseId() {
+//		return purchaseId;
+//	}
+//
+//	public void setPurchaseId(List<PurchaseBean> purchaseId) {
+//		this.purchaseId = purchaseId;
+//	}
+//
+//	public List<RefundBean> getRefundId() {
+//		return refundId;
+//	}
+//
+//	public void setRefundId(List<RefundBean> refundId) {
+//		this.refundId = refundId;
+//	}
+//
+//	public List<ReviewBean> getReviewId() {
+//		return reviewId;
+//	}
+//
+//	public void setReviewId(List<ReviewBean> reviewId) {
+//		this.reviewId = reviewId;
+//	}
+
 }

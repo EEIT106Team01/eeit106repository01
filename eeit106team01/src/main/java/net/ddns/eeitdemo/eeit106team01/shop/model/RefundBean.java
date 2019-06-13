@@ -17,6 +17,8 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
+
 @Entity
 @Table(schema = "Shop", name = "Refund")
 public class RefundBean implements Serializable {
@@ -43,8 +45,8 @@ public class RefundBean implements Serializable {
 	private String processStatus;
 
 	@ManyToOne
-	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
-	private Member memberId;
+	@JoinColumn(name = "MemberID", nullable = false, updatable = false)
+	private MemberTempBean memberId;
 
 	@OneToMany(mappedBy = "refundId")
 	private List<RefundListBean> refundListId;
@@ -60,7 +62,7 @@ public class RefundBean implements Serializable {
 	 * @param processStatus
 	 * @param memberId
 	 */
-	public RefundBean(Date createTime, Date updatedTime, String comment, String processStatus, Member memberId) {
+	public RefundBean(Date createTime, Date updatedTime, String comment, String processStatus, MemberTempBean memberId) {
 		super();
 		this.createTime = createTime;
 		this.updatedTime = updatedTime;
@@ -129,11 +131,11 @@ public class RefundBean implements Serializable {
 		this.processStatus = processStatus;
 	}
 
-	public Member getMemberId() {
+	public MemberTempBean getMemberId() {
 		return memberId;
 	}
 
-	public void setMemberId(Member memberId) {
+	public void setMemberId(MemberTempBean memberId) {
 		this.memberId = memberId;
 	}
 

@@ -18,6 +18,8 @@ import javax.persistence.TemporalType;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.sql.rowset.serial.SerialException;
 
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
+
 @Entity
 @Table(schema = "Shop", name = "Review")
 public class ReviewBean implements Serializable {
@@ -47,8 +49,8 @@ public class ReviewBean implements Serializable {
 	private SerialBlob image;
 
 	@ManyToOne
-	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
-	private Member memberId;
+	@JoinColumn(name = "MemberID", nullable = false, updatable = false)
+	private MemberTempBean memberId;
 
 	@OneToOne
 	@JoinColumn(name = "PurchaseListId", columnDefinition = "bigint", nullable = false, updatable = false, unique = true)
@@ -73,7 +75,7 @@ public class ReviewBean implements Serializable {
 	 * @param purchaseListId
 	 * @param productId
 	 */
-	public ReviewBean(Date createTime, Date updatedTime, Double rating, String comment, Member memberId,
+	public ReviewBean(Date createTime, Date updatedTime, Double rating, String comment, MemberTempBean memberId,
 			PurchaseListBean purchaseListId, ProductBean productId) {
 		super();
 		this.createTime = createTime;
@@ -168,11 +170,11 @@ public class ReviewBean implements Serializable {
 		this.image = image;
 	}
 
-	public Member getMemberId() {
+	public MemberTempBean getMemberId() {
 		return memberId;
 	}
 
-	public void setMemberId(Member memberId) {
+	public void setMemberId(MemberTempBean memberId) {
 		this.memberId = memberId;
 	}
 

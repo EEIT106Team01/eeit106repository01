@@ -31,7 +31,7 @@ public class ShopCrawlerTest {
 
 	final private String logPath = "C:\\Users\\Public\\";
 
-//	@Test
+	@Test
 	public void name() {
 		
 	}
