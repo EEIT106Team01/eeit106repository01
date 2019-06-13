@@ -45,7 +45,7 @@ public class RefundBean implements Serializable {
 	private String processStatus;
 
 	@ManyToOne
-	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
+	@JoinColumn(name = "MemberID", nullable = false, updatable = false)
 	private MemberTempBean memberId;
 
 	@OneToMany(mappedBy = "refundId")

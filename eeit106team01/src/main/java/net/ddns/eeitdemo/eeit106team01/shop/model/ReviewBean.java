@@ -49,7 +49,7 @@ public class ReviewBean implements Serializable {
 	private SerialBlob image;
 
 	@ManyToOne
-	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
+	@JoinColumn(name = "MemberID", nullable = false, updatable = false)
 	private MemberTempBean memberId;
 
 	@OneToOne

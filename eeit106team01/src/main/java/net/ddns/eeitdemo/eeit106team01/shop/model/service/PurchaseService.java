@@ -310,16 +310,21 @@ public class PurchaseService {
 				}
 			} else if (idType.equalsIgnoreCase("member")) {
 				result = purchaseDAO.findReviewsByMemberId(id);
-				if (result != null && result.size() > 0) {
+				if (result != null && !result.isEmpty()) {
 					return result;
 				}
 			} else if (idType.equalsIgnoreCase("product")) {
 				result = purchaseDAO.findReviewsByProductId(id);
-				if (result != null && result.size() > 0) {
+				if (result != null && !result.isEmpty()) {
+					return result;
+				}
+			} else if (idType.equalsIgnoreCase("purchaseList")) {
+				result = purchaseDAO.findReviewsByPurchaseListId(id);
+				if (result != null && !result.isEmpty()) {
 					return result;
 				}
 			} else {
-				throw new IllegalArgumentException("idType must be review, member, product");
+				throw new IllegalArgumentException("idType must be review, member, product, purchaseList");
 			}
 		}
 		return null;

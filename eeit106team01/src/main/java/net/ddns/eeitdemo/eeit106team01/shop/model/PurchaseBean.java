@@ -58,7 +58,7 @@ public class PurchaseBean implements Serializable {
 	private HashMap<String, String> receiverInformation;
 
 	@ManyToOne
-	@JoinColumn(name = "MemberID", columnDefinition = "bigint", nullable = false, updatable = false)
+	@JoinColumn(name = "MemberID", nullable = false, updatable = false)
 	private MemberTempBean memberId;
 
 	@OneToMany(mappedBy = "purchaseId")
