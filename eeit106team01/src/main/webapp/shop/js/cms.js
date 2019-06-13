@@ -52,7 +52,7 @@ $(document).ready(function() {
                 <form role="form" id="form1" class="validate">
                     <div class="form-group">
                         <label class="control-label">產品名稱</label>
-
+                        
                         <input type="text" class="form-control" name="name" id="name" data-validate="required" data-message-required="This is custom message for required field." placeholder="產品名稱" />
                     </div>
 
