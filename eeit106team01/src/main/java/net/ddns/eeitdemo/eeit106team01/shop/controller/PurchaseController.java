@@ -279,6 +279,8 @@ public class PurchaseController {
 
 			result = purchaseService.newPurchase(productIdList, purchaseBean, httpSession, response);
 		} catch (IllegalArgumentException | JsonProcessingException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.toString());
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.isNotNull()) {

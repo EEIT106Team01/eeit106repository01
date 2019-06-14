@@ -1,7 +1,6 @@
 //Document Ready
 $(function() {
     verifyLogin();
-    addToCart();
     //Time
     $(`#currentTime`).text(getLocaleTime(currentTime));
     //Purchase ID
@@ -226,6 +225,8 @@ function newPurchase() {
         let productTotalPrice = $(`#productsTotalPrice`).text().replace(/\$/, ``);
         let deliverStatus = `unsent`;
         let deliverType = `address`;
+        let deliveryPrice = parseInt($(`#deliveryPrice`).text().replace(`$`, ``));
+        console.log(deliveryPrice);
         getProductFromCart().forEach(product => {
             for (let index = 0; index < product.quantity; index++) {
                 productIds.push(product.id);
@@ -248,6 +249,8 @@ function newPurchase() {
 
         let cartLocalStorage = localStorage;
         cartLocalStorage.clear();
+        
+        console.log(data);
 
         $.ajax({
             type: "POST",
@@ -265,6 +268,9 @@ function newPurchase() {
                         $(`body`).html(response);
                     }
                 });
+            },
+            error: function(jqXHr){
+                console.log(jqXHr);
             }
         });
     })

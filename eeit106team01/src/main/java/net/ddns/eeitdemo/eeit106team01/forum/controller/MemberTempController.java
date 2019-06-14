@@ -112,7 +112,7 @@ public class MemberTempController {
 		if (requestbody.getName() != null) {
 			MemberTempBean checkResult = memberBeanService.findByName(requestbody.getName());
 			if (checkResult != null) {
-				return ResponseEntity.noContent().build();
+				return ResponseEntity.ok(new MemberTempBean());
 			}
 		}
 

@@ -1,11 +1,15 @@
 $(document).ready(function() {
-    //verify is admin
-    if(memberBean != undefined){
-        if (member.level == "administrator") {
-            location.href = "/shop/CMS.html";
+        //verify is admin
+        if (memberBean != undefined) {
+            $(`#draggable-events`).show();
+            addToCart();
+            if (member.level == "administrator") {
+                location.href = "/shop/CMS.html";
+            }
+        } else {
+            $(`#draggable-events`).hide();
         }
-    }
-    
+
         getProducts()
         getAllType()
         getProductsByUpdateTime()
@@ -63,7 +67,7 @@ function getProducts() {
             var productsId = [];
             var y = 0;
             $.each(productsData, function() {
-                if(productsData[y].id != 1630){
+                if (productsData[y].id != 1630) {
                     productsName.push(productsData[y].name);
                     productsPrice.push(productsData[y].price);
                     productsImg.push(productsData[y].imageLink[0]);
@@ -103,7 +107,7 @@ function getAllType() {
             var i = 0;
             var productTypeArray = [];
             $.each(typesData, function() {
-                if(typesData[i].data!="會員"){
+                if (typesData[i].data != "會員") {
                     productTypeArray.push('<li class="li"><a href="/shop/search.html?type=' + typesData[i].data + '">' + typesData[i].data + '</a></li>')
                 }
                 i++
@@ -113,9 +117,9 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
-                if(typesData[y].data != "會員"){
+                if (typesData[y].data != "會員") {
                     productTypeArray2.push("<option>" + typesData[y].data + "</option>")
-                }               
+                }
                 y++
             })
             $("#searchType").empty().append("<option>All</option>" + productTypeArray2.join(""))
@@ -142,7 +146,7 @@ function getProductsByUpdateTime() {
             var productsId = [];
             var y = 0;
             $.each(dayData, function() {
-                if(dayData[y].id != 1630){
+                if (dayData[y].id != 1630) {
                     productsName.push(dayData[y].name)
                     productsPrice.push(dayData[y].price)
                     productsImg.push(dayData[y].imageLink[0])
@@ -210,7 +214,7 @@ function getKeyword() {
             $.each(keywordData, function() {
                 kwArray.push(
                     '<a href="/shop/search.html?productName=' + keywordData[i].keyword + '&productType=All">' +
-                    '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + '</button>'+
+                    '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + '</button>' +
                     '<span>&nbsp</span>')
                 i++
             })
@@ -242,7 +246,7 @@ function getMightLikeProduct(type) {
 
             var y = 0;
             $.each(sortData, function() {
-                if(sortData[y].id != 1630){                   
+                if (sortData[y].id != 1630) {
                     productsName.push(sortData[y].name)
                     productsPrice.push(sortData[y].price)
                     productsImg.push(sortData[y].imageLink[0])

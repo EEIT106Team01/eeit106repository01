@@ -11,7 +11,12 @@ if (memberBean != undefined) {
 // Verify Login
 function verifyLogin() {
     if (memberBean == undefined) {
+        $(`#draggable-events`).hide();
+        sessionStorage.setItem("previousPage", location.pathname + location.search);
         location.href = "/forum/login.html";
+    } else {
+        $(`#draggable-events`).show();
+        addToCart();
     }
 }
 
