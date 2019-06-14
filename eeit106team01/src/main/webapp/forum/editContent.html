@@ -189,6 +189,7 @@
 
 		function deleteContent() {
 			var newContentBean = JSON.parse(JSON.stringify(contentBean));
+			newContentBean.videoBean = { id: -1 };
 			var httpMethod = "DELETE";
 			var contentStatus = "delete";
 			newContentBean.contentStatus = contentStatus;
