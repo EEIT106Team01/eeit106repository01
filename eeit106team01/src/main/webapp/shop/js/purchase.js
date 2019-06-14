@@ -1,7 +1,6 @@
 //Document Ready
 $(function() {
     verifyLogin();
-    addToCart();
     //Time
     $(`#currentTime`).text(getLocaleTime(currentTime));
     //Purchase ID
@@ -250,6 +249,8 @@ function newPurchase() {
 
         let cartLocalStorage = localStorage;
         cartLocalStorage.clear();
+        
+        console.log(data);
 
         $.ajax({
             type: "POST",
@@ -268,7 +269,7 @@ function newPurchase() {
                     }
                 });
             },
-            error: function(jqXHr){
+            error: function(jqXHr) {
                 console.log(jqXHr);
             }
         });

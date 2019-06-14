@@ -7,12 +7,13 @@
 }
 
 #draggable-events {
-    /* background: transparent; */
+    background: transparent;
     width: 330px;
+    border: 0;
 }
 
 #draggable-events div {
-    /* background: transparent; */
+    background: transparent;
     border: 0;
 }
 

@@ -188,8 +188,11 @@ public class ArticleContentController {
 			if (result != null && !result.getContentStatus().equalsIgnoreCase("deleted")) {
 				result.setContentStatus("deleted");
 				result.setContentContent(
-						"{\"ops\":[{\"attributes\":{\"italic\":true},\"insert\":\"此文章已被刪除\"},{\"insert\":\"\\n\"}]}");
-
+						"{\"ops\":[{\"attributes\":{\"italic\":true},\"insert\":\"此文章已被刪除\"},{\"insert\":\"\\n\"}]}"
+						);
+				if (result.getVideoBean() != null) {
+					result.getVideoBean().setId(-1);
+				}
 				if ((result = articleContentCurrentService.update(result)) != null) {
 					return ResponseEntity.ok(result);
 				}

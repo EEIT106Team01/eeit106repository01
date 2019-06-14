@@ -11,10 +11,22 @@ if (memberBean != undefined) {
 // Verify Login
 function verifyLogin() {
     if (memberBean == undefined) {
-        // $("body").text("");
-        // alert("請先登入");
+        $(`#draggable-events`).hide();
         sessionStorage.setItem("previousPage", location.pathname + location.search);
         location.href = "/forum/login.html";
+    } else {
+        $(`#draggable-events`).show();
+        addToCart();
+    }
+}
+
+// Verify Login hide cart
+function hideCart() {
+    if (memberBean != undefined) {
+        $(`#draggable-events`).show();
+        addToCart();
+    } else {
+        $(`#draggable-events`).hide();
     }
 }
 

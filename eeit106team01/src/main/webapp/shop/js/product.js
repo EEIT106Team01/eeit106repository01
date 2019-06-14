@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    hideCart();
     getProduct(takeUrlValue());
     getAllType();
     //搜尋
@@ -68,7 +69,7 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
-                if(typesData[y].data != "會員"){
+                if (typesData[y].data != "會員") {
                     productTypeArray2.push("<option>" + typesData[y].data + "</option>");
                 }
                 y++;
@@ -85,7 +86,7 @@ function getAllType() {
 
 //搜單件商品
 function getProduct(id) {
-    if(id != 1630){
+    if (id != 1630) {
 
         $.ajax({
             url: "/product/" + id,
@@ -143,13 +144,13 @@ function getProduct(id) {
                 console.log(textStatus);
             }
         });
-    }else{
+    } else {
         jump();
     }
 }
 //跳轉回首頁
-function jump(){
-    location.href="/shop/index.html"; //跳转
+function jump() {
+    location.href = "/shop/index.html"; //跳转
     //window.location.reload(); //刷新
 }
 
@@ -282,7 +283,7 @@ function recommendTop(recommendData) {
     var recommendName = [];
     var recommendPrice = [];
     var recommendImg = [];
-    var recommendId =[];
+    var recommendId = [];
     var recommendAll = [];
     var recommendC1 = [];
     var recommendC2 = [];
@@ -309,7 +310,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?'+recommendId[k]+'" tabindex="0">' +
+                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
@@ -340,7 +341,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?'+recommendId[q]+'" tabindex="0">' +
+                '<a href="/shop/product.html?' + recommendId[q] + '" tabindex="0">' +
                 "<h5>" +
                 recommendName[q].substr(0, 10) +
                 "..." +
@@ -430,7 +431,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?'+recommendId[k]+'" tabindex="0">' +
+                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
@@ -461,7 +462,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?'+recommendId[q]+'" tabindex="0">' +
+                '<a href="/shop/product.html?' + recommendId[q] + '" tabindex="0">' +
                 "<h5>" +
                 recommendName[q].substr(0, 10) +
                 "..." +

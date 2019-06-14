@@ -1,3 +1,32 @@
+document.addEventListener("DOMContentLoaded", function () {
+    $("#videoBean").after(
+        '<div id="videoModal" class="modal fade" style="margin-top: 10%" role="dialog">'
+        + '<div class="modal-dialog">'
+        + '<!-- Modal content-->'
+        + '<div class="modal-content">'
+        + '<div class="modal-header">'
+        + '<button type="button" class="close" data-dismiss="modal">&times;</button>'
+        + '<h2 class="modal-title">不支援的格式</h2>'
+        + '</div>'
+        + '<div class="modal-body">'
+        + '<p>僅接受如mp4等影片檔案</p>'
+        + '</div>'
+        + '<div class="modal-footer">'
+        + '<button type="button" class="btn btn-default" data-dismiss="modal">確定</button>'
+        // + '<button onclick="deleteContent()" type="button" class="btn btn-danger" data-dismiss="modal">我明白，仍要刪除</button>'
+        + '</div>'
+        + '</div>'
+        + '</div>'
+        + '</div>'
+    );
+    $("#videoBean").on("change", function (e) {
+        if (!checkFileMimeType(this.files[0])) {
+            $("#videoModal").modal('toggle');
+            $(this).val("");
+        }
+    });
+});
+
 function upload() {
     $("#msg").text("");
     var checkFile = $("#videoBean").val();
@@ -97,3 +126,16 @@ function failedHandle(e) {
 function canceledHandle(e) {
     $('.progress-body .progress-info').html("上傳檔案取消。");
 };
+
+//檢查上傳檔案mimeType
+function checkFileMimeType(file) {
+    // let file = this.files[0];
+    let fileType = file["type"];
+    let validVideoTypes = ["video/mp4"];
+    if ($.inArray(fileType, validVideoTypes) < 0) {
+        // invalid file type code goes here.
+        return false;
+    } else {
+        return true;
+    }
+}
