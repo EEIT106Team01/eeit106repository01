@@ -399,15 +399,22 @@ public class FFmpegUtils {
 		System.out.println("Generate cost : " + (System.currentTimeMillis() - time) + " ms");
 		return vtt;
 	}
+	
+	public String checkFormatName(File inFile) throws IOException {
+		return ffprobe.probe(inFile.getAbsolutePath()).getFormat().format_name;
+	}
 
 	public static void main(String[] args) throws IOException {
 		File inFile = new File("C:/JAVA/baseball.mp4");
+//		File inFile = new File("C:/Users/chiay/Pictures/images.jpg");
+//		File inFile = new File("C:/Users/chiay/Pictures/duck.PNG.mp4");
 //		File outFile = new File("C:/JAVA/output");
 //		File outFileJpg = new File("C:/JAVA/basketball.jpg");
 //		File outFileGif = new File("C:/JAVA/basketball.gif");
 		
 		FFmpegUtils ffu = new FFmpegUtils();
-		System.out.println(ffu.getVideoResolution(inFile));
+		System.err.println(ffu.checkFormatName(inFile));
+		
 	}
 	
 }

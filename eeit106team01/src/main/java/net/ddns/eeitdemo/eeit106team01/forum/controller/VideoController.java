@@ -77,6 +77,10 @@ public class VideoController {
 						os.write(bytes, 0, len);
 					}
 				}
+				if (!ffu.checkFormatName(outFile).contains("mp4")) {
+					System.err.println("videoFile format error");
+					return ResponseEntity.noContent().header("errorMsg", "format error").build();
+				}
 				MemberTempBean memberBean = (MemberTempBean) httpSession.getAttribute("MemberBean");
 				VideoBean videoBean = new VideoBean();
 				videoBean.setUploadTime(new java.util.Date(uploadTime));
