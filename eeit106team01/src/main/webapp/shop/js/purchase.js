@@ -273,8 +273,9 @@ function newPurchase() {
         createJson.deliverType = deliverType;
         createJson.deliverPrice = deliveryPrice;
         createJson.receiverInformation = receiverInformationJson;
-        createJson.memberId = 1;
+        createJson.memberId = member.id;
         let data = JSON.stringify(createJson);
+        console.log(data);
 
         let cartLocalStorage = localStorage;
         cartLocalStorage.clear();
