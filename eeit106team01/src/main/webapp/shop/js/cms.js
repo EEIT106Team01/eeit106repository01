@@ -1,6 +1,9 @@
 $(document).ready(function() {
     verifyLogin();
     //verify is admin
+    if (member.level != "administrator") {
+        location.href = "/shop/index.html";
+    }
 
     $("#productsInfo").on("click", (function() {
         $("#div_right2").empty();
@@ -328,29 +331,44 @@ $(document).ready(function() {
     $("#sendMsgToAll").on("click", (function() {
         $("#div_right2").empty()
         $("#div_right").empty().append(
-            `<form role="form" id="form1" class="validate">   
-                <label class="control-label">你想通知大家的話...</label>
-                <input type="text" class="form-control" name="msg" id="msg" data-validate="required" placeholder="訊息" />
-
+            `<form role="form" id="form1" class="validate"> 
+                <div class="form-group">  
+                    <label class="control-label">通知訊息</label>
+                    <input type="text" class="form-control" name="msg" id="msg" data-validate="required" placeholder="訊息" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label">通知連結</label>
+                    <input type="text" class="form-control" name="url" id="url" data-validate="required" placeholder="url" />
+                </div>
                 <div class="form-group">
                     <button type="button" class="btn btn-success" id="btn_sendMsg">送出</button>
                     <button type="reset" class="btn">Reset</button>
+                    <button type="button" class="btn btn-blue" id="btn_addSendMsg">一鍵帶入</button>
                 </div>
              </form>
             `
         )
         $("#btn_sendMsg").on("click", (function() {
-            sendMsgToAll();
+            let urlVal = $("#url").val()
+            let messageVal = $("#msg").val()
+            sendMsgToAll(messageVal,urlVal);
+        }))
+        $("#btn_addSendMsg").on("click", (function() {
+            $("#msg").val("加入VIP會員,立即享9折優惠")
+            $("#url").val("/shop/upgradeMember.html")
         }))
     }))
 })
 
-function sendMsgToAll() {
+function sendMsgToAll(messageVal,urlVal) {
+    let bean = {message:messageVal,url:urlVal}
     $.ajax({
         url: "/sendMsg",
-        method: "GET",
+        method: "POST",
         dataType: "json",
-        success: function(Data) {
+        contentType: "application/json;charset=UTF-8",
+        data: JSON.stringify(bean),
+        success: function() {
             $("#div_right2").empty().append(
                 `<div class="col-md-6"> 
                 <h4>送出訊息資訊</h4> 
@@ -365,8 +383,8 @@ function sendMsgToAll() {
                     <tbody> 
                         <tr> 
                             <td>1</td> 
-                            <td>` + Data.message + `</td> 
-                            <td>` + Data.url + `</td> 
+                            <td>` + messageVal + `</td> 
+                            <td>` + urlVal + `</td> 
                         </tr> 
                     </tbody> 
                 </table> 
@@ -374,6 +392,7 @@ function sendMsgToAll() {
             )
         },
         error: function(jqXHR, textStatus, errorThrown) {
+            alert("發送失敗")
             console.log(textStatus);
         }
     })
