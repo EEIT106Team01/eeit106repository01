@@ -1,7 +1,6 @@
 //Document Ready
 $(function() {
     verifyLogin();
-    addToCart();
     //Time
     $(`#currentTime`).text(getLocaleTime(currentTime));
     //Purchase ID
