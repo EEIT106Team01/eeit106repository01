@@ -278,8 +278,8 @@ public class ProductController {
 		}
 	}
 	
-	@GetMapping(path = { "/sendMsg" }, consumes = { "application/json" }, produces = { "application/json" })
-	public ResponseEntity<?> sendMsg(@RequestParam String msg, BindingResult bindingResult){
+	@PostMapping(path = { "/sendMsg" }, consumes = { "application/json" }, produces = { "application/json" })
+	public ResponseEntity<?> sendMsg(@RequestBody NotificationMsg notificationMsgTemp, BindingResult bindingResult){
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 			Map<String, String> errors = new HashMap<String, String>();
 			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
@@ -288,16 +288,17 @@ public class ProductController {
 			}
 			return ResponseEntity.badRequest().body(errors);
 		}
-		if(msg != null) {
+		if(notificationMsgTemp != null) {
+			System.err.println(notificationMsgTemp.getMessage());
+			System.err.println(notificationMsgTemp.getUrl());
 			NotificationMsg notificationMsg = new NotificationMsg();
-			String url = "/shop/upgradeMember.html";
-			notificationMsg.setMessage(msg);
-			notificationMsg.setUrl(url);
+			notificationMsg.setMessage(notificationMsgTemp.getMessage());
+			notificationMsg.setUrl(notificationMsgTemp.getUrl());
 			notificationMsg.setIcon("entypo-info");
 			notificationMsg.setColor(Color.RED);
 			notificationService.sendNotificationToAllUser(notificationMsg);
-			return new ResponseEntity<NotificationMsg>(notificationMsg, HttpStatus.OK);
+			return new ResponseEntity<NotificationMsg>(notificationMsgTemp, HttpStatus.OK);
 		}
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.noContent().build();
 	}
 }

@@ -1,4 +1,11 @@
 $(document).ready(function() {
+    //verify is admin
+    if(memberBean != undefined){
+        if (member.level == "administrator") {
+            location.href = "/shop/CMS.html";
+        }
+    }
+    
         getProducts()
         getAllType()
         getProductsByUpdateTime()
@@ -106,7 +113,9 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
-                productTypeArray2.push("<option>" + typesData[y].data + "</option>")
+                if(typesData[y].data != "會員"){
+                    productTypeArray2.push("<option>" + typesData[y].data + "</option>")
+                }               
                 y++
             })
             $("#searchType").empty().append("<option>All</option>" + productTypeArray2.join(""))
@@ -201,17 +210,14 @@ function getKeyword() {
             $.each(keywordData, function() {
                 kwArray.push(
                     '<a href="/shop/search.html?productName=' + keywordData[i].keyword + '&productType=All">' +
-                    '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + '</button>')
+                    '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + ' </button>')
                 i++
             })
             if (kwArray.length < 5) {
                 kwArray.length = 5;
-                console.log("kwArray<5")
             }
             var result = kwArray.join("")
-            console.log(result)
             $("#keyWord").empty().append(result)
-
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
