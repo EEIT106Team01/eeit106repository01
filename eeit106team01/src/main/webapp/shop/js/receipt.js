@@ -1,4 +1,5 @@
 $(function() {
+    verifyLogin();
     getReceipt(getEcpaySn());
     getReceiptItem(getEcpaySn().substr(getEcpaySn().indexOf(`ZZ`) + 2, getEcpaySn().length));
 });

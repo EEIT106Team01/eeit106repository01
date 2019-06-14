@@ -1,4 +1,7 @@
 $(document).ready(function() {
+    verifyLogin();
+    //verify is admin
+
     $("#productsInfo").on("click", (function() {
         $("#div_right2").empty();
         $("#div_right").empty().append(

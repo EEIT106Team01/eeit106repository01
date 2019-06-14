@@ -1,4 +1,5 @@
 $(function() {
+    verifyLogin();
     memberInfo(member);
     findPurchaseByMemberId(member);
 });

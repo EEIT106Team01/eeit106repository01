@@ -8,6 +8,13 @@ if (memberBean != undefined) {
     member = JSON.parse(Cookies.get("MemberBean"));
 }
 
+// Verify Login
+function verifyLogin() {
+    if (memberBean == undefined) {
+        location.href = "/forum/login.html";
+    }
+}
+
 // Controller
 const getOneProduct = `shop/product.html?`;
 

@@ -36,7 +36,7 @@ $(document).ready(function() {
             window.location.href = "/shop/search.html?productName=" + productName + "&productType=" + productType;
         }
     }))
-    
+
     //breadcrumb
     var typeUrl = takeTypeUrlValue();
     var typedecodeURI = decodeURIComponent(typeUrl)
@@ -551,7 +551,7 @@ function getAllType() {
             var i = 0;
             var productTypeArray = [];
             $.each(typesData, function() {
-                if(typesData[i].data != "會員"){
+                if (typesData[i].data != "會員") {
                     productTypeArray.push('<li><a href="/shop/search.html?type=' + typesData[i].data + '" onclick="ByType(this)">' + typesData[i].data + '</a></li>')
                 }
                 i++
@@ -561,8 +561,8 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
-                if(typesData[i].data != "會員"){
-                productTypeArray2.push("<option>" + typesData[y].data + "</option>")
+                if (typesData[i].data != "會員") {
+                    productTypeArray2.push("<option>" + typesData[y].data + "</option>")
                 }
                 y++
             })

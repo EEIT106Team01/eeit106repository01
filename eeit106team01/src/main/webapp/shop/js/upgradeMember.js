@@ -8,7 +8,8 @@ function a_buyVIP() {
             let id = Data[0].id;
             let name = Data[0].name;
             let price = Data[0].price;
-            IntoCart(id, price, name)
+            let image = Data[0].imageLink[0].replace(/\"/, ``).replace(/\"/, ``);
+            IntoCart(id, price, name, image);
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus);
@@ -16,10 +17,11 @@ function a_buyVIP() {
     });
 }
 
-function IntoCart(productId, price, name) {
+function IntoCart(productId, price, name, image) {
     let id = parseInt(productId);
     let productName = name;
     let productPrice = parseInt(price);
+    let productImage = image;
     let productQuantity = parseInt(1);
     let productTotalQuantity = parseInt(1);
 
@@ -28,7 +30,7 @@ function IntoCart(productId, price, name) {
     productInfoJson.name = productName;
     productInfoJson.price = productPrice;
     productInfoJson.quantity = productQuantity;
-    productInfoJson.image = "productImage";
+    productInfoJson.image = productImage;
     productInfoJson.totalQuantity = productTotalQuantity;
     let productData = JSON.stringify(productInfoJson);
 
@@ -42,5 +44,10 @@ function IntoCart(productId, price, name) {
     }
 
     var result = cartLocalStorage.getItem(productId);
-    location.href = urlDomain + `shop/purchase.html`;
+    location.href = location.href;
+
 }
+
+$(function() {
+    addToCart();
+});

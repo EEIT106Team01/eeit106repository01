@@ -1,3 +1,35 @@
+//Document Ready
+$(function() {
+    verifyLogin();
+    //Time
+    $(`#currentTime`).text(getLocaleTime(currentTime));
+    //Purchase ID
+    getNewPurchaseId();
+    //Products
+    $(`#productsFromCart`).append(generateProductHtml());
+    //Price
+    $(`#productsTotalPrice`).append(generateProductsTotalPrice());
+    if (memberDiscount) {
+        $(`#totalPrice`).append(
+            Math.round((generateProductsTotalPrice() + parseInt(deliveryPrice)) * 0.9)
+        );
+        $(`#memberDiscount`).empty();
+        $(`#memberDiscount`).append(`VIP`);
+    } else {
+        $(`#totalPrice`).append(
+            generateProductsTotalPrice() + parseInt(deliveryPrice)
+        );
+        $(`#memberDiscount`).empty();
+        $(`#memberDiscount`).append(`無折扣`);
+    }
+    newPurchase();
+    quantityBtn();
+    //Member
+    if ($(`td`).text().match(/VIP會員/)) {
+        console.log($(`td`).text().match(/VIP會員/));
+    }
+});
+
 //RETURN VALUES
 let shoppingCart = findAllFromLocalStorage();
 let currentTime = getCurrentTime();
@@ -28,36 +60,6 @@ $(`#memberAddress`).append(`&nbsp;&nbsp;` + member.address);
 $(`#memberMail`).append(`&nbsp;&nbsp;` + member.email);
 $(`#memberPhone`).append(`&nbsp;&nbsp;` + member.phone);
 
-//Document Ready
-$(function() {
-    //Time
-    $(`#currentTime`).text(getLocaleTime(currentTime));
-    //Purchase ID
-    getNewPurchaseId();
-    //Products
-    $(`#productsFromCart`).append(generateProductHtml());
-    //Price
-    $(`#productsTotalPrice`).append(generateProductsTotalPrice());
-    if (memberDiscount) {
-        $(`#totalPrice`).append(
-            Math.round((generateProductsTotalPrice() + parseInt(deliveryPrice)) * 0.9)
-        );
-        $(`#memberDiscount`).empty();
-        $(`#memberDiscount`).append(`VIP`);
-    } else {
-        $(`#totalPrice`).append(
-            generateProductsTotalPrice() + parseInt(deliveryPrice)
-        );
-        $(`#memberDiscount`).empty();
-        $(`#memberDiscount`).append(`無折扣`);
-    }
-    newPurchase();
-    quantityBtn();
-    //Member
-    if ($(`td`).text().match(/VIP會員/)) {
-        console.log($(`td`).text().match(/VIP會員/));
-    }
-});
 
 //New Purchase ID
 function getNewPurchaseId() {
