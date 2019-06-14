@@ -114,7 +114,12 @@ function createVideo(videoBean, videoId) {
         // let videoTop = $("<div></div>").css({
         //                     margin: "0"
         //                 }).appendTo(videoCard);
-            let video = $("<video></video>").attr("id", videoId).attr("poster", thumbnailURI).attr("src", videoURI).prop("controls", true);
+            let video = $("<video></video>")
+            .attr("id", videoId)
+            .attr("poster", thumbnailURI)
+            // .attr("src", videoURI)
+            .prop("controls", true)
+            ;
         // let videoBottom = $("<div></div>").addClass("card-body").text(videoBean.videoURI.substr(0, 13)).appendTo(videoCard);
     
     // return videoCard;

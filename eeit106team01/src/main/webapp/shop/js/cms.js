@@ -354,8 +354,8 @@ $(document).ready(function() {
             sendMsgToAll(messageVal,urlVal);
         }))
         $("#btn_addSendMsg").on("click", (function() {
-            $("#msg").val("加入VIP會員,立即享9折優惠")
-            $("#url").val("/shop/upgradeMember.html")
+            $("#msg").val("加入VIP會員,立即享9折及免運優惠")
+            $("#url").val("/shop/UpgradeMember.html")
         }))
     }))
 })
