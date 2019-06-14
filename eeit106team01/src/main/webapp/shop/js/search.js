@@ -11,7 +11,7 @@ $(document).ready(function() {
 
     //搜尋
     $("#search").on("click", (function() {
-        if ($("#searchName").val() != null || typeof($("#searchName").val()) != "undefined" || $("#searchName").val().length == 0) {
+        if ($("#searchName").val() != null && typeof($("#searchName").val()) != "undefined" && $("#searchName").val().length != 0) {
             insertKeyWord();
         }
 
@@ -24,7 +24,7 @@ $(document).ready(function() {
             },
             messages: {
                 searchName: {
-                    required: "必須輸入"
+                    required: "關鍵字必須輸入"
                 }
             },
             errorPlacement: function(error, element) {
@@ -130,6 +130,7 @@ function userSearch() {
                     var name = takeSearchUrlValue()
                     sortSoldDescByname(name)
                 }))
+
                 //價錢搜索後sort功能
             $("#searchPriceByNameBtn").on('click', (function() {
                 $("#errorMsg").empty()
@@ -153,6 +154,7 @@ function userSearch() {
             $("#sortPriceDescByNameByMixpriceMaxprice").on('click', (function() {
                 getSortDescByPriceByName(name)
             }))
+
         } else {
             $("#errorMsg").empty()
             console.log("使用者搜尋 type=else")
@@ -201,6 +203,7 @@ function userSearch() {
             $("#sortPriceDescByNameByType").on('click', (function() {
                 getSortDescByPriceByNameByType(searchResult)
             }))
+
 
             $("#searchPriceByNameByTypeBtn").on('click', (function() {
                 $("#errorMsg").empty()
@@ -318,9 +321,9 @@ function ByType(type) {
         sortPriceAscBytype(type)
     }))
     $("#sortPriceDescByType").on('click', (function() {
-            sortPriceDescBytype(type)
-        }))
-        //價錢搜索+
+        sortPriceDescBytype(type)
+    }))
+    //價錢搜索+
     $("#searchPriceBytypeBtn").on('click', (function() {
 
             //other sort close
@@ -342,12 +345,12 @@ function ByType(type) {
                 },
                 messages: {
                     minPrice: {
-                        digits: "必須為整數",
-                        min: "最低於0"
+                        digits: "最低價錢必須為整數",
+                        min: "最低價錢最低於0"
                     },
                     maxPrice: {
-                        digits: "必須為整數",
-                        min: "最低於1"
+                        digits: "最高價錢必須為整數",
+                        min: "最高價錢最低於1"
                     }
                 },
                 errorPlacement: function(error, element) {
@@ -422,9 +425,6 @@ function ByBrand(brand) {
         var type = takeTypeUrlValue();
         sortPriceDescBybrand(brand, type)
     }))
-    $("#sortDefultByBrand").on('click', (function() {
-            getProductsByBrand(brand)
-        }))
         //updateTime
     $("#searchTimeByBrandBtn").on('click', (function() {
             var type = takeTypeUrlValue();
@@ -482,12 +482,12 @@ function ByBrand(brand) {
             },
             messages: {
                 minPrice: {
-                    digits: "必須為整數",
-                    min: "最低於0"
+                    digits: "最低價錢必須為整數",
+                    min: "最低價錢最低於0"
                 },
                 maxPrice: {
-                    digits: "必須為整數",
-                    min: "最低於1"
+                    digits: "最低價錢必須為整數",
+                    min: "最高價錢最低於1"
                 }
             },
             errorPlacement: function(error, element) {
@@ -562,7 +562,7 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
-                if (typesData[i].data != "會員") {
+                if (typesData[y].data != "會員") {
                     productTypeArray2.push("<option>" + typesData[y].data + "</option>")
                 }
                 y++
