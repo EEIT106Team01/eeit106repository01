@@ -36,7 +36,7 @@ public class PurchaseService {
 	private ProductDAO productDAO;
 	
 	@Autowired
-	private MemberBeanService memberBeanService;
+	private MemberBeanService memberBeanService;	
 
 	// Create a Purchase and Purchase List
 	public PurchaseBean newPurchase(ArrayList<Integer> productIdList, PurchaseBean purchaseBean, HttpSession httpSession, HttpServletResponse response) throws JsonProcessingException {
@@ -74,7 +74,7 @@ public class PurchaseService {
 				productBean.setTotalSold(productBean.getTotalSold() + 1);
 				productDAO.updateProduct(productBean);
 			}
-
+			
 			return purchase;
 		}
 		return null;

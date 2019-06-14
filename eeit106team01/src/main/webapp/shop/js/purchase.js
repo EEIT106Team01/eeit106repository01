@@ -1,12 +1,24 @@
 //Document Ready
 $(function() {
     verifyLogin();
+    addToCart();
     //Time
     $(`#currentTime`).text(getLocaleTime(currentTime));
     //Purchase ID
     getNewPurchaseId();
     //Products
     $(`#productsFromCart`).append(generateProductHtml());
+    if ($(`#productsFromCart tr`).length == 0) {
+        location.href = `/shop/index.html`;
+    }
+    //delivery price 
+    if ($(`#productsFromCart tr`).length == 1 && $($(`#productsFromCart tr:last td`).eq(1)).text().match(/VIP會員/)) {
+        $(`#deliveryPrice`).append(0);
+    } else {
+        $(`#deliveryPrice`).append(60);
+    }
+    let deliveryPrice = $(`#deliveryPrice`).text().replace(`$`, ``);
+
     //Price
     $(`#productsTotalPrice`).append(generateProductsTotalPrice());
     if (memberDiscount) {
@@ -24,10 +36,6 @@ $(function() {
     }
     newPurchase();
     quantityBtn();
-    //Member
-    if ($(`td`).text().match(/VIP會員/)) {
-        console.log($(`td`).text().match(/VIP會員/));
-    }
 });
 
 //RETURN VALUES
@@ -37,14 +45,6 @@ let currentTime = getCurrentTime();
 //TAGS
 let timeTitle = $(`#currentTime`).text();
 let productsTotalPrice = $(`#productsTotalPrice`).text();
-let deliveryPrice = $(`#deliveryPrice`)
-    .text()
-    .substr(
-        $(`#deliveryPrice`)
-        .text()
-        .indexOf("$") + 1,
-        $(`#deliveryPrice`).text().length
-    );
 let memberDiscount = generateMemberDiscount();
 
 //Member
@@ -54,7 +54,6 @@ if (member.level.match(/normal/)) {
     $(`#memberShip`).append(`&nbsp;&nbsp;普通會員`);
 } else if (member.level.match(/VIP/)) {
     $(`#memberShip`).append(`&nbsp;&nbsp;VIP會員`);
-
 }
 $(`#memberAddress`).append(`&nbsp;&nbsp;` + member.address);
 $(`#memberMail`).append(`&nbsp;&nbsp;` + member.email);
@@ -227,7 +226,6 @@ function newPurchase() {
         let productTotalPrice = $(`#productsTotalPrice`).text().replace(/\$/, ``);
         let deliverStatus = `unsent`;
         let deliverType = `address`;
-        let deliverPrice = 60;
         getProductFromCart().forEach(product => {
             for (let index = 0; index < product.quantity; index++) {
                 productIds.push(product.id);
@@ -243,7 +241,7 @@ function newPurchase() {
         createJson.productTotalPrice = productTotalPrice;
         createJson.deliverStatus = deliverStatus;
         createJson.deliverType = deliverType;
-        createJson.deliverPrice = deliverPrice;
+        createJson.deliverPrice = deliveryPrice;
         createJson.receiverInformation = receiverInformationJson;
         createJson.memberId = 1;
         let data = JSON.stringify(createJson);
@@ -258,7 +256,6 @@ function newPurchase() {
             contentType: `application/json`,
             success: function(response) {
                 let id = String(response.id);
-                console.log(id);
                 $.ajax({
                     type: "POST",
                     url: "/shop/processEcpay",

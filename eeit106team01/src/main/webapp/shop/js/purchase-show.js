@@ -82,7 +82,7 @@ function showAjaxModalReview(purchaseId, memberId) {
                             `<tr>
                 <td id="` + purchaseListId + `"><a href="/shop/product.html?` + productId + `" target="_blank">` + productName.substr(0, 8) + `...</a>` + `</td>
                 <td style="font-size:15px">` + productSN + `</td>
-                <td><a title="分數: ` + reviewStatus + ` 評論: ` + response[0].comment + `">` + generateRatingStarUtil(reviewStatus) + `</a></td>
+                <td><a name="` + response[0].comment + `" class="` + productSN + `" onclick="editReview(this,` + reviewStatus + `,` + response[0].id + `)" title="分數: ` + reviewStatus + ` 評論: ` + response[0].comment + `">` + generateRatingStarUtil(reviewStatus) + `</a></td>
                 <td>
                     <a href="javascript:;" onclick="reviewEdit()" class="btn btn-info btn-lg btn-icon icon-left disabled">
                         <i class="entypo-comment"></i> 評分
@@ -240,5 +240,53 @@ function newReview(purchaseListIds, productId) {
                 }
             });
         }
+    });
+}
+
+//updateReview
+function editReview(obj, reviewStatus, reviewId) {
+    $('#modal-8 .modal-body tbody .edit-review').empty();
+    $('#modal-8 .modal-footer span').empty();
+    $('#modal-8 .modal-body tbody').append(
+        `<tr class="edit-review">
+    <th colspan="4">序號: &nbsp;&nbsp;&nbsp;<strong>` + $(obj).attr(`class`) + `</strong></th>
+    </tr>
+    <tr class="edit-review">
+        <th colspan="4">評分</th>
+    </tr>
+    <tr class="edit-review">
+    <td colspan="4"><input id="edit-rating" type="number" class="form-control-sm" min="0" max="5" step="0.5" value="` + reviewStatus + `"></input></td>
+    </tr>
+    <tr class="edit-review">
+    <th colspan="4">評論</th>
+    </tr>
+    <tr class="edit-review">
+    <td colspan="4"><textarea type="text" style="width:400px;height:100px;" placeholder="` + $(obj).attr(`name`) + `" value="` + $(obj).attr(`name`) + `"></textarea></td>
+    </tr>`
+    );
+    $('#modal-8 .modal-footer').prepend(`<span><button type="button" class="btn btn-primary btn-lg" id="model-update">修改</button></span>`);
+    updateReview(reviewId);
+}
+
+function updateReview(reviewId) {
+    $(`#model-update`).click(function() {
+        let json = new Object();
+        json.id = reviewId;
+        json.rating = $(`#edit-rating`).val();
+        if ($(`textarea`).val() != "") {
+            json.comment = $(`textarea`).val();
+        } else {
+            json.comment = $(`textarea`).attr(`value`);
+        }
+        let data = JSON.stringify(json);
+        $.ajax({
+            type: "PUT",
+            url: "/shop/updateReview",
+            data: data,
+            contentType: `application/json`,
+            success: function(response) {
+                location.href = location.href;
+            }
+        });
     });
 }

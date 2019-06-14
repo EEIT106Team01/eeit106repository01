@@ -36,7 +36,7 @@ function updateCounter(selector, value) {
 
 //revert
 $("#draggable-events").draggable({
-    revert: true
+    // revert: true
 });
 
 //Card Accordion

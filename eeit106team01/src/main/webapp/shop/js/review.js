@@ -107,7 +107,11 @@ function updateReview(reviewId) {
         let json = new Object();
         json.id = reviewId;
         json.rating = $(`#edit-rating`).val();
-        json.comment = $(`textarea`).val();
+        if ($(`textarea`).val() != "") {
+            json.comment = $(`textarea`).val();
+        } else {
+            json.comment = $(`textarea`).attr(`value`);
+        }
         let data = JSON.stringify(json);
         $.ajax({
             type: "PUT",
