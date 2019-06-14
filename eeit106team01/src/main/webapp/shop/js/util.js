@@ -11,6 +11,9 @@ if (memberBean != undefined) {
 // Verify Login
 function verifyLogin() {
     if (memberBean == undefined) {
+        // $("body").text("");
+        // alert("請先登入");
+        sessionStorage.setItem("previousPage", location.pathname + location.search);
         location.href = "/forum/login.html";
     }
 }

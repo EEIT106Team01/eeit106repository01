@@ -248,6 +248,8 @@ function newPurchase() {
 
         let cartLocalStorage = localStorage;
         cartLocalStorage.clear();
+        
+        console.log(data);
 
         $.ajax({
             type: "POST",
@@ -265,6 +267,9 @@ function newPurchase() {
                         $(`body`).html(response);
                     }
                 });
+            },
+            error: function(jqXHr){
+                console.log(jqXHr);
             }
         });
     })

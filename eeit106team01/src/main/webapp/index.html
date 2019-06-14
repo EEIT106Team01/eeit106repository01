@@ -55,7 +55,7 @@
             max-width: 1130px;
             padding: 15px;
             margin: auto;
-            min-height: 1422px;
+            /* height: 1422px; */
             /* height: 100%; */
             background-color: #ffffff;
             box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
@@ -86,12 +86,14 @@
             margin-bottom: 10px;
         }
 
-        #requestTopicBlock, #requestTopicSearchBlock {
-            height: 386px;
+        #requestTopic,
+        #requestTopicSearch {
+            height: 288px;
         }
 
-        #shareTopicBlock, #shareTopicSearchBlock {
-            height: 690px;
+        #shareTopic,
+        #shareTopicSearch {
+            height: 592px;
         }
 
         /* #requestTopicHeader {
@@ -112,7 +114,7 @@
             width: 600px;
             margin-left: 190px;
             border: 1px solid #d4d4d4;
-            box-shadow: 0 5px 20px rgba(156,160,171,0.25);
+            box-shadow: 0 5px 20px rgba(156, 160, 171, 0.25);
         }
 
         input {
@@ -187,6 +189,7 @@
             autocomplete(document.getElementById("myInput"));
             searchInput = getUrlParameters().q;
             if (searchInput) {
+                $(".myTopicList").height(1427);
                 $("#requestTopicBlock").hide();
                 $("#shareTopicBlock").hide();
                 getTopicList(startPosition, maxResult, "requestTopic", currentOrderType, searchInput);
@@ -194,6 +197,7 @@
                 getTopicList(startPosition, maxResult, "shareTopic", currentOrderType, searchInput);
                 getTopicsNum("shareTopic", searchInput);
             } else {
+                $(".myTopicList").height(1392);
                 $("#searchTopicBlock").hide();
                 getTopicList(startPosition, maxResult, "requestTopic", currentOrderType, "");
                 getTopicsNum("requestTopic", "");
