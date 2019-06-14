@@ -331,8 +331,7 @@ public class PurchaseController {
 			purchaseSucessMsg.setColor(Color.gray);
 			purchaseSucessMsg.setIcon("entypo-comment");
 			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
-			purchaseSucessMsg.setMessage(
-					"商品: " + result.get(0).getProductId().getName().substring(0, 3) + "... " + ", 已新增一則評論。");
+			purchaseSucessMsg.setMessage("評論: "+ " 已新增一則評論, " + "商品: " + result.get(0).getProductId().getName().substring(0, 3) + "... ");
 			notificationService.sendNotificationToUser(result.get(0).getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
@@ -444,8 +443,7 @@ public class PurchaseController {
 			purchaseSucessMsg.setColor(Color.gray);
 			purchaseSucessMsg.setIcon("entypo-comment");
 			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
-			purchaseSucessMsg
-					.setMessage("商品: " + result.getProductId().getName().substring(0, 3) + "... " + ", 已修改一則評論。");
+			purchaseSucessMsg.setMessage("評論: "+ " 已修改一則評論, " + "商品: " + result.getProductId().getName().substring(0, 3) + "... ");
 			notificationService.sendNotificationToUser(result.getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
@@ -535,7 +533,8 @@ public class PurchaseController {
 			purchaseSucessMsg.setColor(Color.gray);
 			purchaseSucessMsg.setIcon("entypo-doc-text");
 			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
-			purchaseSucessMsg.setMessage("訂單編號: " + ecpaySN + " 已收到您的款項 " + " ,共 $ "
+			purchaseSucessMsg.setMessage("訂單: 已收到您的款項, "
+					+ "編號: " + ecpaySN + " 共 $  "
 					+ (purchaseBean.getProductTotalPrice() + purchaseBean.getDeliverPrice()) + " 元。");
 			notificationService.sendNotificationToUser(purchaseBean.getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
