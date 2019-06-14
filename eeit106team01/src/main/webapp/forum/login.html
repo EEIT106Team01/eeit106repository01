@@ -28,6 +28,24 @@
   <script>
 
     document.addEventListener("DOMContentLoaded", function () {
+      $("#email").focusout(function () {
+        $.ajax({
+          url: "/checkMemberName?name=" + $("#email").val(),
+          type: "GET",
+          success: function (checkedMember) {
+            if (checkedMember.name) {
+              $(".indicator").hide();
+            } else {
+              $(".indicator").show();
+            }
+          },
+          error: function (jqXHR, textStatus) {
+            console.log("error");
+            console.log(jqXHR.status);
+            console.log(jqXHR);
+          }
+        });
+      });
       $("#login").on("click", function (e) {
         e.preventDefault();
         // $(".formField input").attr("readonly", true);
@@ -53,15 +71,19 @@
           success: function (data, textStatus, jqXHR) {
             console.log("success");
             console.log("回傳值 : " + data);
-            console.log("cookie: " + Cookies.get("MemberBean"));
-            let redirect = sessionStorage.getItem("previousPage");
-            sessionStorage.removeItem("previousPage");
-            console.log(redirect);
-            console.log(location.pathname + location.search);
-            if ((!redirect) || redirect == location.pathname + location.search) {
-              redirect = "/index.html";
+            if (data.id) {
+              console.log("cookie: " + Cookies.get("MemberBean"));
+              let redirect = sessionStorage.getItem("previousPage");
+              sessionStorage.removeItem("previousPage");
+              console.log(redirect);
+              console.log(location.pathname + location.search);
+              if ((!redirect) || redirect == location.pathname + location.search) {
+                redirect = "/index.html";
+              }
+              location.href = redirect;
+            } else {
+              alert("帳號或密碼錯誤");
             }
-            location.href = redirect;
           },
           error: function (jqXHR, textStatus) {
             console.log("error");
@@ -77,6 +99,10 @@
   </script>
 
   <style>
+    .indicator {
+      color : red;
+    }
+
     /* colors */
 
     /* html {
@@ -373,7 +399,7 @@
           <input type="text" id="email" class="email" maxlength="256" placeholder="使用者名稱" autocomplete="off">
           <!-- <input type="text" name="memberName" id="memberName" placeholder="使用者名稱">  -->
           <!-- <p class="helper helper1">email@domain.com</p> -->
-          <span class="indicator"></span>
+          <span class="indicator" style="display:none">不存在的帳號</span>
         </div>
         <div class="inputGroup inputGroup2">
           <label for="password">密碼</label>
@@ -385,8 +411,8 @@
           <!-- <input type="button" value="Login" id="login" /> -->
         </div>
       </form>
-		</div>
-</div>
+    </div>
+  </div>
   <!-- JavaScripts initializations and stuff -->
   <!-- YW: this is important for navbar -->
   <script src="/assets/js/neon-custom.js"></script>

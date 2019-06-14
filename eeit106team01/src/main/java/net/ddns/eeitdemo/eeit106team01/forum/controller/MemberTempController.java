@@ -214,7 +214,7 @@ public class MemberTempController {
 			}
 		}
 		System.out.println("登入失敗");
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(new MemberTempBean());
 	}
 
 	@GetMapping(path = { "/forumlogout" }, produces = { "application/json" })
