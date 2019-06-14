@@ -210,7 +210,8 @@ function getKeyword() {
             $.each(keywordData, function() {
                 kwArray.push(
                     '<a href="/shop/search.html?productName=' + keywordData[i].keyword + '&productType=All">' +
-                    '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + ' </button>')
+                    '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + '</button>'+
+                    '<span>&nbsp</span>')
                 i++
             })
             if (kwArray.length < 5) {
