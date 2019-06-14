@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
+import java.awt.Color;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -25,6 +26,8 @@ import net.ddns.eeitdemo.eeit106team01.shop.model.RefundListBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.PurchaseService;
 import net.ddns.eeitdemo.eeit106team01.shop.model.service.RefundService;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationMsg;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationService;
 
 @RestController
 public class RefundController {
@@ -34,6 +37,9 @@ public class RefundController {
 
 	@Autowired
 	private PurchaseService purchaseService;
+	
+	@Autowired
+	private NotificationService notificationService;
 
 	private NewDate newDate = new NewDate();
 	
@@ -67,8 +73,7 @@ public class RefundController {
 			if (key.equalsIgnoreCase("purchaseListIds")) {
 				String stringId = (String) value;
 				Long purchaseListId = Long.valueOf(stringId);
-				PurchaseListBean purchaseListBean = purchaseService.findPurchaseListById(purchaseListId, "purchaseList")
-						.get(0);
+				PurchaseListBean purchaseListBean = purchaseService.findPurchaseListById(purchaseListId, "purchaseList").get(0);
 				purchaseListBeans.add(purchaseListBean);
 				refundBean.setMemberId(purchaseListBean.getPurchaseId().getMemberId());
 			} else if (key.equalsIgnoreCase("comment")) {
@@ -77,6 +82,13 @@ public class RefundController {
 		}
 		RefundBean result = refundService.newRefund(purchaseListBeans, refundBean);
 		if (result != null && result.isNotNull()) {
+			// Send notification
+			NotificationMsg purchaseSucessMsg = new NotificationMsg();
+			purchaseSucessMsg.setColor(Color.gray);
+			purchaseSucessMsg.setIcon("entypo-comment");
+			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
+			purchaseSucessMsg.setMessage("退貨: "+ " 已新增一筆退貨申請, " + "商品: " + purchaseListBeans.get(0).getProductId().getName().substring(0, 3) + "... ");
+			notificationService.sendNotificationToUser(result.getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);

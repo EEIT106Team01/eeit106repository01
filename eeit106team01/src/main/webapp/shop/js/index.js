@@ -1,14 +1,11 @@
 $(document).ready(function() {
         //verify is admin
         if (memberBean != undefined) {
-            $(`#draggable-events`).show();
-            addToCart();
             if (member.level == "administrator") {
                 location.href = "/shop/CMS.html";
             }
-        } else {
-            $(`#draggable-events`).hide();
         }
+        hideCart();
 
         getProducts()
         getAllType()

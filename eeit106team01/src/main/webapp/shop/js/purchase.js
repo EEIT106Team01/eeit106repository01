@@ -249,7 +249,7 @@ function newPurchase() {
 
         let cartLocalStorage = localStorage;
         cartLocalStorage.clear();
-        
+
         console.log(data);
 
         $.ajax({
@@ -269,7 +269,7 @@ function newPurchase() {
                     }
                 });
             },
-            error: function(jqXHr){
+            error: function(jqXHr) {
                 console.log(jqXHr);
             }
         });

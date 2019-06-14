@@ -108,6 +108,7 @@ function addToCart() {
     $(document).ready(function() {
         $("#card-shopping-cart-count").text(cartLocalStorageCount);
         if (cartLocalStorageCount > 0) {
+            $(`#accordion-shopping-cart .scrollable`).empty();
             var jsonArray = [];
             allStorage().forEach(element => {
                 var result = JSON.parse(element);
