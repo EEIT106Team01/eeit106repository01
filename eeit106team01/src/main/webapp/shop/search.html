@@ -229,6 +229,34 @@
 
         <div class="main-content">
 
+            <!-- drag and drop start  -->
+            <div class="row" id="div-draggable-events">
+                <div>
+                    <!-- Card -->
+                    <div id="draggable-events" class="card">
+
+                        <!-- Card image -->
+                        <div class="card-header p-2" id="card-shopping-cart">
+                            <span>
+                                <img class="card-img-top mr-1" src="img/cart.png" alt="Shopping Cart" />
+                                <span class="badge badge-warning align-middle pt-1">
+                                    <p class="text-dark" id="card-shopping-cart-count">0</p>
+                                </span>
+                            </span>
+                        </div>
+
+                        <!--Accordion wrapper 1-->
+                        <div class="accordion md-accordion" style="display: none" id="accordion-shopping-cart" role="tablist" aria-multiselectable="true">
+                            <div class="scrollable" data-height="300">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Card -->
+                </div>
+            </div>
+            <!-- drag and drop end -->
+
             <ol class="breadcrumb">
                 <li>
                     <a href="/shop/index.html">
@@ -501,6 +529,11 @@
 
     <!-- JavaScripts initializations and stuff -->
     <script src="/assets/js/neon-custom.js"></script>
+
+    <!-- Shopping Cart -->
+    <script type="text/javascript " src="js/shopping-cart.js"></script>
+    <script type="text/javascript " src="js/util.js"></script>
+    <link rel="stylesheet" href="css/shopping-cart.css" />
 
     <!-- Demo Settings -->
     <script src="/assets/js/neon-demo.js"></script>

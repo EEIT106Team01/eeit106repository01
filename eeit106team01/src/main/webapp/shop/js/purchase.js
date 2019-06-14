@@ -269,7 +269,7 @@ function newPurchase() {
                     }
                 });
             },
-            error: function(jqXHr){
+            error: function(jqXHr) {
                 console.log(jqXHr);
             }
         });

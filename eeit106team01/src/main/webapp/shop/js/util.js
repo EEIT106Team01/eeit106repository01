@@ -20,6 +20,16 @@ function verifyLogin() {
     }
 }
 
+// Verify Login hide cart
+function hideCart() {
+    if (memberBean != undefined) {
+        $(`#draggable-events`).show();
+        addToCart();
+    } else {
+        $(`#draggable-events`).hide();
+    }
+}
+
 // Controller
 const getOneProduct = `shop/product.html?`;
 
