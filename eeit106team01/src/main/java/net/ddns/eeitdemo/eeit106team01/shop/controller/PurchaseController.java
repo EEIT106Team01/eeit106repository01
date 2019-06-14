@@ -483,7 +483,7 @@ public class PurchaseController {
 		obj.setTotalAmount(String.valueOf(purchase.getProductTotalPrice() + purchase.getDeliverPrice()));
 		obj.setTradeDesc("三寶商城");
 		obj.setReturnURL("http://211.23.128.214:5000");
-		obj.setClientBackURL("http://localhost:8080/shop/receipt.html?" + tradeNo);
+		obj.setClientBackURL("https://eeitdemo.ddns.net/shop/receipt.html?" + tradeNo);
 		StringBuilder itemNameAndCountAndPrice = new StringBuilder();
 		HashMap<String, Integer> productMap = new HashMap<>();
 		for (PurchaseListBean purchaseListBean : purchaseListBeans) {
