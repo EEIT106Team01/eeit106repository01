@@ -226,6 +226,8 @@ function newPurchase() {
         let productTotalPrice = $(`#productsTotalPrice`).text().replace(/\$/, ``);
         let deliverStatus = `unsent`;
         let deliverType = `address`;
+        let deliveryPrice = parseInt($(`#deliveryPrice`).text().replace(`$`, ``));
+        console.log(deliveryPrice);
         getProductFromCart().forEach(product => {
             for (let index = 0; index < product.quantity; index++) {
                 productIds.push(product.id);
