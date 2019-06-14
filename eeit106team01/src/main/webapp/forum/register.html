@@ -48,6 +48,10 @@
             padding-bottom: 18px;
             margin-bottom: 24px;
         }
+        
+        .errorMessage {
+            color: red;
+        }
 
         input[type="text"],
         input[type='password'] {
@@ -72,14 +76,32 @@
     </style>
     <script>
         let registerMemberBean = Cookies.get("MemberBean");
-		// console.log("CookieMember: " + registerMemberBean);
-		if (registerMemberBean) {
-			location.href = "/index.html";
-		}
+        // console.log("CookieMember: " + registerMemberBean);
+        if (registerMemberBean) {
+            location.href = "/index.html";
+        }
 
         document.addEventListener("DOMContentLoaded", function () {
+            $("#memberNameError").hide();
             $("#register").click(register);
-
+            $("#memberName").focusout(function () {
+                $.ajax({
+                    url: "/checkMemberName?name=" + $("#memberName").val(),
+                    type: "GET",
+                    success: function (checkedMember) {
+                        if (checkedMember.name) {
+                            $("#memberNameError").show();
+                        } else {
+                            $("#memberNameError").hide();
+                        }
+                    },
+                    error: function (jqXHR, textStatus) {
+                        console.log("error");
+                        console.log(jqXHR.status);
+                        console.log(jqXHR);
+                    }
+                });
+            });
         })
 
         function register() {
@@ -110,14 +132,18 @@
                     console.log("success");
                     console.log("回傳值 : ");
                     console.log(data);
-                    console.log("cookie: " + Cookies.get("MemberBean"));
-                    let redirect = sessionStorage.getItem("previousPage");
-                    console.log(redirect);
-                    console.log(location.pathname + location.search);
-                    if ((!redirect) || redirect == location.pathname + location.search) {
-                        redirect = "/index.html";
+                    if (data.id) {
+                        console.log("cookie: " + Cookies.get("MemberBean"));
+                        let redirect = sessionStorage.getItem("previousPage");
+                        console.log(redirect);
+                        console.log(location.pathname + location.search);
+                        if ((!redirect) || redirect == location.pathname + location.search) {
+                            redirect = "/index.html";
+                        }
+                        location.href = redirect;
+                    } else {
+                        alert("已存在的帳號");
                     }
-                    location.href = redirect;
                 },
                 error: function (data, textStatus, jqXHR) {
                     console.log("error");
@@ -147,6 +173,9 @@
                     </div>
                     <div class="col-md-12">
                         <input type="text" name="memberName" id="memberName" placeholder="請輸入帳號">
+                    </div>
+                    <div class="col-md-12">
+                        <span class="errorMessage" id="memberNameError">帳號重複</span>
                     </div>
                 </div>
                 <div class="col-md-12 itemBlock">
