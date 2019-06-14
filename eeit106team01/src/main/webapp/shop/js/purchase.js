@@ -2,44 +2,50 @@
 $(function() {
     verifyLogin();
     //Time
-    $(`#currentTime`).text(getLocaleTime(currentTime));
+    $(`#currentTime`).text(getLocaleTime(getCurrentTime()));
     //Purchase ID
     getNewPurchaseId();
     //Products
-    $(`#productsFromCart`).append(generateProductHtml());
-    if ($(`#productsFromCart tr`).length == 0) {
-        location.href = `/shop/index.html`;
-    }
+    appendProduct();
     //delivery price 
-    if ($(`#productsFromCart tr`).length == 1 && $($(`#productsFromCart tr:last td`).eq(1)).text().match(/VIP會員/)) {
-        $(`#deliveryPrice`).append(0);
+    if (($(`#productsFromCart tr`).length == 1 && $($(`#productsFromCart tr:last td`).eq(1)).text().match(/VIP會員/)) || member.level.match(/VIP/)) {
+        $(`#deliveryPrice`).append(`$` + 0);
     } else {
-        $(`#deliveryPrice`).append(60);
+        $(`#deliveryPrice`).append(`$` + 60);
     }
     let deliveryPrice = $(`#deliveryPrice`).text().replace(`$`, ``);
-
     //Price
-    $(`#productsTotalPrice`).append(generateProductsTotalPrice());
-    if (memberDiscount) {
-        $(`#totalPrice`).append(
-            Math.round((generateProductsTotalPrice() + parseInt(deliveryPrice)) * 0.9)
-        );
-        $(`#memberDiscount`).empty();
-        $(`#memberDiscount`).append(`VIP`);
-    } else {
-        $(`#totalPrice`).append(
-            generateProductsTotalPrice() + parseInt(deliveryPrice)
-        );
-        $(`#memberDiscount`).empty();
-        $(`#memberDiscount`).append(`無折扣`);
-    }
+    appendTotalPrice(deliveryPrice);
     newPurchase();
     quantityBtn();
 });
 
-//RETURN VALUES
-let shoppingCart = findAllFromLocalStorage();
-let currentTime = getCurrentTime();
+function appendProduct() {
+    $(`#productsFromCart`).empty();
+    $(`#productsFromCart`).append(generateProductHtml());
+    if ($(`#productsFromCart tr`).length == 0) {
+        location.href = `/shop/index.html`;
+    }
+}
+
+function appendTotalPrice(deliveryPrice) {
+    $(`#productsTotalPrice`).empty();
+    $(`#productsTotalPrice`).append(`$` + generateProductsTotalPrice());
+    if (memberDiscount) {
+        $(`#totalPrice`).empty();
+        $(`#totalPrice`).append(`$`);
+        $(`#totalPrice`).append(
+            Math.round((generateProductsTotalPrice() + parseInt(deliveryPrice)) * 0.9));
+        $(`#memberDiscount`).empty();
+        $(`#memberDiscount`).append(`VIP`);
+    } else {
+        $(`#totalPrice`).empty();
+        $(`#totalPrice`).append(`$`);
+        $(`#totalPrice`).append(generateProductsTotalPrice() + parseInt(deliveryPrice));
+        $(`#memberDiscount`).empty();
+        $(`#memberDiscount`).append(`無折扣`);
+    }
+}
 
 //TAGS
 let timeTitle = $(`#currentTime`).text();
@@ -77,7 +83,7 @@ function getNewPurchaseId() {
 
 //Product From Cart
 function getProductFromCart() {
-    return shoppingCart;
+    return findAllFromLocalStorage();
 }
 
 function generatePurchaseId(purchaseId) {
@@ -91,11 +97,7 @@ function generateProductHtml() {
     products.forEach(product => {
         let productDiv =
             `<tr>` +
-            `<td class="text-center" id="` +
-            product.id +
-            `">` +
-            (products.indexOf(product) + 1) +
-            `</td>` +
+            `<td class="text-center" id="` + product.id + `">` + (products.indexOf(product) + 1) + `</td>` +
             `<td>` +
             product.name +
             `</td>` +
@@ -177,7 +179,21 @@ function editTotalPrice(id, boolean, price, name, otherPrice) {
                     let newP = JSON.stringify(newProduct);
                     cart.removeItem(element.id);
                     cart.setItem(element.id, newP);
-                    location.href = location.href;
+                    //Products
+                    appendProduct();
+                    //delivery price 
+                    if (($(`#productsFromCart tr`).length == 1 && $($(`#productsFromCart tr:last td`).eq(1)).text().match(/VIP會員/)) || member.level.match(/VIP/)) {
+                        $(`#deliveryPrice`).empty();
+                        $(`#deliveryPrice`).append(`$` + 0);
+                    } else {
+                        $(`#deliveryPrice`).empty();
+                        $(`#deliveryPrice`).append(`$` + 60);
+                    }
+                    let deliveryPrice = $(`#deliveryPrice`).text().replace(`$`, ``);
+                    //Price
+                    appendTotalPrice(deliveryPrice);
+                    newPurchase();
+                    quantityBtn();
                 }
             });
         }
@@ -195,7 +211,21 @@ function editTotalPrice(id, boolean, price, name, otherPrice) {
                     let newP = JSON.stringify(newProduct);
                     cart.removeItem(element.id);
                     cart.setItem(element.id, newP);
-                    location.href = location.href;
+                    //Products
+                    appendProduct();
+                    //delivery price 
+                    if (($(`#productsFromCart tr`).length == 1 && $($(`#productsFromCart tr:last td`).eq(1)).text().match(/VIP會員/)) || member.level.match(/VIP/)) {
+                        $(`#deliveryPrice`).empty();
+                        $(`#deliveryPrice`).append(`$` + 0);
+                    } else {
+                        $(`#deliveryPrice`).empty();
+                        $(`#deliveryPrice`).append(`$` + 60);
+                    }
+                    let deliveryPrice = $(`#deliveryPrice`).text().replace(`$`, ``);
+                    //Price
+                    appendTotalPrice(deliveryPrice);
+                    newPurchase();
+                    quantityBtn();
                 }
             });
         }
@@ -222,11 +252,10 @@ function newPurchase() {
         let url = `/shop/newPurchase`;
         let productIds = [];
         let payStatus = `unpaid`;
-        let productTotalPrice = $(`#productsTotalPrice`).text().replace(/\$/, ``);
+        let productTotalPrice = $(`#totalPrice`).text().replace(/\$/, ``);
         let deliverStatus = `unsent`;
         let deliverType = `address`;
         let deliveryPrice = parseInt($(`#deliveryPrice`).text().replace(`$`, ``));
-        console.log(deliveryPrice);
         getProductFromCart().forEach(product => {
             for (let index = 0; index < product.quantity; index++) {
                 productIds.push(product.id);
@@ -249,8 +278,6 @@ function newPurchase() {
 
         let cartLocalStorage = localStorage;
         cartLocalStorage.clear();
-
-        console.log(data);
 
         $.ajax({
             type: "POST",

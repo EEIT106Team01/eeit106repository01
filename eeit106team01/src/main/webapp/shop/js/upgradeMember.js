@@ -44,10 +44,9 @@ function IntoCart(productId, price, name, image) {
     }
 
     var result = cartLocalStorage.getItem(productId);
-    location.href = location.href;
-
+    verifyLogin();
 }
 
 $(function() {
-    addToCart();
+    verifyLogin();
 });

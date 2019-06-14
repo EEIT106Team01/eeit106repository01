@@ -50,7 +50,7 @@ function findReview(ProductId, memberId) {
                 if (element.memberId.id == memberId) {
                     $(`#table-2 tbody`).append(
                         `<tr>
-                        <td>` + element.memberId.id + ` </td>
+                        <td>` + element.memberId.name + ` </td>
                         <td><a href="javascript:;" name="` + element.comment + `" onclick="showAjaxModal(this` + `,` + +reviewId + `,` + element.memberId.id + `,` + element.rating + `)">` + generateRatingStar(element.rating) + `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` + element.rating + `分</a></td>
                         <td><a href="javascript:;" name="` + element.comment + `" onclick="showAjaxModal(this` + `,` + +reviewId + `,` + element.memberId.id + `,` + element.rating + `)">` + element.comment + `</a></td>
                         <td>` + getLocaleTime(element.updatedTime) + `</td>
