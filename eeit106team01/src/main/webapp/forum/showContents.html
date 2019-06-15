@@ -194,8 +194,9 @@
                     }
                 }
                 $(".content-content").append(createChangePageBtn());
-                $('[data-toggle="popover"]').popover();
+                
             }
+            $('[data-toggle="popover"]').popover();
             setTimeout(resizeWindow, 50);
             vipVideoCheck();
         }
@@ -832,7 +833,7 @@
                 , center: { lat: topicBean.accidentLocationLatitude, lng: topicBean.accidentLocationLongitude }
                 , scaleControl: true
                 , mapTypeControlOptions: { mapTypeIds: [] }
-                , gestureHandling: 'greedy'
+                // , gestureHandling: 'greedy'
             });
 
             // google.maps.event.addListener(map, 'click', function (event) {

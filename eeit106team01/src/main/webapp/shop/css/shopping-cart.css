@@ -3,7 +3,7 @@
 #div-draggable-events {
     position: fixed;
     z-index: 1000;
-    right: 30px;
+    right: -10px;
 }
 
 #draggable-events {

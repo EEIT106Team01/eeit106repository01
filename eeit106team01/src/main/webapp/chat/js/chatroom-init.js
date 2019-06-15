@@ -58,6 +58,12 @@ cookieJs.src = '/js/js.cookie.min.js';
 head.appendChild(cookieJs);
 // ----------append cookie js end
 
+// ----------append user not found style
+var userNotFound = document.createElement('style');
+userNotFound.innerHTML = ".userNotFound::placeholder{color:red;opacity:1}"
+head.appendChild(userNotFound);
+// ----------append user not found style end
+
 function onSubmitMessage(id, msg, chatData) {
     // console.log(id);
     // console.log(msg);
@@ -269,10 +275,12 @@ function workerInit() {
                         neonChat.refreshUserIds();
                     }
                     getOnlineUsers();
-                    $("#checkUser").attr("placeholder", "Search User");
+                    $("#checkUser").attr("placeholder", "搜尋用戶");
+                    $("#checkUser").removeClass("userNotFound");
                 }
             } else {
-                $("#checkUser").attr("placeholder", "User does not exist!");
+                $("#checkUser").attr("placeholder", "用戶不存在！");
+                $("#checkUser").addClass("userNotFound");
             }
             $("#checkUser").val("");
         } else if (e.data.command == "getOnlineUsers") {
@@ -384,12 +392,12 @@ $(document).ready(function () {
         + '<a href="#" class="chat-close"><i class="entypo-cancel"></i></a>'
 
         + '<i class="entypo-users"></i>'
-        + 'Chat'
+        + '聊天室'
         + '<span class="badge badge-success is-hidden">0</span>'
         + '</h2>'
 
         + '<div class="chat-group" id="group-1">'
-        + '<strong>區域</strong>'
+        + '<strong>區域訊息</strong>'
 
 
         + '<a href="#" id="north"><span class="user-status is-offline"></span> <em>北部聊天室</em></a>'
@@ -400,8 +408,8 @@ $(document).ready(function () {
 
 
         + '<div class="chat-group" id="group-2">'
-        + '<strong>Contacts</strong>'
-        + '<input type="text" id="checkUser" class="form-control" placeholder="Search User" style="margin: 1% 10% 1% 10%;width: 80%" />'
+        + '<strong>私人訊息</strong>'
+        + '<input type="text" id="checkUser" class="form-control" placeholder="搜尋用戶" style="margin: 1% 10% 1% 10%;width: 80%" />'
         + '</div>'
 
         + '</div>'
@@ -755,6 +763,12 @@ $(document).ready(function () {
 
             submitMessage: function () // Submit whats on textarea
             {
+                var textMsg = quillChat.getText().trim();
+                // console.log(textMsg);
+                if (textMsg.length == 0) {
+                    quillChat.setText('');
+                    return;
+                }
                 // var msg = $.trim($textarea.val());
                 var msg = JSON.stringify(quillChat.getContents());
 

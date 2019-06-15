@@ -14,11 +14,11 @@ import net.ddns.eeitdemo.eeit106team01.shop.ecpay.example.integration.errorMsg.E
 import net.ddns.eeitdemo.eeit106team01.shop.ecpay.example.integration.exception.EcpayException;
 
 public class PaymentVerifyBase{
-	protected String confPath = "/net/ddns/eeitdemo/eeit106team01/shop/ecpay/example/integration/config/EcpayPayment.xml";
+	protected String confPath = "classpath:EcpayPayment.xml";
 	protected Document doc;
 	public PaymentVerifyBase(){
 		URL fileURL = this.getClass().getResource(confPath);
-		doc = EcpayFunction.xmlParser(fileURL.toString());
+		doc = EcpayFunction.xmlParser(confPath);
 		doc.getDocumentElement().normalize();
 	}
 	
