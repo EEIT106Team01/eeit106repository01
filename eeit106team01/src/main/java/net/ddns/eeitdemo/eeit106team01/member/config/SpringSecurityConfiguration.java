@@ -41,4 +41,5 @@ public class SpringSecurityConfiguration extends WebSecurityConfigurerAdapter {
         .disable()
 		;
 	}
+	
 }

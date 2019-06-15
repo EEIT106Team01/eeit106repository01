@@ -5,7 +5,7 @@
   <!-- <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
   <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg"
     color="#111"> -->
-  <title>登入</title>
+  <title>行車發大財</title>
   <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700" rel="stylesheet">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -25,77 +25,14 @@
   <script src="/chat/js/stomp.min.js"></script>
   <script src="/chat/js/chatroom-init.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <style>
-  
-  	.mycontainer{
-/*   		border: 1px solid black; */
-  		display: flex;
-  		position:relative;
-  		justify-content: center;
-  	}
-  	.mylogo{
-  		display:inline-block;
-/*   		border: 1px solid pink; */
-  		margin: 0 100px;
-  		overflow:auto;
-  	}
-  	.mylogo img{
-  		width:480px;
-  	}
-  	.myform{
-  		display:inline-block;
-/* 		border: 1px solid green; */
- 		margin: 0 100px;
- 		box-sizing:border-box;
- 		padding:20px;
- 		background-color: #f2f2f2;
- 		border-radius: 5px;
- 		box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.19);
-  	}
-  	.myform input,.myform p,.myform h3{
-  		margin:0;
-  	}
-  	.myform input,.myform button,.btn{
-  		width:100%;
-  		border: none;
-  		border-radius: 4px;
-  		font-size: 17px;
-  		opacity:0.85;
-  		text-decoration: none;
-  		padding: 12px;
-  	}
-  	.myform input:hover,.myform button:hover,.btn:hover{
-  		opacity:1;
-  		color: white;
-  	}
-  	.myform h3{
-  		text-align:center;
-  		padding-bottom: 12px;
-  	}
-  	.myform input{
-  		padding-left: 12px;
-  	}
-  	.myform button[type=submit]{
-  		background-color: #4CAF50;
-  		color: white;
-  	}
-  	
-  	.myform-block{
-  		margin-bottom: 15px;
-  	}
-  	.google {
-	  background-color: #dd4b39;
-	  color: white;
-	  text-align: left;
-	  
-	}
-	.fb {
-	  background-color: #3B5998;
-	  color: white;
-	  text-align: left;
-	}
-  </style>
+	<link rel="stylesheet" href="css/member.css">
+	<script src='js/member.js'></script>
+	<script type="text/javascript">
 
+	</script>
+	<style>
+
+	</style>
 </head>
 <body class="page-body" data-url="http://neon.dev" translate="no">
   <!-- include navbar when window.onload-->
@@ -108,31 +45,36 @@
     			<img src='image/FaDaTtsai.png'>
     		</div>
     		<div class='myform'>
-    			<form>
-	    			<div><h3>會員登入</h3></div>
-	    			<div class='myform-block'><div><p>帳號:</p></div>
-	    			<div><input type='text' name='username' id='username' placeholder="username"></div></div>
-	    			<div class='myform-block'><div><p>密碼:</p></div>
-	    			<div><input type="password" name='password' id='password' placeholder="password"></div></div>
-	    			<div class='myform-block'>
-	    			<div><button type='submit'>登入</button></div></div>
-	    			<div class='myform-block'>
-	    				<a href="#" class="btn fb"><i class="fa fa-facebook fa-fw"></i> Login with Facebook </a>
-	    			</div>
-	    			<div class='myform-block'>
-	    				<a href="#" class="btn google"><i class="fa fa-google fa-fw"></i> Login with Google+</a>
-	    			</div>
-	    			<div class='myform-block'>
-	    				<p><a href='#'>忘記密碼? </a></p>
-	    			</div>
-    			</form>
+    			<div class='myform-title'>
+					<ul class='myform-title-ul'>
+						<li id="login" class='myform-title-ul-li myform-title-assigned'><a href="javascript:;" onclick="changeTitle(this)">會員登入</a></li>
+						<li id="register" class='myform-title-ul-li'><a href="javascript:;" onclick="changeTitle(this)">會員註冊</a></li>
+						<li id="forget" class='myform-title-ul-li'><a href="javascript:;" onclick="changeTitle(this)">忘記密碼</a></li>
+					</ul>
+				</div>
+    			<div class='myform-main' id="main-form">
+	    			<form action='javascript:;' onsubmit='login(this)'>
+		    			<div><h3>會員登入</h3></div>
+		    			<div class='myform-block'><div><p>帳號:</p></div>
+		    			<div><input type='text' name='username' id='username' autocomplete="off" maxlength="25"  placeholder="username"></div></div>
+		    			<div class='myform-block'><div><p>密碼:</p></div>
+		    			<div><input type="password" name='password' id='password' autocomplete="off" maxlength="255" placeholder="password"></div></div>
+		    			<div class='myform-block'>
+		    			<div><button type='submit'>登入</button></div></div>
+		    			<div class='myform-block'>
+		    				<a href="#" class="btn fb"><i class="fa fa-facebook fa-fw"></i> Login with Facebook </a>
+		    			</div>
+		    			<div class='myform-block'>
+		    				<a href="#" class="btn google"><i class="fa fa-google fa-fw"></i> Login with Google+</a>
+		    			</div>
+	    			</form>
+	    		</div>
     		</div>
     	</div>
 	</div>
  </div>
  
  <script src="/assets/js/neon-custom.js"></script>
-
   <!-- Bottom scripts (common) -->
   <script src="/assets/js/gsap/TweenMax.min.js"></script>
   <script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
