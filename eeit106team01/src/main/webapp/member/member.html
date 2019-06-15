@@ -26,10 +26,9 @@
   <script src="/chat/js/chatroom-init.js"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 	<link rel="stylesheet" href="css/member.css">
-	<script src='js/member.js'></script>
-	<script type="text/javascript">
-
-	</script>
+	<script src='js/member-resources.js'></script>
+	<script src='js/member-ajax.js'></script>
+	<script src='js/member-templater.js'></script>
 	<style>
 
 	</style>
@@ -40,37 +39,7 @@
 
   <div class="page-container">
     <div class="main-content">
-    	<div class='mycontainer'>
-    		<div class='mylogo'>
-    			<img src='image/FaDaTtsai.png'>
-    		</div>
-    		<div class='myform'>
-    			<div class='myform-title'>
-					<ul class='myform-title-ul'>
-						<li id="login" class='myform-title-ul-li myform-title-assigned'><a href="javascript:;" onclick="changeTitle(this)">會員登入</a></li>
-						<li id="register" class='myform-title-ul-li'><a href="javascript:;" onclick="changeTitle(this)">會員註冊</a></li>
-						<li id="forget" class='myform-title-ul-li'><a href="javascript:;" onclick="changeTitle(this)">忘記密碼</a></li>
-					</ul>
-				</div>
-    			<div class='myform-main' id="main-form">
-	    			<form action='javascript:;' onsubmit='login(this)'>
-		    			<div><h3>會員登入</h3></div>
-		    			<div class='myform-block'><div><p>帳號:</p></div>
-		    			<div><input type='text' name='username' id='username' autocomplete="off" maxlength="25"  placeholder="username"></div></div>
-		    			<div class='myform-block'><div><p>密碼:</p></div>
-		    			<div><input type="password" name='password' id='password' autocomplete="off" maxlength="255" placeholder="password"></div></div>
-		    			<div class='myform-block'>
-		    			<div><button type='submit'>登入</button></div></div>
-		    			<div class='myform-block'>
-		    				<a href="#" class="btn fb"><i class="fa fa-facebook fa-fw"></i> Login with Facebook </a>
-		    			</div>
-		    			<div class='myform-block'>
-		    				<a href="#" class="btn google"><i class="fa fa-google fa-fw"></i> Login with Google+</a>
-		    			</div>
-	    			</form>
-	    		</div>
-    		</div>
-    	</div>
+    	<div id='mycontainer' class='mycontainer'></div>
 	</div>
  </div>
  

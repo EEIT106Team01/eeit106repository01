@@ -1,9 +1,4 @@
 
-function switchHtmlById(id,text){
-	$(id).html("");
-	$(id).html(text);
-}
-
 function initAjax(){
 	if(arguments.length == 3){
 		inner(arguments[0],arguments[1],null,arguments[2]);
@@ -41,19 +36,4 @@ function login(obj){
 	initAjax("post","demoAjaxGG",data,function(text){console.log(text);});
 }
 
-function changeTitle(obj){
-	let temp = obj.parentNode.parentNode;
-	$(temp).find("li").each(function(){
-		$(this).removeClass("myform-title-assigned");
-	});
-	$(obj.parentNode).addClass("myform-title-assigned");
-	let selector = $(obj.parentNode).attr("id");
-	if(selector == "register"){
-		initAjax("get","register-form.html",null,function(text){switchHtmlById("#main-form",text);});
-	}else if(selector == "login"){
-		initAjax("get","login-form.html",null,function(text){switchHtmlById("#main-form",text);});
-	}else if(selector == "forget"){
-		initAjax("get","forget-form.html",null,function(text){switchHtmlById("#main-form",text);});
-	}
-}
 
