@@ -1,5 +1,5 @@
 let VIPcircleHTML = 
- '<div class="VIPBadge VIPBadge-Gold" style="top:-71px;left:-114px;transform:scale(0.92);">'
+ '<div class="VIPBadge VIPBadge-Gold" style="top:-69px;left:-114px;transform:scale(0.92);">'
 +'    <svg class="VIPBadge-Rot VIPBadge-Rot1" width="472px" height="472px" viewBox="0 0 472 472">'
 +'        <defs>'
 +'            <path id="path-1" d="M0,0 L550,0 L550,549 L0,549 L0,0 Z M275.250246,221.799666 C246.254859,221.799666 222.75,245.301068 222.75,274.291698 C222.75,303.282328 246.254859,326.78373 275.250246,326.78373 C304.245141,326.78373 327.75,303.282328 327.75,274.291698 C327.75,245.301068 304.245141,221.799666 275.250246,221.799666 Z"></path>'
