@@ -162,6 +162,7 @@
 				success: function (data, textStatus, jqXHR) {
 					console.log("success");
 					console.log("回傳值 : " + data);
+					console.log(jqXHR);
 					sessionStorage.removeItem("contentBean");
 					sessionStorage.removeItem("contentPage");
 					location.href = contentPage;
@@ -169,6 +170,7 @@
 				error: function (jqXHR, textStatus, errorThrown) {
 					console.log("error");
 					console.log("status: " + jqXHR.status);
+					console.log(jqXHR);
 					if (jqXHR.status == 401) {
 						sessionStorage.setItem("previousPage", location.pathname);
 						location.href = "/forum/login.html";
