@@ -4,7 +4,7 @@ $(document).ready(function() {
     getAllType();
     //搜尋
     $("#search").on("click", function() {
-        if ($("#searchName").val() != null || typeof($("#searchName").val()) != "undefined" || $("#searchName").val().length == 0) {
+        if ($("#searchName").val() != null && typeof($("#searchName").val()) != "undefined" && $("#searchName").val().length != 0) {
             insertKeyWord();
         }
 
@@ -168,7 +168,7 @@ function searchResult(productData) {
     );
     $("#productRightInfo").append(
         "<div id='productDiv'>" +
-        "<hr>" +
+        // "<hr>" +
         "<table>" +
         "<th colspan='2' id='productName'>" +
         productData.name +
@@ -299,6 +299,7 @@ function recommendTop(recommendData) {
         for (let k = 0; k < 5; k++) {
             recommendC1.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -310,12 +311,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -324,12 +323,14 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }
         for (let q = 5; q < 10; q++) {
             recommendC2.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[q] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -341,12 +342,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?' + recommendId[q] + '" tabindex="0">' +
                 "<h5>" +
                 recommendName[q].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -355,6 +354,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }
@@ -382,6 +382,7 @@ function recommendTop(recommendData) {
         for (let k = 0; k < recommendData.length; k++) {
             recommendC1.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -393,12 +394,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="#" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -407,6 +406,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }
@@ -420,6 +420,7 @@ function recommendTop(recommendData) {
         for (let k = 0; k < 5; k++) {
             recommendC1.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -431,12 +432,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -445,12 +444,14 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }
         for (let q = 5; q < recommendData.length; q++) {
             recommendC2.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[q] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -462,12 +463,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?' + recommendId[q] + '" tabindex="0">' +
                 "<h5>" +
                 recommendName[q].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -476,6 +475,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }

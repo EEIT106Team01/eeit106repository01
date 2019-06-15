@@ -8,27 +8,16 @@
     display: -webkit-flex;
 }
 
-.form-control {
-    width: 70% !important;
-    /* display: inline !important; */
-    /* position: absolute;
-    top: 45%;
-    left: 27%; */
-}
-
 #search {
     /* width: 400px; */
-    font-size: 30px;
+    /* font-size: 30px; */
     text-align: center;
 }
 
-.form-control {
-    width: auto
-}
 
-#search {
+/* #search {
     display: inline;
-}
+} */
 
 .keyWord {
     display: inline;
@@ -36,8 +25,8 @@
 
 .titleIimg1 {
     position: absolute;
-    width: 50%;
-    top: -120px;
+    width: 70%;
+    top: -90px;
     left: 20%;
 }
 
