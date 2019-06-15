@@ -1,5 +1,15 @@
 $(document).ready(function() {
-    verifyLogin();
+
+    let memberBean = Cookies.get("MemberBean");
+    let member = null;
+    if (memberBean != undefined) {
+        member = JSON.parse(Cookies.get("MemberBean"));
+    }
+    if (memberBean == undefined) {
+        $(`#draggable-events`).hide();
+        sessionStorage.setItem("previousPage", location.pathname + location.search);
+        location.href = "/forum/login.html";
+    }
     //verify is admin
     if (member.level != "administrator") {
         location.href = "/shop/index.html";
@@ -351,7 +361,7 @@ $(document).ready(function() {
         $("#btn_sendMsg").on("click", (function() {
             let urlVal = $("#url").val()
             let messageVal = $("#msg").val()
-            sendMsgToAll(messageVal,urlVal);
+            sendMsgToAll(messageVal, urlVal);
         }))
         $("#btn_addSendMsg").on("click", (function() {
             $("#msg").val("加入VIP會員,立即享9折及免運優惠")
@@ -360,8 +370,8 @@ $(document).ready(function() {
     }))
 })
 
-function sendMsgToAll(messageVal,urlVal) {
-    let bean = {message:messageVal,url:urlVal}
+function sendMsgToAll(messageVal, urlVal) {
+    let bean = { message: messageVal, url: urlVal }
     $.ajax({
         url: "/sendMsg",
         method: "POST",
