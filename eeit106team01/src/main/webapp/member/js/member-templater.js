@@ -1,5 +1,5 @@
 $(document).ready(function(){
-	memberPage.selection = memberPage[getQueryStringName('template')];
+	memberPage.selection = memberPage.loginForm;
 	$('#mycontainer').html(memberPage.mainframe);
 })
 
@@ -17,9 +17,4 @@ function changeTitle(obj){
 	}else if(selector == "forget"){
 		$('#main-form').html(memberPage.forgetForm);
 	}
-}
-
-function getQueryStringName(name){
-	let urlParams = new URLSearchParams(window.location.search);
-	return urlParams.get(name);
 }

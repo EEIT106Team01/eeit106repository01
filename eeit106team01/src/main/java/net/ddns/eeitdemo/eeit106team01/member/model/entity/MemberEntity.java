@@ -41,7 +41,7 @@ public class MemberEntity {
 	}
 	
 	@NotNull
-	@Size(min = 3, max=50)
+	@Size(min = 8, max=50)
 	@Column(nullable = false,unique = true)
 	public String getUsername() {
 		return username;
@@ -58,7 +58,7 @@ public class MemberEntity {
 		this.email = email;
 	}
 	@NotNull
-	@Size(min = 6, max = 255)
+	@Size(min = 10, max = 255)
 	public String getPassword() {
 		return password;
 	}
