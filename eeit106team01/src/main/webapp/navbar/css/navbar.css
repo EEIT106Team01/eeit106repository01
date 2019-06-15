@@ -56,7 +56,8 @@ body {
 .myImg-left{
     position: absolute;
     left: -40px;
-    border: "2px solid rgb(255, 255, 255, 0.3)"
+    /* top: calc(50% - 22px); */
+    /* border: "2px solid rgb(255, 255, 255, 0.3)" */
 }    
 
 .myNoticiations{

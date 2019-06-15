@@ -105,14 +105,22 @@
         })
 
         function register() {
-            let memberName = $("#memberName").serialize().substr(11);
-            let memberPassword = $("#memberPassword").serialize().substr(15);
-            let memberPasswordCheck = $("#memberPasswordCheck").serialize().substr(20);
+            let memberName = $("#memberName").val();
+            let memberPassword = $("#memberPassword").val();
+            let memberPasswordCheck = $("#memberPasswordCheck").val();
             let memberEmail = $("#memberEmail").val();
             console.log(memberName);
             console.log(memberPassword);
             console.log(memberPasswordCheck);
             console.log(memberEmail);
+            if((memberName.trim().length == 0) || (!memberName.match(/^[A-Za-z0-9]*$/))
+            || (memberPassword.trim().length == 0) || (!memberPassword.match(/^[A-Za-z0-9]*$/))
+            || (memberPasswordCheck.trim().length == 0) || (!memberPasswordCheck.match(/^[A-Za-z0-9]*$/))
+            || (memberEmail.trim().length == 0) || (!memberEmail.match(/^[A-Za-z0-9]*$/))
+            ) {
+                alert("請勿輸入英文與數字以外的內容");
+                return;
+            }
             if (memberPassword !== memberPasswordCheck) {
                 alert("確認密碼錯誤，請輸入相同密碼");
                 return;

@@ -123,6 +123,7 @@ public class MemberBeanService {
 			String jsonStr = mapper.writeValueAsString(mb);
 			String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
 			Cookie memberBeanCookie = new Cookie("MemberBean", encodeJson);
+			memberBeanCookie.setPath("/");
 			response.addCookie(memberBeanCookie);
 			
 			return levelupResult;
