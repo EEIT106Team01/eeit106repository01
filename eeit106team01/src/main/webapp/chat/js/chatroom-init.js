@@ -763,7 +763,7 @@ $(document).ready(function () {
 
             submitMessage: function () // Submit whats on textarea
             {
-                if(isQuillEmpty(quillChat)){
+                if (isQuillEmpty(quillChat)) {
                     quillChat.setText('');
                     return;
                 }
@@ -1712,7 +1712,11 @@ function timeDifference(current, previous) {
     var msPerYear = msPerDay * 365;
     var elapsed = current - previous;
     if (elapsed < msPerMinute) {
-        return Math.round(elapsed / 1000) + ' 秒前';
+        let sec = Math.round(elapsed / 1000);
+        if (sec < 0) {
+            sec = 0;
+        }
+        return sec + ' 秒前';
     } else if (elapsed < msPerHour) {
         return Math.round(elapsed / msPerMinute) + ' 分鐘前';
     } else if (elapsed < msPerDay) {

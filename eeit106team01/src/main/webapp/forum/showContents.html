@@ -833,7 +833,7 @@
                 , center: { lat: topicBean.accidentLocationLatitude, lng: topicBean.accidentLocationLongitude }
                 , scaleControl: true
                 , mapTypeControlOptions: { mapTypeIds: [] }
-                // , gestureHandling: 'greedy'
+                , gestureHandling: 'cooperative'
             });
 
             // google.maps.event.addListener(map, 'click', function (event) {
