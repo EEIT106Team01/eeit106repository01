@@ -22,7 +22,7 @@ function findPurchaseByMemberId(member) {
                 let time = getLocaleTime(element.createTime);
                 let daysAgo = getLocaleTime(GetDateStr(-1));
                 let id;
-                if (Date.parse(element.createTime) < Date.parse(GetDateStr(-1))) {
+                if (Date.parse(element.createTime) > Date.parse(GetDateStr(-1))) {
                     if (element.id < 10) {
                         id = `0` + element.id + `&nbsp;&nbsp;&nbsp;<span class="label label-sm label-success">新訂單</span>`
                     } else {
@@ -37,21 +37,25 @@ function findPurchaseByMemberId(member) {
                 }
                 let totalPrice = element.productTotalPrice + element.deliverPrice;
                 let refundStatus;
-                $(`.datatable tbody`).append(
-                    `<tr>
-                    <td>
-                    <a href="javascript:;" onclick="showAjaxModalReview(` + element.id + `,` + memberId + `)" class="btn btn-info btn-lg btn-icon icon-left">
-                        <i class="entypo-comment"></i> 評論商品
-                    </a>
-                        <a href="javascript:;" onclick="showAjaxModalRefund(` + element.id + `,` + memberId + `)" class="btn btn-danger btn-lg btn-icon icon-left">
-                            <i class="entypo-back"></i> 退貨申請
+                let payStatus = element.payStatus;
+                console.log(payStatus);
+                if (payStatus == `paid`) {
+                    $(`.datatable tbody`).append(
+                        `<tr>
+                        <td>
+                        <a href="javascript:;" onclick="showAjaxModalReview(` + element.id + `,` + memberId + `)" class="btn btn-info btn-lg btn-icon icon-left">
+                            <i class="entypo-comment"></i> 評論商品
                         </a>
-                    </td>
-                    <td>` + id + ` </td>
-                    <td>` + time + `</td>
-                    <td>$` + totalPrice + `</td>
-                    </tr>`
-                );
+                            <a href="javascript:;" onclick="showAjaxModalRefund(` + element.id + `,` + memberId + `)" class="btn btn-danger btn-lg btn-icon icon-left">
+                                <i class="entypo-back"></i> 退貨申請
+                            </a>
+                        </td>
+                        <td>` + id + ` </td>
+                        <td>` + time + `</td>
+                        <td>$` + totalPrice + `</td>
+                        </tr>`
+                    );  
+                }
             });
         }
     });
