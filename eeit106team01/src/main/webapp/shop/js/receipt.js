@@ -17,7 +17,6 @@ if (member.level.match(/normal/)) {
     $(`#memberShip`).append(`&nbsp;&nbsp;普通會員`);
 } else if (member.level.match(/VIP/)) {
     $(`#memberShip`).append(`&nbsp;&nbsp;VIP會員`);
-
 }
 $(`#memberAddress`).append(`&nbsp;&nbsp;` + member.address);
 $(`#memberMail`).append(`&nbsp;&nbsp;` + member.email);
@@ -33,15 +32,16 @@ function getReceipt(ecpaySn) {
             $(`#receiptId`).append(ecpaySn);
             $(`#createTime`).append(getLocaleTime(response.createTime));
             $(`#productsTotalPrice`).append(response.productTotalPrice);
-            $(`#totalPrice`).append(response.productTotalPrice + 60);
+            $(`#deliveryPrice`).append(response.deliverPrice);
+            $(`#totalPrice`).append(response.productTotalPrice + response.deliverPrice);
             if ((response.payStatus).match(`paid`)) {
                 $(`#payStatus`).append(`已付款`);
             }
             let receiverInformation = response.receiverInformation;
             $(`#receiverName`).append(`&nbsp;&nbsp;` + receiverInformation.receiver);
             $(`#receiverAddress`).append(`&nbsp;&nbsp;` + receiverInformation.address);
-            $(`#receiverPhone`).append(`&nbsp;&nbsp;` + receiverInformation.receiverPhone);
-            $(`#receiverMail`).append(`&nbsp;&nbsp;` + receiverInformation.receiverMail);
+            $(`#receiverPhone`).append(`&nbsp;&nbsp;` +  member.phone);
+            $(`#receiverMail`).append(`&nbsp;&nbsp;` + member.email);
         }
     }).fail(function(response) {
         console.log(response);

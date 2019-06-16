@@ -22,7 +22,7 @@ function findPurchaseByMemberId(member) {
                 let time = getLocaleTime(element.createTime);
                 let daysAgo = getLocaleTime(GetDateStr(-1));
                 let id;
-                if (Date.parse(element.createTime) < Date.parse(GetDateStr(-1))) {
+                if (Date.parse(element.createTime) > Date.parse(GetDateStr(-1))) {
                     if (element.id < 10) {
                         id = `0` + element.id + `&nbsp;&nbsp;&nbsp;<span class="label label-sm label-success">新訂單</span>`
                     } else {
@@ -37,21 +37,25 @@ function findPurchaseByMemberId(member) {
                 }
                 let totalPrice = element.productTotalPrice + element.deliverPrice;
                 let refundStatus;
-                $(`.datatable tbody`).append(
-                    `<tr>
-                    <td>
-                    <a href="javascript:;" onclick="showAjaxModalReview(` + element.id + `,` + memberId + `)" class="btn btn-info btn-lg btn-icon icon-left">
-                        <i class="entypo-comment"></i> 評論商品
-                    </a>
-                        <a href="javascript:;" onclick="showAjaxModalRefund(` + element.id + `,` + memberId + `)" class="btn btn-danger btn-lg btn-icon icon-left">
-                            <i class="entypo-back"></i> 退貨申請
+                let payStatus = element.payStatus;
+                console.log(payStatus);
+                if (payStatus == `paid`) {
+                    $(`.datatable tbody`).append(
+                        `<tr>
+                        <td>
+                        <a href="javascript:;" onclick="showAjaxModalReview(` + element.id + `,` + memberId + `)" class="btn btn-info btn-lg btn-icon icon-left">
+                            <i class="entypo-comment"></i> 評論商品
                         </a>
-                    </td>
-                    <td>` + id + ` </td>
-                    <td>` + time + `</td>
-                    <td>$` + totalPrice + `</td>
-                    </tr>`
-                );
+                            <a href="javascript:;" onclick="showAjaxModalRefund(` + element.id + `,` + memberId + `)" class="btn btn-danger btn-lg btn-icon icon-left">
+                                <i class="entypo-back"></i> 退貨申請
+                            </a>
+                        </td>
+                        <td>` + id + ` </td>
+                        <td>` + time + `</td>
+                        <td>$` + totalPrice + `</td>
+                        </tr>`
+                    );  
+                }
             });
         }
     });
@@ -197,7 +201,7 @@ function refundEdit(refundEditBtn, purchaseListId) {
     $('#modal-7 .modal-footer span').text(``);
     $('#modal-7 .modal-body tbody').append(`
     <tr class="edit-refund"><td colspan="4"><strong>序號: ` + $(refundEditBtn).attr(`id`) + `</strong></td></tr>
-    <tr class="edit-refund"><td colspan="4"><textarea cols="55" rows="5" placeholder="退貨申請說明..."></textarea ></td></tr>`)
+    <tr class="edit-refund"><td colspan="4"><textarea width:400px;height:100px; placeholder="退貨申請說明..."></textarea ></td></tr>`)
     $(`#modal-7 .modal-footer`).prepend(`<span><button type="button" onclick="newRefund(` + purchaseListId + `)" class="btn btn-primary btn-lg">送出申請</button></span>`);
 }
 
@@ -209,7 +213,7 @@ function reviewEdit(reviewEditBtn, purchaseListId, productId) {
     $('#modal-8 .modal-body tbody').append(`
     <tr class="edit-review"><td colspan="4"><strong>序號: ` + $(reviewEditBtn).attr(`id`) + `</strong></td></tr>
     <tr class="edit-review"><td colspan="4"><input id="new-rating" type="number" class="form-control-sm" min="0" max="5" step="0.5" placeholder="評分"></input></td></tr>
-    <tr class="edit-review"><td colspan="4"><textarea cols="55" rows="5" placeholder="評論內容..."></textarea ></td></tr>`);
+    <tr class="edit-review"><td colspan="4"><textarea width:400px;height:100px; placeholder="評論內容..."></textarea ></td></tr>`);
     $('#modal-8 .modal-footer').prepend(`<span><button type="button" onclick="newReview(` + purchaseListId + `,` + productId + `)" class="btn btn-primary btn-lg">送出評論</button></span>`);
 }
 
