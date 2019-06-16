@@ -232,6 +232,8 @@ let checkNavbar = setInterval(function () {
                 }
             });
             $("#login").css({ display: "none" });
+            $("#loginGoogle").css({ display: "none" });
+            $("#loginFB").css({ display: "none" });
             $("#navbarRegister").css({ display: "none" });
         } else {
             $("#logout").css({ display: "none" });
