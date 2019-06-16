@@ -199,7 +199,7 @@ function searchResult(productData) {
         "<td style='color:#AAAAAA'>" +
         "付款 :" +
         "</td>" +
-        "<td>貨到付款 / 超商付款取貨 / 信用卡</td>" +
+        "<td>貨到付款 / 超商付款取貨 / 信用卡<i class='fa fa-credit-card'></i></td>" +
         "</tr>" +
         "</table>" +
         "</div>"
@@ -260,7 +260,7 @@ function buy(productData) {
             stock +
             "件)</p>" +
             '<button type="button" class="btn btn-warning" id="buyNow" disabled="disabled">補貨中</button> ' +
-            '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton" disabled="disabled">加入購物車</button>'
+            '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton" disabled="disabled"><i class="fa fa-heart"></i>加入購物車</button>'
         );
     } else {
         $("#buy").append(
@@ -270,7 +270,7 @@ function buy(productData) {
             stock +
             "件)</p>" +
             '<button type="button" class="btn btn-warning" id="buyNow">立即購買</button> ' +
-            '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton">加入購物車</button>'
+            '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton"><i class="fa fa-heart"></i>加入購物車</button>'
         );
     }
 
