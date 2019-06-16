@@ -4,6 +4,7 @@
     position: fixed;
     z-index: 1000;
     right: -10px;
+    top: 40%;
 }
 
 #draggable-events {
