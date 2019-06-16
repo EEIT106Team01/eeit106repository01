@@ -75,7 +75,7 @@ function getProducts() {
             })
 
             var pageSize = productsData.length;
-            $("#productsQuantity").empty().append("<span class='productsQuantityTitle'>全站共有<h2>" + pageSize + "件商品</h2></span><hr>")
+            $("#productsQuantity").empty().append("<span class='productsQuantityTitle'>全站共有<h2 style='color: indianred;'>" + pageSize + "件商品</h2></span><hr>")
 
             var products = [];
             var top = 10;
@@ -105,7 +105,7 @@ function getAllType() {
             var productTypeArray = [];
             $.each(typesData, function() {
                 if (typesData[i].data != "會員") {
-                    productTypeArray.push('<li class="li"><a href="/shop/search.html?type=' + typesData[i].data + '">' + typesData[i].data + '</a></li>')
+                    productTypeArray.push('<li class="li"><a href="/shop/search.html?type=' + typesData[i].data + '"><i class="entypo-right-dir"></i>' + typesData[i].data + '</a></li>')
                 }
                 i++
             })

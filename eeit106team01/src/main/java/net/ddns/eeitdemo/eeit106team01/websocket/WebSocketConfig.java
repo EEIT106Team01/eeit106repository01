@@ -6,6 +6,7 @@ import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
+import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
 
 import net.ddns.eeitdemo.eeit106team01.websocket.interceptor.UserInterceptor;
 
@@ -24,10 +25,17 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 				.withSockJS();
 
 	}
-	
+
 	@Override
 	public void configureClientInboundChannel(ChannelRegistration registry) {
 		registry.interceptors(new UserInterceptor());
+	}
+
+	@Override
+	public void configureWebSocketTransport(WebSocketTransportRegistration registry) {
+		WebSocketMessageBrokerConfigurer.super.configureWebSocketTransport(registry);
+		registry.setMessageSizeLimit(10 * 1024 * 1024);
+		registry.setSendBufferSizeLimit(50 * 1024 * 1024);
 	}
 
 }

@@ -763,16 +763,15 @@ $(document).ready(function () {
 
             submitMessage: function () // Submit whats on textarea
             {
-                var textMsg = quillChat.getText().trim();
-                // console.log(textMsg);
-                if (textMsg.length == 0) {
+                if(isQuillEmpty(quillChat)){
                     quillChat.setText('');
                     return;
                 }
-                // var msg = $.trim($textarea.val());
                 var msg = JSON.stringify(quillChat.getContents());
-
-                // $textarea.val('');
+                if ((msg.length) > (9 * 1024 * 1024)) {
+                    alert("輸入的內容過多，請減少\n建議上傳圖片容量不要超過5MB");
+                    return;
+                }
                 quillChat.setText('');
 
                 if (this.isOpen && this.$current_user) {
@@ -1734,4 +1733,8 @@ function toColor(num) {
         r = (num & 0xFF0000) >>> 16,
         a = ((num & 0xFF000000) >>> 24) / 255;
     return "rgba(" + [r, g, b, a].join(",") + ")";
+}
+
+function isQuillEmpty(quill) {
+    return quill.getText().trim().length === 0 && quill.container.firstChild.innerHTML.includes("img") === false;
 }

@@ -65,8 +65,24 @@
             <!-- drag and drop end -->
 
 
-            <div class="col-md-4">
-                <ol class="breadcrumb">
+            <div class="col-md-12">
+                <form class="search-bar col-md-12" id="searchForm">
+                    <select class="form-control col-md-2" id="searchType" style="width: auto;"></select>
+                    <div class="input-group">
+                        <input type="text" class="form-control input col-md-10" name="searchName" id="searchName" placeholder="請輸入關鍵字">
+                        <div class="input-group-btn">
+                            <button class="btn btn-primary btn-icon" id="search" type="button">
+                                搜尋
+                                <i class="entypo-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <label for="searchName"></label>
+                </form>
+            </div>
+
+            <div class="col-md-12">
+                <ol class="breadcrumb" style="font-size: 70%">
                     <li>
                         <a href="/shop/index.html">
                             <i class="fa fa-home"></i> 三寶購物
@@ -80,28 +96,11 @@
                 </ol>
             </div>
 
-            <form class="search-bar col-md-4" id="searchForm">
-                <select class="form-control col-md-2" id="searchType"></select>
-                <div class="input-group">
-                    <input type="text" class="form-control input-lg" name="searchName" id="searchName" placeholder="請輸入關鍵字">
-                    <div class="input-group-btn">
-                        <button class="btn btn-lg btn-primary btn-icon" id="search" type="button">
-                            搜尋
-                            <i class="entypo-search"></i>
-                        </button>
-                    </div>
-                </div>
-                <label for="searchName"></label>
-            </form>
-            <!-- 排版用 -->
-            <div class="col-md-4">
-            </div>
             <div id="productItemPage" class="col-md-10">
                 <div id="productLeftInfo" class="col-md-6"></div>
-                <div id="productRightInfo" class="col-md-6">
-                    <div id="buy"></div>
-                </div>
+                <div id="productRightInfo" class="col-md-6"></div>
             </div>
+            <div id="buy" class="col-md-2"></div>
 
             <div class="btn-group btn-group-justified" role="group" aria-label="Basic example">
                 <div class="btn-group">
