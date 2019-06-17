@@ -19,6 +19,7 @@ import javax.sql.rowset.serial.SerialBlob;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -333,7 +334,8 @@ public class PurchaseController {
 			purchaseSucessMsg.setColor(Color.gray);
 			purchaseSucessMsg.setIcon("entypo-comment");
 			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
-			purchaseSucessMsg.setMessage("評論: "+ " 已新增一則評論, " + "商品: " + result.get(0).getProductId().getName().substring(0, 3) + "... ");
+			purchaseSucessMsg.setMessage(
+					"評論: " + " 已新增一則評論, " + "商品: " + result.get(0).getProductId().getName().substring(0, 3) + "... ");
 			notificationService.sendNotificationToUser(result.get(0).getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
@@ -445,13 +447,17 @@ public class PurchaseController {
 			purchaseSucessMsg.setColor(Color.gray);
 			purchaseSucessMsg.setIcon("entypo-comment");
 			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
-			purchaseSucessMsg.setMessage("評論: "+ " 已修改一則評論, " + "商品: " + result.getProductId().getName().substring(0, 3) + "... ");
+			purchaseSucessMsg.setMessage(
+					"評論: " + " 已修改一則評論, " + "商品: " + result.getProductId().getName().substring(0, 3) + "... ");
 			notificationService.sendNotificationToUser(result.getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
 		}
 	}
+
+	@Autowired
+	private Environment env;
 
 	@PostMapping(value = "/shop/processEcpay")
 	public ResponseEntity<?> processEcpay(@RequestBody String purchaseId, BindingResult bindingResult) {
@@ -483,7 +489,8 @@ public class PurchaseController {
 		obj.setTotalAmount(String.valueOf(purchase.getProductTotalPrice() + purchase.getDeliverPrice()));
 		obj.setTradeDesc("三寶商城");
 		obj.setReturnURL("http://211.23.128.214:5000");
-		obj.setClientBackURL("https://eeitdemo.ddns.net/shop/receipt.html?" + tradeNo);
+		String clientBackURL = env.getProperty("client.back.url");
+		obj.setClientBackURL(clientBackURL + "shop/receipt.html?" + tradeNo);
 		StringBuilder itemNameAndCountAndPrice = new StringBuilder();
 		HashMap<String, Integer> productMap = new HashMap<>();
 		for (PurchaseListBean purchaseListBean : purchaseListBeans) {
@@ -511,7 +518,7 @@ public class PurchaseController {
 		} else {
 			obj.setItemName(itemNameAndCountAndPrice.toString().substring(0, itemNameAndCountAndPrice.length() - 1));
 		}
-		
+
 		String result = all.aioCheckOut(obj, null);
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
@@ -535,8 +542,7 @@ public class PurchaseController {
 			purchaseSucessMsg.setColor(Color.gray);
 			purchaseSucessMsg.setIcon("entypo-doc-text");
 			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
-			purchaseSucessMsg.setMessage("訂單: 已收到您的款項, "
-					+ "編號: " + ecpaySN + " 共 $  "
+			purchaseSucessMsg.setMessage("訂單: 已收到您的款項, " + "編號: " + ecpaySN + " 共 $  "
 					+ (purchaseBean.getProductTotalPrice() + purchaseBean.getDeliverPrice()) + " 元。");
 			notificationService.sendNotificationToUser(purchaseBean.getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);

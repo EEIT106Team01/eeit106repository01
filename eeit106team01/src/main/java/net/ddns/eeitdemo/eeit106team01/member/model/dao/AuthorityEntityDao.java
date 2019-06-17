@@ -8,6 +8,7 @@ import net.ddns.eeitdemo.eeit106team01.member.model.entity.AuthorityEntity;
 public interface AuthorityEntityDao {
 	
 	public AuthorityEntity getAuthorityEntityById(Long id);
+	public AuthorityEntity getAuthorityEntityByUuid(String uuid);
 	public List<AuthorityEntity> getAuthorityEntityByAuthorityName(String authorityName);
 	public List<AuthorityEntity> getAuthorityEntityNotExpirated();
 	public List<AuthorityEntity> getAuthorityEntityNotExpirated(Date expirationTimestamp);

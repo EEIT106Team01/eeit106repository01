@@ -11,7 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Index;
-import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -30,7 +30,6 @@ public class MemberEntity {
 	private String image;
 	private Date birth;
 	private List<AuthorityEntity> authorities;
-	private Boolean isThirdPartyMember;
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	public Long getMemberId() {
@@ -41,7 +40,7 @@ public class MemberEntity {
 	}
 	
 	@NotNull
-	@Size(min = 3, max=50)
+	@Size(min = 8, max=50)
 	@Column(nullable = false,unique = true)
 	public String getUsername() {
 		return username;
@@ -58,7 +57,7 @@ public class MemberEntity {
 		this.email = email;
 	}
 	@NotNull
-	@Size(min = 6, max = 255)
+	@Size(min = 10, max = 255)
 	public String getPassword() {
 		return password;
 	}
@@ -88,19 +87,17 @@ public class MemberEntity {
 	public void setBirth(Date birth) {
 		this.birth = birth;
 	}
-	
-	public Boolean getIsThirdPartyMember() {
-		return isThirdPartyMember;
-	}
-	public void setIsThirdPartyMember(Boolean isThirdPartyMember) {
-		this.isThirdPartyMember = isThirdPartyMember;
-	}
-
-	@ManyToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL)
+	@OneToMany(fetch = FetchType.EAGER,cascade = CascadeType.ALL,mappedBy = "member")
 	public List<AuthorityEntity> getAuthorities() {
 		return authorities;
 	}
 	public void setAuthorities(List<AuthorityEntity> authorities) {
 		this.authorities = authorities;
+	}
+	@Override
+	public String toString() {
+		return "MemberEntity [memberId=" + memberId + ", username=" + username + ", email=" + email + ", password="
+				+ password + ", registrationTimestamp=" + registrationTimestamp + ", image=" + image + ", birth="
+				+ birth + ", authorities=" + authorities + "]";
 	}
 }
