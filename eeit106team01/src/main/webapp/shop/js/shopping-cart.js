@@ -36,7 +36,7 @@ function updateCounter(selector, value) {
 
 //revert
 $("#draggable-events").draggable({
-    revert: true
+    // revert: true
 });
 
 //Card Accordion
@@ -105,71 +105,78 @@ function addToCart() {
     var cartLocalStorage = localStorage;
     var cartLocalStorageCount = cartStorageCount();
 
-    $(document).ready(function() {
+    //clear
+    deletePurchase = function(data) {
+        $(function() {
+            cartLocalStorage.removeItem(data.id);
+            addToCart();
+            appendProductsInCart();
+        });
+    };
+
+    $(function() {
+        appendProductsInCart();
+    });
+
+    function appendProductsInCart() {
         $("#card-shopping-cart-count").text(cartLocalStorageCount);
-        if (cartLocalStorageCount > 0) {
-            var jsonArray = [];
-            allStorage().forEach(element => {
-                var result = JSON.parse(element);
-                jsonArray.push(result);
+        $(`#accordion-shopping-cart .scrollable`).empty();
+        $(`#accordion-shopping-cart .scrollable button`).empty();
+        var jsonArray = [];
+        allStorage().forEach(element => {
+            var result = JSON.parse(element);
+            jsonArray.push(result);
+        });
+
+
+        let purchaseButton = `<span id="purchase-Button"><button type="button" class="btn col-md-12" onclick="location.href='` + urlDomain + `shop/purchase.html'"` + `'><span class='fa fa-shopping-cart'></span>去結帳</button></span>`;
+        let productUrl = urlDomain + `shop/product.html?`;
+
+        jsonArray.forEach(element => {
+            var text = [];
+            var closeIcon = [];
+            var img = [];
+            var id = [];
+            $.each(element, function(key, val) {
+                if (key.match(/^(name)$/) && val != null) {
+                    text.push("<span>品名: " + val.substr(0, 6) + "...</span></br>");
+                } else if (key.match(/^(price)$/)) {
+                    text.push("<span>價錢: " + "$" + val + "</span></br>");
+                } else if (key.match(/^(quantity)$/)) {
+                    text.push("<span>數量: " + val + "</span>");
+                } else if (key.match(/^(id)$/)) {
+                    id.push(val);
+                    text.push(
+                        "<span class='hidden' id='" + val + "'>" + val + "</span>"
+                    );
+                    closeIcon.push(
+                        "<a class='badge' onclick='deletePurchase(this)' id='" +
+                        val +
+                        "'><span class='fa fa-close'></span></a>"
+                    );
+                } else if (key.match(/^(image)$/) && val != null) {
+                    img.push("<img src='" + val + "'>");
+                }
             });
-
-            //clear
-            deletePurchase = function(data) {
-                $(".deletePurchase").ready(function() {
-                    cartLocalStorage.removeItem(data.id);
-                    location.href = location.href;
-                });
-            };
-
-            let purchaseButton = `<button type="button" class="btn col-md-12" onclick="location.href='` + urlDomain + `shop/purchase.html'"` + `'><span class='fa fa-shopping-cart'></span>去結帳</button>`;
-            let productUrl = urlDomain + `shop/product.html?`;
-
-            jsonArray.forEach(element => {
-                var text = [];
-                var closeIcon = [];
-                var img = [];
-                var id = [];
-                $.each(element, function(key, val) {
-
-                    if (key.match(/^(name)$/) && val != null) {
-                        text.push("<span>品名: " + val.substr(0, 6) + "...</span></br>");
-                    } else if (key.match(/^(price)$/)) {
-                        text.push("<span>價錢: " + "$" + val + "</span></br>");
-                    } else if (key.match(/^(quantity)$/)) {
-                        text.push("<span>數量: " + val + "</span>");
-                    } else if (key.match(/^(id)$/)) {
-                        id.push(val);
-                        text.push(
-                            "<span class='hidden' id='" + val + "'>" + val + "</span>"
-                        );
-                        closeIcon.push(
-                            "<a class='badge' onclick='deletePurchase(this)' id='" +
-                            val +
-                            "'><span class='fa fa-close'></span></a>"
-                        );
-                    } else if (key.match(/^(image)$/) && val != null) {
-                        img.push("<img src='" + val + "'>");
-                    }
-                });
-                $(`<span class='row cart-product'>` +
-                    `<span class='col-sm-4'>` +
-                    closeIcon.join("") +
-                    img.join("") +
-                    `</span>` +
-                    `<a href="` + productUrl + id.join("") + `">` +
-                    text.join("") +
-                    `</a>` +
-                    `</span>`
-                ).appendTo("#accordion-shopping-cart .scrollable");
-            });
-
+            $(`<span class='row cart-product'>` +
+                `<span class='col-sm-4'>` +
+                closeIcon.join("") +
+                img.join("") +
+                `</span>` +
+                `<a href="` + productUrl + id.join("") + `">` +
+                text.join("") +
+                `</a>` +
+                `</span>`
+            ).appendTo("#accordion-shopping-cart .scrollable");
+        });
+        if (jsonArray.length > 0) {
             $(purchaseButton).appendTo("#accordion-shopping-cart .scrollable");
         }
-    });
+    }
 
     //Save in Cart
     $("#shoppingCartButton").click(function() {
+        verifyLogin();
         var productURL = location.href;
         var productId = parseInt(
             productURL.substr(productURL.indexOf("?") + 1, productURL.length)
@@ -207,11 +214,12 @@ function addToCart() {
         }
 
         var result = cartLocalStorage.getItem(productId);
-        location.href = location.href;
+        addToCart();
     });
 
     //buyNow
     $("#buyNow").click(function() {
+        verifyLogin();
         var productURL = location.href;
         var productId = parseInt(
             productURL.substr(productURL.indexOf("?") + 1, productURL.length)

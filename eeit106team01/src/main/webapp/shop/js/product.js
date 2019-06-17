@@ -1,9 +1,10 @@
 $(document).ready(function() {
+    hideCart();
     getProduct(takeUrlValue());
     getAllType();
     //搜尋
     $("#search").on("click", function() {
-        if ($("#searchName").val() != null || typeof($("#searchName").val()) != "undefined" || $("#searchName").val().length == 0) {
+        if ($("#searchName").val() != null && typeof($("#searchName").val()) != "undefined" && $("#searchName").val().length != 0) {
             insertKeyWord();
         }
 
@@ -68,7 +69,9 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
-                productTypeArray2.push("<option>" + typesData[y].data + "</option>");
+                if (typesData[y].data != "會員") {
+                    productTypeArray2.push("<option>" + typesData[y].data + "</option>");
+                }
                 y++;
             });
             $("#searchType")
@@ -83,63 +86,74 @@ function getAllType() {
 
 //搜單件商品
 function getProduct(id) {
-    $.ajax({
-        url: "/product/" + id,
-        method: "GET",
-        dataType: "json",
-        success: function(productData) {
-            //產品圖片
-            $("#productImgDivButton").click(function() {
-                productImgDiv(productData);
-            });
-            //產品資訊
-            searchResult(productData);
-            //詳細規格
-            $("#productInformationButton").click(function() {
-                productInformation(productData);
-            });
-            //庫存數量.購買/購物車按鈕
-            buy(productData);
+    if (id != 1630) {
 
-            $("#reviewResultButton").click(function() {
-                review();
-            });
-
-            var type = productData.type;
-            getRecommendProducts(type);
-            //type存入localStorage
-            if (localStorage.hasOwnProperty('type')) {
-                localStorage.removeItem("type");
-            }
-            localStorage.setItem("type", type)
-                //breadcrumb
-            $("#typeBreadcrumb").append(
-                '<a href="/shop/search.html?type=' +
-                type +
-                '">' +
-                type +
-                "</a>"
-            );
-            $("#productBreadcrumb").append("<a>" + productData.name + "</a>");
-
-            function review() {
-                $("#reviewTitle").text("商品評價");
-            }
-            //cloudZoom
-            CloudZoom.quickStart();
-            // Initialize the slider.
-            $(function() {
-                $("#slider1").Thumbelina({
-                    $bwdBut: $("#slider1 .left"),
-                    $fwdBut: $("#slider1 .right")
+        $.ajax({
+            url: "/product/" + id,
+            method: "GET",
+            dataType: "json",
+            success: function(productData) {
+                //產品圖片
+                $("#productImgDivButton").click(function() {
+                    productImgDiv(productData);
                 });
-            });
-        },
-        error: function(jqXHR, textStatus, errorThrown) {
-            console.log(textStatus);
-        }
-    });
+                //產品資訊
+                searchResult(productData);
+                //詳細規格
+                $("#productInformationButton").click(function() {
+                    productInformation(productData);
+                });
+                //庫存數量.購買/購物車按鈕
+                buy(productData);
+
+                $("#reviewResultButton").click(function() {
+                    review();
+                });
+
+                var type = productData.type;
+                getRecommendProducts(type);
+                //type存入localStorage
+                if (localStorage.hasOwnProperty('type')) {
+                    localStorage.removeItem("type");
+                }
+                localStorage.setItem("type", type)
+                    //breadcrumb
+                $("#typeBreadcrumb").append(
+                    '<a href="/shop/search.html?type=' +
+                    type +
+                    '">' +
+                    type +
+                    "</a>"
+                );
+                $("#productBreadcrumb").append("<a>" + productData.name + "</a>");
+
+                function review() {
+                    $("#reviewTitle").text("商品評價");
+                }
+                //cloudZoom
+                CloudZoom.quickStart();
+                // Initialize the slider.
+                $(function() {
+                    $("#slider1").Thumbelina({
+                        $bwdBut: $("#slider1 .left"),
+                        $fwdBut: $("#slider1 .right")
+                    });
+                });
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                console.log(textStatus);
+            }
+        });
+    } else {
+        jump();
+    }
 }
+//跳轉回首頁
+function jump() {
+    location.href = "/shop/index.html"; //跳转
+    //window.location.reload(); //刷新
+}
+
 //產品查詢結果
 function searchResult(productData) {
     var productImgArray = [];
@@ -154,7 +168,7 @@ function searchResult(productData) {
     );
     $("#productRightInfo").append(
         "<div id='productDiv'>" +
-        "<hr>" +
+        // "<hr>" +
         "<table>" +
         "<th colspan='2' id='productName'>" +
         productData.name +
@@ -185,7 +199,7 @@ function searchResult(productData) {
         "<td style='color:#AAAAAA'>" +
         "付款 :" +
         "</td>" +
-        "<td>貨到付款 / 超商付款取貨 / 信用卡</td>" +
+        "<td>貨到付款 / 超商付款取貨 / 信用卡<i class='fa fa-credit-card'></i></td>" +
         "</tr>" +
         "</table>" +
         "</div>"
@@ -246,7 +260,7 @@ function buy(productData) {
             stock +
             "件)</p>" +
             '<button type="button" class="btn btn-warning" id="buyNow" disabled="disabled">補貨中</button> ' +
-            '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton" disabled="disabled">加入購物車</button>'
+            '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton" disabled="disabled"><i class="fa fa-heart"></i>加入購物車</button>'
         );
     } else {
         $("#buy").append(
@@ -256,7 +270,7 @@ function buy(productData) {
             stock +
             "件)</p>" +
             '<button type="button" class="btn btn-warning" id="buyNow">立即購買</button> ' +
-            '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton">加入購物車</button>'
+            '<button type="button" class="btn btn-outline-warning" id="shoppingCartButton"><i class="fa fa-heart"></i>加入購物車</button>'
         );
     }
 
@@ -269,7 +283,7 @@ function recommendTop(recommendData) {
     var recommendName = [];
     var recommendPrice = [];
     var recommendImg = [];
-    var recommendId =[];
+    var recommendId = [];
     var recommendAll = [];
     var recommendC1 = [];
     var recommendC2 = [];
@@ -285,6 +299,7 @@ function recommendTop(recommendData) {
         for (let k = 0; k < 5; k++) {
             recommendC1.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -296,12 +311,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?'+recommendId[k]+'" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -310,12 +323,14 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }
         for (let q = 5; q < 10; q++) {
             recommendC2.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[q] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -327,12 +342,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?'+recommendId[q]+'" tabindex="0">' +
                 "<h5>" +
                 recommendName[q].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -341,6 +354,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }
@@ -368,6 +382,7 @@ function recommendTop(recommendData) {
         for (let k = 0; k < recommendData.length; k++) {
             recommendC1.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -379,12 +394,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="#" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -393,6 +406,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }
@@ -406,6 +420,7 @@ function recommendTop(recommendData) {
         for (let k = 0; k < 5; k++) {
             recommendC1.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[k] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -417,12 +432,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?'+recommendId[k]+'" tabindex="0">' +
                 "<h5>" +
                 recommendName[k].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -431,12 +444,14 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }
         for (let q = 5; q < recommendData.length; q++) {
             recommendC2.push(
                 '<div class="col-md-2">' +
+                '<a href="/shop/product.html?' + recommendId[q] + '" tabindex="0">' +
                 "<div>" +
                 "<div>" +
                 "<div>" +
@@ -448,12 +463,10 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "<div>" +
                 "<div>" +
-                '<a href="/shop/product.html?'+recommendId[q]+'" tabindex="0">' +
                 "<h5>" +
                 recommendName[q].substr(0, 10) +
                 "..." +
                 "</h5>" +
-                "</a>" +
                 "</div>" +
                 "<div>" +
                 '<p class="recPrice">$' +
@@ -462,6 +475,7 @@ function recommendTop(recommendData) {
                 "</div>" +
                 "</div>" +
                 "</div>" +
+                "</a>" +
                 "</div>"
             );
         }

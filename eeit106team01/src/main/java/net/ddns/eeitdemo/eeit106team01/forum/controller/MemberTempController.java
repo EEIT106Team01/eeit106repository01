@@ -5,6 +5,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.Cookie;
@@ -13,8 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.apache.catalina.util.URLEncoder;
-import org.apache.tomcat.util.codec.binary.Base64;
-import org.apache.tomcat.util.codec.binary.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -25,13 +24,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
 
 @Controller
 public class MemberTempController {
@@ -46,6 +46,17 @@ public class MemberTempController {
 		if (findOne != null) {
 			findOne.setPassword(null);
 			return ResponseEntity.ok(findOne);
+		} else {
+			return ResponseEntity.notFound().build();
+		}
+	}
+
+	@GetMapping(path = { "/memberTemps" }, produces = { "application/json" })
+	public ResponseEntity<?> getAllMember() {
+		System.out.println("getAllMember method running");
+		List<MemberTempBean> findAll = memberBeanService.findAll();
+		if (findAll != null && findAll.size() != 0) {
+			return ResponseEntity.ok(findAll);
 		} else {
 			return ResponseEntity.notFound().build();
 		}
@@ -78,7 +89,7 @@ public class MemberTempController {
 			return ResponseEntity.notFound().build();
 		}
 	}
-	
+
 	@GetMapping(path = { "/getImageByName/{name}" }, produces = { "application/json" })
 	public ResponseEntity<?> getImageByName(@PathVariable(name = "name") String name) {
 		System.out.println("getImageByName method running");
@@ -99,7 +110,7 @@ public class MemberTempController {
 		if (requestbody.getName() != null) {
 			MemberTempBean checkResult = memberBeanService.findByName(requestbody.getName());
 			if (checkResult != null) {
-				return ResponseEntity.noContent().build();
+				return ResponseEntity.ok(new MemberTempBean());
 			}
 		}
 
@@ -125,6 +136,8 @@ public class MemberTempController {
 			mb.setLevel(insertResult.getLevel());
 			mb.setLevelTime(insertResult.getLevelTime());
 			mb.setMemberCreateTime(insertResult.getMemberCreateTime());
+			mb.setPhone(insertResult.getPhone());
+			mb.setAddress(insertResult.getAddress());
 			ObjectMapper mapper = new ObjectMapper();
 			String jsonStr = mapper.writeValueAsString(mb);
 			String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -155,6 +168,8 @@ public class MemberTempController {
 				mb.setLevel(updateResult.getLevel());
 				mb.setLevelTime(updateResult.getLevelTime());
 				mb.setMemberCreateTime(updateResult.getMemberCreateTime());
+				mb.setPhone(updateResult.getPhone());
+				mb.setAddress(updateResult.getAddress());
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonStr = mapper.writeValueAsString(mb);
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -174,7 +189,36 @@ public class MemberTempController {
 		System.out.println("login method running");
 		System.out.println("帳號： " + name);
 		System.out.println("密碼： " + password);
+		// google FB start
+		ServletRequestAttributes requestattr = (ServletRequestAttributes) RequestContextHolder
+				.currentRequestAttributes();
+		HttpServletRequest attr = requestattr.getRequest();
+		String status = attr.getParameter("status");
+		// google FB end
 		if ((name != null && name.length() != 0) && (password != null && password.length() != 0)) {
+			// google FB start
+			if (status != null) {
+				MemberTempBean result = memberBeanService.login(name, password);
+				if (result == null) {
+					MemberTempBean requestbody = new MemberTempBean();
+					requestbody.setName(name);
+					requestbody.setPassword(password);
+					Date nowDate = new Date();
+					System.err.println(nowDate);
+					Calendar calendar = new GregorianCalendar();
+					calendar.setTime(nowDate);
+					calendar.add(Calendar.DATE, 1);
+					Date levelTime = calendar.getTime();
+					System.err.println(levelTime);
+
+					requestbody.setLevel("normal");
+					requestbody.setLevelTime(levelTime);
+					requestbody.setMemberCreateTime(nowDate);
+
+					memberBeanService.insert(requestbody);
+				}
+			}
+			// google FB end
 			MemberTempBean result = memberBeanService.login(name, password);
 			if (result != null) {
 				httpSession.setAttribute("MemberBean", result);
@@ -185,6 +229,8 @@ public class MemberTempController {
 				mb.setLevel(result.getLevel());
 				mb.setLevelTime(result.getLevelTime());
 				mb.setMemberCreateTime(result.getMemberCreateTime());
+				mb.setPhone(result.getPhone());
+				mb.setAddress(result.getAddress());
 				ObjectMapper mapper = new ObjectMapper();
 				String jsonStr = mapper.writeValueAsString(mb);
 				String encodeJson = new URLEncoder().encode(jsonStr, Charset.forName("UTF-8"));
@@ -195,7 +241,7 @@ public class MemberTempController {
 			}
 		}
 		System.out.println("登入失敗");
-		return ResponseEntity.notFound().build();
+		return ResponseEntity.ok(new MemberTempBean());
 	}
 
 	@GetMapping(path = { "/forumlogout" }, produces = { "application/json" })

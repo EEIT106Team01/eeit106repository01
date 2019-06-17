@@ -2,7 +2,7 @@
 let productId = parseInt(location.href.substr((location.href.indexOf(`?`) + 1), location.href.length));
 
 // Document Ready
-$(function() {
+$(function () {
     let memberId = 0;
     if (member != null) {
         memberId = member.id;
@@ -43,14 +43,14 @@ function findReview(ProductId, memberId) {
     $.ajax({
         type: "GET",
         url: "/shop/findReviewById/?idType=product&id=" + ProductId,
-        success: function(response) {
+        success: function (response) {
             response.forEach(element => {
                 let reviewId = element.id;
                 let comment = element.comment;
                 if (element.memberId.id == memberId) {
                     $(`#table-2 tbody`).append(
                         `<tr>
-                        <td>` + element.memberId.id + ` </td>
+                        <td>` + element.memberId.name + ` </td>
                         <td><a href="javascript:;" name="` + element.comment + `" onclick="showAjaxModal(this` + `,` + +reviewId + `,` + element.memberId.id + `,` + element.rating + `)">` + generateRatingStar(element.rating) + `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` + element.rating + `分</a></td>
                         <td><a href="javascript:;" name="` + element.comment + `" onclick="showAjaxModal(this` + `,` + +reviewId + `,` + element.memberId.id + `,` + element.rating + `)">` + element.comment + `</a></td>
                         <td>` + getLocaleTime(element.updatedTime) + `</td>
@@ -59,7 +59,7 @@ function findReview(ProductId, memberId) {
                 } else {
                     $(`#table-2 tbody`).append(
                         `<tr>
-                        <td>` + element.memberId.id + ` </td>
+                        <td>` + element.memberId.name + ` </td>
                         <td>` + generateRatingStar(element.rating) + `&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;` + element.rating + `分</td>
                         <td>` + element.comment + `</td>
                         <td>` + getLocaleTime(element.updatedTime) + `</td>
@@ -103,18 +103,22 @@ function showAjaxModal(obj, reviewId, memberId, rating) {
 
 //updateReview
 function updateReview(reviewId) {
-    $(`#model-update`).click(function() {
+    $(`#model-update`).click(function () {
         let json = new Object();
         json.id = reviewId;
         json.rating = $(`#edit-rating`).val();
-        json.comment = $(`textarea`).val();
+        if ($(`textarea`).val() != "") {
+            json.comment = $(`textarea`).val();
+        } else {
+            json.comment = $(`textarea`).attr(`value`);
+        }
         let data = JSON.stringify(json);
         $.ajax({
             type: "PUT",
             url: "/shop/updateReview",
             data: data,
             contentType: `application/json`,
-            success: function(response) {
+            success: function (response) {
                 location.href = location.href;
             }
         });

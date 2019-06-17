@@ -8,6 +8,7 @@
     <title>首頁</title>
 
     <link rel="icon" href="/assets/images/favicon.ico">
+    <!-- <link rel="icon" href="/navbar/images/favicon0615.ico"> -->
 
     <script src="/assets/js/jquery-1.11.3.min.js"></script>
 
@@ -55,8 +56,8 @@
             max-width: 1130px;
             padding: 15px;
             margin: auto;
-            min-height: 1236px;
-            height: 100%;
+            /* height: 1422px; */
+            /* height: 100%; */
             background-color: #ffffff;
             box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
             /* border-radius: 10px; */
@@ -86,9 +87,19 @@
             margin-bottom: 10px;
         }
 
-        #requestTopicHeader {
-            color: #FF0000 !important;
+        #requestTopic,
+        #requestTopicSearch {
+            height: 288px;
         }
+
+        #shareTopic,
+        #shareTopicSearch {
+            height: 592px;
+        }
+
+        /* #requestTopicHeader {
+            color: #FF0000 !important;
+        } */
 
         .myPagination {
             text-align: right;
@@ -104,7 +115,7 @@
             width: 600px;
             margin-left: 190px;
             border: 1px solid #d4d4d4;
-            box-shadow: 0 5px 20px rgba(156,160,171,0.25);
+            box-shadow: 0 5px 20px rgba(156, 160, 171, 0.25);
         }
 
         input {
@@ -179,6 +190,7 @@
             autocomplete(document.getElementById("myInput"));
             searchInput = getUrlParameters().q;
             if (searchInput) {
+                $(".myTopicList").height(1427);
                 $("#requestTopicBlock").hide();
                 $("#shareTopicBlock").hide();
                 getTopicList(startPosition, maxResult, "requestTopic", currentOrderType, searchInput);
@@ -186,6 +198,7 @@
                 getTopicList(startPosition, maxResult, "shareTopic", currentOrderType, searchInput);
                 getTopicsNum("shareTopic", searchInput);
             } else {
+                $(".myTopicList").height(1392);
                 $("#searchTopicBlock").hide();
                 getTopicList(startPosition, maxResult, "requestTopic", currentOrderType, "");
                 getTopicsNum("requestTopic", "");
@@ -404,14 +417,14 @@
                     <div class="col-md-12 mySubTopicBlock">
                         <h1>搜尋結果</h1>
                     </div>
-                    <div class="col-md-12 mySubTopicBlock">
+                    <div class="col-md-12 mySubTopicBlock" id="requestTopicSearchBlock">
                         <div class="col-md-12" id="requestTopicSearchHeader">
                             <h1>需求</h1>
                         </div>
                         <div class="col-md-12" id="requestTopicSearch"></div>
                         <div class="col-md-12 myPagination" id="requestTopicSearchPagi"></div>
                     </div>
-                    <div class="col-md-12 mySubTopicBlock">
+                    <div class="col-md-12 mySubTopicBlock" id="shareTopicSearchBlock">
                         <div class="col-md-12" id="shareTopicSearchHeader">
                             <h1>提供</h1>
                         </div>

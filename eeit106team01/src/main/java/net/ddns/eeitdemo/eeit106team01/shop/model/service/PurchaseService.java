@@ -5,12 +5,17 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
 import javax.transaction.Transactional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+
+import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 import net.ddns.eeitdemo.eeit106team01.shop.model.ProductBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseBean;
 import net.ddns.eeitdemo.eeit106team01.shop.model.PurchaseListBean;
@@ -29,9 +34,12 @@ public class PurchaseService {
 
 	@Autowired
 	private ProductDAO productDAO;
+	
+	@Autowired
+	private MemberBeanService memberBeanService;	
 
 	// Create a Purchase and Purchase List
-	public PurchaseBean newPurchase(ArrayList<Integer> productIdList, PurchaseBean purchaseBean) {
+	public PurchaseBean newPurchase(ArrayList<Integer> productIdList, PurchaseBean purchaseBean, HttpSession httpSession, HttpServletResponse response) throws JsonProcessingException {
 		if (productIdList != null && productIdList.size() > 0 && purchaseBean.isNotNull()) {
 
 			// insert purchase
@@ -46,6 +54,11 @@ public class PurchaseService {
 			}
 
 			for (ProductBean productBean : productBeans) {
+				//MemberShip
+				if (productBean.getName().equalsIgnoreCase("VIP會員")){
+					memberBeanService.memberTempsLevelup(purchaseBean.getMemberId().getId(), httpSession, response);
+				}
+				
 				// insert purchase lists
 				SerialNumberBean serialNumberBean = productDAO
 						.findSerialNumbersAreAvailableByProductId(productBean.getId()).get(0);
@@ -61,7 +74,7 @@ public class PurchaseService {
 				productBean.setTotalSold(productBean.getTotalSold() + 1);
 				productDAO.updateProduct(productBean);
 			}
-
+			
 			return purchase;
 		}
 		return null;

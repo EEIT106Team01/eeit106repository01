@@ -16,14 +16,16 @@ import net.ddns.eeitdemo.eeit106team01.websocket.controller.ChatController;
 @Component
 public class ConnectionsHandler {
 	private Map<String, Principal> onlineUsers = new HashMap<String, Principal>();
-	
+
 	@Autowired
 	private ChatController chatController;
 
 	@EventListener
 	protected void onDisconnectEvent(SessionDisconnectEvent event) {
-		Collections.synchronizedMap(onlineUsers).remove(event.getUser().getName());
-		System.err.println("Client disconnected : " + event.getUser().getName());
+		if (event.getUser() != null && event.getUser().getName() != null) {
+			Collections.synchronizedMap(onlineUsers).remove(event.getUser().getName());
+			System.err.println("Client disconnected : " + event.getUser().getName());
+		}
 		chatController.getOnlineUsers();
 	}
 

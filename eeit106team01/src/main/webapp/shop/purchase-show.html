@@ -35,7 +35,7 @@
 
         <h3><span id="memberId"></span>&nbsp;的訂單歷史紀錄</h3>
 
-        <script type="text/javascript">
+        <!-- <script type="text/javascript">
             jQuery(window).load(function() {
                 var $table2 = jQuery("#table-2");
 
@@ -71,7 +71,7 @@
                     replaceCheckboxes();
                 });
             });
-        </script>
+        </script> -->
 
         <table class="table table-bordered table-striped datatable" id="table-2">
             <thead>
@@ -130,7 +130,7 @@
 
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        <h4 class="modal-title" id="show-productList"></h4>
+                        <h4 class="modal-title" id="show-productList2"></h4>
                     </div>
 
                     <div class="modal-body">
@@ -139,7 +139,7 @@
                                 <tr>
                                     <th>名稱</th>
                                     <th>序號</th>
-                                    <th class="col-lg-2">狀態</th>
+                                    <th class="col-lg-3">狀態</th>
                                     <th>進行評分</th>
                                 </tr>
                             </thead>
@@ -157,12 +157,9 @@
 
     </div>
 
-    <!-- Custom JavaScript -->
-    <script src="js/util.js"></script>
-    <script src="js/purchase-show.js"></script>
-
     <!-- Imported styles on this page -->
     <link rel="stylesheet" href="/assets/js/datatables/datatables.css">
+    <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.css" />
 
     <!-- Imported scripts on this page -->
     <script src="/assets/js/datatables/datatables.js"></script>
@@ -175,6 +172,11 @@
     <script src="/assets/js/joinable.js"></script>
     <script src="/assets/js/resizeable.js"></script>
     <script src="/assets/js/neon-api.js"></script>
+
+    <!-- Custom JavaScript -->
+    <script src="js/shopping-cart.js"></script>
+    <script src="js/util.js"></script>
+    <script src="js/purchase-show.js"></script>
 
     <!-- JavaScripts initializations and stuff -->
     <script src="/assets/js/neon-custom.js"></script>

@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.forum.model;
 
+import java.awt.Color;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -7,6 +8,9 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationMsg;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationService;
 
 @Service
 @Transactional(rollbackFor = Exception.class)
@@ -20,6 +24,8 @@ public class ArticleContentCurrentService {
 	private MemberBeanService memberBeanService;
 	@Autowired
 	private VideoService videoService;
+	@Autowired
+	private NotificationService notificationService;
 
 	public ArticleContentCurrentBean findByPrimaryKey(int id) {
 		return articleContentCurrentDAO.findByPrimaryKey(id);
@@ -35,7 +41,8 @@ public class ArticleContentCurrentService {
 
 	public ArticleContentCurrentBean insert(ArticleContentCurrentBean bean) {
 		if (bean != null) {
-			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
+			ArticleTopicCurrentBean articleTopicCurrentBean = articleTopicCurrentDAO
+					.findByPrimaryKey(bean.getArticleTopicCurrent().getId());
 			MemberTempBean memberBean = memberBeanService.findByPrimaryKey(bean.getMemberBean().getId());
 			bean.setArticleTopicCurrent(articleTopicCurrentBean);
 			bean.setMemberBean(memberBean);
@@ -149,11 +156,19 @@ public class ArticleContentCurrentService {
 
 	public Map<Integer, String> contentWhoLike(int id, int memberId, String memberName, String likeOrDislike) {
 		ArticleContentCurrentBean articleContentCurrentBean = this.findByPrimaryKey(id);
+		String likeOrDislikeMemberName = articleContentCurrentBean.getMemberBean().getName();
+		NotificationMsg notiMsg = new NotificationMsg();
+		notiMsg.setColor(new Color(0, 255, 191));
+		notiMsg.setUrl("/forum/showContents.html?topic=" + articleContentCurrentBean.getArticleTopicCurrent().getId());
 		int likeNumber = 0;
 		if (likeOrDislike.equals("like")) {
 			likeNumber = 1;
+			notiMsg.setIcon("entypo-thumbs-up");
+			notiMsg.setMessage(memberName + " 喜歡你的文章");
 		} else if (likeOrDislike.equals("dislike")) {
 			likeNumber = -1;
+			notiMsg.setIcon("entypo-thumbs-down");
+			notiMsg.setMessage(memberName + " 不喜歡你的文章");
 		}
 		HashMap<Integer, String> likeWho = null;
 		if (articleContentCurrentBean != null) {
@@ -163,10 +178,12 @@ public class ArticleContentCurrentService {
 					likeWho.remove(memberId);
 				} else {
 					likeWho.put(memberId, likeOrDislike + "||" + memberName);
+					notificationService.sendNotificationToUser(likeOrDislikeMemberName, notiMsg);
 				}
 			} else {
 				likeWho = new HashMap<Integer, String>();
 				likeWho.put(memberId, likeOrDislike + "||" + memberName);
+				notificationService.sendNotificationToUser(likeOrDislikeMemberName, notiMsg);
 			}
 			articleContentCurrentBean.setContentLikeWho(likeWho);
 			articleContentCurrentBean.setContentLikeNum(articleContentCurrentBean.getContentLikeNum() + likeNumber);

@@ -262,10 +262,9 @@ public class ProductDAOImpl implements ProductDAO {
 									ProductBean.class)
 							.setParameter("name","%"+queryString+"%").setParameter("type",brandType)
 							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();	
-							System.out.println("name type day===========================================");
 				}else {
 					this.productsResutlt = this.getSession()
-							.createQuery("from ProductBean where updatedTime BETWEEN :startDay AND :endDay",
+							.createQuery("from ProductBean where updatedTime BETWEEN :startDay AND :endDay order by convert(datetime, UpdatedTime, 121) DESC",
 									ProductBean.class)
 							.setParameter("startDay", startDay).setParameter("endDay", endDay).getResultList();			
 				}

@@ -194,8 +194,9 @@
                     }
                 }
                 $(".content-content").append(createChangePageBtn());
-                $('[data-toggle="popover"]').popover();
+                
             }
+            $('[data-toggle="popover"]').popover();
             setTimeout(resizeWindow, 50);
             vipVideoCheck();
         }
@@ -369,14 +370,14 @@
                 "data-trigger": "hover",
                 "data-content": likeList,
                 "title": "喜歡這篇文",
-                "data-placement": "bottom"
+                "data-placement": "top"
             });
             $(disLike).attr({
                 "data-toggle": "popover",
                 "data-trigger": "hover",
                 "data-content": dislikeList,
                 "title": "不喜歡這篇文",
-                "data-placement": "bottom"
+                "data-placement": "top"
             });
             if (memberBean) {
                 if (likeWho && likeWho[memberBean.id]) {
@@ -832,7 +833,7 @@
                 , center: { lat: topicBean.accidentLocationLatitude, lng: topicBean.accidentLocationLongitude }
                 , scaleControl: true
                 , mapTypeControlOptions: { mapTypeIds: [] }
-                , gestureHandling: 'greedy'
+                , gestureHandling: 'cooperative'
             });
 
             // google.maps.event.addListener(map, 'click', function (event) {

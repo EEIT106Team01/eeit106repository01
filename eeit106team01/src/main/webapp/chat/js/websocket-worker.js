@@ -87,6 +87,10 @@ onconnect = function (e) {
         for (var i = 0, j = e.ports.length; i < j; i++) {
             console.log(e);
             e.ports[i].onmessage = function (e) {
+                if (e.data.message && (e.data.message.length > (10 * 1024 * 1024))) {
+                    console.log("size over limit")
+                    return;
+                }
                 // console.log(e);
                 if (e.data.command == "subscribeRegion") {
                     if (e.data.region == "north") {

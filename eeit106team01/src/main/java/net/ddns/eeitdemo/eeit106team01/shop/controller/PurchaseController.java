@@ -1,5 +1,6 @@
 package net.ddns.eeitdemo.eeit106team01.shop.controller;
 
+import java.awt.Color;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -12,10 +13,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import javax.sql.rowset.serial.SerialBlob;
 
 import org.apache.commons.lang3.ArrayUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.env.Environment;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +32,8 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
 
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberBeanService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
@@ -43,6 +49,8 @@ import net.ddns.eeitdemo.eeit106team01.shop.util.Converter;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NewDate;
 import net.ddns.eeitdemo.eeit106team01.shop.util.NullChecker;
 import net.ddns.eeitdemo.eeit106team01.shop.util.SerialNumberGenerator;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationMsg;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationService;
 
 @RestController
 public class PurchaseController {
@@ -55,11 +63,14 @@ public class PurchaseController {
 
 	@Autowired
 	private MemberBeanService memberBeanService;
-	
+
+	@Autowired
+	private NotificationService notificationService;
+
 	private NewDate newDate = new NewDate();
 	private static AllInOne all;
-	private static final String IDILEGAL= "ID不合法";
-	private static final String VALUEMISSED= "缺少必要值";
+	private static final String IDILEGAL = "ID不合法";
+	private static final String VALUEMISSED = "缺少必要值";
 	private static final String DELIVERSTATUS = "deliverStatus";
 	private static final String PAYSTATUS = "payStatus";
 	private static final String PURCHASE = "purchase";
@@ -221,7 +232,8 @@ public class PurchaseController {
 	// Create a Purchase and Purchase List
 	@PostMapping(value = "/shop/newPurchase")
 	@SuppressWarnings("unchecked")
-	public ResponseEntity<?> newPurchase(@RequestBody Map<String, Object> json, BindingResult bindingResult) {
+	public ResponseEntity<?> newPurchase(@RequestBody Map<String, Object> json, HttpSession httpSession,
+			HttpServletResponse response, BindingResult bindingResult) {
 		if ((bindingResult != null) && (bindingResult.hasFieldErrors())) {
 			Map<String, String> errors = new HashMap<>();
 			List<ObjectError> bindingErrors = bindingResult.getAllErrors();
@@ -266,8 +278,10 @@ public class PurchaseController {
 				}
 			}
 
-			result = purchaseService.newPurchase(productIdList, purchaseBean);
-		} catch (IllegalArgumentException e) {
+			result = purchaseService.newPurchase(productIdList, purchaseBean, httpSession, response);
+		} catch (IllegalArgumentException | JsonProcessingException e) {
+			System.out.println(e.getMessage());
+			System.out.println(e.toString());
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.isNotNull()) {
@@ -295,6 +309,7 @@ public class PurchaseController {
 		List<ReviewBean> result = new ArrayList<>();
 		try {
 			for (ReviewBean review : reviews) {
+				System.err.println(review.toString());
 				if (!NullChecker.isEmpty(review.getImageBase64())) {
 					Byte[] byteObjects = review.getImageBase64();
 					SerialBlob serialBlob = new SerialBlob(ArrayUtils.toPrimitive(byteObjects));
@@ -314,6 +329,14 @@ public class PurchaseController {
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && !result.isEmpty()) {
+			// Send notification
+			NotificationMsg purchaseSucessMsg = new NotificationMsg();
+			purchaseSucessMsg.setColor(Color.gray);
+			purchaseSucessMsg.setIcon("entypo-comment");
+			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
+			purchaseSucessMsg.setMessage(
+					"評論: " + " 已新增一則評論, " + "商品: " + result.get(0).getProductId().getName().substring(0, 3) + "... ");
+			notificationService.sendNotificationToUser(result.get(0).getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
@@ -419,11 +442,22 @@ public class PurchaseController {
 			return new ResponseEntity<>("錯誤: " + e.getMessage(), HttpStatus.BAD_REQUEST);
 		}
 		if (result != null && result.isNotNull()) {
+			// Send notification
+			NotificationMsg purchaseSucessMsg = new NotificationMsg();
+			purchaseSucessMsg.setColor(Color.gray);
+			purchaseSucessMsg.setIcon("entypo-comment");
+			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
+			purchaseSucessMsg.setMessage(
+					"評論: " + " 已修改一則評論, " + "商品: " + result.getProductId().getName().substring(0, 3) + "... ");
+			notificationService.sendNotificationToUser(result.getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("建立失敗", HttpStatus.NOT_FOUND);
 		}
 	}
+
+	@Autowired
+	private Environment env;
 
 	@PostMapping(value = "/shop/processEcpay")
 	public ResponseEntity<?> processEcpay(@RequestBody String purchaseId, BindingResult bindingResult) {
@@ -455,7 +489,8 @@ public class PurchaseController {
 		obj.setTotalAmount(String.valueOf(purchase.getProductTotalPrice() + purchase.getDeliverPrice()));
 		obj.setTradeDesc("三寶商城");
 		obj.setReturnURL("http://211.23.128.214:5000");
-		obj.setClientBackURL("http://localhost:8080/shop/receipt.html?" + tradeNo);
+		String clientBackURL = env.getProperty("client.back.url");
+		obj.setClientBackURL(clientBackURL + "shop/receipt.html?" + tradeNo);
 		StringBuilder itemNameAndCountAndPrice = new StringBuilder();
 		HashMap<String, Integer> productMap = new HashMap<>();
 		for (PurchaseListBean purchaseListBean : purchaseListBeans) {
@@ -478,7 +513,12 @@ public class PurchaseController {
 					.append("元 ").append(" ").append("x").append(String.valueOf(productCount)).append("#");
 		}
 
-		obj.setItemName(itemNameAndCountAndPrice.append("運費 60 元").toString());
+		if (purchase.getDeliverPrice() != 0) {
+			obj.setItemName(itemNameAndCountAndPrice.append("運費 60 元").toString());
+		} else {
+			obj.setItemName(itemNameAndCountAndPrice.toString().substring(0, itemNameAndCountAndPrice.length() - 1));
+		}
+
 		String result = all.aioCheckOut(obj, null);
 		if (result != null) {
 			return new ResponseEntity<>(result, HttpStatus.OK);
@@ -497,6 +537,14 @@ public class PurchaseController {
 		purchaseBean.setUpdatedTime(newDate.newCurrentTime());
 		PurchaseBean result = purchaseService.updatePurchase(purchaseBean, "paid", null, null);
 		if (result != null) {
+			// Send notification
+			NotificationMsg purchaseSucessMsg = new NotificationMsg();
+			purchaseSucessMsg.setColor(Color.gray);
+			purchaseSucessMsg.setIcon("entypo-doc-text");
+			purchaseSucessMsg.setUrl("/shop/purchase-show.html");
+			purchaseSucessMsg.setMessage("訂單: 已收到您的款項, " + "編號: " + ecpaySN + " 共 $  "
+					+ (purchaseBean.getProductTotalPrice() + purchaseBean.getDeliverPrice()) + " 元。");
+			notificationService.sendNotificationToUser(purchaseBean.getMemberId().getName(), purchaseSucessMsg);
 			return new ResponseEntity<>(result, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<>("購買失敗", HttpStatus.NOT_FOUND);

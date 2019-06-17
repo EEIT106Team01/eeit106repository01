@@ -36,7 +36,7 @@ public class ShopCrawlerTest {
 		
 	}
 	
-	@Test
+//	@Test
 	public void testYahooProductCrawler() {
 		String fetchProductName = null;
 		String fetchProductType = null;

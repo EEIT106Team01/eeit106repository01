@@ -63,20 +63,24 @@
             <!-- drag and drop end -->
 
             <div id="headerDiv">
-                <span id="title" class="col-md-4">
+                <span id="title" class="col-md-2">
                     <img src="img/FaDaTtsai.png" class="titleIimg1">
                 </span>
-                <div class="col-md-8 search" data-unique="search">
+                <div class="col-md-10 search" data-unique="search">
                     <div class="col-md-12">
                         <form id="searchForm">
-                            <select class="form-control col-md-2" id="searchType"></select>
-                            <input type="text" class="form-control input-lg col-md-8" placeholder="請輸入關鍵字" id="searchName" name="searchName">
-                            <button class="btn btn-primary" type="button" id="search">搜尋</button>
+                            <select class="form-control col-md-2 input-lg" id="searchType" style="width: auto;"></select>
+                            <div class="input-group">
+                                <input type="text" class="form-control input-lg col-md-10" placeholder="請輸入關鍵字" id="searchName" name="searchName">
+                                <div class="input-group-btn">
+                                    <button class="btn btn-lg btn-primary" type="button" id="search">搜尋<i class="entypo-search"></i></button>
+                                </div>
+                            </div>
                             <label for="searchName"></label>
                         </form>
                     </div>
                     <div class="col-md-12" id="keyWordDiv">
-                        <p>大家都在找...</p>
+                        <p>大家都在找...<i class="entypo-search"></i></p>
                         <div id="keyWord">
                             <!-- <button type="button" class="btn btn-default">行車紀錄器</button> -->
                         </div>
@@ -89,7 +93,7 @@
                     <div id="productsQuantity">
 
                     </div>
-                    <hr style="width: 100%; color: black; height: 1px; background-color:black;">
+                    <hr style="width: 100%; color:#ecdcd2; height: 1px; background-color:#ecdcd2;">
                     <div id="classification">
                         <ul>
 
@@ -179,30 +183,18 @@
                         </ul>
                         <!-- style="position: absolute;top:90px"  -->
                         <!-- style="position: absolute;top:260px -->
-                        <img src="img/vip.jpg" width="100%" />
+                        <a href="/shop/UpgradeMember.html" style="cursor: pointer">
+                            <img src="img/vip.jpg" width="100%" />
+                            <p></p>
+                            <img src="img/join.jpg" width="100%" />
+                        </a>
                         <div>
                             <div class="col-md-6">
-                                <a href="/shop/UpgradeMember.html">
-                                    <img src="img/join.png" width="125%" />
-                                </a>
+                                <!-- <a href="/shop/UpgradeMember.html">
+                                </a> -->
                             </div>
                             <div class="col-md-6">
-                                <span style="font-size: 20px;">
-                                    <li>
-                                        <a href="#" style="color:rgb(153, 135, 112)">
-                                            <i class="entypo-basket"></i>購物車</a>
-                                    </li>
-                                    <!-- <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);"> -->
-                                    <li>
-                                        <a href="#" style="color:rgb(153, 135, 112)">
-                                            <i class="entypo-doc-text"></i>管理訂單</a>
-                                    </li>
-                                    <!-- <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);"> -->
-                                    <li>
-                                        <a href="#" style="color:rgb(153, 135, 112)">
-                                            <i class="entypo-user"></i>會員管理</a>
-                                    </li>
-                                </span>
+
                             </div>
                         </div>
                     </div>
@@ -210,7 +202,7 @@
                     <div class="col-md-12" id="productsTop10Div">
                         <div data-unique="productsTop10Div"></div>
                         <div class="classification">
-                            <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);">
+                            <hr style="width: 100%; color: #ecdcd2; height: 1px; background-color:#ecdcd2;">
                             <spanp>全站商品TOP 10</span>
                                 <!-- <a href="">
                                     <span class="more">更多人氣排行</span>
@@ -222,7 +214,7 @@
                     <div class="col-md-12" id="newUpdateProductDiv">
                         <div data-unique="newUpdateProductDiv"></div>
                         <div class="classification">
-                            <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);">
+                            <hr style="width: 100%; color: #ecdcd2; height: 1px; background-color:#ecdcd2;">
                             <span>新產品</spanp>
                                 <!-- <a href="">
                                     <span class="more">更多新商品</span>
@@ -234,10 +226,10 @@
                     <div class="col-md-12">
                         <div data-unique="top10Product1"></div>
                         <div class="classification">
-                            <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);">
+                            <hr style="width: 100%; color: #ecdcd2; height: 1px; background-color:#ecdcd2;">
                             <span>行車紀錄器</spanp>
                                 <a id="top10Product1A">
-                                    <span class="more">更多同種類商品</span>
+                                    <span class="more"><i class="entypo-forward"></i>更多同種類商品</span>
                             </a>
                         </div>
                         <div id="top10Product1"></div>
@@ -245,10 +237,10 @@
                     <div class="col-md-12">
                         <div data-unique="top10Product2"></div>
                         <div class="classification">
-                            <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);">
+                            <hr style="width: 100%; color: #ecdcd2; height: 1px; background-color:#ecdcd2;">
                             <span>安全帽</spanp>
                                 <a id="top10Product2A">
-                                    <span class="more">更多同種類商品</span>
+                                    <span class="more"><i class="entypo-forward"></i>更多同種類商品</span>
                             </a>
                         </div>
                         <div id="top10Product2"></div>
@@ -257,10 +249,10 @@
                     <div class="col-md-12">
                         <div data-unique="top10Product3"></div>
                         <div class="classification">
-                            <hr style="width: 100%; color: rgb(255, 255, 255); height: 1px; background-color:rgb(255, 255, 255);">
+                            <hr style="width: 100%; color: #ecdcd2; height: 1px; background-color:#ecdcd2;">
                             <span>衛星導航</spanp>
                                 <a id="top10Product3A">
-                                    <span class="more">更多同種類商品</span>
+                                    <span class="more"><i class="entypo-forward"></i>更多同種類商品</span>
                             </a>
                         </div>
                         <div id="top10Product3"></div>
@@ -293,9 +285,9 @@
     <!-- jQuery Validation Plugin -->
     <script async src="js/jquery.validate.js"></script>
 
-    <!-- Shopping Cart -->
     <link rel="stylesheet" href="css/index.css">
     <script async src="js/index.js"></script>
+    <!-- Shopping Cart -->
     <script type="text/javascript " src="js/shopping-cart.js"></script>
     <script type="text/javascript " src="js/util.js"></script>
     <link rel="stylesheet" href="css/shopping-cart.css" />

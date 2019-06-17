@@ -24,6 +24,8 @@ public class MemberTempBean {
 	private String level;
 	private java.util.Date levelTime;
 	private java.util.Date memberCreateTime;
+	private String phone;
+	private String address;
 	
 //	@OneToMany(mappedBy = "memberId")
 //	private List<PurchaseBean> purchaseId;
@@ -36,15 +38,15 @@ public class MemberTempBean {
 	
 	@Override
 	public String toString() {
-		return "MemberBean [id=" + id + ", name=" + name + ", password=" + password + ", image=" + image + ", email="
-				+ email + ", birth=" + birth + ", level=" + level + ", levelTime=" + levelTime + ", memberCreateTime="
-				+ memberCreateTime + "]";
+		return "MemberTempBean [id=" + id + ", name=" + name + ", password=" + password + ", image=" + image
+				+ ", email=" + email + ", birth=" + birth + ", level=" + level + ", levelTime=" + levelTime
+				+ ", memberCreateTime=" + memberCreateTime + ", phone=" + phone + ", address=" + address + "]";
 	}
 
 	public MemberTempBean() {
 		super();
 	}
-	
+
 	public MemberTempBean(String name, String password, String image, String email, Date birth, String level, Date levelTime,
 			Date memberCreateTime) {
 		super();
@@ -113,6 +115,24 @@ public class MemberTempBean {
 		this.memberCreateTime = memberCreateTime;
 	}
 
+	public String getPhone() {
+		return phone;
+	}
+
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
+
+	public String getAddress() {
+		return address;
+	}
+
+	public void setAddress(String address) {
+		this.address = address;
+	}
+	
+	
+	
 //	public List<PurchaseBean> getPurchaseId() {
 //		return purchaseId;
 //	}

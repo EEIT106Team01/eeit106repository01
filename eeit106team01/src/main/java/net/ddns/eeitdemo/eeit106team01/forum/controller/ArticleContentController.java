@@ -25,8 +25,8 @@ import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentBean;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleContentCurrentService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.ArticleTopicCurrentService;
 import net.ddns.eeitdemo.eeit106team01.forum.model.MemberTempBean;
-import net.ddns.eeitdemo.eeit106team01.websocket.controller.NotificationController;
 import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationMsg;
+import net.ddns.eeitdemo.eeit106team01.websocket.model.NotificationService;
 
 @RestController
 public class ArticleContentController {
@@ -38,7 +38,7 @@ public class ArticleContentController {
 	private ArticleTopicCurrentService articleTopicCurrentService;
 
 	@Autowired
-	private NotificationController notificationController;
+	private NotificationService notificationService;
 
 	@GetMapping(path = { "/articleTopics/{id}/articleContents" }, produces = { "application/json" })
 	public ResponseEntity<?> getContentList(@PathVariable Integer id, @RequestParam Integer begin,
@@ -112,12 +112,12 @@ public class ArticleContentController {
 								page = page / 10;
 							}
 							notificationMsg.setUrl(url + "&page=" + page);
-							notificationController.sendNotificationToUser(repliedName, notificationMsg);
+							notificationService.sendNotificationToUser(repliedName, notificationMsg);
 						}
 					} else {
 						String repliedName = result.getReply().getMemberBean().getName();
 						if (!memberBean.getName().equals(repliedName)) {
-							notificationController.sendNotificationToUser(repliedName, notificationMsg);
+							notificationService.sendNotificationToUser(repliedName, notificationMsg);
 						}
 					}
 					return ResponseEntity
@@ -188,8 +188,11 @@ public class ArticleContentController {
 			if (result != null && !result.getContentStatus().equalsIgnoreCase("deleted")) {
 				result.setContentStatus("deleted");
 				result.setContentContent(
-						"{\"ops\":[{\"attributes\":{\"italic\":true},\"insert\":\"此文章已被刪除\"},{\"insert\":\"\\n\"}]}");
-
+						"{\"ops\":[{\"attributes\":{\"italic\":true},\"insert\":\"此文章已被刪除\"},{\"insert\":\"\\n\"}]}"
+						);
+				if (result.getVideoBean() != null) {
+					result.getVideoBean().setId(-1);
+				}
 				if ((result = articleContentCurrentService.update(result)) != null) {
 					return ResponseEntity.ok(result);
 				}

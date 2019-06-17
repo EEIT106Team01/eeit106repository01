@@ -20,6 +20,7 @@
 
     <link rel="stylesheet" href="/assets/css/font-icons/font-awesome/css/font-awesome.css">
     <link rel="stylesheet" href="/assets/js/selectboxit/jquery.selectBoxIt.css">
+    <link rel="stylesheet" href="css/shopping-cart.css" />
 
 </head>
 
@@ -59,8 +60,8 @@
                     <div class="col-sm-3 invoice-left">
 
                         <h4>會員</h4>
-                        編號:<span id="memberId">1</span>
-                        <br /> 姓名:<span id="memberName">王大明</span>
+                        編號:<span id="memberId"></span>
+                        <br /> 姓名:<span id="memberName"></span>
                         <br /> 會員資格:<span id="memberShip"></span>
 
                     </div>
@@ -68,9 +69,9 @@
                     <div class="col-sm-3 invoice-left">
 
                         <h4>&nbsp;</h4>
-                        地址: <span id="memberAddress">台北市信義區</span>
-                        <br /> 信箱:<span id="memberMail">wangdaming@gmail.com</span>
-                        <br /> 電話:<span id="memberPhone">0972-452-777</span>
+                        地址: <span id="memberAddress"></span>
+                        <br /> 信箱:<span id="memberMail"></span>
+                        <br /> 電話:<span id="memberPhone"></span>
                     </div>
 
                     <div class="col-md-6 invoice-right">
@@ -79,8 +80,6 @@
                         <strong>信用卡號:</strong> -
                         <br />
                         <strong>付費狀態:</strong> 未付費
-                        <!-- <br />
-                        <strong></strong> -->
 
                     </div>
 
@@ -91,7 +90,7 @@
                 <table class="table table-bordered">
                     <thead>
                         <tr>
-                            <th class="text-center">#</th>
+                            <th class="text-center"><i class="entypo entypo-cancel-squared"></i></th>
                             <th width="60%">商品</th>
                             <th>數量</th>
                             <th>單價</th>
@@ -144,11 +143,11 @@
                             <ul class="list-unstyled">
                                 <li>
                                     商品 - 總和:
-                                    <strong id="productsTotalPrice">$</strong>
+                                    <strong id="productsTotalPrice"></strong>
                                 </li>
                                 <li>
                                     運費:
-                                    <strong id="deliveryPrice">$60</strong>
+                                    <strong id="deliveryPrice"></strong>
                                 </li>
                                 <li>
                                     會員折扣:
@@ -156,7 +155,7 @@
                                 </li>
                                 <li>
                                     總金額:
-                                    <strong id="totalPrice">$</strong>
+                                    <strong id="totalPrice"></strong>
                                 </li>
                             </ul>
 
@@ -198,6 +197,7 @@
     <!-- Custom JavaScript -->
     <script src="js/util.js"></script>
     <script src="js/purchase.js"></script>
+    <script src="js/shopping-cart.js"></script>
 
     <!-- JavaScripts initializations and stuff -->
     <script src="/assets/js/neon-custom.js"></script>

@@ -49,7 +49,7 @@ public class MemberTempDAOImpl implements MemberTempDAO {
 
 	@Override
 	public List<MemberTempBean> findAll() {
-		return getSession().createQuery("from ArticleTopicCurrentBean", MemberTempBean.class).getResultList();
+		return getSession().createQuery("from MemberTempBean", MemberTempBean.class).getResultList();
 	}
 
 	@Override

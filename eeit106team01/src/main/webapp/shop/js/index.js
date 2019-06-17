@@ -1,4 +1,12 @@
 $(document).ready(function() {
+        //verify is admin
+        if (memberBean != undefined) {
+            if (member.level == "administrator") {
+                location.href = "/shop/CMS.html";
+            }
+        }
+        hideCart();
+
         getProducts()
         getAllType()
         getProductsByUpdateTime()
@@ -12,7 +20,7 @@ $(document).ready(function() {
         }
 
         $("#search").on("click", (function() {
-            if ($("#searchName").val() != null || typeof($("#searchName").val()) != "undefined" || $("#searchName").val().length == 0) {
+            if ($("#searchName").val() != null && typeof($("#searchName").val()) != "undefined" && $("#searchName").val().length != 0) {
                 insertKeyWord();
             }
 
@@ -56,16 +64,18 @@ function getProducts() {
             var productsId = [];
             var y = 0;
             $.each(productsData, function() {
-                productsName.push(productsData[y].name);
-                productsPrice.push(productsData[y].price);
-                productsImg.push(productsData[y].imageLink[0]);
-                productTotalSold.push(productsData[y].totalSold);
-                productsId.push(productsData[y].id);
+                if (productsData[y].id != 1630) {
+                    productsName.push(productsData[y].name);
+                    productsPrice.push(productsData[y].price);
+                    productsImg.push(productsData[y].imageLink[0]);
+                    productTotalSold.push(productsData[y].totalSold);
+                    productsId.push(productsData[y].id);
+                }
                 y++;
             })
 
             var pageSize = productsData.length;
-            $("#productsQuantity").empty().append("<span class='productsQuantityTitle'>全站共有<h2>" + pageSize + "件商品</h2></span><hr>")
+            $("#productsQuantity").empty().append("<span class='productsQuantityTitle'>全站共有<h2 style='color: indianred;'>" + pageSize + "件商品</h2></span><hr>")
 
             var products = [];
             var top = 10;
@@ -94,7 +104,9 @@ function getAllType() {
             var i = 0;
             var productTypeArray = [];
             $.each(typesData, function() {
-                productTypeArray.push('<li class="li"><a href="/shop/search.html?type=' + typesData[i].data + '">' + typesData[i].data + '</a></li>')
+                if (typesData[i].data != "會員") {
+                    productTypeArray.push('<li class="li"><a href="/shop/search.html?type=' + typesData[i].data + '"><i class="entypo-right-dir"></i>' + typesData[i].data + '</a></li>')
+                }
                 i++
             })
             $("#classification").empty().append(productTypeArray.join(""))
@@ -102,7 +114,9 @@ function getAllType() {
             var y = 0;
             productTypeArray2 = [];
             $.each(typesData, function() {
-                productTypeArray2.push("<option>" + typesData[y].data + "</option>")
+                if (typesData[y].data != "會員") {
+                    productTypeArray2.push("<option>" + typesData[y].data + "</option>")
+                }
                 y++
             })
             $("#searchType").empty().append("<option>All</option>" + productTypeArray2.join(""))
@@ -129,10 +143,12 @@ function getProductsByUpdateTime() {
             var productsId = [];
             var y = 0;
             $.each(dayData, function() {
-                productsName.push(dayData[y].name)
-                productsPrice.push(dayData[y].price)
-                productsImg.push(dayData[y].imageLink[0])
-                productsId.push(dayData[y].id)
+                if (dayData[y].id != 1630) {
+                    productsName.push(dayData[y].name)
+                    productsPrice.push(dayData[y].price)
+                    productsImg.push(dayData[y].imageLink[0])
+                    productsId.push(dayData[y].id)
+                }
                 y++;
             })
 
@@ -195,17 +211,15 @@ function getKeyword() {
             $.each(keywordData, function() {
                 kwArray.push(
                     '<a href="/shop/search.html?productName=' + keywordData[i].keyword + '&productType=All">' +
-                    '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + '</button>')
+                    '<button type="button" class="btn btn-primary">' + keywordData[i].keyword + '</button>' +
+                    '<span>&nbsp</span>')
                 i++
             })
             if (kwArray.length < 5) {
                 kwArray.length = 5;
-                console.log("kwArray<5")
             }
             var result = kwArray.join("")
-            console.log(result)
             $("#keyWord").empty().append(result)
-
         },
         error: function(jqXHR, textStatus, errorThrown) {
             console.log(textStatus)
@@ -229,10 +243,12 @@ function getMightLikeProduct(type) {
 
             var y = 0;
             $.each(sortData, function() {
-                productsName.push(sortData[y].name)
-                productsPrice.push(sortData[y].price)
-                productsImg.push(sortData[y].imageLink[0])
-                productsId.push(sortData[y].id);
+                if (sortData[y].id != 1630) {
+                    productsName.push(sortData[y].name)
+                    productsPrice.push(sortData[y].price)
+                    productsImg.push(sortData[y].imageLink[0])
+                    productsId.push(sortData[y].id);
+                }
                 y++;
             })
 

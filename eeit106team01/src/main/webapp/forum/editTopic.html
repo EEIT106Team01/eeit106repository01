@@ -58,6 +58,7 @@
 			width: 886px;
 			padding: 15px;
 			margin: auto;
+			min-height: 1423px;
 			height: 100%;
 			background-color: #ffffff;
 			box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.33);
@@ -215,6 +216,20 @@
 			}
 
 			// $("#updateMessage").val(contentBean.updateMessage);
+
+			if (topicBean.topicType == "shareTopic") {
+				$("#submit").val("分享影片資源");
+				$(".myVideoDiv").css("display", "block");
+				if ($("#videoURI").text() != "") {
+					$(".myTopicList").css({ height: "1523px" });
+				} else {
+					$(".myTopicList").css({ height: "1494px" });
+				}
+			} else if (topicBean.topicType == "requestTopic") {
+				$("#submit").val("送出協尋請求");
+				$(".myVideoDiv").css("display", "none");
+				$(".myTopicList").css({ height: "1423px" });
+			}
 		}
 
 		function showQuillContent(quillContent) {
@@ -235,8 +250,16 @@
 				$(".updateBlock").css("display", "block");
 				if ($("input[name=topicType]:checked").val() == "shareTopic") {
 					$("#submit").val("分享影片資源");
+					$(".myVideoDiv").css("display", "block");
+					if ($("#videoURI").text()) {
+						$(".myTopicList").css({ height: "1523px" });
+					} else {
+						$(".myTopicList").css({ height: "1494px" });
+					}
 				} else if ($("input[name=topicType]:checked").val() == "requestTopic") {
 					$("#submit").val("送出協尋請求");
+					$(".myVideoDiv").css("display", "none");
+					$(".myTopicList").css({ height: "1423px" });
 				}
 			});
 			$("#deleteTopic").on("click", function () {
@@ -245,28 +268,36 @@
 			});
 
 
-			let selectedTopicType = getUrlParameters().t;
+			// let selectedTopicType = getUrlParameters().t;
 
-			if (selectedTopicType == undefined) {
-				selectedTopicType = "share";
-			}
+			// if (selectedTopicType == undefined) {
+			// 	selectedTopicType = "share";
+			// }
 
-			if (selectedTopicType.substr(0, 5) == "share") {
-				$("#shareTopic").attr("checked", true);
-				$("#submit").val("分享影片資源");
-				$(".myVideoDiv").css("display", "block");
-			} else if (selectedTopicType.substr(0, 4) == "help") {
-				$("#requestTopic").attr("checked", true);
-				$("#submit").val("送出協尋請求");
-				$(".myVideoDiv").css("display", "none");
-			}
+			// if (selectedTopicType.substr(0, 5) == "share") {
+			// 	$("#shareTopic").attr("checked", true);
+			// 	$("#submit").val("分享影片資源");
+			// 	$(".myVideoDiv").css("display", "block");
+			// 	$(".myTopicList").css({ height: "1494px" });
+			// } else if (selectedTopicType.substr(0, 4) == "help") {
+			// 	$("#requestTopic").attr("checked", true);
+			// 	$("#submit").val("送出協尋請求");
+			// 	$(".myVideoDiv").css("display", "none");
+			// 	$(".myTopicList").css({ height: "1423px" });
+			// }
 			$("#shareTopic").on("click", function () {
 				$("#submit").val("分享影片資源");
 				$(".myVideoDiv").css("display", "block");
+				if ($("#videoURI").text()) {
+					$(".myTopicList").css({ height: "1523px" });
+				} else {
+					$(".myTopicList").css({ height: "1494px" });
+				}
 			});
 			$("#requestTopic").on("click", function () {
 				$("#submit").val("送出協尋請求");
 				$(".myVideoDiv").css("display", "none");
+				$(".myTopicList").css({ height: "1423px" });
 			});
 
 			$("#topicHeader").on("input", headerToggleCss);
@@ -419,10 +450,20 @@
 				// var httpMethod = "POST";
 				if (newVideoBean) {
 					console.log("videoBean 不為空");
+					if ($("#videoURI").text()) {
+						$(".myTopicList").css({ height: "1672px" });
+					} else {
+						$(".myTopicList").css({ height: "1643px" });
+					}
 					upload();
 					let checkVideo = setInterval(function () {
 						if (videoUploadResult) {
 							clearInterval(checkVideo);
+							if ($("#videoURI").text()) {
+								$(".myTopicList").css({ height: "1652px" });
+							} else {
+								$(".myTopicList").css({ height: "1623px" });
+							}
 							console.log("videoUploadResult: ");
 							console.log(videoUploadResult);
 							newTopicBean.videoBean = videoUploadResult;

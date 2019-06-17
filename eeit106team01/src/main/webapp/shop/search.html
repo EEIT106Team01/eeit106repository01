@@ -24,17 +24,10 @@
     <link rel="stylesheet" href="/assets/css/neon-forms.css">
     <link rel="stylesheet" href="/assets/css/custom.css">
 
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/twbs-pagination/1.4.2/jquery.twbsPagination.min.js"></script>
-
-    <!-- Isotope排序用 -->
-    <script src="https://unpkg.com/isotope-layout@3/dist/isotope.pkgd.min.js"></script>
 
     <link rel="stylesheet" href="css/search.css">
     <script async src="js/search.js"></script>
-    <!-- <script src="assets/js/jquery-1.11.3.min.js"></script> -->
-
-
 
 </head>
 
@@ -79,16 +72,12 @@
 
                     <div class="sui-hover inline-links animate-in">
                         <!-- You can remove "inline-links" class to make links appear vertically, class "animate-in" will make A elements animateable when click on user profile -->
-                        <a href="#">
-                            <i class="entypo-pencil"></i> New Page
+                        <a href="/shop/index.html">
+                            <i class="fa fa-home"></i> 三寶商城
                         </a>
 
-                        <a href="#">
-                            <i class="entypo-mail"></i> Inbox
-                        </a>
-
-                        <a href="#">
-                            <i class="entypo-lock"></i> Log Off
+                        <a href="/index.html">
+                            <i class="fa fa-home"></i> 論壇
                         </a>
 
                         <span class="close-sui-popup">&times;</span>
@@ -122,7 +111,7 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <label for="searchName"></label>
+                                            <label for="searchName" style="color: red;font-size: 120%"></label>
                                         </form>
                                     </li>
                                 </ul>
@@ -157,8 +146,8 @@
                                                     </button>
                                                 </div>
                                             </div>
-                                            <label for="minPrice"></label>
-                                            <label for="maxPrice"></label>
+                                            <label for="minPrice" style="color: red;font-size: 120%"></label>
+                                            <label for="maxPrice" style="color: red;font-size: 120%"></label>
                                         </form>
                                     </li>
                                 </ul>
@@ -233,6 +222,34 @@
 
         <div class="main-content">
 
+            <!-- drag and drop start  -->
+            <div class="row" id="div-draggable-events">
+                <div>
+                    <!-- Card -->
+                    <div id="draggable-events" class="card">
+
+                        <!-- Card image -->
+                        <div class="card-header p-2" id="card-shopping-cart">
+                            <span>
+                                <img class="card-img-top mr-1" src="img/cart.png" alt="Shopping Cart" />
+                                <span class="badge badge-warning align-middle pt-1">
+                                    <p class="text-dark" id="card-shopping-cart-count">0</p>
+                                </span>
+                            </span>
+                        </div>
+
+                        <!--Accordion wrapper 1-->
+                        <div class="accordion md-accordion" style="display: none" id="accordion-shopping-cart" role="tablist" aria-multiselectable="true">
+                            <div class="scrollable" data-height="300">
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- Card -->
+                </div>
+            </div>
+            <!-- drag and drop end -->
+
             <ol class="breadcrumb">
                 <li>
                     <a href="/shop/index.html">
@@ -248,12 +265,10 @@
 
             <div class="col-md-12" id="searchTitle">
                 <div class="col-md-12" id="other">
-                    <span class="col-md-4 productQuantityFont"></span>
-                    <h4 id="productQuantity"></h4>
-                    <span class="productQuantityFont"></span>
-                    <div id="sortByType" class="col-md-8 sortClass">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-default col-md-">商品排序</button>
+                    <h2 id="productQuantity" class="col-md-4"></h2>
+                    <div id="sortByType" class="col-md-4 sortClass">
+                        <div class="btn-group left-dropdown col-md-8">
+                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -272,15 +287,12 @@
                                 </li>
                                 </li>
                                 <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByType">預設</a>
-                                </li>
                             </ul>
                         </div>
                     </div>
-                    <div id="sortByBrand" class="col-md-8 sortClass">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-default col-md-">商品排序</button>
+                    <div id="sortByBrand" class="col-md-4 sortClass">
+                        <div class="btn-group left-dropdown col-md-8">
+                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -300,16 +312,13 @@
                                 </li>
 
                                 <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByBrand">預設</a>
-                                </li>
                             </ul>
                         </div>
                     </div>
 
-                    <div id="sortByName" class="col-md-8 sortClass">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-default col-md-">商品排序</button>
+                    <div id="sortByName" class="col-md-4 sortClass">
+                        <div class="btn-group left-dropdown col-md-8">
+                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -329,16 +338,13 @@
                                 </li>
 
                                 <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByName">預設</a>
-                                </li>
                             </ul>
                         </div>
                     </div>
 
-                    <div id="sortByNameByType" class="col-md-8 sortClass">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-default col-md-">商品排序</button>
+                    <div id="sortByNameByType" class="col-md-4 sortClass">
+                        <div class="btn-group left-dropdown col-md-8">
+                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -358,16 +364,13 @@
                                 </li>
 
                                 <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByNameByType">預設</a>
-                                </li>
                             </ul>
                         </div>
                     </div>
 
-                    <div id="sortByBrandByMixpriceMaxprice" class="col-md-8 sortClass">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-default col-md-">商品排序</button>
+                    <div id="sortByBrandByMixpriceMaxprice" class="col-md-4 sortClass">
+                        <div class="btn-group left-dropdown col-md-8">
+                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -387,15 +390,13 @@
                                 </li>
 
                                 <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByBrandByPrice">預設</a>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
-                    <div id="sortByTypeByMixpriceMaxprice" class="col-md-8 sortClass">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-default col-md-">商品排序</button>
+                    <div id="sortByTypeByMixpriceMaxprice" class="col-md-4 sortClass">
+                        <div class="btn-group left-dropdown col-md-8">
+                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -415,16 +416,14 @@
                                 </li>
 
                                 <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByTypeByPrice">預設</a>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
 
-                    <div id="sortByNameByMixpriceMaxprice" class="col-md-8 sortClass">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-default col-md-">商品排序</button>
+                    <div id="sortByNameByMixpriceMaxprice" class="col-md-4 sortClass">
+                        <div class="btn-group left-dropdown col-md-8">
+                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -443,16 +442,14 @@
                                 </li>
                                 </li>
                                 <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByNameByPrice">預設</a>
-                                </li>
+
                             </ul>
                         </div>
                     </div>
 
-                    <div id="sortByNameByTypeByMixpriceMaxprice" class="col-md-8 sortClass">
-                        <div class="btn-group left-dropdown col-md-4">
-                            <button type="button" class="btn btn-default col-md-">商品排序</button>
+                    <div id="sortByNameByTypeByMixpriceMaxprice" class="col-md-4 sortClass">
+                        <div class="btn-group left-dropdown col-md-8">
+                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
                                     <span class="caret"></span>
                                 </button>
@@ -471,9 +468,6 @@
                                 </li>
                                 </li>
                                 <li class="divider"></li>
-                                <li>
-                                    <a id="sortDefultByNameByTypeByPrice">預設</a>
-                                </li>
                             </ul>
                         </div>
                     </div>
@@ -526,6 +520,11 @@
 
     <!-- JavaScripts initializations and stuff -->
     <script src="/assets/js/neon-custom.js"></script>
+
+    <!-- Shopping Cart -->
+    <script type="text/javascript " src="js/shopping-cart.js"></script>
+    <script type="text/javascript " src="js/util.js"></script>
+    <link rel="stylesheet" href="css/shopping-cart.css" />
 
     <!-- Demo Settings -->
     <script src="/assets/js/neon-demo.js"></script>

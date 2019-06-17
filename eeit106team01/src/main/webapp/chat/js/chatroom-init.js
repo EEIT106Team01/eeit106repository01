@@ -11,6 +11,20 @@ var quillChat;
 
 var notification;
 
+function DingDong() {
+    let dingDong = new Audio("/chat/dingdong.mp3");
+    var playPromise = dingDong.play();
+    if (playPromise !== undefined) {
+        playPromise
+            .then(function () {
+                // dingDong.pause();
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+    }
+}
+
 
 // ----------append quill js&css
 // if (typeof Quill === 'undefined') {
@@ -43,6 +57,12 @@ var cookieJs = document.createElement('script');
 cookieJs.src = '/js/js.cookie.min.js';
 head.appendChild(cookieJs);
 // ----------append cookie js end
+
+// ----------append user not found style
+var userNotFound = document.createElement('style');
+userNotFound.innerHTML = ".userNotFound::placeholder{color:red;opacity:1}"
+head.appendChild(userNotFound);
+// ----------append user not found style end
 
 function onSubmitMessage(id, msg, chatData) {
     // console.log(id);
@@ -255,10 +275,12 @@ function workerInit() {
                         neonChat.refreshUserIds();
                     }
                     getOnlineUsers();
-                    $("#checkUser").attr("placeholder", "Search User");
+                    $("#checkUser").attr("placeholder", "搜尋用戶");
+                    $("#checkUser").removeClass("userNotFound");
                 }
             } else {
-                $("#checkUser").attr("placeholder", "User does not exist!");
+                $("#checkUser").attr("placeholder", "用戶不存在！");
+                $("#checkUser").addClass("userNotFound");
             }
             $("#checkUser").val("");
         } else if (e.data.command == "getOnlineUsers") {
@@ -345,7 +367,7 @@ function showActiveNotification(notiMsgBean) {
 }
 function showNotificationMsg(notiMsg) {
     console.log(notiMsg);
-    notification.prependNotification(notiMsg[i].message, notiMsg[i].url, notiMsg[i].sendTime, notiMsg[i].icon, notiMsg[i].color.rgb, true);
+    notification.prependNotification(notiMsg.message, notiMsg.url, notiMsg.sendTime, notiMsg.icon, notiMsg.color.rgb, true);
 }
 function clearOfflineNotification() {
     worker.port.postMessage({
@@ -370,12 +392,12 @@ $(document).ready(function () {
         + '<a href="#" class="chat-close"><i class="entypo-cancel"></i></a>'
 
         + '<i class="entypo-users"></i>'
-        + 'Chat'
+        + '聊天室'
         + '<span class="badge badge-success is-hidden">0</span>'
         + '</h2>'
 
         + '<div class="chat-group" id="group-1">'
-        + '<strong>區域</strong>'
+        + '<strong>區域訊息</strong>'
 
 
         + '<a href="#" id="north"><span class="user-status is-offline"></span> <em>北部聊天室</em></a>'
@@ -386,8 +408,8 @@ $(document).ready(function () {
 
 
         + '<div class="chat-group" id="group-2">'
-        + '<strong>Contacts</strong>'
-        + '<input type="text" id="checkUser" class="form-control" placeholder="Search User" style="margin: 1% 10% 1% 10%;width: 80%" />'
+        + '<strong>私人訊息</strong>'
+        + '<input type="text" id="checkUser" class="form-control" placeholder="搜尋用戶" style="margin: 1% 10% 1% 10%;width: 80%" />'
         + '</div>'
 
         + '</div>'
@@ -741,10 +763,15 @@ $(document).ready(function () {
 
             submitMessage: function () // Submit whats on textarea
             {
-                // var msg = $.trim($textarea.val());
+                if (isQuillEmpty(quillChat)) {
+                    quillChat.setText('');
+                    return;
+                }
                 var msg = JSON.stringify(quillChat.getContents());
-
-                // $textarea.val('');
+                if ((msg.length) > (9 * 1024 * 1024)) {
+                    alert("輸入的內容過多，請減少\n建議上傳圖片容量不要超過5MB");
+                    return;
+                }
                 quillChat.setText('');
 
                 if (this.isOpen && this.$current_user) {
@@ -1554,6 +1581,7 @@ $(document).ready(function () {
                 $(this.unreadBadge).css("display", "inline");
                 $(this.unreadBadge).css("background-color", "red");
                 $(this.unreadBadge).text(this.unreads);
+                DingDong();
             }
             $(this.notiBox).find("strong").text(this.unreads);
         },
@@ -1585,7 +1613,7 @@ $(document).ready(function () {
                 setTimeout(function () {
                     notification.clearUnread();
                     clearOfflineNotification();
-                }, 5000);
+                }, 3000);
             });
         } else {
             window.setTimeout(arguments.callee, 10);
@@ -1684,7 +1712,11 @@ function timeDifference(current, previous) {
     var msPerYear = msPerDay * 365;
     var elapsed = current - previous;
     if (elapsed < msPerMinute) {
-        return Math.round(elapsed / 1000) + ' 秒前';
+        let sec = Math.round(elapsed / 1000);
+        if (sec < 0) {
+            sec = 0;
+        }
+        return sec + ' 秒前';
     } else if (elapsed < msPerHour) {
         return Math.round(elapsed / msPerMinute) + ' 分鐘前';
     } else if (elapsed < msPerDay) {
@@ -1705,4 +1737,8 @@ function toColor(num) {
         r = (num & 0xFF0000) >>> 16,
         a = ((num & 0xFF000000) >>> 24) / 255;
     return "rgba(" + [r, g, b, a].join(",") + ")";
+}
+
+function isQuillEmpty(quill) {
+    return quill.getText().trim().length === 0 && quill.container.firstChild.innerHTML.includes("img") === false;
 }
