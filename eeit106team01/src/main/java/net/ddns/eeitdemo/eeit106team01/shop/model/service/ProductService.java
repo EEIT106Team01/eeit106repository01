@@ -59,6 +59,7 @@ public class ProductService {
 			Date date = new Date(System.currentTimeMillis());
 			findOne.setUpdatedTime(date);
 			findOne.setStock(productBean.getStock());
+			System.err.println(findOne.getStock());
 			findOne.setImageLink(productBean.getImageLink());
 			findOne.setName(productBean.getName());
 			findOne.setPrice(productBean.getPrice());
