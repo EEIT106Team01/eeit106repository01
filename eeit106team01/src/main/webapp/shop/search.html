@@ -270,8 +270,8 @@
                     <h2 id="productQuantity" class="col-md-4"></h2>
                     <div id="sortByType" class="col-md-4 sortClass">
                         <div class="btn-group left-dropdown col-md-8">
-                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
-                            <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
+                            <button type="button" class="btn btn-default col-md-10" style="display: none" id="btn_typeSort">商品排序</button>
+                            <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown" id="btn_typeSort2" style="display: none">
                                     <span class="caret"></span>
                                 </button>
                             <ul class="dropdown-menu dropdown-1" role="menu">
@@ -294,8 +294,8 @@
                     </div>
                     <div id="sortByBrand" class="col-md-4 sortClass">
                         <div class="btn-group left-dropdown col-md-8">
-                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
-                            <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
+                            <button type="button" class="btn btn-default col-md-10" style="display: none" id="btn_brandSort">商品排序</button>
+                            <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown" style="display: none" id="btn_brandSort2">
                                     <span class="caret"></span>
                                 </button>
                             <ul class="dropdown-menu dropdown-1" role="menu">
@@ -320,8 +320,8 @@
 
                     <div id="sortByName" class="col-md-4 sortClass">
                         <div class="btn-group left-dropdown col-md-8">
-                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
-                            <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
+                            <button type="button" class="btn btn-default col-md-10" style="display: none" id="btn_nameSort">商品排序</button>
+                            <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown" style="display: none" id="btn_nameSort2">
                                     <span class="caret"></span>
                                 </button>
                             <ul class="dropdown-menu dropdown-1" role="menu">
@@ -346,8 +346,8 @@
 
                     <div id="sortByNameByType" class="col-md-4 sortClass">
                         <div class="btn-group left-dropdown col-md-8">
-                            <button type="button" class="btn btn-default col-md-10">商品排序</button>
-                            <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
+                            <button type="button" class="btn btn-default col-md-10" style="display: none" id="btn_nameTypeSort">商品排序</button>
+                            <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown" style="display: none" id="btn_nameTypeSort2">
                                     <span class="caret"></span>
                                 </button>
                             <ul class="dropdown-menu dropdown-1" role="menu">
@@ -370,7 +370,7 @@
                         </div>
                     </div>
 
-                    <div id="sortByBrandByMixpriceMaxprice" class="col-md-4 sortClass">
+                    <div id="sortByBrandByMixpriceMaxprice" class="col-md-4 sortClass" style="display: none">
                         <div class="btn-group left-dropdown col-md-8">
                             <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
@@ -396,7 +396,7 @@
                             </ul>
                         </div>
                     </div>
-                    <div id="sortByTypeByMixpriceMaxprice" class="col-md-4 sortClass">
+                    <div id="sortByTypeByMixpriceMaxprice" class="col-md-4 sortClass" style="display: none">
                         <div class="btn-group left-dropdown col-md-8">
                             <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
@@ -423,7 +423,7 @@
                         </div>
                     </div>
 
-                    <div id="sortByNameByMixpriceMaxprice" class="col-md-4 sortClass">
+                    <div id="sortByNameByMixpriceMaxprice" class="col-md-4 sortClass" style="display: none">
                         <div class="btn-group left-dropdown col-md-8">
                             <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">
@@ -449,7 +449,7 @@
                         </div>
                     </div>
 
-                    <div id="sortByNameByTypeByMixpriceMaxprice" class="col-md-4 sortClass">
+                    <div id="sortByNameByTypeByMixpriceMaxprice" class="col-md-4 sortClass" style="display: none">
                         <div class="btn-group left-dropdown col-md-8">
                             <button type="button" class="btn btn-default col-md-10">商品排序</button>
                             <button type="button" class="btn btn-default dropdown-toggle col-md-2" data-toggle="dropdown">

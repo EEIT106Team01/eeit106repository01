@@ -224,9 +224,9 @@ public class ProductController {
 			System.err.println(productBean.getId());
 			ProductBean origin = productService.findProductByPrimaryKey(productBean.getId());
 			if (origin != null) {
-				ProductBean result = productService.updateProduct(productBean);
-				System.err.println(result);
+
 				if (origin.getStock() == productBean.getStock()) {
+					ProductBean result = productService.updateProduct(productBean);
 					if (result != null) {
 						return ResponseEntity.ok(result);
 					} else {
@@ -236,6 +236,7 @@ public class ProductController {
 					List<SerialNumberBean> insertSN = productService.insertProductsSN(productBean.getId(),
 							(productBean.getStock() - origin.getStock()));
 					if (insertSN != null) {
+						ProductBean result = productService.updateProduct(productBean);
 						URI uri = URI.create(application.getContextPath() + "/products/"
 								+ insertSN.get(0).getProductId().getId() + "/" + productBean.getStock());
 						return ResponseEntity.created(uri).body(result);
@@ -248,6 +249,7 @@ public class ProductController {
 						sNList.get(i).setAvailabilityStatus("sold");
 						productService.updateSNStatus(sNList.get(i));
 					}
+					ProductBean result = productService.updateProduct(productBean);
 					URI uri = URI
 							.create(application.getContextPath() + "/products/" + sNList.get(0).getProductId().getId());
 					return ResponseEntity.created(uri).body(result);

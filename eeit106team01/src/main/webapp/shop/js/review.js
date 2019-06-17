@@ -2,7 +2,7 @@
 let productId = parseInt(location.href.substr((location.href.indexOf(`?`) + 1), location.href.length));
 
 // Document Ready
-$(function () {
+$(function() {
     let memberId = 0;
     if (member != null) {
         memberId = member.id;
@@ -43,7 +43,8 @@ function findReview(ProductId, memberId) {
     $.ajax({
         type: "GET",
         url: "/shop/findReviewById/?idType=product&id=" + ProductId,
-        success: function (response) {
+        success: function(response) {
+            $(`#table-2 tbody`).empty();
             response.forEach(element => {
                 let reviewId = element.id;
                 let comment = element.comment;
@@ -67,6 +68,13 @@ function findReview(ProductId, memberId) {
                     );
                 }
             });
+        },
+        error: function() {
+            $(`#table-2 tbody`).empty();
+            $(`#table-2 tbody`).append(`<tr>
+                    <td colspan="4" class="text-center">尚無商品評論
+                    </td>
+                    </tr>`);
         }
     });
 }
@@ -103,7 +111,7 @@ function showAjaxModal(obj, reviewId, memberId, rating) {
 
 //updateReview
 function updateReview(reviewId) {
-    $(`#model-update`).click(function () {
+    $(`#model-update`).click(function() {
         let json = new Object();
         json.id = reviewId;
         json.rating = $(`#edit-rating`).val();
@@ -118,7 +126,7 @@ function updateReview(reviewId) {
             url: "/shop/updateReview",
             data: data,
             contentType: `application/json`,
-            success: function (response) {
+            success: function(response) {
                 location.href = location.href;
             }
         });

@@ -63,7 +63,7 @@ public class RefundService {
 				totalRefundPrice += price;
 			}
 			purchaseBean.setProductTotalPrice(purchaseBean.getProductTotalPrice() - totalRefundPrice);
-			purchaseDAO.updatePurchase(purchaseBean);
+//			purchaseDAO.updatePurchase(purchaseBean);
 
 			return newRefund;
 		}

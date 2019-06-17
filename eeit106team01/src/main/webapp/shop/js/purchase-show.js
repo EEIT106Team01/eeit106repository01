@@ -18,6 +18,7 @@ function findPurchaseByMemberId(member) {
         type: "GET",
         url: `/shop/findPurchaseById?idType=member&id=` + memberId,
         success: function(response) {
+            $(`.datatable tbody`).empty();
             response.forEach(element => {
                 let time = getLocaleTime(element.createTime);
                 let daysAgo = getLocaleTime(GetDateStr(-1));
@@ -38,7 +39,6 @@ function findPurchaseByMemberId(member) {
                 let totalPrice = element.productTotalPrice + element.deliverPrice;
                 let refundStatus;
                 let payStatus = element.payStatus;
-                console.log(payStatus);
                 if (payStatus == `paid`) {
                     $(`.datatable tbody`).append(
                         `<tr>
@@ -54,9 +54,18 @@ function findPurchaseByMemberId(member) {
                         <td>` + time + `</td>
                         <td>$` + totalPrice + `</td>
                         </tr>`
-                    );  
+                    );
                 }
             });
+        },
+        error: function() {
+            $(`.datatable tbody`).empty();
+            $(`.datatable tbody`).append(
+                `<tr>
+                    <td colspan="4" class="text-center">尚無購物紀錄
+                    </td>
+                    </tr>`
+            );
         }
     });
 }
@@ -75,42 +84,50 @@ function showAjaxModalReview(purchaseId, memberId) {
                 let productPrice = element.price;
                 let productSN = element.serialNumber;
                 let reviewStatus;
-
-                //find review
+                console.log(purchaseListId);
+                //Verify not been refund
                 $.ajax({
                     type: "GET",
-                    url: "/shop/findReviewById/?idType=purchaseList&id=" + purchaseListId,
-                    success: function(response) {
-                        reviewStatus = response[0].rating;
-                        $('#modal-8 .modal-body tbody').append(
-                            `<tr>
-                <td id="` + purchaseListId + `"><a href="/shop/product.html?` + productId + `" target="_blank">` + productName.substr(0, 8) + `...</a>` + `</td>
-                <td style="font-size:15px">` + productSN + `</td>
-                <td><a name="` + response[0].comment + `" class="` + productSN + `" onclick="editReview(this,` + reviewStatus + `,` + response[0].id + `)" title="分數: ` + reviewStatus + ` 評論: ` + response[0].comment + `">` + generateRatingStarUtil(reviewStatus) + `</a></td>
-                <td>
-                    <a href="javascript:;" onclick="reviewEdit()" class="btn btn-info btn-lg btn-icon icon-left disabled">
-                        <i class="entypo-comment"></i> 評分
-                    </a>
-                </td>
-                </tr > `
-                        );
-                        $(`#show-productList2`).text(`訂單編號 ` + purchaseId);
-                    },
+                    url: "/shop/findRefundListById/?idType=purchaseList&id=" + purchaseListId,
+                    success: function(response) {},
                     error: function() {
-                        reviewStatus = `-`;
-                        $('#modal-8 .modal-body tbody').append(
-                            `<tr>
-                <td id="` + purchaseListId + `"><a href="/shop/product.html?` + productId + `" target="_blank">` + productName.substr(0, 8) + `...</a>` + `</td>
-                <td style="font-size:15px">` + productSN + `</td>
-                <td>` + reviewStatus + `</td>
-                <td>
-                    <a href="javascript:;" id="` + productSN + `" onclick="reviewEdit(this,` + purchaseListId + `,` + productId + `)" class="btn btn-info btn-lg btn-icon icon-left">
-                        <i class="entypo-comment"></i> 評論
-                    </a>
-                </td>
-                </tr > `
-                        );
-                        $(`#show-productList2`).text(`訂單編號 ` + purchaseId);
+                        //find review
+                        $.ajax({
+                            type: "GET",
+                            url: "/shop/findReviewById/?idType=purchaseList&id=" + purchaseListId,
+                            success: function(response) {
+                                reviewStatus = response[0].rating;
+                                $('#modal-8 .modal-body tbody').append(
+                                    `<tr>
+                                        <td id="` + purchaseListId + `"><a href="/shop/product.html?` + productId + `" target="_blank">` + productName.substr(0, 8) + `...</a>` + `</td>
+                                        <td style="font-size:15px">` + productSN + `</td>
+                                        <td><a name="` + response[0].comment + `" class="` + productSN + `" onclick="editReview(this,` + reviewStatus + `,` + response[0].id + `)" title="分數: ` + reviewStatus + ` 評論: ` + response[0].comment + `">` + generateRatingStarUtil(reviewStatus) + `</a></td>
+                                        <td>
+                                            <a href="javascript:;" onclick="reviewEdit()" class="btn btn-info btn-lg btn-icon icon-left disabled">
+                                                <i class="entypo-comment"></i> 評分
+                                            </a>
+                                        </td>
+                                        </tr > `
+                                );
+                                $(`#show-productList2`).text(`訂單編號 ` + purchaseId);
+                            },
+                            error: function() {
+                                reviewStatus = `-`;
+                                $('#modal-8 .modal-body tbody').append(
+                                    `<tr>
+                                        <td id="` + purchaseListId + `"><a href="/shop/product.html?` + productId + `" target="_blank">` + productName.substr(0, 8) + `...</a>` + `</td>
+                                        <td style="font-size:15px">` + productSN + `</td>
+                                        <td>` + reviewStatus + `</td>
+                                        <td>
+                                            <a href="javascript:;" id="` + productSN + `" onclick="reviewEdit(this,` + purchaseListId + `,` + productId + `)" class="btn btn-info btn-lg btn-icon icon-left">
+                                                <i class="entypo-comment"></i> 評論
+                                            </a>
+                                        </td>
+                                        </tr > `
+                                );
+                                $(`#show-productList2`).text(`訂單編號 ` + purchaseId);
+                            }
+                        });
                     }
                 });
 

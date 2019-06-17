@@ -8,6 +8,7 @@ $(function() {
     //Products
     appendProduct();
     //delivery price 
+    $(`#deliveryPrice`).empty();
     if (($(`#productsFromCart tr`).length == 1 && $($(`#productsFromCart tr:last td`).eq(1)).text().match(/VIP會員/)) || member.level.match(/VIP/)) {
         $(`#deliveryPrice`).append(`$` + 0);
     } else {
@@ -87,7 +88,8 @@ function getProductFromCart() {
 }
 
 function generatePurchaseId(purchaseId) {
-    $(`#purchaseId`).append(purchaseId);
+    $(`#purchaseId`).empty();
+    $(`#purchaseId`).append(`購物車 No. ` + purchaseId);
 }
 
 //Generate Product html
@@ -97,7 +99,7 @@ function generateProductHtml() {
     products.forEach(product => {
         let productDiv =
             `<tr>` +
-            `<td class="text-center" id="` + product.id + `">` + (products.indexOf(product) + 1) + `</td>` +
+            `<td class="text-center" id="` + product.id + `"><a class="` + product.id + `" href="javaScript:;" onclick="deletePurchaseInCart(this)">` + (products.indexOf(product) + 1) + `</a></td>` +
             `<td>` +
             product.name +
             `</td>` +
@@ -303,3 +305,23 @@ function newPurchase() {
         });
     })
 }
+
+function deletePurchaseInCart(data) {
+    localStorage.removeItem($(data).attr(`class`));
+    //Purchase ID
+    getNewPurchaseId();
+    //Products
+    appendProduct();
+    //delivery price 
+    $(`#deliveryPrice`).empty();
+    if (($(`#productsFromCart tr`).length == 1 && $($(`#productsFromCart tr:last td`).eq(1)).text().match(/VIP會員/)) || member.level.match(/VIP/)) {
+        $(`#deliveryPrice`).append(`$` + 0);
+    } else {
+        $(`#deliveryPrice`).append(`$` + 60);
+    }
+    let deliveryPrice = $(`#deliveryPrice`).text().replace(`$`, ``);
+    //Price
+    appendTotalPrice(deliveryPrice);
+    newPurchase();
+    quantityBtn();
+};
