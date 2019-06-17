@@ -29,10 +29,9 @@
 <script src="/chat/js/chatroom-init.js"></script>
 <link rel="stylesheet"
 	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="css/member.css">
-<script src='js/member-info-resources.js'></script>
-<script src='js/member-info-ajax.js'></script>
-<script src='js/member-info-templater.js'></script>
+<link rel="stylesheet"
+	href="css/emailconfirm.css">
+	<script src='js/emailconfirm.js'></script>
 <style>
 </style>
 </head>
@@ -42,43 +41,10 @@
 
 	<div class="page-container">
 		<div class="main-content">
-			<div class='myinfoouter'>
-				<div class='myinfobracket'>
-					<div class='myinfotitle'>
-						<ul class='myinfotitle-ul'>
-							<li class='myinfotitle-ul-li myinfotitle-assigned'><a
-								href="javascript:;" onclick="">修改頭像</a></li>
-							<li class='myinfotitle-ul-li'><a href="javascript:;"
-								onclick="">修改密碼</a></li>
-							<li class='myinfotitle-ul-li'><a href="javascript:;"
-								onclick="">修改資料</a></li>
-							<li class='myinfotitle-ul-li'><a href="javascript:;"
-								onclick="">查看活動</a></li>
-							<li class='myinfotitle-ul-li'><a href="javascript:;"
-								onclick="">交易紀錄</a></li>
-						</ul>
-					</div>
-					<div class='myinfoform'>
-<!-- 						<form action="javascript:;" onsubmit="photoUpload(this)" enctype="multipart/form-data"> -->
-						<form action="uploadFile" method="post" enctype="multipart/form-data">
-							<div class='myPhoto'>
-								<img id='myphoto' src='image/notLogin.jpg'>
-								<div class='myphototext'>
-									<div class='myphototext-block'>
-										<label class="myform-main-button btn btn-info"> <input
-											id="upload_img" style="display: none;" name='file' type="file"
-											accept="image/*" onchange="readURL(this);"> <i
-											class="fa fa-photo"></i> 上傳圖片
-										</label>
-									</div>
-									<div class='myphototext-block'>
-										<button class="myform-main-button btn" type="submit">確認</button>
-									</div>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
+			<div class="textinfo" align="center">
+				<p><span id='text'></span>，歡迎加入行車發大財</p>
+				<p>請至註冊信箱<span id='remail' style='color:blue;'></span>啟動註冊信</p>
+				<p>頁面將在<span id='second'></span>秒跳轉至首頁</p>
 			</div>
 		</div>
 	</div>

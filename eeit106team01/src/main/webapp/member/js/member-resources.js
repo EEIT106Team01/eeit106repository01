@@ -21,7 +21,7 @@ memberPage.mainframe = function(){
 }
 
 memberPage.loginForm =`
-<form action='/login' method='post'>
+<form id='xxx' action='javascript:;' onsubmit='login(this)'>
     <div>
         <h3>會員登入</h3></div>
     <div class='myform-block'>
@@ -46,68 +46,68 @@ memberPage.loginForm =`
         </div>
     </div>
     <div class='myform-block'>
-        <a href="#" class="btn fb"><i class="fa fa-facebook fa-fw"></i> Login with Facebook </a>
+        <a href="/oauth2/authorization/facebook" class="myform-main-button btn fb"><i class="fa fa-facebook fa-fw"></i> Login with Facebook </a>
     </div>
     <div class='myform-block'>
-        <a href="#" class="btn google"><i class="fa fa-google fa-fw"></i> Login with Google+</a>
+        <a href="/oauth2/authorization/google" class="myform-main-button btn google"><i class="fa fa-google fa-fw"></i> Login with Google+</a>
     </div>
 </form>
 `;
 
 memberPage.registerForm=`
-<form action='javascript:;' onsubmit='register(this)'>
+<form id='xxx' action='javascript:;' onsubmit='register(this)'>
     <div>
         <h3>會員註冊</h3>
     </div>
     <div class='myform-block'>
         <div class='myform-tag'>
             <div class="myform-tag-left">
-                <p>帳號:</p>
+                <p>帳號:<span id='checkusername'></span></p>
             </div>
             <div class="myform-tag-right">
                 <p>請輸入大小寫英文數字8~12</p>
         	</div>
         </div>
-            <input class='myform-main-input' type='text' autocomplete="off" maxlength="12" name='username' id='username' placeholder="username">
+            <input class='myform-main-input' type='text' autocomplete="off" maxlength="12" name='username' id='username' placeholder="username" onblur='checkUsername(this)'>
         </div>
     </div>
     <div class='myform-block'>
         <div class='myform-tag'>
         	<div class="myform-tag-left">
-                <p>密碼:</p>
+                <p>密碼:<span id='checkpassword'></span></p>
             </div>
             <div class="myform-tag-right">
-                <p>請輸入大小寫英文數字10~25</p>
+                <p>請輸入!@#$%^&*大小寫英文數字10~25</p>
         	</div>
         </div>
         <div>
-            <input class='myform-main-input' autocomplete="off" maxlength="25" type="password" name='password' id='password' placeholder="password">
+            <input class='myform-main-input' autocomplete="off" maxlength="25" type="password" name='password' id='password' placeholder="password" onblur='checkPassword(this)'>
         </div>
     </div>
     <div class='myform-block'>
         <div class='myform-tag'>
         	<div class="myform-tag-left">
-            	<p>確認密碼:</p>
+            	<p>確認密碼:<span id='confirmpassword'></span></p>
             </div>
             <div class="myform-tag-right">
                 <p>請再次輸入密碼</p>
         	</div>
         </div>
         <div>
-            <input class='myform-main-input' autocomplete="off" maxlength="25" type="password" name='password' placeholder="password">
+            <input class='myform-main-input' autocomplete="off" maxlength="25" type="password" name='password' placeholder="password" id='cpassword' onblur='confirmPassword(this)'>
         </div>
     </div>
     <div class='myform-block'>
         <div class='myform-tag'>
         	<div class="myform-tag-left">
-            	<p>信箱:</p>
+            	<p>信箱:<span id='checkemail'></span></p>
             </div>
             <div class="myform-tag-right">
                 <p>請輸入信箱</p>
         	</div>
         </div>
         <div>
-            <input class='myform-main-input' autocomplete="off" type="email" name='email' id='email' placeholder="email">
+            <input class='myform-main-input' autocomplete="off" type="email" name='email' id='email' placeholder="email" onblur='checkEmail(this)'>
         </div>
     </div>
     <div class='myform-block'>
@@ -119,15 +119,25 @@ memberPage.registerForm=`
 `;
 
 memberPage.forgetForm=`
-<form action='javascript:;' onsubmit='forget(this)'>
+<form id='xxx' action='javascript:;' onsubmit='forget(this)'>
     <div>
-        <h3>忘記密碼</h3></div>
+        <h3>忘記密碼</h3>
+    </div>
+    <div class='myform-block'>
+        <div class='myform-tag'>
+            <div>
+                <p>帳號:</p>
+            </div>
+        </div>
+            <input class='myform-main-input' type='text' autocomplete="off" maxlength="12" name='username' id='username' placeholder="username">
+        </div>
+    </div>
     <div class='myform-block'>
         <div>
             <p>信箱:</p>
         </div>
         <div>
-            <input class='myform-main-input' type="email" name='email' id='email' placeholder="email">
+            <input class='myform-main-input' autocomplete="off" type="email" name='email' id='email' placeholder="email">
         </div>
     </div>
     <div class='myform-block'>

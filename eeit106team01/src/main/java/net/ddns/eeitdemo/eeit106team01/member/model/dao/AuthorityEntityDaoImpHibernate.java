@@ -92,5 +92,17 @@ public class AuthorityEntityDaoImpHibernate implements AuthorityEntityDao{
 		return false;
 	}
 
+	@Override
+	public AuthorityEntity getAuthorityEntityByUuid(String uuid) {
+		AuthorityEntity result = null;
+		String queryString = "From AuthorityEntity Where authorityUuid = :authorityUuid";
+		List<?> list = getSession().createQuery(queryString)
+				.setParameter("authorityUuid", uuid).getResultList();
+		if(list!=null && list.size()!=0) {
+			result = (AuthorityEntity)list.get(0);
+		}
+		return result;
+	}
+
 	
 }

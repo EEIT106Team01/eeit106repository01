@@ -59,7 +59,9 @@
   	.myform-main-input,.myform-main p,.myform-main h3{
   		margin:0;
   	}
-  	.myform-main-input,.myform-main-button,.btn{
+  	.myform-main-input,.myform-main-button
+/*   	,.btn */
+  	{
   		width:100%;
   		border: none;
   		border-radius: 4px;
@@ -72,7 +74,9 @@
   		font:small-caption;
   		font-size:16px;
   	}
-  	.myform-main-button:hover,.btn:hover{
+  	.myform-main-button:hover
+/*   	,.btn:hover */
+  	{
   		opacity:1;
   		color: white;
   	}
@@ -116,65 +120,70 @@
 	  text-align: left;
 	}
 	.myinfoouter{
-		border: 1px solid gray;
 		justify-content: center;
 		display: flex;
 	}
 	.myinfobracket{
-		display: flex;
   		margin-top:20px;
   		box-sizing:border-box;
-  		width: 780px;
+  		width: 550px;
+  		height: 720px;
   		padding:30px;
+	}
+	.myinfotitle{
+		margin:0;
+	}
+	.myinfotitle-ul{
+		margin:0;
+		padding:0;
+		list-style-type: none;
+  		box-sizing:border-box;
+	}
+	.myinfotitle-ul-li{
+		display:inline-block;
+		margin:0;
+		background-color: #dfdfdf;
+		padding: 5px 7px;
+		border-radius: 3px 3px 0 0;
+	}
+	.myinfotitle-ul-li a{
+		text-decoration: none;
+		color: black;
+  	}
+  	.myinfoform{
+  		margin:0;
+  		box-sizing:border-box;
+  		height: 500px;
   		border-radius: 5px;
   		background-color: #f2f2f2;
   		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
-	}
-	.mytablist{
-		border: 1px solid yellow;
-		margin:0;
-		box-sizing:border-box;
-		width:200px;
-		display:block;
-		position:relative;
-	}
-	.mytablist-top{
-		border: 1px solid green;
-		margin:0;
-		box-sizing:border-box;
-		width:100%;
-	}
-	.myPhoto{
-		border: 1px solid black;
-		margin:0;
-		box-sizing:border-box;
-		overflow: auto;
-	}
-	.myPhoto img{
-		width:180px;
-		border-radius: 50%;
-	}
-	.mytablist-down{
-		border: 1px solid pink;
-		margin:0;
-		box-sizing:border-box;
-		text-align: center;
-		height: inherit;
-		display: block;
-		margin-top: 10px;
-	}
-	.mytablist-down-block{
-		margin:0;
-		box-sizing:border-box;
-		border: 1px solid blue;
-		padding: 5px; 
-		margin:5px 0px;
-		border-radius: 3px;
-	}
-	.myInfoList{
-		border: 1px solid purple;
-		margin:0;
-		box-sizing:border-box;
-		width:100%;
-		height:420px;
-	}
+  		display:flex;
+  		justify-content: center;
+  		
+  	}
+  	.myinfotitle-assigned{
+  		background-color: #f2f2f2;
+  	}
+  	.myPhoto{
+  		overflow: auto;
+  		display:inline-block;
+  		padding-top:80px;
+/*   		border:1px solid grey; */
+  		
+  	}
+  	.myPhoto img{
+  		width:200px;
+  		height:200px;
+  		border: 0.5px solid grey;
+  		border-radius: 5px;
+  		padding:5px;
+  	}
+  	.myphototext{
+  		text-align:center;
+  		width:100%;
+/*   		border:1px solid grey; */
+  	}
+  	.myphototext-block{
+  		margin-top:15px;
+  	}
+  	
