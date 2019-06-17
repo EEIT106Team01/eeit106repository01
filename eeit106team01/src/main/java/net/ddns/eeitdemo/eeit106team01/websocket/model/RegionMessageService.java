@@ -27,7 +27,7 @@ public class RegionMessageService {
 		regionMessageBean.setStatus("inactive");
 		List<RegionMsg> oldMessages = regionMessageBean.getMessages();
 		int size = oldMessages.size();
-		for (int i = size - 1; i >= size - 10; i--) {
+		for (int i = size - 5; i >= size - 1; i++) {
 			newRecord.getMessages().add(oldMessages.get(i));
 			oldMessages.remove(i);
 		}
@@ -77,7 +77,7 @@ public class RegionMessageService {
 			}
 			regionMessageBean.getMessages().add(message);
 			result = regionMessageDAO.update(regionMessageBean);
-			if (result != null && result.getMessages().size() > 30) {
+			if (result != null && result.getMessages().size() > 10) {
 				this.createNewRecord(result);
 			}
 		}

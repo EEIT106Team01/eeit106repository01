@@ -129,7 +129,7 @@
 
         function getContents() {
             $.ajax({
-                url: "/articleTopics/" + topicBean.id + "/articleContents?begin=" + (page * 10 - 9) + "&end=10&orderType=" + orderType,
+                url: "/articleTopics/" + topicBean.id + "/articleContents?begin=" + (page * 5 - 4) + "&end=5&orderType=" + orderType,
                 method: "GET",
                 dataType: "json",
                 success: function (data, textStatus, jqXHR) {
@@ -217,7 +217,7 @@
             $(content).html(
                 // "[" + topicBean.topicType + "] " +
                 "<h1>" + topicBean.topicHeader + "</h1>" +
-                "<img src='" + mbIcon + "' class='img-circle' width='30' style='max-height: 30px' /> " + author + "<hr>"
+                "<img src='" + mbIcon + "' class='img-circle' width='50' style='max-height: 50px; margin-right:0.5%' /> " + author + "<hr>"
             );
 
             let container = document.createElement("div");
@@ -284,7 +284,7 @@
             let author = contentBean.memberBean.name;
             $(content).html(
                 // "Re: " + contentBean.articleTopicCurrent.topicHeader +
-                "<img src='" + mbIcon + "' class='img-circle' width='30'> " + author + "<hr>"
+                "<img src='" + mbIcon + "' class='img-circle' width='50' style='max-height: 50px; margin-right:1%' >" + author + "<hr>"
             );
 
             let container = document.createElement("div");
@@ -639,7 +639,7 @@
         }
 
         function createChangePageBtn() {
-            let pageNumber = Math.ceil((topicBean.contentReplyNum) / 10);
+            let pageNumber = Math.ceil((topicBean.contentReplyNum) / 5);
             // console.log("location.search: " + location.search);
             // console.log("location.pathname: " + location.pathname);
             let container = document.createElement("div");
