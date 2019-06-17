@@ -93,7 +93,8 @@
 		  // Retrieve the singleton for the GoogleAuth library and set up the client.
 		  auth2 = gapi.auth2.init({
 		    client_id: '782156516037-i2qol45grfp7v696ipplrss7pn6kuqe5.apps.googleusercontent.com', //客户端ID
-		    cookiepolicy: 'single_host_origin',
+        // client_id: 'a91222783538-ebhulqdh8ahndgpocakfcqifo850guej.apps.googleusercontent.com',
+        cookiepolicy: 'single_host_origin',
 		    scope: 'profile' //可以请求除了默认的'profile' and 'email'之外的数据
 		  });
 		  attachSignin(document.getElementById('customBtn'));
