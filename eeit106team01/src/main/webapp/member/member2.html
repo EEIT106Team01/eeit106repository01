@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<!-- <link rel="shortcut icon" type="image/x-icon" href="https://static.codepen.io/assets/favicon/favicon-aec34940fbc1a6e787974dcd360f2c6b63348d4b1f4e06c77743096d55480f33.ico">
+  <link rel="mask-icon" type="" href="https://static.codepen.io/assets/favicon/logo-pin-8f3771b1072e3c38bd662872f6b673a722f4b3ca2421637d5596661b4e2132cc.svg"
+    color="#111"> -->
+<title>行車發大財</title>
+<link
+	href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600,700"
+	rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="icon" href="/assets/images/favicon.ico">
+
+<script src="/assets/js/jquery-1.11.3.min.js"></script>
+
+<!-- cookie -->
+<script
+	src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+<!--input data-include property in any tag when window.onload-->
+<script src="/navbar/js/csi.min.js"></script>
+
+<!-- navbar-->
+<script src="/navbar/js/navbar-init.js"></script>
+<!-- chatroom -->
+<script src="/chat/js/sockjs.min.js"></script>
+<script src="/chat/js/stomp.min.js"></script>
+<script src="/chat/js/chatroom-init.js"></script>
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet" href="css/member.css">
+<script src='js/member-info-resources.js'></script>
+<script src='js/member-info-ajax.js'></script>
+<script src='js/member-info-templater.js'></script>
+<style>
+</style>
+</head>
+<body class="page-body" data-url="http://neon.dev" translate="no">
+	<!-- include navbar when window.onload-->
+	<div data-include="/navbar/navbarWhite.html"></div>
+
+	<div class="page-container">
+		<div class="main-content">
+			<div class='myinfoouter'>
+				<div class='myinfobracket'>
+					<div class='myinfotitle'>
+						<ul class='myinfotitle-ul'>
+							<li class='myinfotitle-ul-li myinfotitle-assigned'><a
+								href="javascript:;" onclick="">修改頭像</a></li>
+							<li class='myinfotitle-ul-li'><a href="javascript:;"
+								onclick="">修改密碼</a></li>
+							<li class='myinfotitle-ul-li'><a href="javascript:;"
+								onclick="">修改資料</a></li>
+							<li class='myinfotitle-ul-li'><a href="javascript:;"
+								onclick="">查看活動</a></li>
+							<li class='myinfotitle-ul-li'><a href="javascript:;"
+								onclick="">交易紀錄</a></li>
+						</ul>
+					</div>
+					<div class='myinfoform'>
+<!-- 						<form action="javascript:;" onsubmit="photoUpload(this)" enctype="multipart/form-data"> -->
+						<form action="uploadFile" method="post" enctype="multipart/form-data">
+							<div class='myPhoto'>
+								<img id='myphoto' src='image/notLogin.jpg'>
+								<div class='myphototext'>
+									<div class='myphototext-block'>
+										<label class="myform-main-button btn btn-info"> <input
+											id="upload_img" style="display: none;" name='file' type="file"
+											accept="image/*" onchange="readURL(this);"> <i
+											class="fa fa-photo"></i> 上傳圖片
+										</label>
+									</div>
+									<div class='myphototext-block'>
+										<button class="myform-main-button btn" type="submit">確認</button>
+									</div>
+								</div>
+							</div>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="/assets/js/neon-custom.js"></script>
+	<!-- Bottom scripts (common) -->
+	<script src="/assets/js/gsap/TweenMax.min.js"></script>
+	<script src="/assets/js/jquery-ui/js/jquery-ui-1.10.3.minimal.min.js"></script>
+	<script src="/assets/js/bootstrap.js"></script>
+	<script src="/assets/js/joinable.js"></script>
+	<script src="/assets/js/resizeable.js"></script>
+	<script src="/assets/js/neon-api.js"></script>
+</body>
+</html>
