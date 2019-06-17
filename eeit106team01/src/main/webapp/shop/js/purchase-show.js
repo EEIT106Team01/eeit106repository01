@@ -18,6 +18,7 @@ function findPurchaseByMemberId(member) {
         type: "GET",
         url: `/shop/findPurchaseById?idType=member&id=` + memberId,
         success: function(response) {
+            $(`.datatable tbody`).empty();
             response.forEach(element => {
                 let time = getLocaleTime(element.createTime);
                 let daysAgo = getLocaleTime(GetDateStr(-1));
@@ -38,7 +39,6 @@ function findPurchaseByMemberId(member) {
                 let totalPrice = element.productTotalPrice + element.deliverPrice;
                 let refundStatus;
                 let payStatus = element.payStatus;
-                console.log(payStatus);
                 if (payStatus == `paid`) {
                     $(`.datatable tbody`).append(
                         `<tr>
@@ -54,9 +54,18 @@ function findPurchaseByMemberId(member) {
                         <td>` + time + `</td>
                         <td>$` + totalPrice + `</td>
                         </tr>`
-                    );  
+                    );
                 }
             });
+        },
+        error: function() {
+            $(`.datatable tbody`).empty();
+            $(`.datatable tbody`).append(
+                `<tr>
+                    <td colspan="4" class="text-center">尚無購物紀錄
+                    </td>
+                    </tr>`
+            );
         }
     });
 }
