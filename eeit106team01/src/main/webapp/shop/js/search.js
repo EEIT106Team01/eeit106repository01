@@ -93,6 +93,8 @@ function userSearch() {
             $("#sortByNameByMixpriceMaxprice").hide();
             $("#sortByNameByTypeByMixpriceMaxprice").hide();
             //sort open
+            $("#btn_nameSort").show();
+            $("#btn_nameSort2").show();
             $("#sortByName").show();
             //search price Btn close
             $("#searchPriceByBrandBtnDiv").hide();
@@ -115,7 +117,7 @@ function userSearch() {
 
             //sort功能
             $("#sortPriceDescByName").on('click', (function() {
-                var name = takeSearchUrlValue()
+                var name = takeSearchUrlValue();
                 sortPriceDescByname(name)
             }))
             $("#sortPriceAscByName").on('click', (function() {
@@ -169,6 +171,8 @@ function userSearch() {
             $("#sortByNameByMixpriceMaxprice").hide();
             $("#sortByNameByTypeByMixpriceMaxprice").hide();
             //sort open
+            $("#btn_nameTypeSort").show();
+            $("#btn_nameTypeSort2").show();
             $("#sortByNameByType").show();
             //search price Btn close
             $("#searchPriceByBrandBtnDiv").hide();
@@ -204,27 +208,38 @@ function userSearch() {
                 getSortDescByPriceByNameByType(searchResult)
             }))
 
-
+            var minPrice = $("#minPrice").val()
+            var maxPrice = $("#maxPrice").val()
             $("#searchPriceByNameByTypeBtn").on('click', (function() {
                 $("#errorMsg").empty()
                     //sort close
                 $("#sortByNameByType").hide();
                 //sort open
                 $("#sortByNameByTypeByMixpriceMaxprice").show();
-                getProductsByPriceByNameByType(name, type);
+                var minPrice = $("#minPrice").val()
+                var maxPrice = $("#maxPrice").val()
+                getProductsByPriceByNameByType(name, type,minPrice,maxPrice);
             }))
 
             $("#sortSoldDescByNameByTypeByMixpriceMaxprice").on('click', (function() {
-                getSortDescBySoldByNameByType(name, type)
+                var minPrice = $("#minPrice").val()
+                var maxPrice = $("#maxPrice").val()
+                getSortDescBySoldByNameByTypeByPrice(name, type,minPrice,maxPrice)
             }))
             $("#sortSoldAscByNameByTypeByMixpriceMaxprice").on('click', (function() {
-                getSortAscBySoldByNameByType(name, type)
+                var minPrice = $("#minPrice").val()
+                var maxPrice = $("#maxPrice").val()
+                getSortAscBySoldByNameByTypeByPrice(name, type,minPrice,maxPrice)
             }))
             $("#sortPriceAscByNameByTypeByMixpriceMaxprice").on('click', (function() {
-                getSortAscByPriceByNameByType(name, type)
+                var minPrice = $("#minPrice").val()
+                var maxPrice = $("#maxPrice").val()
+                getSortAscByPriceByNameByTypeByPrice(name, type,minPrice,maxPrice)
             }))
             $("#sortPriceDescByNameByTypeByMixpriceMaxprice").on('click', (function() {
-                getSortDescByPriceByNameByType(name, type)
+                var minPrice = $("#minPrice").val()
+                var maxPrice = $("#maxPrice").val()
+                getSortDescByPriceByNameByTypeByPrice(name, type,minPrice,maxPrice)
             }))
         }
     } else
@@ -289,6 +304,8 @@ function ByType(type) {
     $("#sortByNameByMixpriceMaxprice").hide();
     $("#sortByNameByTypeByMixpriceMaxprice").hide();
     //sort open
+    $("#btn_typeSort").show()
+    $("#btn_typeSort2").show()
     $("#sortByType").show();
     //search price Btn close
     $("#searchPriceByBrandBtnDiv").hide();
@@ -389,6 +406,8 @@ function ByBrand(brand) {
     $("#sortByNameByMixpriceMaxprice").hide();
     $("#sortByNameByTypeByMixpriceMaxprice").hide();
     //sort open
+    $("#btn_brandSort").show();
+    $("#btn_brandSort2").show();
     $("#sortByBrand").show();
 
     //search price Btn close
@@ -1530,9 +1549,9 @@ function getProductsByPriceByName(name) {
     })
 }
 //依Name&Type搜尋and價錢區間搜尋
-function getProductsByPriceByNameByType(name, type) {
-    var minPrice = $("#minPrice").val()
-    var maxPrice = $("#maxPrice").val()
+function getProductsByPriceByNameByType(name, type,minPrice,maxPrice) {
+    // var minPrice = $("#minPrice").val()
+    // var maxPrice = $("#maxPrice").val()
     var produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&minPrice=" + minPrice + "&maxPrice=" + maxPrice + "&type=" + type;
     if (minPrice == 0 || minPrice == null || isNaN(minPrice) || typeof(minPrice) == "undefined") {
         produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&maxPrice=" + maxPrice + "&type=" + type;
@@ -5332,9 +5351,9 @@ function getSortDescBySoldByNameByType(searchResult) {
     })
 }
 //商品排序(name&type/價錢區間price低到高)
-function getSortAscByPriceByNameByType(name, type) {
-    var minPrice = $("#minPrice").val()
-    var maxPrice = $("#maxPrice").val()
+function getSortAscByPriceByNameByTypeByPrice(name, type,minPrice,maxPrice) {
+    // var minPrice = $("#minPrice").val()
+    // var maxPrice = $("#maxPrice").val()
     var produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&minPrice=" + minPrice + "&maxPrice=" + maxPrice + "&type=" + type;
     if (minPrice == 0 || minPrice == null || isNaN(minPrice) || typeof(minPrice) == "undefined") {
         produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&maxPrice=" + maxPrice + "&type=" + type;
@@ -5459,9 +5478,9 @@ function getSortAscByPriceByNameByType(name, type) {
     })
 }
 //商品排序(name&type/價錢區間price高到低)
-function getSortDescByPriceByNameByType(name, type) {
-    var minPrice = $("#minPrice").val()
-    var maxPrice = $("#maxPrice").val()
+function getSortDescByPriceByNameByTypeByPrice(name, type,minPrice,maxPrice) {
+    // var minPrice = $("#minPrice").val()
+    // var maxPrice = $("#maxPrice").val()
     var produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&minPrice=" + minPrice + "&maxPrice=" + maxPrice + "&type=" + type;
     if (minPrice == 0 || minPrice == null || isNaN(minPrice) || typeof(minPrice) == "undefined") {
         produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&maxPrice=" + maxPrice + "&type=" + type;
@@ -5595,9 +5614,9 @@ function getSortDescByPriceByNameByType(name, type) {
     })
 }
 //商品排序(name&type/價錢區間sold高到低)
-function getSortDescBySoldByNameByType(name, type) {
-    var minPrice = $("#minPrice").val()
-    var maxPrice = $("#maxPrice").val()
+function getSortDescBySoldByNameByTypeByPrice(name, type,minPrice,maxPrice) {
+    // var minPrice = $("#minPrice").val()
+    // var maxPrice = $("#maxPrice").val()
     var produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&minPrice=" + minPrice + "&maxPrice=" + maxPrice + "&type=" + type;
     if (minPrice == 0 || minPrice == null || isNaN(minPrice) || typeof(minPrice) == "undefined") {
         produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&maxPrice=" + maxPrice + "&type=" + type;
@@ -5731,9 +5750,9 @@ function getSortDescBySoldByNameByType(name, type) {
     })
 }
 //商品排序(name&type/價錢區間sold低到高)
-function getSortAscBySoldByNameByType(name, type) {
-    var minPrice = $("#minPrice").val()
-    var maxPrice = $("#maxPrice").val()
+function getSortAscBySoldByNameByTypeByPrice(name, type,minPrice,maxPrice) {
+    // var minPrice = $("#minPrice").val()
+    // var maxPrice = $("#maxPrice").val()
     var produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&minPrice=" + minPrice + "&maxPrice=" + maxPrice + "&type=" + type;
     if (minPrice == 0 || minPrice == null || isNaN(minPrice) || typeof(minPrice) == "undefined") {
         produstUrl = "/search/price?byNameBrandType=name&queryString=" + name + "&maxPrice=" + maxPrice + "&type=" + type;
