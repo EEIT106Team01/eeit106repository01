@@ -76,9 +76,8 @@ public class DemoRestfulController {
 	@ResponseBody
 	public ResponseEntity<?> forget(String username,String email,HttpServletRequest request){
 			Map<String,String> result = new HashMap<String,String>();
-			String tempPassword = passwordEncoder.encode(UUID.randomUUID().toString()).substring(20,31);
-			String encodePassword = passwordEncoder.encode(tempPassword);
-			boolean flag = memberService.forgetPassword(username,email,encodePassword);
+			String tempPassword = passwordEncoder.encode(username).substring(0, 11);
+			boolean flag = memberService.forgetPassword(username,email,tempPassword);
 			if(flag) {
 				StringBuffer baseUrl = domainNameGenerator(request.getRequestURL(), request.getRequestURI(), true);		
 				MimeMessage mimeMessage = javaMailSender.createMimeMessage();
